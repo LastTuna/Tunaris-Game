@@ -395,6 +395,11 @@ Prefab:
       propertyPath: gears.Array.data[1]
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114944359246625752, guid: 093443e168e976d458a6b81d06329a48,
+        type: 2}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 093443e168e976d458a6b81d06329a48, type: 2}
   m_IsPrefabParent: 0
@@ -675,80 +680,39 @@ Prefab:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalPosition.x
       value: 110.6127
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalPosition.y
       value: 4.23
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalPosition.z
       value: -84.263084
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalRotation.x
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalRotation.y
       value: -0.24655885
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalRotation.z
       value: -0
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_LocalRotation.w
       value: 0.96912783
       objectReference: {fileID: 0}
-    - target: {fileID: 4014668877771024, guid: f9808d73496a99443be220412ff95074, type: 2}
+    - target: {fileID: 4323717460670394, guid: f9808d73496a99443be220412ff95074, type: 2}
       propertyPath: m_RootOrder
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelFL
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelFR
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelRL
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelRR
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelFLTrans
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelFRTrans
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelRLTrans
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074,
-        type: 2}
-      propertyPath: wheelRRTrans
-      value: 
-      objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 114614582834375616, guid: f9808d73496a99443be220412ff95074, type: 2}
+    m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: f9808d73496a99443be220412ff95074, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1910066180 stripped
