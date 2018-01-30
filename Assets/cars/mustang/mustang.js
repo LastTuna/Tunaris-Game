@@ -41,6 +41,8 @@ ratio = 4.3;
 Physics.gravity = Vector3(0,-aero,0);
 GetComponent.<Rigidbody>().centerOfMass = Vector3(0, -0.4, 0.5);
 gear = 1;
+
+
 }
 
 function FixedUpdate () {
