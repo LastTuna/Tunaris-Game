@@ -40,14 +40,39 @@ public class Controller : MonoBehaviour {
         CourseSelectCanvas.gameObject.SetActive(true);
     }
 
+    private List<GameObject> createdGarageButtons;
+    public GameObject buttonPrefab;
+
     public void OpenGarage() {
         GoRaceCanvas.gameObject.SetActive(false);
         GarageCanvas.gameObject.SetActive(true);
+
+        // Add the car buttons
+        createdGarageButtons = new List<GameObject>();
+        int offset = 0;
+        foreach(string name in new string[]{"rallyx", "car" }) {
+            GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
+            button.name = name;
+            button.GetComponentInChildren<Text>().text = name;
+            createdGarageButtons.Add(button);
+            (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
+            offset -= 70;
+        }
+        
     }
     
     public void OpenTuneScreen() {
         GoRaceCanvas.gameObject.SetActive(false);
         TuneScreenCanvas.gameObject.SetActive(true);
+
+        // Restore tuning values from save data
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("Tire Bias").GetComponent<Slider>().value = data.TireBias;
+        GameObject.Find("Final Drive").GetComponent<Slider>().value = data.FinalDrive;
+        GameObject.Find("Aero").GetComponent<Slider>().value = data.Aero;
+        GameObject.Find("Spring Stiffness").GetComponent<Slider>().value = data.SpringStiffness;
+        GameObject.Find("Brake Stiffness").GetComponent<Slider>().value = data.BrakeStiffness;
+        GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value = (int)data.Gearbox;
     }
 
     // Main menu button callbacks
@@ -87,7 +112,7 @@ public class Controller : MonoBehaviour {
         data.Aero = GameObject.Find("Aero").GetComponent<Slider>().value;
         data.SpringStiffness = GameObject.Find("Spring Stiffness").GetComponent<Slider>().value;
         data.BrakeStiffness = GameObject.Find("Brake Stiffness").GetComponent<Slider>().value;
-        data.Gearbox = GameObject.Find("Gearbox").GetComponent<Dropdown>().value;
+        data.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
         
         Cancel();
     }
@@ -122,6 +147,10 @@ public class Controller : MonoBehaviour {
         if (GarageCanvas.gameObject.activeSelf) {
             GoRaceCanvas.gameObject.SetActive(true);
             GarageCanvas.gameObject.SetActive(false);
+
+            foreach(GameObject button in createdGarageButtons) {
+                Destroy(button);
+            }
         }
 
         // Tuning -> Go Race
