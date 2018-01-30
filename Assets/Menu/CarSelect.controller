@@ -5,7 +5,7 @@ AnimatorController:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Button
+  m_Name: CarSelect
   serializedVersion: 5
   m_AnimatorParameters:
   - m_Name: Normal
@@ -249,7 +249,7 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_GenerateMotionCurves: 0
   m_Events: []
---- !u!114 &114014021808940500
+--- !u!114 &114073512522043752
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -257,7 +257,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: bdd65da5bc2c909408db7ae76097fef0, type: 3}
+  m_Script: {fileID: 11500000, guid: 970e68385fe77564999ab9ceafb95182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1101 &1101631741094846368
@@ -392,7 +392,7 @@ AnimatorState:
   m_CycleOffset: 0
   m_Transitions: []
   m_StateMachineBehaviours:
-  - {fileID: 114014021808940500}
+  - {fileID: 114073512522043752}
   m_Position: {x: 50, y: 50, z: 0}
   m_IKOnFeet: 0
   m_WriteDefaultValues: 1
