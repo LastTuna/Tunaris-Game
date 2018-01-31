@@ -6,7 +6,6 @@ public class ShowCarSpinner : StateMachineBehaviour {
     public GameObject spinner;
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("OnStateEnter");
         // Instantiate prefab
         ButtonProperties data = animator.gameObject.GetComponent<ButtonProperties>();
         spinner = Instantiate(data.carPrefab, data.parent.transform);
@@ -31,7 +30,6 @@ public class ShowCarSpinner : StateMachineBehaviour {
     }
 
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Debug.Log("OnStateExit");
         Destroy(spinner);
     }
 }

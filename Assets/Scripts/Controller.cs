@@ -66,7 +66,10 @@ public class Controller : MonoBehaviour {
             button.GetComponent<ButtonProperties>().parent = GarageCanvas;
             createdGarageButtons.Add(button);
 
-            // Move the bottm to its correct position using a lot of unity code soup
+            // Add car select callback
+            button.GetComponent<Button>().onClick.AddListener(CarSelection);
+
+            // Move the button to its correct position using a lot of unity code soup
             (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
             offset -= 70;
         }
@@ -114,7 +117,7 @@ public class Controller : MonoBehaviour {
 
     // Car selection callback
     public void CarSelection() {
-        Debug.Log(gameObject.GetComponent<EventSystem>().lastSelectedGameObject);
+        Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
         GameObject.Find("DataController").GetComponent<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
