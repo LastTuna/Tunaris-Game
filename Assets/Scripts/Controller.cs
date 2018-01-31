@@ -72,11 +72,19 @@ public class Controller : MonoBehaviour {
             // Move the button to its correct position using a lot of unity code soup
             (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
             offset -= 70;
+
+            // Detect default focused button
+            if (prefab.name == selectedCarName) selectedCar = button;
         }
 
         // Set focus to the button corresponding to the last selected car
-        GameObject.Find("EventSystem").GetComponent<EventSystem>().SetSelectedGameObject(selectedCar == null ? createdGarageButtons[0] : selectedCar);
+        StartCoroutine(SetSelectedGameObject(selectedCar));
 
+    }
+
+    private IEnumerator SetSelectedGameObject(GameObject select) {
+        yield return new WaitForEndOfFrame();
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().SetSelectedGameObject(select);
     }
     
     public void OpenTuneScreen() {
