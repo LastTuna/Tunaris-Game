@@ -2628,22 +2628,6 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 450881529}
---- !u!1 &451191273 stripped
-GameObject:
-  m_PrefabParentObject: {fileID: 1216864803974664, guid: 093443e168e976d458a6b81d06329a48,
-    type: 2}
-  m_PrefabInternal: {fileID: 1501523441}
---- !u!114 &451191276
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 451191273}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a6e6f6ebbd8ece4491efd160c3c59f6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &457315940
 GameObject:
   m_ObjectHideFlags: 0
@@ -3822,7 +3806,7 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 1057594253}
-        m_MethodName: Cancel
+        m_MethodName: CarSelection
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -5060,6 +5044,9 @@ MonoBehaviour:
   LoadingScreenCanvas: {fileID: 1521312208}
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
+  carsPrefabs:
+  - {fileID: 1362113268423642, guid: f9808d73496a99443be220412ff95074, type: 2}
+  - {fileID: 1610897889992770, guid: 093443e168e976d458a6b81d06329a48, type: 2}
 --- !u!114 &1057594254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6930,12 +6917,40 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 120
+      objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 220
+      objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -50
+      objectReference: {fileID: 0}
+    - target: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -200
+      objectReference: {fileID: 0}
+    - target: {fileID: 1610897889992770, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 093443e168e976d458a6b81d06329a48, type: 2}
   m_IsPrefabParent: 0
 --- !u!4 &1501523442 stripped
 Transform:
-  m_PrefabParentObject: {fileID: 4713063733275502, guid: 093443e168e976d458a6b81d06329a48,
+  m_PrefabParentObject: {fileID: 4448572492038084, guid: 093443e168e976d458a6b81d06329a48,
     type: 2}
   m_PrefabInternal: {fileID: 1501523441}
 --- !u!1 &1521312205
