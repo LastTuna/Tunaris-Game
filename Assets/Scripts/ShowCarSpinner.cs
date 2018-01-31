@@ -3,12 +3,17 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class ShowCarSpinner : StateMachineBehaviour {
-    public GameObject spinner;
+    public static List<GameObject> spinners = new List<GameObject>();
 
     override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
+        // Destroys all the spinners
+        foreach (GameObject car in spinners) {
+            Destroy(car);
+        }
+
         // Instantiate prefab
         ButtonProperties data = animator.gameObject.GetComponent<ButtonProperties>();
-        spinner = Instantiate(data.carPrefab, data.parent.transform);
+        GameObject spinner = Instantiate(data.carPrefab, data.parent.transform);
 
         // Disable main rigidbody
         Destroy(spinner.GetComponent<Rigidbody>());
@@ -27,9 +32,8 @@ public class ShowCarSpinner : StateMachineBehaviour {
 
         // Add rotation script
         spinner.AddComponent<Spinner>();
-    }
 
-    override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
-        Destroy(spinner);
+        // Keep track for the spinner
+        spinners.Add(spinner);
     }
 }
