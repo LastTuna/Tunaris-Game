@@ -42,23 +42,38 @@ public class Controller : MonoBehaviour {
 
     private List<GameObject> createdGarageButtons;
     public GameObject buttonPrefab;
+    public List<GameObject> carsPrefabs;
 
     public void OpenGarage() {
         GoRaceCanvas.gameObject.SetActive(false);
         GarageCanvas.gameObject.SetActive(true);
 
+        string selectedCarName = GameObject.Find("DataController").GetComponent<DataController>().SelectedCar;
+
         // Add the car buttons
         createdGarageButtons = new List<GameObject>();
         int offset = 0;
-        foreach(string name in new string[]{"rallyx", "car" }) {
+        GameObject selectedCar = null;
+        foreach(GameObject prefab in carsPrefabs) {
             GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
-            button.name = name;
-            button.GetComponentInChildren<Text>().text = name;
+
+            // Set labels
+            button.name = prefab.name;
+            button.GetComponentInChildren<Text>().text = prefab.name;
+
+            // Set car model instantiation parameters
+            button.GetComponent<ButtonProperties>().carPrefab = prefab;
+            button.GetComponent<ButtonProperties>().parent = GarageCanvas;
             createdGarageButtons.Add(button);
+
+            // Move the bottm to its correct position using a lot of unity code soup
             (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
             offset -= 70;
         }
-        
+
+        // Set focus to the button corresponding to the last selected car
+        GameObject.Find("EventSystem").GetComponent<EventSystem>().SetSelectedGameObject(selectedCar == null ? createdGarageButtons[0] : selectedCar);
+
     }
     
     public void OpenTuneScreen() {
@@ -99,7 +114,7 @@ public class Controller : MonoBehaviour {
 
     // Car selection callback
     public void CarSelection() {
-        Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
+        Debug.Log(gameObject.GetComponent<EventSystem>().lastSelectedGameObject);
         GameObject.Find("DataController").GetComponent<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }

@@ -41,6 +41,7 @@ GameObject:
   - component: {fileID: 114194728856462776}
   - component: {fileID: 95471075873888650}
   - component: {fileID: 114880730586412784}
+  - component: {fileID: 114030170889829992}
   m_Layer: 0
   m_Name: Car Button
   m_TagString: Untagged
@@ -65,6 +66,18 @@ Animator:
   m_WarningMessage: 
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
+--- !u!114 &114030170889829992
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1862533101197166}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5993a331e386df849ab090d324a88e92, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  carPrefab: {fileID: 0}
 --- !u!114 &114194728856462776
 MonoBehaviour:
   m_ObjectHideFlags: 1
