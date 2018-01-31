@@ -1,11 +1,19 @@
 ﻿#pragma strict
-var beer : Transform;
-
+var car : Transform;
+var beep : AudioSource;
+var launch : AudioSource;
 function Start () {
-	beer.GetComponent(mustang).enabled = false;
-	yield WaitForSeconds (3);
-	beer.GetComponent(mustang).enabled = true;
+	car.GetComponent(mustang).enabled = false;
+	yield WaitForSeconds (1);
+	beep.Play();
+	yield WaitForSeconds (1);
+	beep.Play();
+	yield WaitForSeconds (1);
+	launch.Play();
+	car.GetComponent(mustang).enabled = true;
+
 }
+
 
 function Update () {
 	
