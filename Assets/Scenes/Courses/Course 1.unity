@@ -156,6 +156,16 @@ Prefab:
       propertyPath: m_LocalEulerAnglesHint.y
       value: -90
       objectReference: {fileID: 0}
+    - target: {fileID: 114808372019102870, guid: 093443e168e976d458a6b81d06329a48,
+        type: 2}
+      propertyPath: speedo
+      value: 
+      objectReference: {fileID: 2800000, guid: 56d06adae7db1db42a37580d67ca5c05, type: 3}
+    - target: {fileID: 114808372019102870, guid: 093443e168e976d458a6b81d06329a48,
+        type: 2}
+      propertyPath: speedopoint
+      value: 
+      objectReference: {fileID: 2800000, guid: 3f5f5ccc8b012e047ab30dea98bf28af, type: 3}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 093443e168e976d458a6b81d06329a48, type: 2}
   m_IsPrefabParent: 0
@@ -288,13 +298,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 256955479}
-  m_LocalRotation: {x: 0.053996157, y: 0.3016506, z: 0.017113991, w: 0.9517344}
-  m_LocalPosition: {x: -8.8, y: 7.55, z: -24.18}
+  m_LocalRotation: {x: -0, y: 0.79268783, z: -0, w: 0.6096278}
+  m_LocalPosition: {x: 50.71, y: 16.33, z: -72.15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 5.3050003, y: 35.346, z: 3.752}
+  m_LocalEulerAnglesHint: {x: 0, y: 104.87501, z: 0}
 --- !u!114 &256955484
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -184,13 +184,13 @@ wheelRRTrans.position = wheelPos;
 }
 
 function OnGUI (){//dial
-GUI.DrawTexture(Rect(Screen.width - 200,Screen.height-130,128,128),speedo);
+GUI.DrawTexture(Rect(Screen.width - 250,Screen.height-160,240,160),speedo);
 var speedFactor : float = engineRPM / engineREDLINE;
 var rotationAngle : float;
 if (engineRPM >= 0){
   rotationAngle = Mathf.Lerp(-70,160,speedFactor);
   }
-GUIUtility.RotateAroundPivot(rotationAngle,Vector2(Screen.width-136,Screen.height-65));
-GUI.DrawTexture(Rect(Screen.width - 200,Screen.height-100,64,64),speedopoint);
+GUIUtility.RotateAroundPivot(rotationAngle,Vector2(Screen.width-162,Screen.height-77));
+GUI.DrawTexture(Rect(Screen.width - 215,Screen.height-112,100,67),speedopoint);
  
 }
