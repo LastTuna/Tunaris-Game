@@ -21,7 +21,7 @@ public class AddOutline : StateMachineBehaviour {
     // OnStateExit is called when a transition ends and the state machine finishes evaluating this state
     override public void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         if (animator.gameObject.transform.childCount > 0 && animator.gameObject.transform.GetChild(0).GetType() == typeof(RectTransform)) {
-        Destroy(animator.gameObject.transform.GetChild(0).gameObject.GetComponent<Outline>());
+            Destroy(animator.gameObject.transform.GetChild(0).gameObject.GetComponent<Outline>());
         }
     }
 

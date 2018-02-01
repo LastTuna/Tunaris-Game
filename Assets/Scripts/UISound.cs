@@ -5,9 +5,11 @@ using UnityEngine;
 public class UISound : StateMachineBehaviour {
     public AudioClip clip;
 
-    void OnStateEnter() {
+    override public void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex) {
         // Get the audio source attached to the main camera
-        AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
-        audioSource.PlayOneShot(clip);
+        if (animator.GetBool("PlaySound")) {
+            AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
+            audioSource.PlayOneShot(clip);
+        }
     }
 }

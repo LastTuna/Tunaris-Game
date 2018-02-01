@@ -144,12 +144,23 @@ public class Controller : MonoBehaviour {
     }
 
     // Global cancel callback
+    public AudioClip cancelClip;
     public void Cancel() {
+        StartCoroutine(CancelCoroutine());
+    }
+    public IEnumerator CancelCoroutine() {
         // Don't return past main menu
-        if (MainMenuCanvas.gameObject.activeSelf) return;
+        if (MainMenuCanvas.gameObject.activeSelf) yield return null;
 
         // Always save settings
         GameObject.Find("DataController").GetComponent<DataController>().SaveGameData();
+
+        // Play cancel sound
+        AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
+        audioSource.PlayOneShot(cancelClip);
+
+        // Wait for the sound to start playing, just in case
+        yield return new WaitForEndOfFrame();
 
         // Go Race -> menu
         if (GoRaceCanvas.gameObject.activeSelf) {
@@ -184,5 +195,7 @@ public class Controller : MonoBehaviour {
             TuneScreenCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
         }
+
+        yield return null;
     }
 }

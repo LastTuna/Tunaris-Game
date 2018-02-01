@@ -929,6 +929,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 1207016144}
+  noBeepControlller: {fileID: 0}
 --- !u!114 &143224005
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3065,6 +3066,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 783279722}
+  noBeepControlller: {fileID: 0}
 --- !u!1 &555579456
 GameObject:
   m_ObjectHideFlags: 0
@@ -5231,6 +5233,7 @@ MonoBehaviour:
   carsPrefabs:
   - {fileID: 1362113268423642, guid: f9808d73496a99443be220412ff95074, type: 2}
   - {fileID: 1610897889992770, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+  cancelClip: {fileID: 0}
 --- !u!114 &1057594254
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6126,6 +6129,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 2135260456}
+  noBeepControlller: {fileID: 9100000, guid: 394921d1e05376340a79c881851a30b3, type: 2}
 --- !u!1 &1269213910
 GameObject:
   m_ObjectHideFlags: 0
@@ -6488,6 +6492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 2118216116}
+  noBeepControlller: {fileID: 0}
 --- !u!1 &1350367343
 GameObject:
   m_ObjectHideFlags: 0
@@ -6598,6 +6603,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 1811647136}
+  noBeepControlller: {fileID: 0}
 --- !u!1 &1387171725
 GameObject:
   m_ObjectHideFlags: 0
@@ -7486,6 +7492,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   DefaultFocusObject: {fileID: 41754102}
+  noBeepControlller: {fileID: 0}
 --- !u!1001 &1648754992
 Prefab:
   m_ObjectHideFlags: 0
