@@ -684,6 +684,7 @@ GameObject:
   - component: {fileID: 128802751}
   - component: {fileID: 128802750}
   - component: {fileID: 128802749}
+  - component: {fileID: 128802752}
   m_Layer: 0
   m_Name: Gearbox Selector
   m_TagString: Untagged
@@ -799,6 +800,36 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 128802747}
+--- !u!114 &128802752
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 128802747}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &142955551
 GameObject:
   m_ObjectHideFlags: 0
@@ -1899,6 +1930,7 @@ GameObject:
   - component: {fileID: 336854699}
   - component: {fileID: 336854702}
   - component: {fileID: 336854700}
+  - component: {fileID: 336854701}
   m_Layer: 0
   m_Name: Tire Bias
   m_TagString: Untagged
@@ -1988,6 +2020,36 @@ MonoBehaviour:
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!114 &336854701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 336854698}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!114 &336854702
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2216,6 +2278,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: CourseSelect
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -2484,6 +2551,7 @@ GameObject:
   - component: {fileID: 444863025}
   - component: {fileID: 444863024}
   - component: {fileID: 444863023}
+  - component: {fileID: 444863027}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -2554,6 +2622,86 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!82 &444863027
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 444863022}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!1 &450881529
 GameObject:
   m_ObjectHideFlags: 0
@@ -3199,6 +3347,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: Cancel
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -4386,6 +4539,7 @@ GameObject:
   - component: {fileID: 848496854}
   - component: {fileID: 848496856}
   - component: {fileID: 848496855}
+  - component: {fileID: 848496857}
   m_Layer: 0
   m_Name: Brake Stiffness
   m_TagString: Untagged
@@ -4488,6 +4642,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 848496855}
   value: {fileID: 257552721}
+--- !u!114 &848496857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 848496853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &849067458
 GameObject:
   m_ObjectHideFlags: 0
@@ -5087,6 +5271,7 @@ GameObject:
   - component: {fileID: 1087563534}
   - component: {fileID: 1087563536}
   - component: {fileID: 1087563535}
+  - component: {fileID: 1087563537}
   m_Layer: 0
   m_Name: Final Drive
   m_TagString: Untagged
@@ -5189,6 +5374,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1087563535}
   value: {fileID: 13222820}
+--- !u!114 &1087563537
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1087563533}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1001 &1087822713
 Prefab:
   m_ObjectHideFlags: 0
@@ -6617,6 +6832,7 @@ GameObject:
   - component: {fileID: 1466583966}
   - component: {fileID: 1466583968}
   - component: {fileID: 1466583967}
+  - component: {fileID: 1466583969}
   m_Layer: 0
   m_Name: Spring Stiffness
   m_TagString: Untagged
@@ -6719,6 +6935,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1466583967}
   value: {fileID: 295860496}
+--- !u!114 &1466583969
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1466583965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &1490218061
 GameObject:
   m_ObjectHideFlags: 0
@@ -7387,6 +7633,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: OpenTuneScreen
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -8212,6 +8463,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1057594253}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -8570,6 +8826,7 @@ GameObject:
   - component: {fileID: 1997375130}
   - component: {fileID: 1997375132}
   - component: {fileID: 1997375131}
+  - component: {fileID: 1997375133}
   m_Layer: 0
   m_Name: Aero
   m_TagString: Untagged
@@ -8672,6 +8929,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   slider: {fileID: 1997375131}
   value: {fileID: 265698596}
+--- !u!114 &1997375133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1997375129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1862395651, guid: f70555f144d8491a825f0804e09c671c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Delegates:
+  - eventID: 16
+    callback:
+      m_PersistentCalls:
+        m_Calls:
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: Cancel
+          m_Mode: 1
+          m_Arguments:
+            m_ObjectArgument: {fileID: 0}
+            m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+            m_IntArgument: 0
+            m_FloatArgument: 0
+            m_StringArgument: 
+            m_BoolArgument: 0
+          m_CallState: 2
+      m_TypeName: UnityEngine.EventSystems.EventTrigger+TriggerEvent, UnityEngine.UI,
+        Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
+  delegates: []
 --- !u!1 &1999532296
 GameObject:
   m_ObjectHideFlags: 0
@@ -8989,6 +9276,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: StartRace
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -9154,6 +9446,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: CourseSelection
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
@@ -9387,6 +9684,11 @@ Prefab:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
       value: CourseSelection
       objectReference: {fileID: 0}
+    - target: {fileID: 114755651598527280, guid: b555b599761871c44a814d6590f33ed3,
+        type: 2}
+      propertyPath: m_Delegates.Array.data[0].callback.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 1057594253}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: b555b599761871c44a814d6590f33ed3, type: 2}
   m_IsPrefabParent: 0
