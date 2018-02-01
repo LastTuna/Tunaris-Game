@@ -1,8 +1,9 @@
 ﻿#pragma strict
 var car : Transform;
 var beep : AudioSource;
-var launch : AudioSource;
-function Start () {
+var launch: AudioSource;
+
+function Start() {
 	car.GetComponent(mustang).enabled = false;
 	yield WaitForSeconds (1);
 	beep.Play();
