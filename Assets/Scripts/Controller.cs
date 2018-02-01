@@ -103,11 +103,22 @@ public class Controller : MonoBehaviour {
 
     // Main menu button callbacks
     public void GoRace() {
+        StartCoroutine(GoRaceCoroutine());
+    }
+
+    IEnumerator GoRaceCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
         GoRaceCanvas.gameObject.SetActive(true);
     }
 
     public void Options() {
+        StartCoroutine(OptionsCoroutine());
+    }
+    IEnumerator OptionsCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
         OptionsCanvas.gameObject.SetActive(true);
     }
@@ -118,6 +129,13 @@ public class Controller : MonoBehaviour {
 
     // Course select callback
     public void CourseSelection() {
+        StartCoroutine(CourseSelectionCoroutine());
+    }
+
+    IEnumerator CourseSelectionCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame();
+
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
         GameObject.Find("DataController").GetComponent<DataController>().SelectedCourse = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
@@ -125,6 +143,12 @@ public class Controller : MonoBehaviour {
 
     // Car selection callback
     public void CarSelection() {
+        StartCoroutine(CarSelectionCoroutine());
+    }
+
+    IEnumerator CarSelectionCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame();
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
         GameObject.Find("DataController").GetComponent<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();

@@ -6,7 +6,7 @@ using UnityEngine.EventSystems;
 public class DefaultFocus : MonoBehaviour {
     public GameObject DefaultFocusObject;
 
-    void Start() {
+    void OnEnable() {
         StartCoroutine(SetDefaultFocus());
     }
 
