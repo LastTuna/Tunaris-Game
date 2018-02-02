@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class mustang : NetworkBehaviour {
+public class mustang : MonoBehaviour {
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
@@ -40,7 +40,6 @@ public class mustang : NetworkBehaviour {
     public bool shifting = false;//shifter delay
 
     void Start() {
-        // Initialize car camera
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
@@ -52,12 +51,7 @@ public class mustang : NetworkBehaviour {
     }
 
     void FixedUpdate() {
-        // Only process shit for the local player
-        if (!isLocalPlayer) {
-            return;
-        }
-
-        StartCoroutine(engine());
+         StartCoroutine(engine());
 
         if (Input.GetAxis("Brake") > 0f) {//brakes
             wheelFL.brakeTorque = brakeStrength;
@@ -71,10 +65,10 @@ public class mustang : NetworkBehaviour {
             wheelRR.brakeTorque = 0;
         }
         if (Input.GetAxis("Handbrake") > 0f) {//HANDBRAKE
-            wheelRL.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRR.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = 0.5f };
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.5f);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.5f);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
 
             wheelRL.brakeTorque = 300;
             wheelRR.brakeTorque = 300;
@@ -82,10 +76,10 @@ public class mustang : NetworkBehaviour {
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
 
-            wheelRL.sidewaysFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRR.sidewaysFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = currentGrip };
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
         }
 
         wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
@@ -96,21 +90,25 @@ public class mustang : NetworkBehaviour {
         currentSpeed = Mathf.Round(currentSpeed);
     }
 
-    void Update() {
-        // Only process shit for the local player
-        if (!isLocalPlayer) {
-            return;
-        }
+    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness) {
+        return new WheelFrictionCurve() {
+            asymptoteSlip = wheelRL.sidewaysFriction.asymptoteSlip,
+            asymptoteValue = wheelRL.sidewaysFriction.asymptoteValue,
+            extremumSlip = wheelRL.sidewaysFriction.extremumSlip,
+            extremumValue = wheelRL.sidewaysFriction.extremumValue,
+            stiffness = newStiffness };
+    }
 
+    void Update() {
         StartCoroutine(gearbox());//gearbox update 
 
         wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z);
-        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z);
-        //WheelPosition(); //graphical update - wheel positions 
+        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
+        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
+        WheelPosition(); //graphical update - wheel positions 
     }
 
     IEnumerator engine() {//engine

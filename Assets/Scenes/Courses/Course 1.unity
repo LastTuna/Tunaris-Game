@@ -125,7 +125,6 @@ GameObject:
   - component: {fileID: 88717921}
   - component: {fileID: 88717920}
   - component: {fileID: 88717922}
-  - component: {fileID: 88717919}
   m_Layer: 0
   m_Name: car
   m_TagString: Untagged
@@ -133,38 +132,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &88717919
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 88717918}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 9
-    i1: 52
-    i2: 67
-    i3: 225
-    i4: 104
-    i5: 233
-    i6: 118
-    i7: 212
-    i8: 88
-    i9: 166
-    i10: 184
-    i11: 29
-    i12: 6
-    i13: 50
-    i14: 154
-    i15: 72
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
 --- !u!114 &88717920
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -212,7 +179,7 @@ MonoBehaviour:
   wheelRR: {fileID: 1385911147}
   wheelFLTrans: {fileID: 414194932}
   wheelFRTrans: {fileID: 1273159868}
-  wheelRLTrans: {fileID: 1183878061}
+  wheelRLTrans: {fileID: 462353102}
   wheelRRTrans: {fileID: 1396319322}
   currentSpeed: 0
   wheelRPM: 0

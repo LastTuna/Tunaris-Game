@@ -57,10 +57,10 @@ InputManager:
     m_Name: Throttle
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: up
-    altNegativeButton: 
-    altPositiveButton: w
+    negativeButton: up
+    positiveButton: 
+    altNegativeButton: w
+    altPositiveButton: 
     gravity: 3
     dead: 0.001
     sensitivity: 3
@@ -86,29 +86,13 @@ InputManager:
     axis: 0
     joyNum: 0
   - serializedVersion: 3
-    m_Name: Brake
-    descriptiveName: 
-    descriptiveNegativeName: 
-    negativeButton: down
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
-    gravity: 3
-    dead: 0.001
-    sensitivity: 3
-    snap: 1
-    invert: 0
-    type: 0
-    axis: 0
-    joyNum: 0
-  - serializedVersion: 3
     m_Name: ShiftUp
     descriptiveName: Shifts gear up (R1)
     descriptiveNegativeName: 
     negativeButton: 
     positiveButton: joystick button 5
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: left shift
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
@@ -124,7 +108,7 @@ InputManager:
     negativeButton: 
     positiveButton: joystick button 4
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: left ctrl
     gravity: 1000
     dead: 0.001
     sensitivity: 1000
