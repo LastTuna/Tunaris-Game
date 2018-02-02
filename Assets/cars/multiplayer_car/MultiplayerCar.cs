@@ -110,9 +110,9 @@ public class MultiplayerCar : NetworkBehaviour {
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFRTrans.localEulerAngles.y, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z);
-        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFLTrans.localEulerAngles.y, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z);
-        WheelPosition(); //graphical update - wheel positions 
+        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z);
+        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z);
+        //WheelPosition(); //graphical update - wheel positions 
     }
 
     IEnumerator engine() {//engine
