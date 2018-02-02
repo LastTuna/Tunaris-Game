@@ -40,8 +40,10 @@ public class MultiplayerCar : NetworkBehaviour {
     public bool shifting = false;//shifter delay
 
     void Start() {
-        // Initialize car camera
-        (GameObject.Find("Main Camera").GetComponent<CarCamera>() as CarCamera).car = this.transform;
+        if (isLocalPlayer) {
+            // Initialize car camera
+            (GameObject.Find("Main Camera").GetComponent<CarCamera>() as CarCamera).car = this.transform;
+        }
 
         engineRPM = 800;
         ratio = 4.3f;
@@ -73,10 +75,10 @@ public class MultiplayerCar : NetworkBehaviour {
             wheelRR.brakeTorque = 0;
         }
         if (Input.GetAxis("Handbrake") > 0f) {//HANDBRAKE
-            wheelRL.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRR.sidewaysFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = 0.5f };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = 0.5f };
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.5f);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.5f);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
 
             wheelRL.brakeTorque = 300;
             wheelRR.brakeTorque = 300;
@@ -84,10 +86,10 @@ public class MultiplayerCar : NetworkBehaviour {
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
 
-            wheelRL.sidewaysFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRR.sidewaysFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = currentGrip };
-            wheelRL.forwardFriction = new WheelFrictionCurve() { stiffness = currentGrip };
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
         }
 
         wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
@@ -96,6 +98,16 @@ public class MultiplayerCar : NetworkBehaviour {
         wheelRPM = (wheelFL.rpm + wheelRL.rpm) / 2; //speed counter
         currentSpeed = 2 * 22 / 7 * wheelFL.radius * wheelRL.rpm * 60 / 1000;
         currentSpeed = Mathf.Round(currentSpeed);
+    }
+
+    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness) {
+        return new WheelFrictionCurve() {
+            asymptoteSlip = wheelRL.sidewaysFriction.asymptoteSlip,
+            asymptoteValue = wheelRL.sidewaysFriction.asymptoteValue,
+            extremumSlip = wheelRL.sidewaysFriction.extremumSlip,
+            extremumValue = wheelRL.sidewaysFriction.extremumValue,
+            stiffness = newStiffness
+        };
     }
 
     void Update() {
@@ -110,8 +122,8 @@ public class MultiplayerCar : NetworkBehaviour {
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z);
-        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z);
+        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
+        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
         WheelPosition(); //graphical update - wheel positions 
     }
 
@@ -199,14 +211,15 @@ public class MultiplayerCar : NetworkBehaviour {
     }
 
     void OnGUI() {//dial
-        GUI.DrawTexture(new Rect(Screen.width - 250, Screen.height - 160, 240, 160), speedo);
-        float speedFactor = engineRPM / engineREDLINE;
-        float rotationAngle = 0;
-        if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(-70, 160, speedFactor);
+        if (isLocalPlayer) {
+            GUI.DrawTexture(new Rect(Screen.width - 250, Screen.height - 160, 240, 160), speedo);
+            float speedFactor = engineRPM / engineREDLINE;
+            float rotationAngle = 0;
+            if (engineRPM >= 0) {
+                rotationAngle = Mathf.Lerp(-70, 160, speedFactor);
+            }
+            GUIUtility.RotateAroundPivot(rotationAngle, new Vector2(Screen.width - 162, Screen.height - 77));
+            GUI.DrawTexture(new Rect(Screen.width - 215, Screen.height - 112, 100, 67), speedopoint);
         }
-        GUIUtility.RotateAroundPivot(rotationAngle, new Vector2(Screen.width - 162, Screen.height - 77));
-        GUI.DrawTexture(new Rect(Screen.width - 215, Screen.height - 112, 100, 67), speedopoint);
-
     }
 }
