@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class MultiplayerCar : NetworkBehaviour {
+public class CarScript : MonoBehaviour {
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
@@ -40,9 +40,6 @@ public class MultiplayerCar : NetworkBehaviour {
     public bool shifting = false;//shifter delay
 
     void Start() {
-        // Initialize car camera
-        (GameObject.Find("Main Camera").GetComponent<CarCamera>() as CarCamera).car = this.transform;
-
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
@@ -54,11 +51,6 @@ public class MultiplayerCar : NetworkBehaviour {
     }
 
     void FixedUpdate() {
-        // Only process shit for the local player
-        if (!isLocalPlayer) {
-            return;
-        }
-
         StartCoroutine(engine());
 
         if (Input.GetAxis("Brake") > 0f) {//brakes
@@ -99,11 +91,6 @@ public class MultiplayerCar : NetworkBehaviour {
     }
 
     void Update() {
-        // Only process shit for the local player
-        if (!isLocalPlayer) {
-            return;
-        }
-
         StartCoroutine(gearbox());//gearbox update 
 
         wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
