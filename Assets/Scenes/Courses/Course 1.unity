@@ -113,6 +113,11 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!146 &68068075 stripped
+WheelCollider:
+  m_PrefabParentObject: {fileID: 146049310741882660, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
 --- !u!1 &88717918
 GameObject:
   m_ObjectHideFlags: 0
@@ -440,13 +445,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abdb99c61f1aa0446a5f1ae99937bfad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  car: {fileID: 1102563113}
+  car: {fileID: 1599768447}
   distance: 6.4
   height: 1.4
   rotationDamping: 3
   heightDamping: 2
   zoomRacio: 0.5
   DefaultFOV: 60
+--- !u!146 &258253941 stripped
+WheelCollider:
+  m_PrefabParentObject: {fileID: 146462054748331484, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
 --- !u!1 &296229825
 GameObject:
   m_ObjectHideFlags: 0
@@ -481,6 +491,16 @@ Transform:
   m_Father: {fileID: 1102563113}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!146 &300119734 stripped
+WheelCollider:
+  m_PrefabParentObject: {fileID: 146925858365884318, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!146 &376611648 stripped
+WheelCollider:
+  m_PrefabParentObject: {fileID: 146220109942087966, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
 --- !u!1 &414194931
 GameObject:
   m_ObjectHideFlags: 0
@@ -621,6 +641,16 @@ MeshFilter:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 486959753}
   m_Mesh: {fileID: 4300000, guid: 41a49613e0716fb4582fa5f720094260, type: 3}
+--- !u!4 &523879791 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4172892060932234, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!4 &604040895 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4163563626721086, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
 --- !u!1 &604123834
 GameObject:
   m_ObjectHideFlags: 0
@@ -1492,6 +1522,66 @@ Transform:
   m_Father: {fileID: 296229826}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1574280023 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4894799371240430, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!4 &1580738173 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4808935104155644, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!1 &1599768444 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 1707764057531940, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!4 &1599768447 stripped
+Transform:
+  m_PrefabParentObject: {fileID: 4895115189282840, guid: 88003c4a94741504aaf89203c765d4a6,
+    type: 2}
+  m_PrefabInternal: {fileID: 254355168}
+--- !u!114 &1599768448
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1599768444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa86f15f648ff2e40b6b7824429d7b54, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wheelFL: {fileID: 258253941}
+  wheelFR: {fileID: 376611648}
+  wheelRL: {fileID: 68068075}
+  wheelRR: {fileID: 300119734}
+  wheelFLTrans: {fileID: 604040895}
+  wheelFRTrans: {fileID: 523879791}
+  wheelRLTrans: {fileID: 1580738173}
+  wheelRRTrans: {fileID: 1574280023}
+  currentSpeed: 0
+  wheelRPM: 0
+  speedo: {fileID: 2800000, guid: 71145f4f7c3d78f40ba1bb45e6f299c7, type: 3}
+  speedopoint: {fileID: 2800000, guid: 3f5f5ccc8b012e047ab30dea98bf28af, type: 3}
+  currentGrip: 1.3
+  brakeStrength: 200
+  aero: 15
+  ratio: 0
+  engineRPM: 0
+  engineREDLINE: 9000
+  unitOutput: 0
+  gearR: -5
+  gearN: 0
+  gear1: 5.4
+  gear2: 3.4
+  gear3: 2.7
+  gear4: 2
+  gear5: 1.8
+  gear6: 1.6
+  gear: 0
+  shifting: 0
 --- !u!1 &1660062325
 GameObject:
   m_ObjectHideFlags: 0
