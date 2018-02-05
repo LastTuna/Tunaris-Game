@@ -128,7 +128,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1102563113}
   - component: {fileID: 88717921}
-  - component: {fileID: 88717920}
+  - component: {fileID: 88717919}
   - component: {fileID: 88717922}
   m_Layer: 0
   m_Name: car
@@ -137,16 +137,15 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &88717920
+--- !u!114 &88717919
 MonoBehaviour:
   m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 114217610944125400, guid: 093443e168e976d458a6b81d06329a48,
-    type: 2}
+  m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 88717918}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f6d0bf5e3ed07e4fa1c785daf4329d5, type: 3}
+  m_Script: {fileID: 11500000, guid: b54bfceeb0e6a4c4f8ca31c7c9ff819c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   beep: {fileID: 854783239}
@@ -173,7 +172,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 88717918}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bd2dcec3d46a93f4693381c30f8b9834, type: 3}
   m_Name: 
@@ -348,6 +347,26 @@ Prefab:
     - target: {fileID: 4895115189282840, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
       propertyPath: m_RootOrder
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 146220109942087966, guid: 88003c4a94741504aaf89203c765d4a6,
+        type: 2}
+      propertyPath: m_SuspensionSpring.spring
+      value: 6000
+      objectReference: {fileID: 0}
+    - target: {fileID: 146462054748331484, guid: 88003c4a94741504aaf89203c765d4a6,
+        type: 2}
+      propertyPath: m_SuspensionSpring.spring
+      value: 6000
+      objectReference: {fileID: 0}
+    - target: {fileID: 146049310741882660, guid: 88003c4a94741504aaf89203c765d4a6,
+        type: 2}
+      propertyPath: m_SuspensionSpring.spring
+      value: 6000
+      objectReference: {fileID: 0}
+    - target: {fileID: 146925858365884318, guid: 88003c4a94741504aaf89203c765d4a6,
+        type: 2}
+      propertyPath: m_SuspensionSpring.spring
+      value: 6000
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
