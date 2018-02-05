@@ -1,8 +1,13 @@
 using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.Networking;
 
-public class merci : MonoBehaviour {
+public class merci : MonoBehaviour
+{
+    public Text speedDisplay;//output of speed to meter - by default MPH
+    public Text gearDisplay;
+    public RectTransform pointer;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
@@ -13,8 +18,6 @@ public class merci : MonoBehaviour {
     public Transform wheelRRTrans;
     public float currentSpeed;
     public float wheelRPM;
-    public Texture2D speedo;
-    public Texture2D speedopoint;
 
     public float currentGrip = 1.3f;
     //tuneable stats
@@ -39,7 +42,9 @@ public class merci : MonoBehaviour {
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
-    void Start() {
+    void Start()
+    {
+        ValueChecks();
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
@@ -50,21 +55,26 @@ public class merci : MonoBehaviour {
 
     }
 
-    void FixedUpdate() {
-         StartCoroutine(engine());
+    void FixedUpdate()
+    {
+        StartCoroutine(engine());
 
-        if (Input.GetAxis("Brake") > 0f) {//brakes
+        if (Input.GetAxis("Brake") > 0f)
+        {//brakes
             wheelFL.brakeTorque = brakeStrength;
             wheelFR.brakeTorque = brakeStrength;
             wheelRL.brakeTorque = brakeStrength;
             wheelRR.brakeTorque = brakeStrength;
-        } else {
+        }
+        else
+        {
             wheelFL.brakeTorque = 0;
             wheelFR.brakeTorque = 0;
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
         }
-        if (Input.GetAxis("Handbrake") > 0f) {//HANDBRAKE
+        if (Input.GetAxis("Handbrake") > 0f)
+        {//HANDBRAKE
             wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.5f);
             wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
             wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.5f);
@@ -72,7 +82,9 @@ public class merci : MonoBehaviour {
 
             wheelRL.brakeTorque = 300;
             wheelRR.brakeTorque = 300;
-        } else {
+        }
+        else
+        {
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
 
@@ -90,18 +102,22 @@ public class merci : MonoBehaviour {
         currentSpeed = Mathf.Round(currentSpeed);
     }
 
-    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness) {
-        return new WheelFrictionCurve() {
+    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness)
+    {
+        return new WheelFrictionCurve()
+        {
             asymptoteSlip = wheelRL.sidewaysFriction.asymptoteSlip,
             asymptoteValue = wheelRL.sidewaysFriction.asymptoteValue,
             extremumSlip = wheelRL.sidewaysFriction.extremumSlip,
             extremumValue = wheelRL.sidewaysFriction.extremumValue,
-            stiffness = newStiffness };
+            stiffness = newStiffness
+        };
     }
 
-    void Update() {
+    void Update()
+    {
         StartCoroutine(gearbox());//gearbox update 
-
+        ValueChecks();
         wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -111,17 +127,26 @@ public class merci : MonoBehaviour {
         WheelPosition(); //graphical update - wheel positions 
     }
 
-    IEnumerator engine() {//engine
-        if (gear == 1) {//neutral revs
+    IEnumerator engine()
+    {//engine
+        if (gear == 1)
+        {//neutral revs
 
-            if (engineRPM >= engineREDLINE) {
+            if (engineRPM >= engineREDLINE)
+            {
                 engineRPM = engineRPM - 300;
-            } else {
-                if (Input.GetAxis("Throttle") > 0) {
+            }
+            else
+            {
+                if (Input.GetAxis("Throttle") > 0)
+                {
                     yield return new WaitForSeconds(0.1f);
                     engineRPM = 100 + engineRPM;
-                } else {
-                    if (engineRPM > 800) {
+                }
+                else
+                {
+                    if (engineRPM > 800)
+                    {
                         yield return new WaitForSeconds(0.05f);
                         engineRPM = engineRPM - 100;
                     }
@@ -129,31 +154,42 @@ public class merci : MonoBehaviour {
 
 
             }
-        } else { //drive revs
+        }
+        else
+        { //drive revs
             engineRPM = wheelRPM * gears[gear] * ratio + 800;
         }
 
-        if (gear > 0) {
+        if (gear > 0)
+        {
             unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + 120; //ENGINE OUTPUT TO WHEELS
-        } else {
+        }
+        else
+        {
             unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - 120; //reverse output
         }
-        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0) {//throttle & rev limit
+        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
+        {//throttle & rev limit
             wheelFR.motorTorque = 0;
             wheelFL.motorTorque = 0;
-        } else {
+        }
+        else
+        {
             wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle");
             wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle");
         }
     }
-    IEnumerator gearbox() {
-        if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false) {
+    IEnumerator gearbox()
+    {
+        if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false)
+        {
             shifting = true;
             gear = gear + 1;
             yield return new WaitForSeconds(0.3f);
             shifting = false;
         }
-        if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false) {
+        if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
+        {
             shifting = true;
             gear = gear - 1;
             yield return new WaitForSeconds(0.1f);
@@ -161,48 +197,84 @@ public class merci : MonoBehaviour {
         }
     }
 
-    void WheelPosition() { //graphical update - wheel positions 
+    void WheelPosition()
+    { //graphical update - wheel positions 
         RaycastHit hit;
         Vector3 wheelPos;
         //FL
-        if (Physics.Raycast(wheelFL.transform.position, -wheelFL.transform.up, out hit, wheelFL.radius + wheelFL.suspensionDistance)) {
+        if (Physics.Raycast(wheelFL.transform.position, -wheelFL.transform.up, out hit, wheelFL.radius + wheelFL.suspensionDistance))
+        {
             wheelPos = hit.point + wheelFL.transform.up * wheelFL.radius;
-        } else {
+        }
+        else
+        {
             wheelPos = wheelFL.transform.position - wheelFL.transform.up * wheelFL.suspensionDistance;
         }
         wheelFLTrans.position = wheelPos;
         //FR
-        if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up, out hit, wheelFR.radius + wheelFR.suspensionDistance)) {
+        if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up, out hit, wheelFR.radius + wheelFR.suspensionDistance))
+        {
             wheelPos = hit.point + wheelFR.transform.up * wheelFR.radius;
-        } else {
+        }
+        else
+        {
             wheelPos = wheelFR.transform.position - wheelFR.transform.up * wheelFR.suspensionDistance;
         }
         wheelFRTrans.position = wheelPos;
         //RL
-        if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up, out hit, wheelRL.radius + wheelRL.suspensionDistance)) {
+        if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up, out hit, wheelRL.radius + wheelRL.suspensionDistance))
+        {
             wheelPos = hit.point + wheelRL.transform.up * wheelRL.radius;
-        } else {
+        }
+        else
+        {
             wheelPos = wheelRL.transform.position - wheelRL.transform.up * wheelRL.suspensionDistance;
         }
         wheelRLTrans.position = wheelPos;
         //RR
-        if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up, out hit, wheelRR.radius + wheelRR.suspensionDistance)) {
+        if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up, out hit, wheelRR.radius + wheelRR.suspensionDistance))
+        {
             wheelPos = hit.point + wheelRR.transform.up * wheelRR.radius;
-        } else {
+        }
+        else
+        {
             wheelPos = wheelRR.transform.position - wheelRR.transform.up * wheelRR.suspensionDistance;
         }
         wheelRRTrans.position = wheelPos;
     }
 
-    void OnGUI() {//dial
-        GUI.DrawTexture(new Rect(Screen.width - 250, Screen.height - 160, 240, 160), speedo);
-        float speedFactor = engineRPM / engineREDLINE;
+    void ValueChecks()
+    {
+        float speedFactor = engineRPM / engineREDLINE;//dial rotation
         float rotationAngle = 0;
-        if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(-70, 160, speedFactor);
+        if (engineRPM >= 0)
+        {
+            rotationAngle = Mathf.Lerp(70, -160, speedFactor);
+            pointer.eulerAngles = new Vector3(0, 0, rotationAngle);
+        }//end dial rot
+
+        if (currentSpeed < 0)//cancelling negative integers, speed
+        {
+            speedDisplay.text = (currentSpeed * -1).ToString();
         }
-        GUIUtility.RotateAroundPivot(rotationAngle, new Vector2(Screen.width - 162, Screen.height - 77));
-        GUI.DrawTexture(new Rect(Screen.width - 215, Screen.height - 112, 100, 67), speedopoint);
+        else
+        {
+            speedDisplay.text = currentSpeed.ToString();
+        }
+        if(gear == 0)//gears
+        {
+            gearDisplay.text = "R".ToString();//reverse gear
+        }
+        else if(gear == 1)
+        {
+            gearDisplay.text = "N".ToString();//neutral
+        }
+        else
+        {
+            gearDisplay.text = (gear - 1).ToString();//array value, minus 1
+        }
+
 
     }
 }
+
