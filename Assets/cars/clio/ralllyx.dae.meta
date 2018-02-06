@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ae378cf6a020b424a8e19837c4250242
-timeCreated: 1516808209
+guid: 95609a3846449fa498630e412e66de38
+timeCreated: 1517754796
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
@@ -17,6 +17,10 @@ ModelImporter:
     400006: //RootNode
     400008: RL
     400010: RR
+    2100000: MAIN1
+    2100002: WINDOWS
+    2100004: lightB1
+    2100006: lightF1
     2300000: FL
     2300002: FR
     2300004: MAIN
@@ -58,7 +62,7 @@ ModelImporter:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -96,6 +100,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
