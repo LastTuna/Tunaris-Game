@@ -6,11 +6,12 @@ using UnityEngine;
 public class raceStart : MonoBehaviour {
     public AudioSource beep;
     public AudioSource launch;
+
     // Use this for initialization
     void Start () {
        StartCoroutine(CountDown());
 
-	}
+}
 
     IEnumerator CountDown ()
     {

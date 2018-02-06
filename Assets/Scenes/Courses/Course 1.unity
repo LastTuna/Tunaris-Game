@@ -1704,6 +1704,7 @@ MonoBehaviour:
   brakeStrength: 200
   aero: 15
   ratio: 0
+  tyreBias: 0.3
   engineRPM: 0
   engineREDLINE: 9000
   unitOutput: 0
@@ -1812,7 +1813,7 @@ GameObject:
   - component: {fileID: 1660062326}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: sand
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

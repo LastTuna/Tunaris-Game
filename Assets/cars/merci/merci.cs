@@ -5,6 +5,7 @@ using UnityEngine.Networking;
 
 public class merci : MonoBehaviour
 {
+
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
     public RectTransform pointer;
@@ -19,13 +20,15 @@ public class merci : MonoBehaviour
     public float currentSpeed;
     public float wheelRPM;
 
-    public float currentGrip = 1.3f;
+    public float currentGrip; //value manipulated by road type
     //tuneable stats
-    public float brakeStrength = 200;
-    public float aero = 15.0f;
-    public float ratio;
+    public float brakeStrength = 200; //brake strength
+    public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
+    public float ratio; //final drive
+    public float tyreBias = 0.6f; //tyre bias - smaller value = offroad - higher value = tarmac (0-1) BASE TIRE GRIP VALUE = 1
 
 
+    //end tuneable stats
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline
     public float unitOutput;
@@ -59,6 +62,23 @@ public class merci : MonoBehaviour
     {
         StartCoroutine(engine());
 
+        if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
+        {
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.4f);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+
+            wheelRL.brakeTorque = 300;
+            wheelRR.brakeTorque = 300;
+        }
+        else
+        {
+            wheelRL.brakeTorque = 0;
+            wheelRR.brakeTorque = 0;
+        }
+
+
         if (Input.GetAxis("Brake") > 0f)
         {//brakes
             wheelFL.brakeTorque = brakeStrength;
@@ -72,26 +92,6 @@ public class merci : MonoBehaviour
             wheelFR.brakeTorque = 0;
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
-        }
-        if (Input.GetAxis("Handbrake") > 0f)
-        {//HANDBRAKE
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.5f);
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.5f);
-            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
-
-            wheelRL.brakeTorque = 300;
-            wheelRR.brakeTorque = 300;
-        }
-        else
-        {
-            wheelRL.brakeTorque = 0;
-            wheelRR.brakeTorque = 0;
-
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
-            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
         }
 
         wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
@@ -116,8 +116,10 @@ public class merci : MonoBehaviour
 
     void Update()
     {
+        
         StartCoroutine(gearbox());//gearbox update 
         ValueChecks();
+        Offroad();
         wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -242,6 +244,69 @@ public class merci : MonoBehaviour
         }
         wheelRRTrans.position = wheelPos;
     }
+
+    void Offroad()
+    {
+        WheelHit FLhit;
+        float wheelpreload;
+
+        //4444444444444444444444444444444
+        if (wheelFL.GetGroundHit(out FLhit))
+        {
+            if (FLhit.collider.gameObject.CompareTag("sand"))
+            {
+                if (currentGrip > 1.1f)
+                {
+                    currentGrip = 1.1f;
+                }
+                else
+                {
+                    currentGrip = 1 - tyreBias + 0.3f;//OFFROAD
+                }
+                wheelFR.sidewaysFriction = SetStiffness(wheelFR.sidewaysFriction, currentGrip + 0.1f);
+                wheelFL.sidewaysFriction = SetStiffness(wheelFL.sidewaysFriction, currentGrip + 0.1f);
+                wheelFR.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + 0.1f);
+                wheelFL.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + 0.1f);
+                //
+                wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
+                wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
+                wheelRR.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+                wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+            }
+            else
+            {
+                if(currentGrip > 1.3f)
+                {
+                currentGrip = 1.3f;
+                }
+                else
+                {
+                    currentGrip = 1 * tyreBias + 0.4f;//TARMAC
+                }
+                if(currentGrip > 0.9f)//drive wheel preload - provides extra grip to drive wheels.
+                {//make sure to change application accordingly!!!! (RWD, FWD, AWD)
+                    wheelpreload = 0f; //this setting applies to TARMAC ONLY!!! change offroad value accordingly
+                }
+                else
+                {
+                    wheelpreload = 0.2f;
+                }
+                wheelFR.sidewaysFriction = SetStiffness(wheelFR.sidewaysFriction, currentGrip + wheelpreload);
+                wheelFL.sidewaysFriction = SetStiffness(wheelFL.sidewaysFriction, currentGrip + wheelpreload);
+                wheelFR.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + wheelpreload);
+                wheelFL.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + wheelpreload);
+                //
+                wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
+                wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
+                wheelRR.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+                wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
+            }
+            
+            
+        }
+    }
+
+
 
     void ValueChecks()
     {
