@@ -13,7 +13,6 @@ public class MultiplayerCar : NetworkBehaviour {
     public Transform wheelRRTrans;
     public float currentSpeed;
     public float wheelRPM;
-    public Texture2D speedo;
     public Texture2D speedopoint;
 
     public float currentGrip = 1.3f;
@@ -212,7 +211,6 @@ public class MultiplayerCar : NetworkBehaviour {
 
     void OnGUI() {//dial
         if (isLocalPlayer) {
-            GUI.DrawTexture(new Rect(Screen.width - 250, Screen.height - 160, 240, 160), speedo);
             float speedFactor = engineRPM / engineREDLINE;
             float rotationAngle = 0;
             if (engineRPM >= 0) {
