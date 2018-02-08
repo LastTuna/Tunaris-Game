@@ -17,7 +17,6 @@ public class TGNetworkManager : NetworkManager {
 
     // Called on the HOST after OSC, when the client is connected and ready to be added
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
-        Debug.Log("OSAP");
         // Spawn player car
         GameObject player = Instantiate(DefaultPrefab, SpawnPositions[Players.Count].transform.position, Quaternion.identity);
 
@@ -38,10 +37,17 @@ public class TGNetworkManager : NetworkManager {
         NetworkServer.RegisterHandler(TGMessageTypes.PlayerConnection, HandlePlayerConnection);
     }
 
+    // Called on the HOST when a player leaves
+    public override void OnClientDisconnect(NetworkConnection conn) {
+        base.OnClientDisconnect(conn);
+        ConnectedPlayer player = Players[conn];
+        Destroy(player.PlayerGO);
+        Players.Remove(conn);
+    }
+
     // Called on the HOST to handle the PlayerConnection message from the client
     // This message is sent right after the client connects in XXX
     private void HandlePlayerConnection(NetworkMessage rawMessage) {
-        Debug.Log("HPC");
         // Parse the message back
         PlayerConnectionMessage currentPlayerMessage = rawMessage.ReadMessage<PlayerConnectionMessage>();
 
