@@ -88,7 +88,7 @@ public class DataController : MonoBehaviour {
         LoadGameData();
     }
 
-    private void LoadGameData() {
+    public void LoadGameData() {
         string filePath = Path.Combine(Application.dataPath, gameDataFileName);
 
         if (File.Exists(filePath)) {
