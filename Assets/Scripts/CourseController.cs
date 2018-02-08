@@ -10,8 +10,10 @@ public class CourseController : MonoBehaviour {
     public bool IsMultiplayer = true;
     // Server IP, null if hosting
     public string IP = null;
-    // Multiplayer prefab to instantiate, should contain shit like spawn points
+    // Per-course multiplayer prefab to instantiate, should contain shit like spawn points
     public GameObject MultiplayerPrefab;
+    // Global Host UI prefab to instantiate
+    public GameObject HostUI;
 
 	void Start () {
         GameObject dataController = GameObject.Find("DataController");
@@ -33,9 +35,19 @@ public class CourseController : MonoBehaviour {
         if (IsMultiplayer) {
             // Create all the spawn points
             GameObject MpPrefab = Instantiate(MultiplayerPrefab);
+            TGNetworkManager manager = MpPrefab.GetComponentInChildren<TGNetworkManager>();
 
-            // Start hosting
-            MpPrefab.GetComponentInChildren<TGNetworkManager>().StartHost();
+            if (IP == null || IP == string.Empty) {
+                // Start hosting
+                manager.StartHost();
+                
+                // Create host UI
+                Instantiate(HostUI).name = "HostUI";
+            } else {
+                // Connect
+                manager.networkAddress = IP;
+                manager.StartClient();
+            }
         }
     }
 }
