@@ -151,8 +151,9 @@ MonoBehaviour:
     Gearbox: 0
   IsMultiplayer: 1
   IP: 
-  MultiplayerPrefab: {fileID: 1927611942117612, guid: a930d34439da909449a3d9824ec2493f,
+  MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,
     type: 2}
+  HostUI: {fileID: 1267096992082948, guid: 36ac95ee80f840d4d81bb8365829d596, type: 2}
 --- !u!4 &149764962
 Transform:
   m_ObjectHideFlags: 0
