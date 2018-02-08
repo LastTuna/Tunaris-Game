@@ -498,7 +498,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1714042928635844}
   m_LocalRotation: {x: 0, y: -0.7071068, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 61.21, y: 15.43, z: -75.53}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4084993025984356}
@@ -908,7 +908,6 @@ MonoBehaviour:
   wheelRRTrans: {fileID: 4901580473685000}
   currentSpeed: 0
   wheelRPM: 0
-  speedo: {fileID: 2800000, guid: 56d06adae7db1db42a37580d67ca5c05, type: 3}
   speedopoint: {fileID: 2800000, guid: 3f5f5ccc8b012e047ab30dea98bf28af, type: 3}
   currentGrip: 1.3
   brakeStrength: 200
