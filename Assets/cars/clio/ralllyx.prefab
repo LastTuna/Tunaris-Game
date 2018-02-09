@@ -802,7 +802,7 @@ MonoBehaviour:
   aero: 15
   ratio: 0
   tyreBias: 0.6
-  FrontWheelDriveBias: 0.5
+  FrontWheelDriveBias: 0
   engineRPM: 0
   engineREDLINE: 9000
   unitOutput: 0
@@ -816,6 +816,7 @@ MonoBehaviour:
   gear6: 1.6
   gear: 0
   shifting: 0
+  CenterOfGravity: {x: 0, y: -0.4, z: 0.5}
 --- !u!146 &146213937008683764
 WheelCollider:
   m_ObjectHideFlags: 1

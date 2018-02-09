@@ -56,6 +56,9 @@ public class CarBehaviour : MonoBehaviour {
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
+    // CoG
+    public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
+
     void Start() {
         // Set the HUD objects
         CourseController ctrl = FindObjectOfType<CourseController>();
@@ -66,7 +69,7 @@ public class CarBehaviour : MonoBehaviour {
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
-        GetComponent<Rigidbody>().centerOfMass = new Vector3(0, -0.4f, 0.5f);
+        GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
         gear = 1;
 
         gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
@@ -126,10 +129,10 @@ public class CarBehaviour : MonoBehaviour {
         StartCoroutine(gearbox());//gearbox update 
         HUDUpdate();
         SetSurfaceProperties();
-        wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
+        wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelRLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+        wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+        wheelRLTrans.Rotate(wheelRL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
         wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
         WheelPosition(); //graphical update - wheel positions 
