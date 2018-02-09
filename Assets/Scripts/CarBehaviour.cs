@@ -162,7 +162,7 @@ public class CarBehaviour : MonoBehaviour {
 
             wheelRR.motorTorque = 0 * (1 - FrontWheelDriveBias);
             wheelRL.motorTorque = 0 * (1 - FrontWheelDriveBias);
-        } else { 
+        } else {
             wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
             wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
 
@@ -188,7 +188,7 @@ public class CarBehaviour : MonoBehaviour {
     }
 
     // Graphical update - wheel positions 
-    void WheelPosition() { 
+    void WheelPosition() {
         RaycastHit hit;
         Vector3 wheelPos;
         //FL
@@ -279,13 +279,17 @@ public class CarBehaviour : MonoBehaviour {
         } else {
             speedDisplay.text = currentSpeed.ToString();
         }
-        if (gear == 0)//gears
-        {
-            gearDisplay.text = "R".ToString();//reverse gear
-        } else if (gear == 1) {
-            gearDisplay.text = "N".ToString();//neutral
-        } else {
-            gearDisplay.text = (gear - 1).ToString();//array value, minus 1
+        if (shifting) {
+            gearDisplay.text = "-";
+        } else {         
+            //gears
+            if (gear == 0) {
+                gearDisplay.text = "R".ToString();//reverse gear
+            } else if (gear == 1) {
+                gearDisplay.text = "N".ToString();//neutral
+            } else {
+                gearDisplay.text = (gear - 1).ToString();//array value, minus 1
+            }
         }
     }
 }
