@@ -21,6 +21,8 @@ public class CourseController : MonoBehaviour {
     public Text SpeedDisplayHUD;
     public Text GearDisplayHUD;
     public RectTransform PointerHUD;
+    // Reference to the scene's AudioSource
+    public AudioSource AudioSource;
 
     void Start () {
         GameObject dataController = GameObject.Find("DataController");
@@ -49,14 +51,22 @@ public class CourseController : MonoBehaviour {
             if (IP == null || IP == string.Empty) {
                 // Start hosting
                 manager.StartHost();
-                
+
                 // Create host UI
-                Instantiate(HostUI).name = "HostUI";
+                GameObject HostUIInstance = Instantiate(HostUI);
+                HostUIInstance.name = "HostUI";
+                HostUIInstance.GetComponentInChildren<Button>().onClick.AddListener(StartRaceProcess);
             } else {
                 // Connect
                 manager.networkAddress = IP;
                 manager.StartClient();
             }
         }
+    }
+
+    public void StartRaceProcess() {
+        RaceStart rcComponent = this.gameObject.AddComponent<RaceStart>();
+        rcComponent.AudioSource = AudioSource;
+        StartCoroutine(rcComponent.CountDown());
     }
 }

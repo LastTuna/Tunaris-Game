@@ -3,28 +3,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class raceStart : MonoBehaviour {
-    public AudioSource beep;
-    public AudioSource launch;
+public class RaceStart : MonoBehaviour {
+    // All 3 race start sounds
+    public List<AudioClip> RaceStartSounds;
+    // AudioSource playing
+    public AudioSource AudioSource;
 
-    // Use this for initialization
-    void Start () {
-       StartCoroutine(CountDown());
-
-}
-
-    IEnumerator CountDown ()
-    {
-        yield return new WaitForSeconds(1.0f);
-        beep.Play();
-        yield return new WaitForSeconds(1.0f);
-        beep.Play();
-        yield return new WaitForSeconds(1.0f);
-        launch.Play();
+    public IEnumerator CountDown() {
+        foreach (AudioClip clip in RaceStartSounds) {
+            AudioSource.PlayOneShot(clip);
+            yield return new WaitForSeconds(1);
+        }
     }
-
-	// Update is called once per frame
-	void Update () {
-		
-	}
 }
