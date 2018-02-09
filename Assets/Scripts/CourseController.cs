@@ -65,8 +65,7 @@ public class CourseController : MonoBehaviour {
     }
 
     public void StartRaceProcess() {
-        RaceStart rcComponent = this.gameObject.AddComponent<RaceStart>();
-        rcComponent.AudioSource = AudioSource;
+        RaceStart rcComponent = GetComponent<RaceStart>();
         StartCoroutine(rcComponent.CountDown());
     }
 }

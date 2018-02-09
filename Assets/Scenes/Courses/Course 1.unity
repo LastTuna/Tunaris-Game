@@ -189,8 +189,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b54bfceeb0e6a4c4f8ca31c7c9ff819c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  RaceStartSounds: []
-  AudioSource: {fileID: 0}
+  RaceStartSounds:
+  - {fileID: 8300000, guid: 6dc2d65fcac066c41a1d3cf2d52ef12d, type: 3}
+  - {fileID: 8300000, guid: 6dc2d65fcac066c41a1d3cf2d52ef12d, type: 3}
+  - {fileID: 8300000, guid: 6dc2d65fcac066c41a1d3cf2d52ef12d, type: 3}
+  - {fileID: 8300000, guid: 0f216dd4995116040ac16bef0e151a61, type: 3}
+  AudioSource: {fileID: 1161932346}
 --- !u!1001 &152830036
 Prefab:
   m_ObjectHideFlags: 0
