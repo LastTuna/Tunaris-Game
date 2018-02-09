@@ -57,7 +57,12 @@ public class CarBehaviour : MonoBehaviour {
     public bool shifting = false;//shifter delay
 
     void Start() {
-        HUDUpdate();
+        // Set the HUD objects
+        CourseController ctrl = FindObjectOfType<CourseController>();
+        speedDisplay = ctrl.SpeedDisplayHUD;
+        gearDisplay = ctrl.GearDisplayHUD;
+        pointer = ctrl.PointerHUD;
+
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
@@ -66,6 +71,7 @@ public class CarBehaviour : MonoBehaviour {
 
         gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
 
+        HUDUpdate();
     }
 
     void FixedUpdate() {

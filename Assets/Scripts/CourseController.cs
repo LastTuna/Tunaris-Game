@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class CourseController : MonoBehaviour {
     public GameObject DataControllerPrefab;
@@ -16,7 +17,12 @@ public class CourseController : MonoBehaviour {
     // Global Host UI prefab to instantiate
     public GameObject HostUI;
 
-	void Start () {
+    // References to this course's HUD
+    public Text SpeedDisplayHUD;
+    public Text GearDisplayHUD;
+    public RectTransform PointerHUD;
+
+    void Start () {
         GameObject dataController = GameObject.Find("DataController");
         if(dataController == null) {
             dataController = Instantiate(DataControllerPrefab);
