@@ -1,8 +1,14 @@
+﻿using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
-using System.Collections;
-using UnityEngine.Networking;
+using UnityEngine.UI;
 
-public class clio : MonoBehaviour {
+public class CarBehaviour : MonoBehaviour {
+
+
+    public Text speedDisplay;//output of speed to meter - by default MPH
+    public Text gearDisplay;
+    public RectTransform pointer;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
@@ -13,15 +19,27 @@ public class clio : MonoBehaviour {
     public Transform wheelRRTrans;
     public float currentSpeed;
     public float wheelRPM;
-    public Texture2D speedopoint;
 
-    public float currentGrip = 1.3f;
+    public float currentGrip; //value manipulated by road type
     //tuneable stats
-    public float brakeStrength = 200;
-    public float aero = 15.0f;
-    public float ratio;
+    public float brakeStrength = 200; //brake strength
+    public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
+    public float ratio; //final drive
+    public float tyreBias = 0.6f; //tyre bias - smaller value = offroad - higher value = tarmac (0-1) BASE TIRE GRIP VALUE = 1
+    /// <summary>
+    /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
+    /// 0: no power to front, 100% power to rear
+    /// 0.5: half front, half rear
+    /// 1: 100% front,  no rear
+    /// </summary>
+    public float FrontWheelDriveBias = 0.5f;
+    // Having it as a ratio opens a whole lot of tricks, but mainly an easy way to allocate power for ALL drivetrains
+    // FrontPower = engineOutput * FrontWheelDriveBias
+    // RearPower = engineOutput * (1-FrontWheelDriveBias)
+    // Chaning this while the car is driving is an effective way of having a center diff
 
 
+    //end tuneable stats
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline
     public float unitOutput;
@@ -39,6 +57,7 @@ public class clio : MonoBehaviour {
     public bool shifting = false;//shifter delay
 
     void Start() {
+        HUDUpdate();
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);
@@ -50,7 +69,22 @@ public class clio : MonoBehaviour {
     }
 
     void FixedUpdate() {
-         StartCoroutine(engine());
+        StartCoroutine(engine());
+
+        if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
+        {
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.4f);
+            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+
+            wheelRL.brakeTorque = 300;
+            wheelRR.brakeTorque = 300;
+        } else {
+            wheelRL.brakeTorque = 0;
+            wheelRR.brakeTorque = 0;
+        }
+
 
         if (Input.GetAxis("Brake") > 0f) {//brakes
             wheelFL.brakeTorque = brakeStrength;
@@ -62,23 +96,6 @@ public class clio : MonoBehaviour {
             wheelFR.brakeTorque = 0;
             wheelRL.brakeTorque = 0;
             wheelRR.brakeTorque = 0;
-        }
-        if (Input.GetAxis("Handbrake") > 0f) {//HANDBRAKE
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.5f);
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.5f);
-            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.5f);
-
-            wheelRL.brakeTorque = 300;
-            wheelRR.brakeTorque = 300;
-        } else {
-            wheelRL.brakeTorque = 0;
-            wheelRR.brakeTorque = 0;
-
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip);
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip);
-            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip);
         }
 
         wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
@@ -95,12 +112,14 @@ public class clio : MonoBehaviour {
             asymptoteValue = wheelRL.sidewaysFriction.asymptoteValue,
             extremumSlip = wheelRL.sidewaysFriction.extremumSlip,
             extremumValue = wheelRL.sidewaysFriction.extremumValue,
-            stiffness = newStiffness };
+            stiffness = newStiffness
+        };
     }
 
     void Update() {
         StartCoroutine(gearbox());//gearbox update 
-
+        HUDUpdate();
+        SetSurfaceProperties();
         wheelFRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
         wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
         wheelRRTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -138,13 +157,21 @@ public class clio : MonoBehaviour {
             unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - 120; //reverse output
         }
         if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0) {//throttle & rev limit
-            wheelFR.motorTorque = 0;
-            wheelFL.motorTorque = 0;
+            wheelFR.motorTorque = 0 * FrontWheelDriveBias;
+            wheelFL.motorTorque = 0 * FrontWheelDriveBias;
+
+            wheelRR.motorTorque = 0 * (1 - FrontWheelDriveBias);
+            wheelRL.motorTorque = 0 * (1 - FrontWheelDriveBias);
         } else {
-            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle");
-            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle");
+            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
+            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
+
+            wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
+            wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
         }
     }
+
+    // Gearbox managed, called each frame
     IEnumerator gearbox() {
         if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false) {
             shifting = true;
@@ -160,7 +187,8 @@ public class clio : MonoBehaviour {
         }
     }
 
-    void WheelPosition() { //graphical update - wheel positions 
+    // Graphical update - wheel positions 
+    void WheelPosition() {
         RaycastHit hit;
         Vector3 wheelPos;
         //FL
@@ -193,14 +221,75 @@ public class clio : MonoBehaviour {
         wheelRRTrans.position = wheelPos;
     }
 
-    void OnGUI() {//dial
-        float speedFactor = engineRPM / engineREDLINE;
+    // Sets the surface properties, based on what the front left (?) wheel is doing
+    // Called each frame
+    void SetSurfaceProperties() {
+        WheelHit FLhit;
+        float wheelpreload;
+
+        // Ground surface detection
+        if (wheelFL.GetGroundHit(out FLhit)) {
+            if (FLhit.collider.gameObject.CompareTag("sand")) {
+                if (currentGrip > 1.1f) {
+                    currentGrip = 1.1f;
+                } else {
+                    currentGrip = 1 - tyreBias + 0.3f;//OFFROAD
+                }
+                // On sand, wheelpreload was set to 0.1f as constant
+                wheelpreload = 0.1f;
+            } else {
+                if (currentGrip > 1.3f) {
+                    currentGrip = 1.3f;
+                } else {
+                    currentGrip = 1 * tyreBias + 0.4f;//TARMAC
+                }
+                if (currentGrip > 0.9f)//drive wheel preload - provides extra grip to drive wheels.
+                {//make sure to change application accordingly!!!! (RWD, FWD, AWD)
+                    wheelpreload = 0f; //this setting applies to TARMAC ONLY!!! change offroad value accordingly
+                } else {
+                    wheelpreload = 0.2f;
+                }
+            }
+            // Those are always called, might as well take them out of the if blocks
+            // Front wheels
+            wheelFR.sidewaysFriction = SetStiffness(wheelFR.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
+            wheelFL.sidewaysFriction = SetStiffness(wheelFL.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
+            wheelFR.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
+            wheelFL.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
+            // Rear wheels
+            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
+            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
+            wheelRR.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
+            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
+        }
+    }
+
+    // Updates the HUD
+    void HUDUpdate() {
+        float speedFactor = engineRPM / engineREDLINE;//dial rotation
         float rotationAngle = 0;
         if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(-70, 160, speedFactor);
-        }
-        GUIUtility.RotateAroundPivot(rotationAngle, new Vector2(Screen.width - 162, Screen.height - 77));
-        GUI.DrawTexture(new Rect(Screen.width - 215, Screen.height - 112, 100, 67), speedopoint);
+            rotationAngle = Mathf.Lerp(70, -160, speedFactor);
+            pointer.eulerAngles = new Vector3(0, 0, rotationAngle);
+        }//end dial rot
 
+        if (currentSpeed < 0)//cancelling negative integers, speed
+        {
+            speedDisplay.text = (currentSpeed * -1).ToString();
+        } else {
+            speedDisplay.text = currentSpeed.ToString();
+        }
+        if (shifting) {
+            gearDisplay.text = "-";
+        } else {         
+            //gears
+            if (gear == 0) {
+                gearDisplay.text = "R".ToString();//reverse gear
+            } else if (gear == 1) {
+                gearDisplay.text = "N".ToString();//neutral
+            } else {
+                gearDisplay.text = (gear - 1).ToString();//array value, minus 1
+            }
+        }
     }
 }

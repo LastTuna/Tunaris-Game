@@ -557,7 +557,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: c0fad6a0f281f8342b805aa770e6dbad, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9594f83926ccf9e4c8a266a5ad4f54ef, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -1948,7 +1948,7 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.MaskableGraphic+CullStateChangedEvent, UnityEngine.UI,
       Version=1.0.0.0, Culture=neutral, PublicKeyToken=null
-  m_Sprite: {fileID: 21300000, guid: 0b8eab0f2657bdc43866113e481b893a, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 8673f65beceb30345853ea152e35c4a7, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -5815,9 +5815,10 @@ MonoBehaviour:
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
-  - {fileID: 0}
-  - {fileID: 1610897889992770, guid: 093443e168e976d458a6b81d06329a48, type: 2}
-  cancelClip: {fileID: 0}
+  - {fileID: 1240470853666004, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+  - {fileID: 1410949346796916, guid: f9808d73496a99443be220412ff95074, type: 2}
+  - {fileID: 1652932485955558, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
+  cancelClip: {fileID: 8300000, guid: cb85f8b7bf17f254db110fa532924745, type: 3}
 --- !u!114 &1057594254
 MonoBehaviour:
   m_ObjectHideFlags: 0
