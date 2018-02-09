@@ -5815,9 +5815,10 @@ MonoBehaviour:
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
-  - {fileID: 0}
-  - {fileID: 0}
-  cancelClip: {fileID: 0}
+  - {fileID: 1240470853666004, guid: 093443e168e976d458a6b81d06329a48, type: 2}
+  - {fileID: 1410949346796916, guid: f9808d73496a99443be220412ff95074, type: 2}
+  - {fileID: 1652932485955558, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
+  cancelClip: {fileID: 8300000, guid: cb85f8b7bf17f254db110fa532924745, type: 3}
 --- !u!114 &1057594254
 MonoBehaviour:
   m_ObjectHideFlags: 0
