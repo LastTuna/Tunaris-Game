@@ -66,6 +66,9 @@ public class CarBehaviour : MonoBehaviour {
         gearDisplay = ctrl.GearDisplayHUD;
         pointer = ctrl.PointerHUD;
 
+        // Set game camera target
+        ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
+
         engineRPM = 800;
         ratio = 4.3f;
         Physics.gravity = new Vector3(0, -aero, 0);

@@ -38,8 +38,8 @@ public class TGNetworkManager : NetworkManager {
     }
 
     // Called on the HOST when a player leaves
-    public override void OnClientDisconnect(NetworkConnection conn) {
-        base.OnClientDisconnect(conn);
+    public override void OnServerDisconnect(NetworkConnection conn) {
+        base.OnServerDisconnect(conn);
         ConnectedPlayer player = Players[conn];
         Destroy(player.PlayerGO);
         Players.Remove(conn);

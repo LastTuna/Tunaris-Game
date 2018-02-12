@@ -23,6 +23,8 @@ public class CourseController : MonoBehaviour {
     public RectTransform PointerHUD;
     // Reference to the scene's AudioSource
     public AudioSource AudioSource;
+    // Reference to the scene's Camera
+    public GameObject Camera;
 
     void Start () {
         GameObject dataController = GameObject.Find("DataController");
