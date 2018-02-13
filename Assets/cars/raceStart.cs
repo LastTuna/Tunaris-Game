@@ -9,12 +9,11 @@ public class raceStart : MonoBehaviour {
     public AudioSource launch;
     public Text currentTime;
     public TimeSpan duration = new TimeSpan(0, 0, 00, 00, 000);
-    public TimeSpan holypiss = new TimeSpan(0, 0, 00, 00, 016);//placeholder
 
     // Use this for initialization
     void Start () {
     StartCoroutine(CountDown());
-
+        
     }
 
 
@@ -32,7 +31,9 @@ public class raceStart : MonoBehaviour {
 	void Update () {
         
         currentTime.text = string.Format("{0:00}:{1:00}:{2:000}", duration.Minutes, duration.Seconds, duration.Milliseconds);
-        duration = duration.Add(holypiss);//i dont not understand and youll need to help with the time getting correct thing
+        duration = duration.Add(TimeSpan.FromMilliseconds(Time.deltaTime*1000));
+
+
     }
 
 
