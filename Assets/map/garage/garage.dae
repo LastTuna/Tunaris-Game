@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="utf-8"?>
+<COLLADA xmlns="http://www.collada.org/2005/11/COLLADASchema" version="1.4.1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <asset>
+    <contributor>
+      <author>Blender User</author>
+      <authoring_tool>Blender 2.79.0 commit date:2017-09-11, commit time:10:43, hash:5bd8ac9</authoring_tool>
+    </contributor>
+    <created>2018-02-12T14:54:33</created>
+    <modified>2018-02-12T14:54:33</modified>
+    <unit name="meter" meter="1"/>
+    <up_axis>Z_UP</up_axis>
+  </asset>
+  <library_images/>
+  <library_effects>
+    <effect id="lift-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.1521419 0.1521419 0.1521419 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="garagewalls-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.1547094 0.03419028 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="garagefloors-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.09770305 0.110064 0.1070952 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+    <effect id="badge-effect">
+      <profile_COMMON>
+        <technique sid="common">
+          <phong>
+            <emission>
+              <color sid="emission">0 0 0 1</color>
+            </emission>
+            <ambient>
+              <color sid="ambient">0 0 0 1</color>
+            </ambient>
+            <diffuse>
+              <color sid="diffuse">0.64 0.64 0.64 1</color>
+            </diffuse>
+            <specular>
+              <color sid="specular">0.5 0.5 0.5 1</color>
+            </specular>
+            <shininess>
+              <float sid="shininess">50</float>
+            </shininess>
+            <index_of_refraction>
+              <float sid="index_of_refraction">1</float>
+            </index_of_refraction>
+          </phong>
+        </technique>
+      </profile_COMMON>
+    </effect>
+  </library_effects>
+  <library_materials>
+    <material id="lift-material" name="lift">
+      <instance_effect url="#lift-effect"/>
+    </material>
+    <material id="garagewalls-material" name="garagewalls">
+      <instance_effect url="#garagewalls-effect"/>
+    </material>
+    <material id="garagefloors-material" name="garagefloors">
+      <instance_effect url="#garagefloors-effect"/>
+    </material>
+    <material id="badge-material" name="badge">
+      <instance_effect url="#badge-effect"/>
+    </material>
+  </library_materials>
+  <library_geometries>
+    <geometry id="Cube-mesh" name="Cube">
+      <mesh>
+        <source id="Cube-mesh-positions">
+          <float_array id="Cube-mesh-positions-array" count="120">1.741843 -3.584187 -0.1169297 -1.741844 -3.584187 -0.1169297 1.741842 -3.584189 1.825651 -1.741844 -3.584186 1.825651 2.86735 -3.584187 -0.1270708 -2.86735 -3.584187 -0.1270708 2.867348 -3.58419 3.054338 -2.867351 -3.584185 3.054338 2.685384 6.02695 -0.1199318 1.786837 -3.371894 -0.1104342 -1.786839 -3.371894 -0.1104342 -2.685383 6.026952 -0.1199318 2.685385 6.026947 2.859581 1.786837 -3.371896 1.914677 -1.786839 -3.371892 1.914677 -2.685384 6.02695 2.859581 2.685384 -3.371894 -0.1199318 -2.685384 -3.371893 -0.1199318 2.685382 -3.371896 2.859581 -2.685385 -3.371892 2.859581 1.101663 -1.478894 -0.1244871 0.6937729 -1.478894 -0.1244871 1.101663 3.652576 -0.1244871 0.6937729 3.652576 -0.1244871 1.101663 -0.8125172 -0.02402108 0.6937729 -0.8125172 -0.02402108 1.101663 2.9862 -0.02402108 0.6937729 2.9862 -0.02402108 -1.101663 -1.478894 -0.1244871 -0.6937729 -1.478894 -0.1244871 -1.101663 3.652576 -0.1244871 -0.6937729 3.652576 -0.1244871 -1.101663 -0.8125172 -0.02402108 -0.6937729 -0.8125172 -0.02402108 -1.101663 2.9862 -0.02402108 -0.6937729 2.9862 -0.02402108 1.741843 -5.56183 -0.3566638 -1.741844 -5.56183 -0.3566638 2.86735 -5.56183 -0.3668049 -2.86735 -5.561829 -0.3668049</float_array>
+          <technique_common>
+            <accessor source="#Cube-mesh-positions-array" count="40" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube-mesh-normals">
+          <float_array id="Cube-mesh-normals-array" count="135">0 0 -1 2.64429e-7 -1 -7.33112e-7 -8.56176e-7 -1 8.72375e-7 -8.31494e-7 -1 -5.41387e-7 -1 0 4.00097e-7 1 -1.3622e-7 2.40058e-7 -4.43919e-7 -1 -4.21188e-7 2.76538e-7 1 7.86144e-7 1.07131e-6 1 -8.53285e-7 1.06744e-6 1 1.12968e-6 4.45941e-7 0.386727 -0.9221944 -0.9782688 0.2073411 -1.41391e-7 0.9782688 0.2073405 0 0 0.001010477 0.9999995 0 -0.03058212 0.9995323 -1 0 0 0 -0.1490799 0.9888252 1 0 0 0 0.1490799 0.9888252 0 0 1 0 -0.1203412 0.9927327 -0.008944511 -0.1203364 0.992693 0.008944392 -0.1203364 0.992693 0 0 -1 -4.34723e-7 -1 -1.30856e-6 1.97225e-7 -1 3.66555e-7 -1.09502e-6 -1 2.22802e-7 -1 2.7244e-7 -5.60135e-7 1 -1.3622e-7 2.40058e-7 -3.55135e-7 -1 -9.53539e-7 -1.2961e-7 1 9.97988e-7 -1.554e-7 1 -3.56217e-7 8.87838e-7 1 0 3.67958e-7 0.386726 -0.9221947 -0.978269 0.2073397 -2.15236e-7 0.9782691 0.2073397 0 0.01056933 0 0.9999442 -0.01056933 0 0.9999442 0 0.001010477 0.9999995 0 -0.03058207 0.9995323 0 -0.1490797 0.9888252 0 0.1490798 0.9888252 0 -0.1203413 0.9927327 -0.008944511 -0.1203364 0.992693 0.008944332 -0.1203364 0.992693</float_array>
+          <technique_common>
+            <accessor source="#Cube-mesh-normals-array" count="45" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube-mesh-map-0">
+          <float_array id="Cube-mesh-map-0-array" count="348">4.581591 -1.120476 -3.925252 -5.981531 4.581591 -5.981532 3.04665 0.8066995 4.692193 -2.048265 4.692189 2.603095 -2.046653 0.8067002 -3.692193 -2.048261 -2.046654 -2.033435 -2.046653 0.8067002 4.692189 2.603095 -3.692193 2.603096 -3.925251 1.580193 4.581593 -1.116547 4.581596 1.580193 -3.925254 1.584119 4.581591 4.280863 -3.925253 4.28086 -3.925254 6.981532 0.9358003 4.284788 0.935803 6.98153 -1.109323 0.9228522 -1.806673 -0.6561796 -1.109323 -0.6488084 2.361504 -0.6561794 1.664155 0.9228525 1.664155 -0.6488087 2.361504 1.65618 -1.109323 0.9228522 1.664155 0.9228525 0.7324723 3.174541 0.3462811 -2.745359 0.7324815 -2.669873 0.7324815 -2.669873 0.3528944 0.2523419 0.7320111 0.2523419 0.3528939 0.2523419 0.7324723 3.174541 0.7320128 0.2523419 4.384794 2.499397 -3.384794 0.285036 4.384793 -1.929325 -1.213487 0.03006887 2.536918 0.2558075 -1.26131 0.2558077 -3.274842 1.139641 6.316546 1.35545 -4.706272 1.35545 -4.706272 1.357053 -3.830095 2.804655 -4.706272 2.804655 4.885108 1.138039 -4.706272 0.9222287 6.316538 0.9222287 -2.380892 2.23323 -3.828492 1.357053 -2.380892 1.357053 -4.706272 0.04444891 3.453651 0.9206266 -4.706272 0.9206266 6.316546 1.35545 -3.274842 1.139641 -4.706272 1.35545 -3.830095 2.804655 -4.706272 1.357053 -4.706272 2.804655 -4.706272 0.9222287 4.885108 1.138039 6.316538 0.9222287 -3.828492 1.357053 -2.380892 2.23323 -2.380892 1.357053 3.453651 0.9206266 -4.706272 0.04444891 -4.706272 0.9206266 -0.3674128 1.229349 1.367413 -0.8803921 1.367413 1.22935 -0.9279217 1.228058 -0.3674129 -0.8803926 -0.3674128 1.229349 1.927922 1.228057 1.367413 -0.8803921 1.927922 -0.8816854 4.581591 -1.120476 -3.925254 -1.120476 -3.925252 -5.981531 3.04665 0.8066995 3.046652 -2.033438 4.692193 -2.048265 -2.046653 0.8067002 -3.692193 2.603096 -3.692193 -2.048261 -2.046653 0.8067002 3.04665 0.8066995 4.692189 2.603095 -3.925251 1.580193 -3.925254 -1.11655 4.581593 -1.116547 -3.925254 1.584119 4.581593 1.584119 4.581591 4.280863 -3.925254 6.981532 -3.925254 4.28479 0.9358003 4.284788 -1.109323 0.9228522 -1.806673 1.656179 -1.806673 -0.6561796 2.361504 -0.6561794 2.361504 1.65618 1.664155 0.9228525 2.361504 1.65618 -1.806673 1.656179 -1.109323 0.9228522 0.7324723 3.174541 0.3462681 3.250026 0.3462811 -2.745359 0.7324815 -2.669873 0.3462811 -2.745359 0.3528944 0.2523419 0.3528939 0.2523419 0.3462681 3.250026 0.7324723 3.174541 -3.365471 -1.929325 4.384793 -1.929325 -3.384794 0.285036 4.384794 2.499397 -3.365469 2.499398 -3.384794 1.392301 -3.384794 1.392301 -3.384794 0.285036 4.384794 2.499397 -1.213487 0.03006887 2.489094 0.0300641 2.536918 0.2558075 -3.274842 1.139641 4.885157 1.139646 6.316546 1.35545 -4.706272 1.357053 -3.830095 1.357053 -3.830095 2.804655 4.885108 1.138039 -3.274879 1.138033 -4.706272 0.9222287 -2.380892 2.23323 -3.828492 2.23323 -3.828492 1.357053 -4.706272 0.04444891 3.453651 0.04445105 3.453651 0.9206266 6.316546 1.35545 4.885157 1.139646 -3.274842 1.139641 -3.830095 2.804655 -3.830095 1.357053 -4.706272 1.357053 -4.706272 0.9222287 -3.274879 1.138033 4.885108 1.138039 -3.828492 1.357053 -3.828492 2.23323 -2.380892 2.23323 3.453651 0.9206266 3.453651 0.04445105 -4.706272 0.04444891 -0.3674128 1.229349 -0.3674129 -0.8803926 1.367413 -0.8803921 -0.9279217 1.228058 -0.9279213 -0.8816843 -0.3674129 -0.8803926 1.927922 1.228057 1.367413 1.22935 1.367413 -0.8803921</float_array>
+          <technique_common>
+            <accessor source="#Cube-mesh-map-0-array" count="174" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cube-mesh-vertices">
+          <input semantic="POSITION" source="#Cube-mesh-positions"/>
+        </vertices>
+        <triangles material="lift-material" count="20">
+          <input semantic="VERTEX" source="#Cube-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cube-mesh-map-0" offset="2" set="0"/>
+          <p>25 15 45 23 15 46 21 15 47 24 16 48 21 16 49 20 16 50 26 17 51 20 17 52 22 17 53 23 18 54 26 18 55 22 18 56 24 19 57 27 19 58 25 19 59 31 17 60 33 17 61 29 17 62 29 16 63 32 16 64 28 16 65 28 15 66 34 15 67 30 15 68 34 18 69 31 18 70 30 18 71 35 19 72 32 19 73 33 19 74 25 15 135 27 15 136 23 15 137 24 40 138 25 40 139 21 40 140 26 17 141 24 17 142 20 17 143 23 41 144 27 41 145 26 41 146 24 19 147 26 19 148 27 19 149 31 17 150 35 17 151 33 17 152 29 40 153 33 40 154 32 40 155 28 15 156 32 15 157 34 15 158 34 41 159 35 41 160 31 41 161 35 19 162 34 19 163 32 19 164</p>
+        </triangles>
+        <triangles material="garagewalls-material" count="26">
+          <input semantic="VERTEX" source="#Cube-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cube-mesh-map-0" offset="2" set="0"/>
+          <p>12 0 0 19 0 1 15 0 2 2 1 3 4 1 4 6 1 5 3 2 6 5 2 7 1 2 8 3 3 9 6 3 10 7 3 11 16 4 12 12 4 13 8 4 14 17 5 15 15 5 16 19 5 17 15 6 18 8 6 19 12 6 20 13 7 21 16 7 22 9 7 23 17 8 24 14 8 25 10 8 26 19 9 27 13 9 28 14 9 29 3 10 30 13 10 31 2 10 32 2 11 33 9 11 34 0 11 35 10 12 36 3 12 37 1 12 38 12 23 84 18 23 85 19 23 86 2 24 87 0 24 88 4 24 89 3 25 90 7 25 91 5 25 92 3 26 93 2 26 94 6 26 95 16 27 96 18 27 97 12 27 98 17 28 99 11 28 100 15 28 101 15 29 102 11 29 103 8 29 104 13 30 105 18 30 106 16 30 107 17 31 108 19 31 109 14 31 110 19 32 111 18 32 112 13 32 113 3 33 114 14 33 115 13 33 116 2 34 117 13 34 118 9 34 119 10 35 120 14 35 121 3 35 122</p>
+        </triangles>
+        <triangles material="garagefloors-material" count="12">
+          <input semantic="VERTEX" source="#Cube-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cube-mesh-map-0" offset="2" set="0"/>
+          <p>11 13 39 9 13 40 8 13 41 1 14 42 9 14 43 10 14 44 1 20 75 36 20 76 0 20 77 5 21 78 37 21 79 1 21 80 4 22 81 36 22 82 38 22 83 16 36 123 8 36 124 9 36 125 11 37 126 17 37 127 10 37 128 10 38 129 9 38 130 11 38 131 1 39 132 0 39 133 9 39 134 1 42 165 37 42 166 36 42 167 5 43 168 39 43 169 37 43 170 4 44 171 0 44 172 36 44 173</p>
+        </triangles>
+      </mesh>
+    </geometry>
+    <geometry id="Cube_014-mesh" name="Cube.014">
+      <mesh>
+        <source id="Cube_014-mesh-positions">
+          <float_array id="Cube_014-mesh-positions-array" count="12">1.497692 -3.594958 1.998163 -1.497695 -3.594956 1.998163 1.479263 -3.594957 2.462596 -1.479266 -3.594956 2.462596</float_array>
+          <technique_common>
+            <accessor source="#Cube_014-mesh-positions-array" count="4" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube_014-mesh-normals">
+          <float_array id="Cube_014-mesh-normals-array" count="6">-3.22348e-7 -1 0 -4.77571e-7 -1 3.42764e-7</float_array>
+          <technique_common>
+            <accessor source="#Cube_014-mesh-normals-array" count="2" stride="3">
+              <param name="X" type="float"/>
+              <param name="Y" type="float"/>
+              <param name="Z" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <source id="Cube_014-mesh-map-0">
+          <float_array id="Cube_014-mesh-map-0-array" count="12">0.999999 0 0 0.9938475 5.13354e-7 0.006152391 0.999999 0 1 1 0 0.9938475</float_array>
+          <technique_common>
+            <accessor source="#Cube_014-mesh-map-0-array" count="6" stride="2">
+              <param name="S" type="float"/>
+              <param name="T" type="float"/>
+            </accessor>
+          </technique_common>
+        </source>
+        <vertices id="Cube_014-mesh-vertices">
+          <input semantic="POSITION" source="#Cube_014-mesh-positions"/>
+        </vertices>
+        <triangles material="badge-material" count="2">
+          <input semantic="VERTEX" source="#Cube_014-mesh-vertices" offset="0"/>
+          <input semantic="NORMAL" source="#Cube_014-mesh-normals" offset="1"/>
+          <input semantic="TEXCOORD" source="#Cube_014-mesh-map-0" offset="2" set="0"/>
+          <p>1 0 0 2 0 1 3 0 2 1 1 3 0 1 4 2 1 5</p>
+        </triangles>
+      </mesh>
+    </geometry>
+  </library_geometries>
+  <library_controllers/>
+  <library_visual_scenes>
+    <visual_scene id="Scene" name="Scene">
+      <node id="Cube" name="Cube" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#Cube-mesh" name="Cube">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lift-material" target="#lift-material"/>
+              <instance_material symbol="garagewalls-material" target="#garagewalls-material"/>
+              <instance_material symbol="garagefloors-material" target="#garagefloors-material"/>
+              <instance_material symbol="badge-material" target="#badge-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+      <node id="Cube_002" name="Cube_002" type="NODE">
+        <matrix sid="transform">1 0 0 0 0 1 0 0 0 0 1 0 0 0 0 1</matrix>
+        <instance_geometry url="#Cube_014-mesh" name="Cube_002">
+          <bind_material>
+            <technique_common>
+              <instance_material symbol="lift-material" target="#lift-material"/>
+              <instance_material symbol="garagewalls-material" target="#garagewalls-material"/>
+              <instance_material symbol="garagefloors-material" target="#garagefloors-material"/>
+              <instance_material symbol="badge-material" target="#badge-material"/>
+            </technique_common>
+          </bind_material>
+        </instance_geometry>
+      </node>
+    </visual_scene>
+  </library_visual_scenes>
+  <scene>
+    <instance_visual_scene url="#Scene"/>
+  </scene>
+</COLLADA>
