@@ -134,4 +134,6 @@ public class GameData {
     public float SpringStiffness;
     public float BrakeStiffness;
     public float Gearbox;
+    public bool IsMultiplayer;
+    public string IP;
 }

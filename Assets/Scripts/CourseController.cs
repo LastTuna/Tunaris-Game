@@ -9,7 +9,7 @@ public class CourseController : MonoBehaviour {
     public GameData settings;
 
     // Are we loading into multiplayer
-    public bool IsMultiplayer = true;
+    public bool IsMultiplayer = false;
     // Server IP, null if hosting
     public string IP = null;
     // Per-course multiplayer prefab to instantiate, should contain shit like spawn points
@@ -41,8 +41,8 @@ public class CourseController : MonoBehaviour {
         Debug.Log(settings.SelectedCar);
 
         // Get multiplayer-related data
-        // IsMultiplayer = settings.IsMultiplayer;
-        // IP = settings.IP;
+        IsMultiplayer = settings.IsMultiplayer;
+        IP = settings.IP;
 
         // Initialize network-related resources
         if (IsMultiplayer) {
@@ -68,6 +68,6 @@ public class CourseController : MonoBehaviour {
 
     public void StartRaceProcess() {
         RaceStart rcComponent = GetComponent<RaceStart>();
-        StartCoroutine(rcComponent.CountDown());
+        rcComponent.enabled = true;
     }
 }

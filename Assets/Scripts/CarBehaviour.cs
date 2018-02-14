@@ -4,8 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class CarBehaviour : MonoBehaviour {
-
-
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
     public RectTransform pointer;
