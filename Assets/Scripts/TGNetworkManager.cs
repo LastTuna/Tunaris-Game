@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -13,6 +14,8 @@ public class TGNetworkManager : NetworkManager {
     public GameObject DefaultPrefab;
     // Settings
     public GameData UserSettings;
+    // Race Start script
+    public RaceStart RaceStart;
 
     // Players connected
     public Dictionary<NetworkConnection, ConnectedPlayer> Players = new Dictionary<NetworkConnection, ConnectedPlayer>();
@@ -80,12 +83,25 @@ public class TGNetworkManager : NetworkManager {
     // Called on the CLIENT to handle sending the PlayerConnection message
     public override void OnClientConnect(NetworkConnection conn) {
         base.OnClientConnect(conn);
+        client.RegisterHandler(TGMessageTypes.CountdownStart, HandleClientCountdownStart);
         client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = UserSettings.SelectedCar, PlayerName = UserSettings.PlayerName });
     }
+
+    // Called on the CLIENT to handle the start of the countdown
+    private void HandleClientCountdownStart(NetworkMessage netMsg) {
+        RaceStart.enabled = true;
+    }
+
+    // Called on the SERVER when the host starts the game
+    public void StartRaceProcess() {
+        NetworkServer.SendToAll(TGMessageTypes.CountdownStart, new CountdownStartMessage());
+    }
+
 
     // Network message classes
     public class TGMessageTypes {
         public static short PlayerConnection = MsgType.Highest + 1;
+        public static short CountdownStart = MsgType.Highest + 2;
     };
 
     public class PlayerConnectionMessage : MessageBase {
@@ -93,6 +109,10 @@ public class TGNetworkManager : NetworkManager {
         public string PlayerName;
     }
 
+    public class CountdownStartMessage : MessageBase {
+        public int PlayersConnected;
+    }
+    
     // Player state class
     public class ConnectedPlayer {
         public string CarName;

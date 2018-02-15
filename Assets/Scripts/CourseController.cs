@@ -26,6 +26,9 @@ public class CourseController : MonoBehaviour {
     // Reference to the scene's Camera
     public GameObject Camera;
 
+    // NetworkManager
+    public TGNetworkManager manager;
+
     void Start () {
         GameObject dataController = GameObject.Find("DataController");
         if(dataController == null) {
@@ -42,8 +45,9 @@ public class CourseController : MonoBehaviour {
         if (IsMultiplayer) {
             // Create all the spawn points
             GameObject MpPrefab = Instantiate(MultiplayerPrefab);
-            TGNetworkManager manager = MpPrefab.GetComponentInChildren<TGNetworkManager>();
+            manager = MpPrefab.GetComponentInChildren<TGNetworkManager>();
             manager.UserSettings = settings;
+            manager.RaceStart = GetComponent<RaceStart>();
 
             if (IP == null || IP == string.Empty) {
                 // Start hosting
@@ -62,7 +66,6 @@ public class CourseController : MonoBehaviour {
     }
 
     public void StartRaceProcess() {
-        RaceStart rcComponent = GetComponent<RaceStart>();
-        rcComponent.enabled = true;
+        manager.StartRaceProcess();
     }
 }
