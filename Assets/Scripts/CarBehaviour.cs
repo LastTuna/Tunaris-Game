@@ -1,9 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class CarBehaviour : MonoBehaviour {
+public class CarBehaviour : NetworkBehaviour { 
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
     public RectTransform pointer;
@@ -58,62 +59,66 @@ public class CarBehaviour : MonoBehaviour {
     public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
 
     void Start() {
-        // Set the HUD objects
-        CourseController ctrl = FindObjectOfType<CourseController>();
-        speedDisplay = ctrl.SpeedDisplayHUD;
-        gearDisplay = ctrl.GearDisplayHUD;
-        pointer = ctrl.PointerHUD;
+        if (isLocalPlayer) {
+            // Set the HUD objects
+            CourseController ctrl = FindObjectOfType<CourseController>();
+            speedDisplay = ctrl.SpeedDisplayHUD;
+            gearDisplay = ctrl.GearDisplayHUD;
+            pointer = ctrl.PointerHUD;
 
-        // Set game camera target
-        ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
+            // Set game camera target
+            ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
-        engineRPM = 800;
-        ratio = 4.3f;
-        Physics.gravity = new Vector3(0, -aero, 0);
-        GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
-        gear = 1;
+            engineRPM = 800;
+            ratio = 4.3f;
+            Physics.gravity = new Vector3(0, -aero, 0);
+            GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
+            gear = 1;
 
-        gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
+            gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
 
-        HUDUpdate();
+            HUDUpdate();
+        }
     }
 
     void FixedUpdate() {
-        StartCoroutine(engine());
+        if (isLocalPlayer) {
+            StartCoroutine(engine());
 
-        if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
-        {
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.4f);
-            wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+            if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
+            {
+                wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);
+                wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
+                wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.4f);
+                wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
 
-            wheelRL.brakeTorque = 300;
-            wheelRR.brakeTorque = 300;
-        } else {
-            wheelRL.brakeTorque = 0;
-            wheelRR.brakeTorque = 0;
+                wheelRL.brakeTorque = 300;
+                wheelRR.brakeTorque = 300;
+            } else {
+                wheelRL.brakeTorque = 0;
+                wheelRR.brakeTorque = 0;
+            }
+
+
+            if (Input.GetAxis("Brake") > 0f) {//brakes
+                wheelFL.brakeTorque = brakeStrength;
+                wheelFR.brakeTorque = brakeStrength;
+                wheelRL.brakeTorque = brakeStrength;
+                wheelRR.brakeTorque = brakeStrength;
+            } else {
+                wheelFL.brakeTorque = 0;
+                wheelFR.brakeTorque = 0;
+                wheelRL.brakeTorque = 0;
+                wheelRR.brakeTorque = 0;
+            }
+
+            wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
+            wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
+
+            wheelRPM = (wheelFL.rpm + wheelRL.rpm) / 2; //speed counter
+            currentSpeed = 2 * 22 / 7 * wheelFL.radius * wheelRL.rpm * 60 / 1000;
+            currentSpeed = Mathf.Round(currentSpeed);
         }
-
-
-        if (Input.GetAxis("Brake") > 0f) {//brakes
-            wheelFL.brakeTorque = brakeStrength;
-            wheelFR.brakeTorque = brakeStrength;
-            wheelRL.brakeTorque = brakeStrength;
-            wheelRR.brakeTorque = brakeStrength;
-        } else {
-            wheelFL.brakeTorque = 0;
-            wheelFR.brakeTorque = 0;
-            wheelRL.brakeTorque = 0;
-            wheelRR.brakeTorque = 0;
-        }
-
-        wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
-        wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
-
-        wheelRPM = (wheelFL.rpm + wheelRL.rpm) / 2; //speed counter
-        currentSpeed = 2 * 22 / 7 * wheelFL.radius * wheelRL.rpm * 60 / 1000;
-        currentSpeed = Mathf.Round(currentSpeed);
     }
 
     WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness) {
@@ -127,16 +132,18 @@ public class CarBehaviour : MonoBehaviour {
     }
 
     void Update() {
-        StartCoroutine(gearbox());//gearbox update 
-        HUDUpdate();
-        SetSurfaceProperties();
-        wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
-        wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelRLTrans.Rotate(wheelRL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
-        wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
-        WheelPosition(); //graphical update - wheel positions 
+        if (isLocalPlayer) {
+            StartCoroutine(gearbox());//gearbox update 
+            HUDUpdate();
+            SetSurfaceProperties();
+            wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
+            wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelRLTrans.Rotate(wheelRL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
+            wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
+            WheelPosition(); //graphical update - wheel positions 
+        }
     }
 
     IEnumerator engine() {//engine
