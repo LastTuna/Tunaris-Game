@@ -62,7 +62,6 @@ public class TGNetworkManager : NetworkManager {
 
         // Instantiate the actual car
         foreach(GameObject prefab in Cars) {
-            Debug.Log("_" + prefab.name +  "__" + currentPlayer.CarName + "_");
             if (prefab.name == currentPlayer.CarName) {
                 GameObject carInstance = Instantiate(prefab, currentPlayer.PlayerSpawn.transform.position, Quaternion.identity);
                 NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerID);

@@ -17,11 +17,9 @@ public class RaceStart : MonoBehaviour {
 
     public IEnumerator CountDown() {
         for(int i = 0; i < RaceStartSounds.Count - 1; i++) {
-            Debug.Log("Playing sound " + i + " data::" + RaceStartSounds[i]);
             AudioSource.PlayOneShot(RaceStartSounds[i]);
             yield return new WaitForSeconds(1);
         }
-        Debug.Log("Playing sound " + (RaceStartSounds.Count - 1) + " data::" + RaceStartSounds[RaceStartSounds.Count - 1]);
         AudioSource.PlayOneShot(RaceStartSounds[RaceStartSounds.Count - 1]);
         IsRaceStarted = true;
     }
