@@ -154,6 +154,7 @@ MonoBehaviour:
     Gearbox: 0
     IsMultiplayer: 0
     IP: 
+    PlayerName: 
   IsMultiplayer: 1
   IP: 
   MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,
@@ -164,6 +165,7 @@ MonoBehaviour:
   PointerHUD: {fileID: 1628532948}
   AudioSource: {fileID: 256955484}
   Camera: {fileID: 256955479}
+  manager: {fileID: 0}
 --- !u!4 &149764962
 Transform:
   m_ObjectHideFlags: 0
