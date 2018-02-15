@@ -275,3 +275,16 @@ MonoBehaviour:
   - {fileID: 1153904651110622}
   DefaultPrefab: {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a,
     type: 2}
+  UserSettings:
+    SelectedCar: 
+    SelectedCourse: 
+    TireBias: 0
+    FinalDrive: 0
+    Aero: 0
+    SpringStiffness: 0
+    BrakeStiffness: 0
+    Gearbox: 0
+    IsMultiplayer: 0
+    IP: 
+    PlayerName: 
+  RaceStart: {fileID: 0}

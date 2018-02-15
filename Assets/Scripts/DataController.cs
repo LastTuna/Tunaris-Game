@@ -145,5 +145,5 @@ public class GameData {
     public float Gearbox;
     public bool IsMultiplayer;
     public string IP;
-    internal string PlayerName;
+    public string PlayerName;
 }
