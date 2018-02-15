@@ -50,6 +50,13 @@ public class TGNetworkManager : NetworkManager {
         ConnectedPlayer player = Players[conn];
         Destroy(player.PlayerGO);
         Players.Remove(conn);
+
+        // Update UI
+        string newText = "Players: " + Players.Count + "\n";
+        foreach (ConnectedPlayer knownPlayer in Players.Values) {
+            newText += knownPlayer.PlayerName + "\n";
+        }
+        GameObject.Find("PlayerList").GetComponent<Text>().text = newText;
     }
 
     // Called on the HOST to handle the PlayerConnection message from the client
