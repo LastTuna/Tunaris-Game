@@ -11,6 +11,8 @@ public class TGNetworkManager : NetworkManager {
     public List<GameObject> SpawnPositions;
     // Default player prefab
     public GameObject DefaultPrefab;
+    // Settings
+    public GameData UserSettings;
 
     // Players connected
     public Dictionary<NetworkConnection, ConnectedPlayer> Players = new Dictionary<NetworkConnection, ConnectedPlayer>();
@@ -79,7 +81,7 @@ public class TGNetworkManager : NetworkManager {
     // Called on the CLIENT to handle sending the PlayerConnection message
     public override void OnClientConnect(NetworkConnection conn) {
         base.OnClientConnect(conn);
-        client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = "ralllyx", PlayerName = "bite" });
+        client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = UserSettings.SelectedCar, PlayerName = UserSettings.PlayerName });
     }
 
     // Network message classes

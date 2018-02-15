@@ -80,6 +80,14 @@ public class DataController : MonoBehaviour {
             LoadedData.Gearbox = value;
         }
     }
+    public string PlayerName {
+        get {
+            return LoadedData.PlayerName;
+        }
+        set {
+            LoadedData.PlayerName = value;
+        }
+    }
     #endregion
 
 
@@ -109,6 +117,7 @@ public class DataController : MonoBehaviour {
             SpringStiffness = 100;
             BrakeStiffness = 0;
             Gearbox = 0;
+            PlayerName = "Player";
 
             SaveGameData();
         }
@@ -136,4 +145,5 @@ public class GameData {
     public float Gearbox;
     public bool IsMultiplayer;
     public string IP;
+    internal string PlayerName;
 }

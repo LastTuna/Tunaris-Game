@@ -49,6 +49,7 @@ public class CourseController : MonoBehaviour {
             // Create all the spawn points
             GameObject MpPrefab = Instantiate(MultiplayerPrefab);
             TGNetworkManager manager = MpPrefab.GetComponentInChildren<TGNetworkManager>();
+            manager.UserSettings = settings;
 
             if (IP == null || IP == string.Empty) {
                 // Start hosting
