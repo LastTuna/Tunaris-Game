@@ -152,6 +152,8 @@ MonoBehaviour:
     SpringStiffness: 0
     BrakeStiffness: 0
     Gearbox: 0
+    IsMultiplayer: 0
+    IP: 
   IsMultiplayer: 1
   IP: 
   MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,

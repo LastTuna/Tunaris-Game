@@ -21,14 +21,16 @@ public class TGNetworkManager : NetworkManager {
         GameObject player = Instantiate(DefaultPrefab, SpawnPositions[Players.Count].transform.position, Quaternion.identity);
 
         // Add network identity to base SP prefab
-        player.AddComponent<NetworkIdentity>().localPlayerAuthority = true;
+        /*player.AddComponent<NetworkIdentity>().localPlayerAuthority = true;
         player.AddComponent<NetworkTransform>();
+        ClientScene.RegisterPrefab(player, NetworkHash128.Parse(player.name + "_" + conn.connectionId));
+        spawnPrefabs.Add(player);*/
 
         // Link connection and prefab
-        NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
+        //NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 
         // Store player
-        Players[conn] = new ConnectedPlayer() { PlayerGO = player };
+        Players[conn] = new ConnectedPlayer() { PlayerGO = player, PlayerID = playerControllerId, PlayerSpawn = SpawnPositions[Players.Count] };
     }
 
     // Called on the HOST when the underlying NetworkServer is rady
@@ -60,7 +62,8 @@ public class TGNetworkManager : NetworkManager {
         foreach(GameObject prefab in Cars) {
             Debug.Log("_" + prefab.name +  "__" + currentPlayer.CarName + "_");
             if (prefab.name == currentPlayer.CarName) {
-                Instantiate(prefab, currentPlayer.PlayerGO.transform);
+                GameObject carInstance = Instantiate(prefab, currentPlayer.PlayerSpawn.transform.position, Quaternion.identity);
+                NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerID);
                 break;
             }
         }
@@ -94,5 +97,7 @@ public class TGNetworkManager : NetworkManager {
         public string CarName;
         public string PlayerName;
         public GameObject PlayerGO;
+        public short PlayerID;
+        internal GameObject PlayerSpawn;
     }
 }
