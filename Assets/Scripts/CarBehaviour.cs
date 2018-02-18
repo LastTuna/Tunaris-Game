@@ -19,6 +19,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float currentSpeed;
     public float wheelRPM;
 
+    public bool manual = false; //manual(true) auto(false)
     public float currentGrip; //value manipulated by road type
     //tuneable stats
     public float brakeStrength = 200; //brake strength
@@ -189,20 +190,49 @@ public class CarBehaviour : NetworkBehaviour {
     }
 
     // Gearbox managed, called each frame
-    IEnumerator gearbox() {
-        if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false) {
-            shifting = true;
-            gear = gear + 1;
-            yield return new WaitForSeconds(0.3f);
-            shifting = false;
-        }
-        if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false) {
-            shifting = true;
-            gear = gear - 1;
-            yield return new WaitForSeconds(0.1f);
-            shifting = false;
+    IEnumerator gearbox()
+    {
+        if (manual)
+        {
+            if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false)
+            {
+                shifting = true;
+                gear = gear + 1;
+                yield return new WaitForSeconds(0.3f);
+                shifting = false;
+            }
+            if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
+            {
+                shifting = true;
+                gear = gear - 1;
+                yield return new WaitForSeconds(0.1f);
+                shifting = false;
+            }
+        }//END MANUAL
+        else
+        {
+            {//START OF AUTOMATIC TRANS
+                if (engineRPM > (engineREDLINE - 1000) && gear < 7 && shifting == false)//upshift
+                {
+                    shifting = true;
+                    gear = gear + 1;
+                    yield return new WaitForSeconds(0.3f);
+                    shifting = false;
+                }//end upshift
+                if (engineRPM < 5000 && gear > 0 && shifting == false && currentSpeed > 30)//downshift
+                {
+                    shifting = true;
+                    gear = gear - 1;
+                    yield return new WaitForSeconds(0.1f);
+                    shifting = false;
+
+
+                } //downshiftEND
+
+            }
         }
     }
+    
 
     // Graphical update - wheel positions 
     void WheelPosition() {

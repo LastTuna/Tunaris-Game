@@ -1,57 +1,124 @@
 fileFormatVersion: 2
-guid: c75c52e02bec01740a68f5deab125f40
-timeCreated: 1518470754
+guid: 5abb51405d149934e8c71b3835b15ed0
+timeCreated: 1518785549
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Cube
-    100002: Plane
-    100004: Plane_001
-    100006: Plane_002
-    100008: Plane_003
-    100010: //RootNode
-    400000: Cube
-    400002: Plane
-    400004: Plane_001
-    400006: Plane_002
-    400008: Plane_003
-    400010: //RootNode
-    2100000: MAIN
-    2100002: WINDOWS
-    2100004: lightF
-    2100006: lightB
-    2100008: TARMAC
-    2100010: CONCRETE
-    2100012: gravel
-    2100014: grass
-    2100016: pavement
-    2100018: buildingGRAY
-    2100020: buildingROOF
-    2100022: lightpole
-    2100024: netWALL
-    2300000: Cube
-    2300002: Plane
-    2300004: Plane_001
-    2300006: Plane_002
-    2300008: Plane_003
-    3300000: Cube
-    3300002: Plane
-    3300004: Plane_001
-    3300006: Plane_002
-    3300008: Plane_003
-    4300000: Cube
-    4300002: Plane
-    4300004: Plane_002
-    4300006: Plane_001
-    4300008: Plane_003
+    100000: Plane
+    100002: Plane_001
+    100004: Plane_003
+    100006: //RootNode
+    400000: Plane
+    400002: Plane_001
+    400004: Plane_003
+    400006: //RootNode
+    2100000: TARMAC
+    2100002: CONCRETE
+    2100004: grass
+    2100006: pavement
+    2100008: buildingGRAY
+    2100010: buildingROOF
+    2100012: buildingRED
+    2100014: buildingWin0
+    2100016: buildingWin1
+    2100018: buildingWHITE
+    2100020: wheat
+    2100022: mud
+    2100024: lightpole
+    2100026: netWALL
+    2100028: gravel
+    2300000: Plane
+    2300002: Plane_001
+    2300004: Plane_003
+    3300000: Plane
+    3300002: Plane_001
+    3300004: Plane_003
+    4300000: Plane
+    4300002: Plane_003
+    4300004: Plane_001
     9500000: //RootNode
-  externalObjects: {}
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CONCRETE
+    second: {fileID: 2100000, guid: 2b027b4925913b24a8700a5d5ace6e83, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TARMAC
+    second: {fileID: 2100000, guid: a12adf63384b4b946a9e1be37b46811c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingGRAY
+    second: {fileID: 2100000, guid: c1df243714640d1479b4111f3292815f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingRED
+    second: {fileID: 2100000, guid: e1f34d8addc88904781d66b90edf8db5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingROOF
+    second: {fileID: 2100000, guid: 213ff6b8eb1c565468a76af7300c979a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWHITE
+    second: {fileID: 2100000, guid: 687f4c01dad14734299e5ec89f8722bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWin0
+    second: {fileID: 2100000, guid: 843da615da6d6da4ab98a83b3c77ad9e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWin1
+    second: {fileID: 2100000, guid: aa82ccbf06a388d4a9f2fade8e01bfeb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grass
+    second: {fileID: 2100000, guid: 6f9cb4a4120a2af40bf685dea4219c30, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gravel
+    second: {fileID: 2100000, guid: dfba5bc2beb41c146869e7b1389dec38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lightpole
+    second: {fileID: 2100000, guid: 0ba02bc926825ea47befe7c50c3d508e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mud
+    second: {fileID: 2100000, guid: 4b43d20b15e4ba24d8694246c14303b7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: netWALL
+    second: {fileID: 2100000, guid: 216023cbc1621324483000c0a3125af5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pavement
+    second: {fileID: 2100000, guid: ddff244b604d86c4398c710fe3c3bf22, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wheat
+    second: {fileID: 2100000, guid: 6828bbfc3782e654db476eee3b959150, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
