@@ -1,42 +1,74 @@
 fileFormatVersion: 2
-guid: 5abb51405d149934e8c71b3835b15ed0
-timeCreated: 1518785549
+guid: f6522ccbc296c4b48867b1bd7f30cc19
+timeCreated: 1519136150
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Plane
-    100002: Plane_001
-    100004: Plane_003
-    100006: //RootNode
-    400000: Plane
-    400002: Plane_001
-    400004: Plane_003
-    400006: //RootNode
-    2100000: TARMAC
-    2100002: CONCRETE
-    2100004: grass
-    2100006: pavement
-    2100008: buildingGRAY
-    2100010: buildingROOF
-    2100012: buildingRED
-    2100014: buildingWin0
-    2100016: buildingWin1
-    2100018: buildingWHITE
-    2100020: wheat
-    2100022: mud
-    2100024: lightpole
-    2100026: netWALL
-    2100028: gravel
-    2300000: Plane
-    2300002: Plane_001
-    2300004: Plane_003
-    3300000: Plane
-    3300002: Plane_001
-    3300004: Plane_003
-    4300000: Plane
-    4300002: Plane_003
-    4300004: Plane_001
+    100000: Cube_001
+    100002: Cube_002
+    100004: Cube_003
+    100006: Cube_004
+    100008: Plane
+    100010: Plane_001
+    100012: Plane_002
+    100014: Plane_064
+    100016: //RootNode
+    400000: Cube_001
+    400002: Cube_002
+    400004: Cube_003
+    400006: Cube_004
+    400008: Plane
+    400010: Plane_001
+    400012: Plane_002
+    400014: Plane_064
+    400016: //RootNode
+    2100000: TRUCK
+    2100002: TRACTOR
+    2100004: TARMAC
+    2100006: CONCRETE
+    2100008: grass
+    2100010: pavement
+    2100012: buildingGRAY
+    2100014: buildingROOF
+    2100016: buildingRED
+    2100018: buildingWin0
+    2100020: buildingWin1
+    2100022: buildingWHITE
+    2100024: mud
+    2100026: metalGRID
+    2100028: buildingLIME
+    2100030: bush
+    2100032: FENCE
+    2100034: cow
+    2100036: lightpole
+    2100038: netWALL
+    2100040: wheat
+    2100042: gravel
+    2300000: Cube_001
+    2300002: Cube_002
+    2300004: Cube_003
+    2300006: Cube_004
+    2300008: Plane
+    2300010: Plane_001
+    2300012: Plane_002
+    2300014: Plane_064
+    3300000: Cube_001
+    3300002: Cube_002
+    3300004: Cube_003
+    3300006: Cube_004
+    3300008: Plane
+    3300010: Plane_001
+    3300012: Plane_002
+    3300014: Plane_064
+    4300000: Cube_002
+    4300002: Cube_001
+    4300004: Plane
+    4300006: Plane_002
+    4300008: Plane_064
+    4300010: Cube_003
+    4300012: Cube_004
+    4300014: Plane_001
     9500000: //RootNode
   externalObjects:
   - first:
@@ -47,13 +79,33 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: FENCE
+    second: {fileID: 2100000, guid: 0faeaf3af70102844bd102cf5c13d623, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: TARMAC
     second: {fileID: 2100000, guid: a12adf63384b4b946a9e1be37b46811c, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: TRACTOR
+    second: {fileID: 2100000, guid: 19eca813c3f044641b9601c82c00d34d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TRUCK
+    second: {fileID: 2100000, guid: 020607f7981763a49a05a42c2e38c9e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: buildingGRAY
     second: {fileID: 2100000, guid: c1df243714640d1479b4111f3292815f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingLIME
+    second: {fileID: 2100000, guid: fbe7ba1dddd1e434d8d437a17da06ddc, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -82,6 +134,16 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: bush
+    second: {fileID: 2100000, guid: dfc23b14040d85341980780af1785018, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cow
+    second: {fileID: 2100000, guid: 154452630da638549b6838b23fc99a97, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: grass
     second: {fileID: 2100000, guid: 6f9cb4a4120a2af40bf685dea4219c30, type: 2}
   - first:
@@ -94,6 +156,11 @@ ModelImporter:
       assembly: UnityEngine.CoreModule
       name: lightpole
     second: {fileID: 2100000, guid: 0ba02bc926825ea47befe7c50c3d508e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metalGRID
+    second: {fileID: 2100000, guid: 200a0653c19f08041b025c4b19772eec, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
