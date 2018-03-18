@@ -1,74 +1,47 @@
 fileFormatVersion: 2
-guid: f6522ccbc296c4b48867b1bd7f30cc19
-timeCreated: 1519136150
+guid: 08c7c692199d6354f9cc82f3292f129b
+timeCreated: 1521375335
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: Cube_001
-    100002: Cube_002
-    100004: Cube_003
-    100006: Cube_004
-    100008: Plane
-    100010: Plane_001
-    100012: Plane_002
-    100014: Plane_064
-    100016: //RootNode
-    400000: Cube_001
-    400002: Cube_002
-    400004: Cube_003
-    400006: Cube_004
-    400008: Plane
-    400010: Plane_001
-    400012: Plane_002
-    400014: Plane_064
-    400016: //RootNode
-    2100000: TRUCK
-    2100002: TRACTOR
-    2100004: TARMAC
-    2100006: CONCRETE
+    100000: Plane_001
+    100002: Plane_002
+    100004: //RootNode
+    400000: Plane_001
+    400002: Plane_002
+    400004: //RootNode
+    2100000: TARMAC
+    2100002: CONCRETE
+    2100004: TYREWALL
+    2100006: gravel
     2100008: grass
-    2100010: pavement
-    2100012: buildingGRAY
-    2100014: buildingROOF
-    2100016: buildingRED
-    2100018: buildingWin0
-    2100020: buildingWin1
-    2100022: buildingWHITE
-    2100024: mud
-    2100026: metalGRID
-    2100028: buildingLIME
-    2100030: bush
-    2100032: FENCE
-    2100034: cow
-    2100036: lightpole
-    2100038: netWALL
-    2100040: wheat
-    2100042: gravel
-    2300000: Cube_001
-    2300002: Cube_002
-    2300004: Cube_003
-    2300006: Cube_004
-    2300008: Plane
-    2300010: Plane_001
-    2300012: Plane_002
-    2300014: Plane_064
-    3300000: Cube_001
-    3300002: Cube_002
-    3300004: Cube_003
-    3300006: Cube_004
-    3300008: Plane
-    3300010: Plane_001
-    3300012: Plane_002
-    3300014: Plane_064
-    4300000: Cube_002
-    4300002: Cube_001
-    4300004: Plane
-    4300006: Plane_002
-    4300008: Plane_064
-    4300010: Cube_003
-    4300012: Cube_004
-    4300014: Plane_001
+    2100010: lightpole
+    2100012: pavement
+    2100014: buildingGRAY
+    2100016: buildingROOF
+    2100018: buildingRED
+    2100020: buildingWin0
+    2100022: buildingWin1
+    2100024: buildingWHITE
+    2100026: wheat
+    2100028: mud
+    2100030: metalGRID
+    2100032: buildingLIME
+    2100034: bush
+    2100036: FENCE
+    2100038: cow
+    2100040: TREES
+    2100042: netWALL
+    2100044: TRACTOR
+    2100046: TRUCK
+    2100048: TRANSP
+    2300000: Plane_001
+    2300002: Plane_002
+    3300000: Plane_001
+    3300002: Plane_002
+    4300000: Plane_001
+    4300002: Plane_002
     9500000: //RootNode
   externalObjects:
   - first:
@@ -94,8 +67,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: TRANSP
+    second: {fileID: 2100000, guid: cb31c8627daa100458625578e8ad891d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TREES
+    second: {fileID: 2100000, guid: 75cd1052d0950e44f9fbdf023784f49f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: TRUCK
     second: {fileID: 2100000, guid: 020607f7981763a49a05a42c2e38c9e7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TYREWALL
+    second: {fileID: 2100000, guid: 64c3a07f6e50ee045ab5c4f91feac275, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
