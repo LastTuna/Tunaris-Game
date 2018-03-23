@@ -197,7 +197,13 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 0f216dd4995116040ac16bef0e151a61, type: 3}
   AudioSource: {fileID: 256955484}
   IsRaceStarted: 0
+  currentLap: 0
+  laps: 0
   currentTime: {fileID: 199590947}
+  lap1: {fileID: 1179558362}
+  lap2: {fileID: 842745099}
+  lap3: {fileID: 547802747}
+  lapCompleted: 0
 --- !u!1001 &152830036
 Prefab:
   m_ObjectHideFlags: 0
@@ -947,13 +953,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1075721101}
-  m_LocalRotation: {x: 0.40821788, y: -0.23456968, z: 0.10938163, w: 0.8754261}
+  m_LocalRotation: {x: 0.7004354, y: 0.21408308, z: -0.015685389, w: 0.68067074}
   m_LocalPosition: {x: 7.71, y: 21.39, z: -121.2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
-  m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
+  m_LocalEulerAnglesHint: {x: 73.791, y: -254.86499, z: -273.75598}
 --- !u!1 &1161932340 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100000, guid: 24198479efc46fb4a861b75a78ad4d7a, type: 3}
@@ -1243,15 +1249,15 @@ Prefab:
     m_Modifications:
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.8976
+      value: -8.9722
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.9781
+      value: -19.4
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -220.88
+      value: -256.8
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalRotation.x
@@ -1283,15 +1289,15 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalScale.x
-      value: 1.9791743
+      value: 2.7012815
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalScale.y
-      value: 1.9791744
+      value: 2.701282
       objectReference: {fileID: 0}
     - target: {fileID: 400004, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
       propertyPath: m_LocalScale.z
-      value: 1.9791744
+      value: 2.701282
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 08c7c692199d6354f9cc82f3292f129b, type: 3}
