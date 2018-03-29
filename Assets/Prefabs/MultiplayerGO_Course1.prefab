@@ -208,10 +208,10 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a, type: 2}
-  - {fileID: 1652932485955558, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
-  - {fileID: 1410949346796916, guid: f9808d73496a99443be220412ff95074, type: 2}
-  - {fileID: 1240470853666004, guid: 093443e168e976d458a6b81d06329a48, type: 2}
-  - {fileID: 1908880967954970, guid: 18507b772392db948860fd853159501c, type: 2}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
   m_CustomConfig: 0
   m_MaxConnections: 4
   m_ConnectionConfig:
@@ -268,10 +268,11 @@ MonoBehaviour:
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   Cars:
-  - {fileID: 1240470853666004, guid: 093443e168e976d458a6b81d06329a48, type: 2}
-  - {fileID: 1410949346796916, guid: f9808d73496a99443be220412ff95074, type: 2}
-  - {fileID: 1652932485955558, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
-  - {fileID: 1908880967954970, guid: 18507b772392db948860fd853159501c, type: 2}
+  - {fileID: 1821101812714084, guid: 32cd82d2f3eaea843b65ece47923c33e, type: 2}
+  - {fileID: 1476367287164014, guid: 61a1fa41248e36444a47e0cf5cd606c1, type: 2}
+  - {fileID: 1770940476309454, guid: 88003c4a94741504aaf89203c765d4a6, type: 2}
+  - {fileID: 1304798499290922, guid: 18507b772392db948860fd853159501c, type: 2}
+  - {fileID: 1946904327093524, guid: a7c4762e3c821a8448599062fc70b9b4, type: 2}
   SpawnPositions:
   - {fileID: 1482728283008114}
   - {fileID: 1153904651110622}

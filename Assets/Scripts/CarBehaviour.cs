@@ -41,7 +41,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     //end tuneable stats
     public float engineRPM;
-    public float engineREDLINE = 9000;//engine redline
+    public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
+    public float engineTORQUE = 120;//engine power - CHANGE TO 200 IF TRUCK
     public float unitOutput;
     //gears
     public float gearR = -5.0f;
@@ -170,9 +171,9 @@ public class CarBehaviour : NetworkBehaviour {
         }
 
         if (gear > 0) {
-            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + 120; //ENGINE OUTPUT TO WHEELS
+            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTORQUE; //ENGINE OUTPUT TO WHEELS
         } else {
-            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - 120; //reverse output
+            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
         }
         if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0) {//throttle & rev limit
             wheelFR.motorTorque = 0 * FrontWheelDriveBias;
