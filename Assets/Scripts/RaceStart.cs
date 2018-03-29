@@ -9,6 +9,8 @@ public class RaceStart : MonoBehaviour {
     
     public List<AudioClip> RaceStartSounds;// All 3 race start sounds
     public AudioSource AudioSource;// AudioSource playing
+    public CanvasGroup gameplayUI;//canvas group for the active UI during race
+    public CanvasGroup postRaceUI;//canvas group for the UI that activates post-race
     public bool IsRaceStarted;// Is the race started
     public int currentLap;//current lap(player). 0 = 1st lap, 1 = 2nd lap!!!!!
     public int laps;//amount of laps; changeable in menu?
@@ -38,12 +40,17 @@ public class RaceStart : MonoBehaviour {
 
     void Start() {
         StartCoroutine(CountDown());
+
     }
 
     void Update() {
         LaptimeTicker();
-        RaceOver();
 
+        if (laps < currentLap && IsRaceStarted)
+        {
+            IsRaceStarted = false;
+            StartCoroutine(EndRace());
+        }
     }
 
     void LaptimeTicker()
@@ -94,14 +101,25 @@ public class RaceStart : MonoBehaviour {
             }
         }
     }
-    void RaceOver()
+
+    public IEnumerator EndRace()
     {
-        if(laps < currentLap)
-        {
-            IsRaceStarted = false;
-        }
+
+            yield return new WaitForSeconds(4);
+            Time.timeScale = 0.0F;
+            gameplayUI.alpha = 0f;
+            postRaceUI.alpha = 1f;
+
+
+            //add trigger to camera script - quit following the car with a moderate damping effect, and move upwards
+            //ill make a refrence or something of how it should go
+
+            //add trigger to car brake, so when you cross finish line it would brake (carBehaviour.cs)
+            //make the post-race UI and expose it on screen,
+            //make the button to restart/exit
+            //comes in english
+            
 
     }
-
 
 }
