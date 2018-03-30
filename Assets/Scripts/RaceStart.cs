@@ -19,6 +19,11 @@ public class RaceStart : MonoBehaviour {
     public Text lap2;//the center ticker on UI - alternatively displays the last completed lap
     public Text lap3;//third ticker on UI / active lap
     
+    public bool checkpoint1 = GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum;
+    public bool checkpoint2 = GameObject.Find("checkpoint2").GetComponent<CheckpointFlag>().checkum;
+    public bool checkpoint3 = GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum;
+    public bool checkpoint4 = GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum;
+
 
     public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
@@ -42,7 +47,6 @@ public class RaceStart : MonoBehaviour {
 
     void Start() {
         StartCoroutine(CountDown());
-
     }
 
     void Update() {
@@ -123,5 +127,7 @@ public class RaceStart : MonoBehaviour {
             
 
     }
+
+
 
 }
