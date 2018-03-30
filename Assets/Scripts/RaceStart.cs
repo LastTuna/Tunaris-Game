@@ -18,6 +18,8 @@ public class RaceStart : MonoBehaviour {
     public Text lap1;//the top ticker on UI - alternatively displays best lap
     public Text lap2;//the center ticker on UI - alternatively displays the last completed lap
     public Text lap3;//third ticker on UI / active lap
+    
+
     public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
