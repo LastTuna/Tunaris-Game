@@ -18,20 +18,18 @@ public class RaceStart : MonoBehaviour {
     public Text lap1;//the top ticker on UI - alternatively displays best lap
     public Text lap2;//the center ticker on UI - alternatively displays the last completed lap
     public Text lap3;//third ticker on UI / active lap
-    
-    public bool checkpoint1 = GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum;
-    public bool checkpoint2 = GameObject.Find("checkpoint2").GetComponent<CheckpointFlag>().checkum;
-    public bool checkpoint3 = GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum;
-    public bool checkpoint4 = GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum;
 
+    public bool checkpoint1;
+    public bool checkpoint2;
+    public bool checkpoint3;
+    public bool checkpoint4;
 
     public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
-
-    Boolean[] checkpoints = new Boolean[4];//array for checkpoints; 4 per track
-    public Boolean lapCompleted;//flag for when checkpoints array values are all true
+    
+    public bool lapCompleted;//flag for when checkpoints array values are all true
     
     public TimeSpan duration = new TimeSpan(0, 0, 00, 00, 000);//creates new timespan,
     //used to tally time from beginning of race
@@ -51,12 +49,29 @@ public class RaceStart : MonoBehaviour {
 
     void Update() {
         LaptimeTicker();
-
+        CheckpointUpdates();
         if (laps < currentLap && IsRaceStarted)
         {
             IsRaceStarted = false;
             StartCoroutine(EndRace());
         }
+    }
+
+    void CheckpointUpdates()
+    {
+        checkpoint1 = GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum;
+        checkpoint2 = GameObject.Find("checkpoint2").GetComponent<CheckpointFlag>().checkum;
+        checkpoint3 = GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum;
+        checkpoint4 = GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum;
+        if (checkpoint1 && checkpoint2 && checkpoint3 && checkpoint4)
+        {
+            lapCompleted = true;
+        }
+        if (checkpoint2 == false)
+        {
+            GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum = false;
+        }
+
     }
 
     void LaptimeTicker()
@@ -76,10 +91,11 @@ public class RaceStart : MonoBehaviour {
             currentLap++;
             laptimes.Add(CurrentLapTime);//tally current lap time to List
             CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
-            checkpoints.SetValue(false, 0); //reset checkpoints values
-            checkpoints.SetValue(false, 1);
-            checkpoints.SetValue(false, 2);
-            checkpoints.SetValue(false, 3);
+
+            GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum = false;
+            GameObject.Find("checkpoint2").GetComponent<CheckpointFlag>().checkum = false;
+            GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum = false;
+            GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum = false;
 
             //tally on screen values
             if (currentLap > 2)

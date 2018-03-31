@@ -273,8 +273,9 @@ MonoBehaviour:
   - {fileID: 1295908161098018, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1535011744267836, guid: ce3f62544da1c564ba9753d45d668530, type: 2}
   - {fileID: 1691042904921274, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
+  - {fileID: 1113844531919436, guid: 88b16b2ced6320a438c568b23b577658, type: 2}
   SpawnPositions:
-  - {fileID: 1482728283008114}
+  - {fileID: 1888596724209704, guid: a8c4be44a5f3a034c8903b5628f68311, type: 2}
   - {fileID: 1153904651110622}
   DefaultPrefab: {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a,
     type: 2}

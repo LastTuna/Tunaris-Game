@@ -808,7 +808,7 @@ MonoBehaviour:
   brakeStrength: 200
   aero: 15
   ratio: 0
-  tyreBias: 0.6
+  tyreBias: 1
   FrontWheelDriveBias: 0
   engineRPM: 0
   engineREDLINE: 9000
