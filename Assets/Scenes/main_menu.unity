@@ -5817,7 +5817,7 @@ MonoBehaviour:
   carsPrefabs:
   - {fileID: 1457936637991408, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
-  - {fileID: 1295908161098018, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
+  - {fileID: 1816319678053308, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1535011744267836, guid: ce3f62544da1c564ba9753d45d668530, type: 2}
   - {fileID: 1691042904921274, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
   - {fileID: 1113844531919436, guid: 88b16b2ced6320a438c568b23b577658, type: 2}
@@ -6882,6 +6882,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1271179946}
   - component: {fileID: 1271179947}
+  - component: {fileID: 1271179948}
   m_Layer: 0
   m_Name: DataController
   m_TagString: Untagged
@@ -6925,6 +6926,17 @@ MonoBehaviour:
     IsMultiplayer: 0
     IP: 
     PlayerName: 
+--- !u!114 &1271179948
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1271179945}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922b46d35c1712d4a8bf346f291863ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1308242323
 GameObject:
   m_ObjectHideFlags: 0

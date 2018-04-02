@@ -20,6 +20,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4517867224859804}
   - component: {fileID: 114185816789157522}
+  - component: {fileID: 114683374790074888}
   m_Layer: 0
   m_Name: DataController
   m_TagString: Untagged
@@ -60,3 +61,17 @@ MonoBehaviour:
     SpringStiffness: 0
     BrakeStiffness: 0
     Gearbox: 0
+    IsMultiplayer: 0
+    IP: 
+    PlayerName: 
+--- !u!114 &114683374790074888
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1648861468993458}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922b46d35c1712d4a8bf346f291863ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

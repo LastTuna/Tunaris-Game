@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class RaceStart : MonoBehaviour {
     
@@ -19,11 +20,12 @@ public class RaceStart : MonoBehaviour {
     public Text lap2;//the center ticker on UI - alternatively displays the last completed lap
     public Text lap3;//third ticker on UI / active lap
 
-    public bool checkpoint1;
+    public bool checkpoint1;//checkpoint booleans - cleared checkpoints
     public bool checkpoint2;
     public bool checkpoint3;
     public bool checkpoint4;
-
+    
+    public bool raceFinished = false;//flag for when races finished
     public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
@@ -44,7 +46,14 @@ public class RaceStart : MonoBehaviour {
     }
 
     void Start() {
+        
+        //DontDestroyOnLoad(laptimes); CREEATE A GAME OBJECT, ADD THIS SCRIPT TO THAT SO I CAN USE IT ON THAT
         StartCoroutine(CountDown());
+        GameObject.Find("checkpoint1").GetComponent<CheckpointFlag>().checkum = false;
+        GameObject.Find("checkpoint2").GetComponent<CheckpointFlag>().checkum = false;
+        GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum = false;
+        GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum = false;
+
     }
 
     void Update() {
@@ -126,21 +135,25 @@ public class RaceStart : MonoBehaviour {
 
     public IEnumerator EndRace()
     {
-
-            yield return new WaitForSeconds(4);
+        raceFinished = true;
+            yield return new WaitForSecondsRealtime(4);
             Time.timeScale = 0.0F;
             gameplayUI.alpha = 0f;
             postRaceUI.alpha = 1f;
 
 
-            //add trigger to camera script - quit following the car with a moderate damping effect, and move upwards
-            //ill make a refrence or something of how it should go
+        //add trigger to camera script - quit following the car with a moderate damping effect, and move upwards
+        //ill make a refrence or something of how it should go
 
-            //add trigger to car brake, so when you cross finish line it would brake (carBehaviour.cs)
-            //make the post-race UI and expose it on screen,
-            //make the button to restart/exit
-            //comes in english
-            
+        //add trigger to car brake, so when you cross finish line it would brake (carBehaviour.cs)
+        //make the post-race UI and expose it on screen,
+        //make the button to restart/exit
+        //comes in english
+        GameObject.Find("DataController(Clone)").GetComponent<PostRace>().enabled = true;
+
+        yield return new WaitForSecondsRealtime(4);
+        Time.timeScale = 1.0F;
+        SceneManager.LoadScene("post_race", LoadSceneMode.Single);
 
     }
 

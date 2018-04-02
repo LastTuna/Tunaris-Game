@@ -4,7 +4,14 @@ using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
 
-public class CarBehaviour : NetworkBehaviour { 
+public class CarBehaviour : NetworkBehaviour {
+    //sounds
+    public AudioSource idleSound;
+    public AudioSource driveSound;
+    public AudioSource revLimitSound;
+    public AudioSource decelSound;
+
+    //end sounds
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
     public RectTransform pointer;
@@ -148,17 +155,26 @@ public class CarBehaviour : NetworkBehaviour {
         }
     }
 
-    IEnumerator engine() {//engine
-        if (gear == 1) {//neutral revs
+    IEnumerator engine()
+    {//engine
+        if (gear == 1)
+        {//neutral revs
 
-            if (engineRPM >= engineREDLINE) {
+            if (engineRPM >= engineREDLINE)
+            {
                 engineRPM = engineRPM - 300;
-            } else {
-                if (Input.GetAxis("Throttle") > 0) {
+            }
+            else
+            {
+                if (Input.GetAxis("Throttle") > 0)
+                {
                     yield return new WaitForSeconds(0.1f);
                     engineRPM = 100 + engineRPM;
-                } else {
-                    if (engineRPM > 800) {
+                }
+                else
+                {
+                    if (engineRPM > 800)
+                    {
                         yield return new WaitForSeconds(0.05f);
                         engineRPM = engineRPM - 100;
                     }
@@ -166,28 +182,73 @@ public class CarBehaviour : NetworkBehaviour {
 
 
             }
-        } else { //drive revs
+        }
+        else
+        { //drive revs
             engineRPM = wheelRPM * gears[gear] * ratio + 800;
         }
 
-        if (gear > 0) {
+        if (gear > 0)
+        {
             unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTORQUE; //ENGINE OUTPUT TO WHEELS
-        } else {
+        }
+        else
+        {
             unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
         }
-        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0) {//throttle & rev limit
+        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
+        {//throttle & rev limit
             wheelFR.motorTorque = 0 * FrontWheelDriveBias;
             wheelFL.motorTorque = 0 * FrontWheelDriveBias;
 
             wheelRR.motorTorque = 0 * (1 - FrontWheelDriveBias);
             wheelRL.motorTorque = 0 * (1 - FrontWheelDriveBias);
-        } else {
+        }
+        else
+        {
             wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
             wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
 
             wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
             wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
         }
+
+        //SOUND UPDATES
+        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0 && engineRPM < engineREDLINE - 200)
+        {//driveRevs
+            driveSound.mute = false;
+            driveSound.pitch = (engineRPM / 1000) / 4;
+        }
+        else
+        {
+            driveSound.mute = true;
+        }//end drive sound
+        if (engineRPM < 829)
+        {//idle
+            idleSound.mute = false;
+        }
+        else
+        {
+            idleSound.mute = true;
+        }//end idle sound
+        if (engineRPM > engineREDLINE - 200)
+        {//revLimiter sound
+            revLimitSound.mute = false;
+        }
+        else
+        {
+            revLimitSound.mute = true;
+
+        }//end rev limter
+        if (engineRPM > 830 && Input.GetAxis("Throttle") == 0)
+        {//deceleration
+            decelSound.mute = false;
+            decelSound.pitch = (engineRPM / 1000) / 4;
+        }
+        else
+        {
+            decelSound.mute = true;
+        }//end decel
     }
 
     // Gearbox managed, called each frame
