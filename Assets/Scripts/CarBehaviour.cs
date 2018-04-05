@@ -8,8 +8,9 @@ public class CarBehaviour : NetworkBehaviour {
     //sounds
     public AudioSource idleSound;
     public AudioSource driveSound;
-    public AudioSource revLimitSound;
     public AudioSource decelSound;
+    public AudioSource turboSpoolSound;
+    public AudioSource blowOffSound;
 
     //end sounds
     public Text speedDisplay;//output of speed to meter - by default MPH
@@ -50,6 +51,8 @@ public class CarBehaviour : NetworkBehaviour {
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
     public float engineTORQUE = 120;//engine power - CHANGE TO 200 IF TRUCK
+    public float turboSpool = 0.1f;//turbo boost value
+    public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //gears
     public float gearR = -5.0f;
@@ -214,13 +217,30 @@ public class CarBehaviour : NetworkBehaviour {
         }
 
         //SOUND UPDATES
-        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0 && engineRPM < engineREDLINE - 200)
+        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
         {//driveRevs
             driveSound.mute = false;
             driveSound.pitch = (engineRPM / 1000) / 4;
+            turboSpoolSound.mute = false;
+            turboSpoolSound.pitch = turboSpool;
+            if (turboSpool < 1.8f)
+            {
+                turboSpool = turboSpool + 0.1f * (turboSpool / 2);
+            }
+            if(turboSpool > 1.3f)
+            {
+                spooled = true;
+            }
         }
         else
         {
+            if (spooled)
+            {
+                blowOffSound.Play();
+                spooled = false;
+            }
+            turboSpool = 0.1f;
+            turboSpoolSound.mute = true;
             driveSound.mute = true;
         }//end drive sound
         if (engineRPM < 829)
@@ -231,15 +251,6 @@ public class CarBehaviour : NetworkBehaviour {
         {
             idleSound.mute = true;
         }//end idle sound
-        if (engineRPM > engineREDLINE - 200)
-        {//revLimiter sound
-            revLimitSound.mute = false;
-        }
-        else
-        {
-            revLimitSound.mute = true;
-
-        }//end rev limter
         if (engineRPM > 830 && Input.GetAxis("Throttle") == 0)
         {//deceleration
             decelSound.mute = false;
