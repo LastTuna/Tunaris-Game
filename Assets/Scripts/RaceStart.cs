@@ -37,12 +37,14 @@ public class RaceStart : MonoBehaviour {
     //used to tally time from beginning of race
 
     public IEnumerator CountDown() {
-        for(int i = 0; i < RaceStartSounds.Count - 1; i++) {
+        FindObjectOfType<CourseController>().OnRaceStart();
+        for (int i = 0; i < RaceStartSounds.Count - 1; i++) {
             AudioSource.PlayOneShot(RaceStartSounds[i]);
             yield return new WaitForSeconds(1);
         }
         AudioSource.PlayOneShot(RaceStartSounds[RaceStartSounds.Count - 1]);
         IsRaceStarted = true;
+
     }
 
     void Start() {

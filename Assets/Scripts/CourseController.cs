@@ -16,6 +16,7 @@ public class CourseController : MonoBehaviour {
     public GameObject MultiplayerPrefab;
     // Global Host UI prefab to instantiate
     public GameObject HostUI;
+    public GameObject HostUIInstance;
 
     // References to this course's HUD
     public Text SpeedDisplayHUD;
@@ -54,7 +55,7 @@ public class CourseController : MonoBehaviour {
                 manager.StartHost();
 
                 // Create host UI
-                GameObject HostUIInstance = Instantiate(HostUI);
+                HostUIInstance = Instantiate(HostUI);
                 HostUIInstance.name = "HostUI";
                 HostUIInstance.GetComponentInChildren<Button>().onClick.AddListener(StartRaceProcess);
             } else {
@@ -63,6 +64,10 @@ public class CourseController : MonoBehaviour {
                 manager.StartClient();
             }
         }
+    }
+
+    public void OnRaceStart() {
+        Destroy(HostUIInstance);
     }
 
     public void Cleanup() {
