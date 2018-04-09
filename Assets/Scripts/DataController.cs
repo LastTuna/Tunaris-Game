@@ -92,8 +92,18 @@ public class DataController : MonoBehaviour {
 
 
     void Start () {
-        DontDestroyOnLoad(gameObject);
-        LoadGameData();
+        // Check existence of a previous DataController
+        if (FindObjectsOfType(typeof(DataController)).Length > 1) {
+            // Return to menu from game scene
+            // Put player back in city area and kill ourselves
+            (FindObjectOfType(typeof(Controller)) as Controller).GoRace();
+
+            Destroy(this);
+        } else {
+            // First game load, initialize
+            DontDestroyOnLoad(gameObject);
+            LoadGameData();
+        }
     }
 
     public void LoadGameData() {
