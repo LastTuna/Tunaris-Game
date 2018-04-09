@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Networking;
 
 public class ShowCarSpinner : StateMachineBehaviour {
     public static List<GameObject> spinners = new List<GameObject>();
@@ -15,16 +16,23 @@ public class ShowCarSpinner : StateMachineBehaviour {
         ButtonProperties data = animator.gameObject.GetComponent<ButtonProperties>();
         GameObject spinner = Instantiate(data.carPrefab, data.parent.transform);
 
-        // Disable main rigidbody
-        Destroy(spinner.GetComponent<Rigidbody>());
         // Disable wheel colliders or unity spergs in the log
         foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>()) {
             Destroy(wc);
+        }
+        // Disable network scripts
+        foreach (Behaviour c in spinner.GetComponents(typeof(NetworkTransform))) {
+            Destroy(c);
+        }
+        foreach (Behaviour c in spinner.GetComponents(typeof(NetworkTransformChild))) {
+            Destroy(c);
         }
         // Disable car driving scripts
         foreach (Behaviour c in spinner.GetComponents(typeof(Behaviour))) {
             Destroy(c);
         }
+        // Disable main rigidbody
+        Destroy(spinner.GetComponent<Rigidbody>());
 
         // Set transform
         spinner.transform.localScale = new Vector3(120, 120, 120);
