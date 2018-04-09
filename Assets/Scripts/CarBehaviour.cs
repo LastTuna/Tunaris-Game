@@ -5,14 +5,8 @@ using UnityEngine.Networking;
 using UnityEngine.UI;
 
 public class CarBehaviour : NetworkBehaviour {
-    //sounds
-    public AudioSource idleSound;
-    public AudioSource driveSound;
-    public AudioSource decelSound;
-    public AudioSource turboSpoolSound;
-    public AudioSource blowOffSound;
+    public EngineAudioBehaviour EngineAudio;
 
-    //end sounds
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
     public RectTransform pointer;
@@ -217,49 +211,21 @@ public class CarBehaviour : NetworkBehaviour {
         }
 
         //SOUND UPDATES
-        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
-        {//driveRevs
-            driveSound.mute = false;
-            driveSound.pitch = (engineRPM / 1000) / 4;
-            turboSpoolSound.mute = false;
-            turboSpoolSound.pitch = turboSpool;
-            if (turboSpool < 1.8f)
-            {
+        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0) {
+            //driveRevs
+            if (turboSpool < 1.8f) {
                 turboSpool = turboSpool + 0.1f * (turboSpool / 2);
             }
-            if(turboSpool > 1.3f)
-            {
+            if (turboSpool > 1.3f) {
                 spooled = true;
             }
-        }
-        else
-        {
-            if (spooled)
-            {
-                blowOffSound.Play();
+        } else {
+            if (spooled) {
                 spooled = false;
             }
             turboSpool = 0.1f;
-            turboSpoolSound.mute = true;
-            driveSound.mute = true;
-        }//end drive sound
-        if (engineRPM < 829)
-        {//idle
-            idleSound.mute = false;
         }
-        else
-        {
-            idleSound.mute = true;
-        }//end idle sound
-        if (engineRPM > 830 && Input.GetAxis("Throttle") == 0)
-        {//deceleration
-            decelSound.mute = false;
-            decelSound.pitch = (engineRPM / 1000) / 4;
-        }
-        else
-        {
-            decelSound.mute = true;
-        }//end decel
+        EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
     // Gearbox managed, called each frame
