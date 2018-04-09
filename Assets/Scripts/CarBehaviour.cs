@@ -91,6 +91,12 @@ public class CarBehaviour : NetworkBehaviour {
         if (isLocalPlayer) {
             StartCoroutine(engine());
 
+            if (Input.GetButtonDown("Reset")) {
+                Debug.Log("Reset was pressed");
+                transform.rotation = Quaternion.identity;
+                transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
+            }
+
             if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
             {
                 wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);

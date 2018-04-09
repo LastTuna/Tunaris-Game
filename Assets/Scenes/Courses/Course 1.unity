@@ -1477,7 +1477,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: if you flip youre retarded and need to restart game- there is no reset button
+  m_Text: press r to crudely reset to track
 --- !u!222 &517612468
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2332,7 +2332,7 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1270875648}
-  m_LocalRotation: {x: 0.6368548, y: -0, z: -0, w: 0.7709837}
+  m_LocalRotation: {x: 0.6368549, y: -0, z: -0, w: 0.77098376}
   m_LocalPosition: {x: 20.07147, y: -0.35056126, z: 0.35283762}
   m_LocalScale: {x: 0.22763711, y: 0.22763717, z: 0.22763717}
   m_Children: []
