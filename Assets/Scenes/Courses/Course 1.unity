@@ -222,6 +222,7 @@ MonoBehaviour:
   MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,
     type: 2}
   HostUI: {fileID: 1267096992082948, guid: 36ac95ee80f840d4d81bb8365829d596, type: 2}
+  HostUIInstance: {fileID: 0}
   SpeedDisplayHUD: {fileID: 281785708}
   GearDisplayHUD: {fileID: 1714846787}
   PointerHUD: {fileID: 1628532948}

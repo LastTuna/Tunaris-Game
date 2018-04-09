@@ -31,9 +31,9 @@ public class CourseController : MonoBehaviour {
     public TGNetworkManager manager;
 
     void Start () {
-        GameObject dataController = GameObject.Find("DataController");
+        DataController dataController = FindObjectOfType<DataController>();
         if(dataController == null) {
-            dataController = Instantiate(DataControllerPrefab);
+            dataController = Instantiate(DataControllerPrefab).GetComponent<DataController>();
             dataController.GetComponent<DataController>().LoadGameData();
         }
         settings = dataController.GetComponent<DataController>().LoadedData;

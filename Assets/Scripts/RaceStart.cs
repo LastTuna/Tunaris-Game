@@ -151,7 +151,7 @@ public class RaceStart : MonoBehaviour {
         //make the post-race UI and expose it on screen,
         //make the button to restart/exit
         //comes in english
-        GameObject.Find("DataController").GetComponent<PostRace>().enabled = true;
+        FindObjectOfType<PostRace>().enabled = true;
 
         yield return new WaitForSecondsRealtime(4);
         Time.timeScale = 1.0F;

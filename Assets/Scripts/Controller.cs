@@ -29,7 +29,7 @@ public class Controller : MonoBehaviour {
 
     IEnumerator LoadRace() {
         yield return new WaitForSeconds(5);
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(GameObject.Find("DataController").GetComponent<DataController>().SelectedCourse);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(FindObjectOfType<DataController>().SelectedCourse);
         while (!asyncLoad.isDone) {
             yield return null;
         }
@@ -48,7 +48,7 @@ public class Controller : MonoBehaviour {
         GoRaceCanvas.gameObject.SetActive(false);
         GarageCanvas.gameObject.SetActive(true);
 
-        string selectedCarName = GameObject.Find("DataController").GetComponent<DataController>().SelectedCar;
+        string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
 
         // Add the car buttons
         createdGarageButtons = new List<GameObject>();
