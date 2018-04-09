@@ -21,14 +21,14 @@ public class ShowCarSpinner : StateMachineBehaviour {
             Destroy(wc);
         }
         // Disable network scripts
-        foreach (Behaviour c in spinner.GetComponents(typeof(NetworkTransform))) {
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransform>()) {
             Destroy(c);
         }
-        foreach (Behaviour c in spinner.GetComponents(typeof(NetworkTransformChild))) {
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>()) {
             Destroy(c);
         }
         // Disable car driving scripts
-        foreach (Behaviour c in spinner.GetComponents(typeof(Behaviour))) {
+        foreach (Behaviour c in spinner.GetComponents<Behaviour>()) {
             Destroy(c);
         }
         // Disable main rigidbody
