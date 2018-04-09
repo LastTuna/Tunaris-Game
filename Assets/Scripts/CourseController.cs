@@ -65,6 +65,16 @@ public class CourseController : MonoBehaviour {
         }
     }
 
+    public void Cleanup() {
+        // Kill the network manager when leaving the scene
+        if (IP == null || IP == string.Empty) {
+            manager.StopHost();
+        } else {
+            manager.StopClient();
+        }
+        Destroy(manager);
+    }
+
     public void StartRaceProcess() {
         manager.StartRaceProcess();
     }

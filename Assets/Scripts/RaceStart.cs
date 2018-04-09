@@ -153,6 +153,8 @@ public class RaceStart : MonoBehaviour {
 
         yield return new WaitForSecondsRealtime(4);
         Time.timeScale = 1.0F;
+
+        FindObjectOfType<CourseController>().Cleanup();
         SceneManager.LoadScene(3, LoadSceneMode.Single);
 
     }
