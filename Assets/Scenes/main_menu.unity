@@ -5820,7 +5820,7 @@ MonoBehaviour:
   - {fileID: 1123898695330390, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1535011744267836, guid: ce3f62544da1c564ba9753d45d668530, type: 2}
   - {fileID: 1691042904921274, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
-  - {fileID: 1984092072874344, guid: 07f89a5f3aabdba4ca3cc715e82bd072, type: 2}
+  - {fileID: 1635950991657954, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
   cancelClip: {fileID: 8300000, guid: cb85f8b7bf17f254db110fa532924745, type: 3}
 --- !u!114 &1057594254
 MonoBehaviour:
@@ -6937,6 +6937,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922b46d35c1712d4a8bf346f291863ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  i: 1
+  laps: 0
+  laptime1: {fileID: 0}
+  laptime2: {fileID: 0}
+  laptime3: {fileID: 0}
+  laptime4: {fileID: 0}
+  laptime5: {fileID: 0}
+  laptime6: {fileID: 0}
+  laptime7: {fileID: 0}
+  laptime8: {fileID: 0}
+  laptime9: {fileID: 0}
+  laptime10: {fileID: 0}
 --- !u!1 &1308242323
 GameObject:
   m_ObjectHideFlags: 0
