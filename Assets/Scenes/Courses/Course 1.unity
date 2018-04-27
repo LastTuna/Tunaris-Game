@@ -809,6 +809,7 @@ MonoBehaviour:
   heightDamping: 2
   zoomRacio: 0.5
   DefaultFOV: 60
+  chosenCamera: 0
 --- !u!1 &272638768
 GameObject:
   m_ObjectHideFlags: 0
@@ -2232,7 +2233,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!224 &1244692929
 RectTransform:
