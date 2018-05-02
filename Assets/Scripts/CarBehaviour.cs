@@ -217,21 +217,8 @@ public class CarBehaviour : NetworkBehaviour {
         }
 
         //SOUND UPDATES
-        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0) {
-            //driveRevs
-            if (turboSpool < 1.8f) {
-                turboSpool = turboSpool + 0.1f * (turboSpool / 2);
-            }
-            if (turboSpool > 1.3f) {
-                spooled = true;
-            }
-        } else {
-            if (spooled) {
-                spooled = false;
-            }
-            turboSpool = 0.1f;
-        }
-        EngineAudio.ProcessSounds(engineRPM, spooled);
+
+        EngineAudio.ProcessSounds(engineRPM);
     }
 
     // Gearbox managed, called each frame

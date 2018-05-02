@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class EngineAudioBehaviour : MonoBehaviour {
     // Car attached source
@@ -12,10 +9,11 @@ public class EngineAudioBehaviour : MonoBehaviour {
 
     // Turbo related stuff
     public bool hasTurbo;
+    public bool spooled;
+    public float turboSpool = 0.1f;
     public AudioSource boostSource;
     public AudioClip woosh;
     public AudioClip pssh;
-    public bool isSpooled;
 
     // Some attempt at blindly speeding up processing
     private int lastIndex = 0;
@@ -24,10 +22,12 @@ public class EngineAudioBehaviour : MonoBehaviour {
     void Start() {
         CarEngine.clip = sounds[lastIndex].clip;
         CarEngine.Play();
+
+        
     }
 
     // Called from CarBehaviour, processes sounds
-    public void ProcessSounds(float revs, bool spooled) {
+    public void ProcessSounds(float revs) {
         if (sounds.Length == 0) return;
         int currentIndex = lastIndex;
 
@@ -62,23 +62,39 @@ public class EngineAudioBehaviour : MonoBehaviour {
         // Process turbo sound
         if (hasTurbo) {
             // turbo started spooling
-            if(!isSpooled && spooled) {
+            if (revs > 830 && Input.GetAxis("Throttle") > 0)
+            {//when you step on the gas
                 boostSource.clip = woosh;
-                boostSource.loop = true;
-                boostSource.Play();
-                isSpooled = spooled;
+                boostSource.mute = false;
+                boostSource.pitch = turboSpool;
+                boostSource.Play();//PROBLEM - using the play() function has a delay, and the sound clips and creates a stuttering effect which doesnt sound nice. idea was to mute/unmute the soundbyte when it plays/doesnt play.
+                //at its current state it has a delay, dunno how to fix it (calling boostSource.mute = true would also mute prematurely when playing wastegate.)
+                if (turboSpool < 1.8f)//contol to keep boost level tops at 1.8
+                {
+                    turboSpool = turboSpool + 0.1f * (turboSpool / 2);
+                }
+                if (turboSpool > 1.3f)//after boost exceeds 1.3, play wastegate
+                {
+                    spooled = true;
+                }
             }
+            else
+            {//when you let off the gas
+                if (spooled)
+                {
+                    spooled = false;
+                    boostSource.clip = pssh;
+                    boostSource.pitch = 1;
+                    boostSource.Play();
+                    boostSource.loop = false;
+                }
+                turboSpool = 0.1f;
 
-            // turbo stopped spooling
-            if(isSpooled && !spooled) {
-                boostSource.clip = pssh;
-                boostSource.loop = false;
-                boostSource.Play();
-                isSpooled = spooled;
             }
         }
+
+        }
     }
-}
 
 [System.Serializable]
 public struct EngineSample {
