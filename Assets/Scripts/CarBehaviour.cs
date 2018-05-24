@@ -216,9 +216,29 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
         }
 
+
+        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
+        {//when you step on the gas
+
+            if (turboSpool < 1.8f)//contol to keep boost level tops at 1.8
+            {
+                turboSpool = turboSpool + 0.1f * (turboSpool / 2);
+            }
+            if (turboSpool > 1.3f)//after boost exceeds 1.3, play wastegate
+            {
+                spooled = true;
+            }
+        }
+        else
+        {
+            turboSpool = 0.1f;
+            spooled = false;
+        }
+
+
         //SOUND UPDATES
 
-        EngineAudio.ProcessSounds(engineRPM);
+        EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
     // Gearbox managed, called each frame
