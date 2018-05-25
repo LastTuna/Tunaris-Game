@@ -180,7 +180,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: 
 --- !u!222 &70972434
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -300,7 +300,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: test
 --- !u!222 &109570398
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -374,7 +374,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: game over
 --- !u!222 &161755362
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -782,7 +782,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: 
 --- !u!222 &459023568
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -887,7 +887,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: alignment
 --- !u!222 &741350305
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1101,7 +1101,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: 
 --- !u!222 &947489726
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1175,7 +1175,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: it crashed
 --- !u!222 &1063432173
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1352,7 +1352,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: 
 --- !u!222 &1235116314
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1511,7 +1511,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: i will fix later
 --- !u!222 &1307473357
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1764,7 +1764,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: reeeerere
+  m_Text: error 322
 --- !u!222 &1894417251
 CanvasRenderer:
   m_ObjectHideFlags: 0

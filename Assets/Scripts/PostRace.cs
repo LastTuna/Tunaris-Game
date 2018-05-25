@@ -7,8 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
 public class PostRace : MonoBehaviour {
-
-    public int i = 1;
+    public bool checkum;
     public int laps;
     public Text laptime1;
     public Text laptime2;
@@ -26,6 +25,7 @@ public class PostRace : MonoBehaviour {
     // Use this for initialization
     void Start ()
     {
+        checkum = true;
         lapTally = GameObject.Find("CourseController").GetComponent<RaceStart>().laptimes;
         laps = lapTally.Count - 1;
     }
@@ -34,16 +34,15 @@ public class PostRace : MonoBehaviour {
 	void Update () {
 
 
-        if (i > 0)
+        if (GameObject.Find("lap1") && checkum)
         {
             StartCoroutine(TallyLaps());
-            i--;
         }
 	}
 
     IEnumerator TallyLaps()
     {
-        yield return new WaitForSecondsRealtime(4);
+        checkum = false;
         laptime1 = GameObject.Find("lap1").GetComponent<Text>();
         laptime2 = GameObject.Find("lap2").GetComponent<Text>();
         laptime3 = GameObject.Find("lap3").GetComponent<Text>();
@@ -67,6 +66,8 @@ public class PostRace : MonoBehaviour {
         //laptime1.text = string.Format("{0:00}:{1:00}:{2:000}", laptally[0].Minutes, laptimes[0].Seconds, laptimes[0].Milliseconds);
         yield return new WaitForSecondsRealtime(4);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
+
+        
 
     }
 }
