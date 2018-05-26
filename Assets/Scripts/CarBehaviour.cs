@@ -24,6 +24,7 @@ public class CarBehaviour : NetworkBehaviour {
     public bool manual = false; //manual(true) auto(false)
     public float currentGrip; //value manipulated by road type
     //tuneable stats
+    public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
     public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
     public float ratio; //final drive
@@ -71,12 +72,10 @@ public class CarBehaviour : NetworkBehaviour {
             speedDisplay = ctrl.SpeedDisplayHUD;
             gearDisplay = ctrl.GearDisplayHUD;
             pointer = ctrl.PointerHUD;
-
             // Set game camera target
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
             engineRPM = 800;
-            ratio = 4.3f;
             Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
@@ -84,6 +83,16 @@ public class CarBehaviour : NetworkBehaviour {
             gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
 
             HUDUpdate();
+            //stats update
+
+            springStiffness = GameObject.Find("DataController").GetComponent<DataController>().SpringStiffness;
+            brakeStrength = GameObject.Find("DataController").GetComponent<DataController>().BrakeStiffness;
+            aero = GameObject.Find("DataController").GetComponent<DataController>().Aero;
+            ratio = GameObject.Find("DataController").GetComponent<DataController>().FinalDrive;
+            tyreBias = GameObject.Find("DataController").GetComponent<DataController>().TireBias;
+            manual = true;
+
+
         }
     }
 
