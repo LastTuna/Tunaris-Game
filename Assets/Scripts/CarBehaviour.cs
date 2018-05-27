@@ -50,15 +50,7 @@ public class CarBehaviour : NetworkBehaviour {
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //gears
-    public float gearR = -5.0f;
-    public float gearN = 0.0f;
-    public float gear1 = 5.4f;
-    public float gear2 = 3.4f;
-    public float gear3 = 2.7f;
-    public float gear4 = 2.0f;
-    public float gear5 = 1.8f;
-    public float gear6 = 1.6f;
-    private float[] gears;
+    public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
@@ -79,8 +71,7 @@ public class CarBehaviour : NetworkBehaviour {
             Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-
-            gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
+            
 
             HUDUpdate();
             //stats update
@@ -255,7 +246,7 @@ public class CarBehaviour : NetworkBehaviour {
     {
         if (manual)
         {
-            if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false)
+            if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
             {
                 shifting = true;
                 gear = gear + 1;

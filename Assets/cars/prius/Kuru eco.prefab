@@ -1019,6 +1019,7 @@ MonoBehaviour:
   wheelRPM: 0
   manual: 1
   currentGrip: 0
+  springStiffness: 8000
   brakeStrength: 200
   aero: 15
   ratio: 0
@@ -1026,18 +1027,14 @@ MonoBehaviour:
   FrontWheelDriveBias: 1
   engineRPM: 0
   engineREDLINE: 9000
-  engineTORQUE: 120
+  engineTORQUE: 200
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
-  gearR: -5
-  gearN: 0
-  gear1: 5.4
-  gear2: 3.4
-  gear3: 2.7
-  gear4: 2
-  gear5: 1.8
-  gear6: 1.6
+  gears:
+  - -5
+  - 0
+  - 2
   gear: 0
   shifting: 0
   CenterOfGravity: {x: 0, y: -0.4, z: 0.3}
