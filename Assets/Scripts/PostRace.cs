@@ -62,7 +62,7 @@ public class PostRace : MonoBehaviour {
         laptime7.text = "null";
         laptime8.text = "null";
         laptime9.text = "null";
-        laptime10.text = "error#364";
+        laptime10.text = "will be fixed later";
         //laptime1.text = string.Format("{0:00}:{1:00}:{2:000}", laptally[0].Minutes, laptimes[0].Seconds, laptimes[0].Milliseconds);
         yield return new WaitForSecondsRealtime(4);
         SceneManager.LoadScene(0, LoadSceneMode.Single);

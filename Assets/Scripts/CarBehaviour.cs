@@ -54,6 +54,12 @@ public class CarBehaviour : NetworkBehaviour {
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
+    public JointSpring springs = new JointSpring {
+        spring = 8000,
+        damper = 800,
+        targetPosition = 0.1f,
+    };
+
     // CoG
     public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
 
@@ -82,6 +88,17 @@ public class CarBehaviour : NetworkBehaviour {
             ratio = GameObject.Find("DataController").GetComponent<DataController>().FinalDrive;
             tyreBias = GameObject.Find("DataController").GetComponent<DataController>().TireBias;
             manual = true;
+
+            //spring stiffness set (dampers = spring / 10)
+            springs.spring = springStiffness;
+            springs.damper = springStiffness / 10;
+
+            wheelFL.suspensionSpring = springs;
+            wheelFR.suspensionSpring = springs;
+            wheelRL.suspensionSpring = springs;
+            wheelRR.suspensionSpring = springs;
+
+
 
 
         }

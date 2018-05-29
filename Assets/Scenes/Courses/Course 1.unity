@@ -947,7 +947,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: '[[RECALLED]]                            DNF'
+  m_Text: placeholder
 --- !u!222 &282171353
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1223,7 +1223,7 @@ MeshCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 346202667}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b9a67aef91b23fb41a368a029682d8d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -1237,7 +1237,7 @@ MeshCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 346202668}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: b9a67aef91b23fb41a368a029682d8d0, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 3
@@ -2008,8 +2008,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 504.10004, y: 272.86115}
-  m_SizeDelta: {x: 243.03, y: 45}
+  m_AnchoredPosition: {x: 504, y: 268}
+  m_SizeDelta: {x: 243.03, y: 53.32}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &982899961
 MonoBehaviour:
@@ -2782,7 +2782,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: test message 1232
+  m_Text: for later use
 --- !u!222 &1712525687
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -2972,7 +2972,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: civic 3k mods                      2:40.40
+  m_Text: text
 --- !u!222 &1830645471
 CanvasRenderer:
   m_ObjectHideFlags: 0

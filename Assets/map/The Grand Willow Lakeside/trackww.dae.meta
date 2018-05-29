@@ -1,14 +1,20 @@
 fileFormatVersion: 2
-guid: cdc30f7505f55ce4ab90bdb934a9ede2
-timeCreated: 1527499162
+guid: 95c6681c67a91954895453bd7254fbce
+timeCreated: 1527603868
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: //RootNode
-    400000: //RootNode
+    100000: COLLIDER
+    100002: OFFROAD
+    100004: TRACK
+    100006: //RootNode
+    400000: COLLIDER
+    400002: OFFROAD
+    400004: TRACK
+    400006: //RootNode
     2100000: TARMAC
-    2100002: offroad
+    2100002: GRAVEL
     2100004: water
     2100006: STONE
     2100008: GRASS
@@ -18,11 +24,33 @@ ModelImporter:
     2100016: WILLOW_BARK
     2100018: WILLOW_LEAVES
     2100020: airDuct
-    2300000: //RootNode
-    3300000: //RootNode
-    4300000: Plane
+    2100022: NOTICEBOARD
+    2100024: BUILDING_ROOF
+    2100026: BUILDING_GRAY
+    2100028: BLACK
+    2100030: RED_PLANKS
+    2100032: WINDOW_0
+    2100034: WINDOW_1
+    2100036: BUSH
+    2100038: ARROWBOARD
+    2100040: lightPole
+    2100042: sea
+    2300000: COLLIDER
+    2300002: OFFROAD
+    2300004: TRACK
+    3300000: COLLIDER
+    3300002: OFFROAD
+    3300004: TRACK
+    4300000: TRACK
+    4300002: COLLIDER
+    4300004: OFFROAD
     9500000: //RootNode
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ARROWBOARD
+    second: {fileID: 2100000, guid: 235745dbfa40d6c40a15df5cbec2439b, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -31,13 +59,48 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: BLACK
+    second: {fileID: 2100000, guid: 73db9a599289efe4d82eef4e7e16c3f2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BUILDING_GRAY
+    second: {fileID: 2100000, guid: 7889b755fe94e5b4f85e4f207d0aac7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BUILDING_ROOF
+    second: {fileID: 2100000, guid: c8b42f88bf2549f44b90e14ca083f8c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BUSH
+    second: {fileID: 2100000, guid: 4e653bcf15f25e648bf68d95a1ec2a5a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: GRASS
     second: {fileID: 2100000, guid: 6f9cb4a4120a2af40bf685dea4219c30, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: GRAVEL
+    second: {fileID: 2100000, guid: dfba5bc2beb41c146869e7b1389dec38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: NOTICEBOARD
+    second: {fileID: 2100000, guid: cf8333a9f06503e4798712cd52a8b0eb, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: RAILING
     second: {fileID: 2100000, guid: 46e1ae834e0fcdb4197b5b5f399aa8bc, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RED_PLANKS
+    second: {fileID: 2100000, guid: 765e0925457de3b48aa3ba48f57894f9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -66,13 +129,28 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: WINDOW_0
+    second: {fileID: 2100000, guid: 0b400883db6d3b04a8f6fa7d1fa8b245, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WINDOW_1
+    second: {fileID: 2100000, guid: 9c18f12679fe7f745b72044ba4b27d09, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: airDuct
     second: {fileID: 2100000, guid: 502d244f7ccd9fd45bebb15b674c5df9, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: offroad
-    second: {fileID: 2100000, guid: cfa400a16d0b4f64aada23282e879283, type: 2}
+      name: lightPole
+    second: {fileID: 2100000, guid: 0ba02bc926825ea47befe7c50c3d508e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: sea
+    second: {fileID: 2100000, guid: 2f7181ce2a686be499ffbb2934fc5d83, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
