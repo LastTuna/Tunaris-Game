@@ -1,0 +1,267 @@
+fileFormatVersion: 2
+guid: 343f23aa384621743b3d219faf2481e6
+timeCreated: 1527421750
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: COLLIDER
+    100002: MAIN
+    100004: OFFROAD
+    100006: //RootNode
+    400000: COLLIDER
+    400002: MAIN
+    400004: OFFROAD
+    400006: //RootNode
+    2100000: TARMAC
+    2100002: CONCRETE
+    2100004: TYREWALL
+    2100006: gravel
+    2100008: grass
+    2100010: lightpole
+    2100012: pavement
+    2100014: buildingGRAY
+    2100016: buildingROOF
+    2100018: buildingRED
+    2100020: buildingWin0
+    2100022: buildingWin1
+    2100024: buildingWHITE
+    2100026: wheat
+    2100028: mud
+    2100030: metalGRID
+    2100032: buildingLIME
+    2100034: bush
+    2100036: FENCE
+    2100038: cow
+    2100040: TREES
+    2100042: netWALL
+    2100044: TRACTOR
+    2100046: TRUCK
+    2100048: BLACK
+    2100050: SCAFFOLDING
+    2100052: BANNER
+    2300000: COLLIDER
+    2300002: MAIN
+    2300004: OFFROAD
+    3300000: COLLIDER
+    3300002: MAIN
+    3300004: OFFROAD
+    4300000: MAIN
+    4300002: COLLIDER
+    4300004: OFFROAD
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BANNER
+    second: {fileID: 2100000, guid: 69d96b3e868fb184aab001c3b94ffa31, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BLACK
+    second: {fileID: 2100000, guid: 1c655dae364bfb74dac89963e5f2bf33, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CONCRETE
+    second: {fileID: 2100000, guid: 2b027b4925913b24a8700a5d5ace6e83, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: FENCE
+    second: {fileID: 2100000, guid: ba01d7b33dad19a4b901d2302b200594, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SCAFFOLDING
+    second: {fileID: 2100000, guid: 2ca33faf5c945d649b33e834f7fe61fe, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TARMAC
+    second: {fileID: 2100000, guid: a12adf63384b4b946a9e1be37b46811c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TRACTOR
+    second: {fileID: 2100000, guid: a219db5a8c271c74bb09a58a0e4d9640, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TREES
+    second: {fileID: 2100000, guid: 21b5d8bc389d5464c87c9a47bbe0231d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TRUCK
+    second: {fileID: 2100000, guid: 693887c39b174b64192d005b1c48b972, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: TYREWALL
+    second: {fileID: 2100000, guid: 64c3a07f6e50ee045ab5c4f91feac275, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingGRAY
+    second: {fileID: 2100000, guid: 7889b755fe94e5b4f85e4f207d0aac7b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingLIME
+    second: {fileID: 2100000, guid: 254147b975707b64b91bdf20ef84c871, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingRED
+    second: {fileID: 2100000, guid: 765e0925457de3b48aa3ba48f57894f9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingROOF
+    second: {fileID: 2100000, guid: c8b42f88bf2549f44b90e14ca083f8c0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWHITE
+    second: {fileID: 2100000, guid: f27f643bcf4a8e043889fa7eb3d3cddd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWin0
+    second: {fileID: 2100000, guid: 0b400883db6d3b04a8f6fa7d1fa8b245, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: buildingWin1
+    second: {fileID: 2100000, guid: 9c18f12679fe7f745b72044ba4b27d09, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: bush
+    second: {fileID: 2100000, guid: 4e653bcf15f25e648bf68d95a1ec2a5a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: cow
+    second: {fileID: 2100000, guid: e2e52560024c2634b882e5a42a7170e8, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: grass
+    second: {fileID: 2100000, guid: 6f9cb4a4120a2af40bf685dea4219c30, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: gravel
+    second: {fileID: 2100000, guid: dfba5bc2beb41c146869e7b1389dec38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: lightpole
+    second: {fileID: 2100000, guid: 0ba02bc926825ea47befe7c50c3d508e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: metalGRID
+    second: {fileID: 2100000, guid: 0b8bcea70e13b934383951f3da5e8721, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: mud
+    second: {fileID: 2100000, guid: 796d730874fdba147b63fe26930534b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: netWALL
+    second: {fileID: 2100000, guid: 216023cbc1621324483000c0a3125af5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: pavement
+    second: {fileID: 2100000, guid: 0b5316b83bd4b8e4d91eefb0b10af960, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: wheat
+    second: {fileID: 2100000, guid: 2dd5c6c32cd36f84f99f6a9737b1929f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -270,13 +270,13 @@ MonoBehaviour:
   Cars:
   - {fileID: 1457936637991408, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
-  - {fileID: 1123898695330390, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
+  - {fileID: 1189740919712952, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1535011744267836, guid: ce3f62544da1c564ba9753d45d668530, type: 2}
-  - {fileID: 1691042904921274, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
+  - {fileID: 1342470044116918, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
   - {fileID: 1611336230945088, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
   SpawnPositions:
   - {fileID: 1888596724209704, guid: a8c4be44a5f3a034c8903b5628f68311, type: 2}
-  - {fileID: 1153904651110622}
+  - {fileID: 1465204789229744, guid: d1010f130c037eb47950f3e21d96f55f, type: 2}
   DefaultPrefab: {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a,
     type: 2}
   UserSettings:

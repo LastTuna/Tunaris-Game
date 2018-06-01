@@ -795,7 +795,7 @@ BoxCollider:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1737360663689702}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: d060c939e57b9ab42837d3dc5141d76a, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -891,7 +891,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 0.437
   m_Pitch: 1
   Loop: 0
@@ -1024,6 +1024,7 @@ MonoBehaviour:
   wheelRPM: 0
   manual: 1
   currentGrip: 0
+  springStiffness: 8000
   brakeStrength: 200
   aero: 15
   ratio: 0
@@ -1035,14 +1036,15 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 1
   unitOutput: 0
-  gearR: -5
-  gearN: 0
-  gear1: 5.4
-  gear2: 3.4
-  gear3: 2.7
-  gear4: 2
-  gear5: 1.8
-  gear6: 1.6
+  gears:
+  - -5
+  - 0
+  - 5.4
+  - 3.4
+  - 2.7
+  - 2
+  - 1.8
+  - 1.6
   gear: 0
   shifting: 0
   CenterOfGravity: {x: 0, y: -0.3, z: 0.1}
@@ -1174,11 +1176,10 @@ MonoBehaviour:
     relativeVolume: 1
     isPitchModified: 0
   hasTurbo: 1
-  spooled: 0
-  turboSpool: 0.1
   boostSource: {fileID: 82728530938075044}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
   pssh: {fileID: 8300000, guid: 03835c3bc44cb6545808a3d741dffd8e, type: 3}
+  isSpooled: 0
 --- !u!114 &114608746017400476
 MonoBehaviour:
   m_ObjectHideFlags: 1

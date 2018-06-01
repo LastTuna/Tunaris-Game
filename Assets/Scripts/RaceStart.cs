@@ -148,6 +148,7 @@ public class RaceStart : MonoBehaviour {
 
         FindObjectOfType<CourseController>().Cleanup();
         SceneManager.LoadScene(3, LoadSceneMode.Single);
+        GameObject.Find("DataController").GetComponent<PostRace>().checkum = true;
 
     }
 }

@@ -24,6 +24,7 @@ public class CarBehaviour : NetworkBehaviour {
     public bool manual = false; //manual(true) auto(false)
     public float currentGrip; //value manipulated by road type
     //tuneable stats
+    public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
     public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
     public float ratio; //final drive
@@ -49,17 +50,15 @@ public class CarBehaviour : NetworkBehaviour {
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //gears
-    public float gearR = -5.0f;
-    public float gearN = 0.0f;
-    public float gear1 = 5.4f;
-    public float gear2 = 3.4f;
-    public float gear3 = 2.7f;
-    public float gear4 = 2.0f;
-    public float gear5 = 1.8f;
-    public float gear6 = 1.6f;
-    private float[] gears;
+    public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
     public bool shifting = false;//shifter delay
+
+    public JointSpring springs = new JointSpring {
+        spring = 8000,
+        damper = 800,
+        targetPosition = 0.1f,
+    };
 
     // CoG
     public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
@@ -71,19 +70,37 @@ public class CarBehaviour : NetworkBehaviour {
             speedDisplay = ctrl.SpeedDisplayHUD;
             gearDisplay = ctrl.GearDisplayHUD;
             pointer = ctrl.PointerHUD;
-
             // Set game camera target
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
             engineRPM = 800;
-            ratio = 4.3f;
             Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-
-            gears = new float[] { gearR, gearN, gear1, gear2, gear3, gear4, gear5, gear6 };
+            
 
             HUDUpdate();
+            //stats update
+
+            springStiffness = GameObject.Find("DataController").GetComponent<DataController>().SpringStiffness;
+            brakeStrength = GameObject.Find("DataController").GetComponent<DataController>().BrakeStiffness;
+            aero = GameObject.Find("DataController").GetComponent<DataController>().Aero;
+            ratio = GameObject.Find("DataController").GetComponent<DataController>().FinalDrive;
+            tyreBias = GameObject.Find("DataController").GetComponent<DataController>().TireBias;
+            manual = true;
+
+            //spring stiffness set (dampers = spring / 10)
+            springs.spring = springStiffness;
+            springs.damper = springStiffness / 10;
+
+            wheelFL.suspensionSpring = springs;
+            wheelFR.suspensionSpring = springs;
+            wheelRL.suspensionSpring = springs;
+            wheelRR.suspensionSpring = springs;
+
+
+
+
         }
     }
 
@@ -216,9 +233,29 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
         }
 
+
+        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
+        {//when you step on the gas
+
+            if (turboSpool < 1.8f)//contol to keep boost level tops at 1.8
+            {
+                turboSpool = turboSpool + 0.1f * (turboSpool / 2);
+            }
+            if (turboSpool > 1.3f)//after boost exceeds 1.3, play wastegate
+            {
+                spooled = true;
+            }
+        }
+        else
+        {
+            turboSpool = 0.1f;
+            spooled = false;
+        }
+
+
         //SOUND UPDATES
 
-        EngineAudio.ProcessSounds(engineRPM);
+        EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
     // Gearbox managed, called each frame
@@ -226,7 +263,7 @@ public class CarBehaviour : NetworkBehaviour {
     {
         if (manual)
         {
-            if (Input.GetButtonDown("ShiftUp") == true && gear < 7 && shifting == false)
+            if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
             {
                 shifting = true;
                 gear = gear + 1;
