@@ -118,7 +118,7 @@ public class DataController : MonoBehaviour {
         } else {
             Debug.LogError("Cannot load game data! Creating new gamedata file.");
             LoadedData = new GameData();
-            SelectedCar = "Carro";
+            SelectedCar = "Nasan GRT";
             SelectedCourse = "Course 1";
 
             TireBias = 0;

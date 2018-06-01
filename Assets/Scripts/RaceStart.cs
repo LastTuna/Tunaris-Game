@@ -55,7 +55,10 @@ public class RaceStart : MonoBehaviour {
         GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum = false;
         GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum = false;
 
-        //GameObject.Find("Pos_" + position)
+        GameObject gridSpot = GameObject.Find("Pos_" + position);
+        FindObjectOfType<CarBehaviour>().gameObject.transform.position = gridSpot.transform.position;
+        FindObjectOfType<CarBehaviour>().gameObject.transform.rotation = gridSpot.transform.rotation;
+
     }
 
     void Update() {

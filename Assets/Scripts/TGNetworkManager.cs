@@ -112,7 +112,6 @@ public class TGNetworkManager : NetworkManager {
         int i = 0;
         foreach(NetworkConnection player in Players.Keys) {
             player.Send(TGMessageTypes.CountdownStart, new CountdownStartMessage() { PlayersConnected = Players.Count, GridSpot = positions[i] });
-            Players[player].PlayerGO.transform.position = Vector3.zero;
             i++;
         }
     }
