@@ -82,11 +82,12 @@ public class CarBehaviour : NetworkBehaviour {
             HUDUpdate();
             //stats update
 
-            springStiffness = GameObject.Find("DataController").GetComponent<DataController>().SpringStiffness;
-            brakeStrength = GameObject.Find("DataController").GetComponent<DataController>().BrakeStiffness;
-            aero = GameObject.Find("DataController").GetComponent<DataController>().Aero;
-            ratio = GameObject.Find("DataController").GetComponent<DataController>().FinalDrive;
-            tyreBias = GameObject.Find("DataController").GetComponent<DataController>().TireBias;
+            DataController dataController = FindObjectOfType<DataController>();
+            springStiffness = dataController.SpringStiffness;
+            brakeStrength = dataController.BrakeStiffness;
+            aero = dataController.Aero;
+            ratio = dataController.FinalDrive;
+            tyreBias = dataController.TireBias;
             manual = true;
 
             //spring stiffness set (dampers = spring / 10)
