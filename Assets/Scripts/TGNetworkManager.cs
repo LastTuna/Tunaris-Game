@@ -96,7 +96,9 @@ public class TGNetworkManager : NetworkManager {
 
     // Called on the CLIENT to handle the start of the countdown
     private void HandleClientCountdownStart(NetworkMessage netMsg) {
+        CountdownStartMessage message = netMsg.ReadMessage<CountdownStartMessage>();
         RaceStart.enabled = true;
+        RaceStart.StartRace(message.GridSpot);
     }
 
     // Called on the SERVER when the host starts the game
@@ -118,6 +120,7 @@ public class TGNetworkManager : NetworkManager {
 
     public class CountdownStartMessage : MessageBase {
         public int PlayersConnected;
+        public int GridSpot;
     }
     
     // Player state class

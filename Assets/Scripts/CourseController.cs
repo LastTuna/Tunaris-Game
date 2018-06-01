@@ -30,6 +30,9 @@ public class CourseController : MonoBehaviour {
     // NetworkManager
     public TGNetworkManager manager;
 
+    // Instantiated multiplayer object
+    private GameObject MpPrefab;
+
     void Start () {
         DataController dataController = FindObjectOfType<DataController>();
         if(dataController == null) {
@@ -45,7 +48,7 @@ public class CourseController : MonoBehaviour {
         // Initialize network-related resources
         if (IsMultiplayer) {
             // Create all the spawn points
-            GameObject MpPrefab = Instantiate(MultiplayerPrefab);
+            MpPrefab = Instantiate(MultiplayerPrefab);
             manager = MpPrefab.GetComponentInChildren<TGNetworkManager>();
             manager.UserSettings = settings;
             manager.RaceStart = GetComponent<RaceStart>();
