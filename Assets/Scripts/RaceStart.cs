@@ -55,7 +55,7 @@ public class RaceStart : MonoBehaviour {
         GameObject.Find("checkpoint3").GetComponent<CheckpointFlag>().checkum = false;
         GameObject.Find("checkpoint4").GetComponent<CheckpointFlag>().checkum = false;
 
-
+        //GameObject.Find("Pos_" + position)
     }
 
     void Update() {

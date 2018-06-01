@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -74,6 +75,7 @@ public class TGNetworkManager : NetworkManager {
         foreach(GameObject prefab in Cars) {
             if (prefab.name == currentPlayer.CarName) {
                 GameObject carInstance = Instantiate(prefab, currentPlayer.PlayerSpawn.transform.position, Quaternion.identity);
+                currentPlayer.PlayerGO = carInstance;
                 NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerID);
                 break;
             }
@@ -103,7 +105,16 @@ public class TGNetworkManager : NetworkManager {
 
     // Called on the SERVER when the host starts the game
     public void StartRaceProcess() {
-        NetworkServer.SendToAll(TGMessageTypes.CountdownStart, new CountdownStartMessage());
+        // RANDOM GRID BOYO
+        System.Random rnd = new System.Random();
+        int[] positions = Enumerable.Range(1, Players.Count).OrderBy(x => rnd.Next()).ToArray();
+
+        int i = 0;
+        foreach(NetworkConnection player in Players.Keys) {
+            player.Send(TGMessageTypes.CountdownStart, new CountdownStartMessage() { PlayersConnected = Players.Count, GridSpot = positions[i] });
+            Players[player].PlayerGO.transform.position = Vector3.zero;
+            i++;
+        }
     }
 
 
