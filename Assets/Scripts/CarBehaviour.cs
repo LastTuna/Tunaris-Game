@@ -350,7 +350,7 @@ public class CarBehaviour : NetworkBehaviour {
                 if (currentGrip > 1.1f) {
                     currentGrip = 1.1f;
                 } else {
-                    currentGrip = 1 - tyreBias + 0.3f;//OFFROAD
+                    currentGrip = 1 - tyreBias + 0.4f;//OFFROAD
                 }
                 // On sand, wheelpreload was set to 0.1f as constant
                 wheelpreload = 0.1f;
@@ -369,14 +369,16 @@ public class CarBehaviour : NetworkBehaviour {
             }
             // Those are always called, might as well take them out of the if blocks
             // Front wheels
+
+
             wheelFR.sidewaysFriction = SetStiffness(wheelFR.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
             wheelFL.sidewaysFriction = SetStiffness(wheelFL.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
-            wheelFR.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
+            wheelFR.forwardFriction = SetStiffness(wheelFR.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
             wheelFL.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
             // Rear wheels
             wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
             wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
-            wheelRR.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
+            wheelRR.forwardFriction = SetStiffness(wheelRR.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
             wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
         }
     }
