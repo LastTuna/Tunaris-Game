@@ -14,11 +14,13 @@ public class Madness : MonoBehaviour
     public float damage;
     public float flipf;//speed of aerial rotation
     public float aerialBoost;//aerial boost gives slight extra air when doing flips
+    public float maxAirSpeed;//to limit aerial boost
     public int i;
     public float x;
     public float negx;
     public float z;
     public float negz;
+    public bool crash;
 
 
     // Use this for initialization
@@ -32,7 +34,7 @@ public class Madness : MonoBehaviour
     {
 
         WheelHit wheelHit;
-        if (!wheelFL.GetGroundHit(out wheelHit) && !wheelFR.GetGroundHit(out wheelHit) && !wheelRL.GetGroundHit(out wheelHit) && !wheelRR.GetGroundHit(out wheelHit))
+        if (!wheelFL.GetGroundHit(out wheelHit) && !wheelFR.GetGroundHit(out wheelHit) && !wheelRL.GetGroundHit(out wheelHit) && !wheelRR.GetGroundHit(out wheelHit) && crash)
         {
             if (Input.GetKeyDown("space"))
             {
@@ -61,11 +63,20 @@ public class Madness : MonoBehaviour
                 x = x + flipf / (20 / flipf);
 
             }//apply transforms
-            car.GetComponent<Rigidbody>().velocity = new Vector3(
-            car.forward.x * aerialBoost + car.GetComponent<Rigidbody>().velocity.x,
-            car.GetComponent<Rigidbody>().velocity.y,
-            car.forward.z * aerialBoost + car.GetComponent<Rigidbody>().velocity.z
-            );
+            if(maxAirSpeed > car.GetComponent<Rigidbody>().velocity.x &&
+                car.GetComponent<Rigidbody>().velocity.z < maxAirSpeed &&
+
+                car.GetComponent<Rigidbody>().velocity.x > -maxAirSpeed &&///////wip
+                car.GetComponent<Rigidbody>().velocity.z > -maxAirSpeed
+                )
+            {
+                car.GetComponent<Rigidbody>().AddForce(new Vector3(
+                aerialBoost + car.GetComponent<Rigidbody>().velocity.x,
+                car.GetComponent<Rigidbody>().velocity.y,
+                aerialBoost + car.GetComponent<Rigidbody>().velocity.z), ForceMode.Acceleration);
+
+            }
+
             car.GetComponent<Rigidbody>().AddForce(new Vector3(0, aerialBoost, 0), ForceMode.Acceleration);
         }
         else
@@ -151,6 +162,9 @@ public class Madness : MonoBehaviour
 
     }
 
-    
+    public void OnCollisionEnter(Collision collision)
+    {
+            crash = false;//i demand euthanasia
+    }
 
 }
