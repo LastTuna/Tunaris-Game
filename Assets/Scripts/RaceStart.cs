@@ -75,18 +75,21 @@ public class RaceStart : MonoBehaviour {
 
     void CheckpointUpdates()
     {
-
-        if (checkpoints[0].GetComponent<CheckpointFlag>().checkum && checkpoints[checkpoints.Length - 1].GetComponent<CheckpointFlag>().checkum && halfAlap)
+        i = 0;
+        foreach (GameObject e in checkpoints)
         {
-            halfAlap = false;
-            checkpoints[0].GetComponent<CheckpointFlag>().checkum = false;
+            halfAlap = checkpoints[i].GetComponent<CheckpointFlag>().checkum;
+            if (!checkpoints[i].GetComponent<CheckpointFlag>().checkum)
+            {
+                break;
+            }
+            i++;
         }
-        if (checkpoints[0].GetComponent<CheckpointFlag>().checkum && checkpoints[checkpoints.Length - 1].GetComponent<CheckpointFlag>().checkum && !lapCompleted)
+        if(halfAlap)
         {
             lapCompleted = true;
-            halfAlap = true;
         }
-    }
+        }
 
     void LaptimeTicker() {
         if (IsRaceStarted) {//counter; TOTAL TIME

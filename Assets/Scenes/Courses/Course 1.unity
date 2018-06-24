@@ -145,6 +145,8 @@ MonoBehaviour:
   checkum: 0
   sound: {fileID: 8300000, guid: 362ebecc70701b843bbd3f7f8537daf5, type: 3}
   soundOutput: {fileID: 256955484}
+  prevCheck: {fileID: 1846917077}
+  lastCheck: 1
 --- !u!65 &40287492
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -2921,6 +2923,8 @@ MonoBehaviour:
   checkum: 0
   sound: {fileID: 8300000, guid: 362ebecc70701b843bbd3f7f8537daf5, type: 3}
   soundOutput: {fileID: 256955484}
+  prevCheck: {fileID: 40287490}
+  lastCheck: 0
 --- !u!1 &1957109976
 GameObject:
   m_ObjectHideFlags: 0
