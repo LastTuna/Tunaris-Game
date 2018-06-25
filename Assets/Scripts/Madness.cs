@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Madness : MonoBehaviour
@@ -22,12 +23,14 @@ public class Madness : MonoBehaviour
     public float z;
     public float negz;
     public bool crash;
-    public float[] wheelTorqOnLiftOff = new float[4];
+    float[] wheelTorqOnLiftOff = new float[4];
 
     //deform things
     public MeshFilter originalMesh;
-    public Mesh carMesh;
-    public Vector3[] carVerts;
+    Mesh carMesh;
+    Vector3[] ogMesh;
+    Vector3[] modMesh;
+
 
 
 
@@ -35,6 +38,9 @@ public class Madness : MonoBehaviour
     void Start()
     {
         carMesh = originalMesh.mesh;
+        ogMesh = originalMesh.mesh.vertices;
+        modMesh = originalMesh.mesh.vertices;
+
     }
 
     // Update is called once per frame
@@ -187,8 +193,31 @@ public class Madness : MonoBehaviour
 
         //visual damage updates
 
+
     }
 
+    public void CarDeform(Vector3 impactPoint, float radius)
+    {
+        i = 0;
+        foreach(Vector3 e in modMesh)
+        {
+
+            modMesh[i] = new Vector3(modMesh[i].x, modMesh[i].y, modMesh[i].z);//atm does nothing, changing these values deforms the car
+            
+            i++;
+        }
+        carMesh.vertices = modMesh;
+        originalMesh.mesh.RecalculateNormals();
+    }
+
+    public void FixHoop()
+    {
+        carMesh.vertices = ogMesh;
+        modMesh = ogMesh;
+        originalMesh.mesh = carMesh;
+        originalMesh.mesh.RecalculateNormals();
+
+    }
 
     public void OnCollisionEnter(Collision collision)
     {
@@ -198,7 +227,12 @@ public class Madness : MonoBehaviour
             CarDamage();
             damage += 2 / maxMag;
         }
-
+        //
+        foreach (var contact in collision.contacts)
+        {
+            CarDeform(contact.point, 1f);
+        }
+        
     }
     public void OnCollisionExit(Collision collision)
     {

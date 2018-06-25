@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44543022, g: 0.49509132, b: 0.5740373, a: 1}
+  m_IndirectSpecularColor: {r: 0.44543082, g: 0.49509215, b: 0.57403845, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -439,7 +439,7 @@ GameObject:
   - component: {fileID: 321135902}
   - component: {fileID: 321135901}
   m_Layer: 0
-  m_Name: Plane (2)
+  m_Name: ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1366,7 +1366,7 @@ GameObject:
   - component: {fileID: 995049878}
   - component: {fileID: 995049877}
   m_Layer: 0
-  m_Name: Plane (3)
+  m_Name: ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2463,7 +2463,7 @@ GameObject:
   - component: {fileID: 1693443958}
   - component: {fileID: 1693443957}
   m_Layer: 0
-  m_Name: Plane (1)
+  m_Name: ramp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
