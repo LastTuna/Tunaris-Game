@@ -1102,13 +1102,7 @@ MonoBehaviour:
   z: 0
   negz: 0
   crash: 0
-  wheelTorqOnLiftOff:
-  - 0
-  - 0
-  - 0
-  - 0
-  carMesh: {fileID: 0}
-  carVerts: []
+  originalMesh: {fileID: 33197648111241456}
 --- !u!114 &114417726421681386
 MonoBehaviour:
   m_ObjectHideFlags: 1

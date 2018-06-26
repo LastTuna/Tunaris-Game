@@ -1,6 +1,5 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class Madness : MonoBehaviour
@@ -31,8 +30,7 @@ public class Madness : MonoBehaviour
     Vector3[] ogMesh;
     Vector3[] modMesh;
 
-
-
+    public bool carfixed;
 
     // Use this for initialization
     void Start()
@@ -46,6 +44,11 @@ public class Madness : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (carfixed)
+        {
+            FixHoop();
+        }
+
         WheelHit wheelHit;
         if (!wheelFL.GetGroundHit(out wheelHit) && !wheelFR.GetGroundHit(out wheelHit) && !wheelRL.GetGroundHit(out wheelHit) && !wheelRR.GetGroundHit(out wheelHit) && !crash)
         {
@@ -53,10 +56,10 @@ public class Madness : MonoBehaviour
             {
                 stunting = true;
                 car.GetComponent<Rigidbody>().angularVelocity = new Vector3(0, car.GetComponent<Rigidbody>().angularVelocity.y, 0);
-                wheelTorqOnLiftOff[0] = wheelFL.motorTorque;
-                wheelTorqOnLiftOff[1] = wheelFR.motorTorque;
-                wheelTorqOnLiftOff[2] = wheelRL.motorTorque;
-                wheelTorqOnLiftOff[3] = wheelRR.motorTorque;
+                wheelTorqOnLiftOff[0] = wheelFL.rpm;
+                wheelTorqOnLiftOff[1] = wheelFR.rpm;
+                wheelTorqOnLiftOff[2] = wheelRL.rpm;
+                wheelTorqOnLiftOff[3] = wheelRR.rpm;
             }
         }
         else
@@ -199,15 +202,25 @@ public class Madness : MonoBehaviour
     public void CarDeform(Vector3 impactPoint, float radius)
     {
         i = 0;
-        foreach(Vector3 e in modMesh)
-        {
+            foreach (Vector3 e in modMesh)
+            {
+                if((modMesh[i].x + car.position.x > impactPoint.x
+                && modMesh[i].y + car.position.y > impactPoint.y
+                && modMesh[i].z + car.position.z > impactPoint.z)
+                )
+                {//ATTRIBUTE WORLD POSITION OF CAR, TO THE VERTEX TRYING TO DEFORM
+                //IF VERTEX IS IN RANGE OF RADIUS, MOVE IT INWARDS
+                modMesh[i] = new Vector3(modMesh[i].x, modMesh[i].y, modMesh[i].z - 0.2f);
+                //apply deform
+                }
 
-            modMesh[i] = new Vector3(modMesh[i].x, modMesh[i].y, modMesh[i].z);//atm does nothing, changing these values deforms the car
-            
-            i++;
-        }
+                i++;
+            }
+
         carMesh.vertices = modMesh;
         originalMesh.mesh.RecalculateNormals();
+        print("boxcollision, " + impactPoint.ToString());
+
     }
 
     public void FixHoop()
@@ -216,6 +229,7 @@ public class Madness : MonoBehaviour
         modMesh = ogMesh;
         originalMesh.mesh = carMesh;
         originalMesh.mesh.RecalculateNormals();
+        print("ok");
 
     }
 
