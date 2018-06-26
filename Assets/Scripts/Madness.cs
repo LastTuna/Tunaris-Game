@@ -36,19 +36,14 @@ public class Madness : MonoBehaviour
     void Start()
     {
         carMesh = originalMesh.mesh;
-        ogMesh = originalMesh.mesh.vertices;
-        modMesh = originalMesh.mesh.vertices;
+        ogMesh = carMesh.vertices;
+        modMesh = carMesh.vertices;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (carfixed)
-        {
-            FixHoop();
-        }
-
         WheelHit wheelHit;
         if (!wheelFL.GetGroundHit(out wheelHit) && !wheelFR.GetGroundHit(out wheelHit) && !wheelRL.GetGroundHit(out wheelHit) && !wheelRR.GetGroundHit(out wheelHit) && !crash)
         {
@@ -188,49 +183,48 @@ public class Madness : MonoBehaviour
 
 
     }
-    public void CarDamage()
+    public void CarDamage(Collision collision)
     {
-        //damage values, when you crash i suppose its rigidbody.velocity,
-        //durability values
-        //fix hoops - take the hoop and reset damage
-
-        //visual damage updates
-
+        damage += collision.relativeVelocity.x + collision.relativeVelocity.y + collision.relativeVelocity.z;
 
     }
 
     public void CarDeform(Vector3 impactPoint, float radius)
     {
         i = 0;
-            foreach (Vector3 e in modMesh)
+        foreach (Vector3 e in modMesh)
+        {
+            //i dont even know how this works, but it does. project raycast torwards point of impact,
+            //if raycast collides, apply a deform value
+            if (Physics.Raycast(modMesh[i] + car.position, impactPoint, radius))
             {
-                if((modMesh[i].x + car.position.x > impactPoint.x
-                && modMesh[i].y + car.position.y > impactPoint.y
-                && modMesh[i].z + car.position.z > impactPoint.z)
-                )
-                {//ATTRIBUTE WORLD POSITION OF CAR, TO THE VERTEX TRYING TO DEFORM
-                //IF VERTEX IS IN RANGE OF RADIUS, MOVE IT INWARDS
-                modMesh[i] = new Vector3(modMesh[i].x, modMesh[i].y, modMesh[i].z - 0.2f);
-                //apply deform
+                if (ogMesh[i].x - modMesh[i].x < maxMag / 100
+                    && ogMesh[i].y - modMesh[i].y < maxMag / 100
+                    && ogMesh[i].z - modMesh[i].z < maxMag / 100)
+                {
+                    
+                    modMesh[i] = new Vector3(modMesh[i].x - (modMesh[i].x - ogMesh[i].x) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.x / 100,
+                        modMesh[i].y - (modMesh[i].y - ogMesh[i].y) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.y / 100,
+                        modMesh[i].z - (modMesh[i].z - ogMesh[i].z) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.z / 100);
+                    //Random.Range(0, maxMag / 100) 
+                    //apply deform
                 }
-
-                i++;
             }
-
+            i++;
+        }
         carMesh.vertices = modMesh;
         originalMesh.mesh.RecalculateNormals();
-        print("boxcollision, " + impactPoint.ToString());
 
     }
 
     public void FixHoop()
     {
-        carMesh.vertices = ogMesh;
+        originalMesh.mesh.vertices = ogMesh;
         modMesh = ogMesh;
-        originalMesh.mesh = carMesh;
+        carMesh.vertices = ogMesh;
         originalMesh.mesh.RecalculateNormals();
-        print("ok");
-
+        damage = 0;
+        print("ok");//THIS IS BROKEN? ONLY WORKS ONCE. FUCK THIS AND FUCK UNITY FORREALS MATE
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -238,15 +232,14 @@ public class Madness : MonoBehaviour
         crash = true;
         if (collision.collider.name != "ramp")
         {
-            CarDamage();
-            damage += 2 / maxMag;
+            CarDamage(collision);
         }
         //
         foreach (var contact in collision.contacts)
         {
-            CarDeform(contact.point, 1f);
+            CarDeform(contact.point, maxMag / 10);
         }
-        
+
     }
     public void OnCollisionExit(Collision collision)
     {

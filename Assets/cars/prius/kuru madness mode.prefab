@@ -1092,7 +1092,7 @@ MonoBehaviour:
   stunting: 0
   power: 0
   damage: 0
-  maxMag: 1000
+  maxMag: 20
   flipf: 4
   aerialBoost: 3
   maxAirSpeed: 40
@@ -1103,6 +1103,7 @@ MonoBehaviour:
   negz: 0
   crash: 0
   originalMesh: {fileID: 33197648111241456}
+  carfixed: 0
 --- !u!114 &114417726421681386
 MonoBehaviour:
   m_ObjectHideFlags: 1
