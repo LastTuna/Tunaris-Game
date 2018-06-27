@@ -35,10 +35,10 @@ public class Madness : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        i = 0;
         carMesh = originalMesh.mesh;
         ogMesh = carMesh.vertices;
         modMesh = carMesh.vertices;
-
     }
 
     // Update is called once per frame
@@ -219,12 +219,17 @@ public class Madness : MonoBehaviour
 
     public void FixHoop()
     {
-        originalMesh.mesh.vertices = ogMesh;
-        modMesh = ogMesh;
-        carMesh.vertices = ogMesh;
+        i = 0;
+        foreach(Vector3 e in ogMesh)
+        {
+            modMesh[i] = e;
+            i++;
+        }
+        carMesh.vertices = modMesh;
+        originalMesh.mesh = carMesh;
         originalMesh.mesh.RecalculateNormals();
         damage = 0;
-        print("ok");//THIS IS BROKEN? ONLY WORKS ONCE. FUCK THIS AND FUCK UNITY FORREALS MATE
+        print("ok");
     }
 
     public void OnCollisionEnter(Collision collision)

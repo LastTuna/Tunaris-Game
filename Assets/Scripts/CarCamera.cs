@@ -7,7 +7,7 @@ public class CarCamera : MonoBehaviour {
     public float height = 1.4f;
     public float rotationDamping = 3.0f;
     public float heightDamping = 2.0f;
-    public float zoomRacio = 0.5f;
+    public float zoomRatio = 0.5f;
     public float DefaultFOV = 60;
     private Vector3 rotationVector;
 
@@ -63,7 +63,7 @@ public class CarCamera : MonoBehaviour {
                 rotationVector.y = car.eulerAngles.y;
             }
             float acc = car.GetComponent<Rigidbody>().velocity.magnitude;
-            GetComponent<Camera>().fieldOfView = DefaultFOV + acc * zoomRacio;
+            GetComponent<Camera>().fieldOfView = DefaultFOV + acc * zoomRatio;
         }
     }
 }
