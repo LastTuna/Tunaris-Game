@@ -19,6 +19,8 @@ public class RaceStart : MonoBehaviour {
     public Text lap1;//the top ticker on UI - alternatively displays best lap
     public Text lap2;//the center ticker on UI - alternatively displays the last completed lap
     public Text lap3;//third ticker on UI / active lap
+    public Text countdownText;//countdown visual
+    public Text currentLapText;//laps / current lap
     public bool halfAlap = true;
 
     public GameObject[] checkpoints = new GameObject[2];
@@ -29,6 +31,7 @@ public class RaceStart : MonoBehaviour {
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
+    public float countdown;//countdown begins at end race
 
     public bool lapCompleted;//flag for when checkpoints array values are all true
 
@@ -47,7 +50,6 @@ public class RaceStart : MonoBehaviour {
     }
 
     public void StartRace(int position) {
-        //DontDestroyOnLoad(laptimes); CREEATE A GAME OBJECT, ADD THIS SCRIPT TO THAT SO I CAN USE IT ON THAT
         StartCoroutine(CountDown());
         i = 0;
         foreach (GameObject e in checkpoints)
@@ -137,10 +139,18 @@ public class RaceStart : MonoBehaviour {
 
     public IEnumerator EndRace() {
         raceFinished = true;
-        yield return new WaitForSecondsRealtime(4);
-        Time.timeScale = 0.0F;
         gameplayUI.alpha = 0f;
         postRaceUI.alpha = 1f;
+        i = 30;
+        while (i > 0)
+        {
+            countdownText.text = i.ToString();
+            i--;
+            yield return new WaitForSecondsRealtime(1);
+        }
+
+        yield return new WaitForSecondsRealtime(4);
+        Time.timeScale = 0.0F;
 
 
         //add trigger to camera script - quit following the car with a moderate damping effect, and move upwards

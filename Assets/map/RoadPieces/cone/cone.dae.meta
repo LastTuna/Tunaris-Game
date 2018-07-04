@@ -1,51 +1,23 @@
 fileFormatVersion: 2
-guid: d9feca4c9fe35b5438dbb5493ee23060
-timeCreated: 1530734512
+guid: cf3ba7bb29c8f0d44a41b3d21b4a8e99
+timeCreated: 1530206779
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: FL
-    100002: FR
-    100004: //RootNode
-    100006: MAIN
-    100008: RL
-    100010: RR
-    400000: FL
-    400002: FR
-    400004: //RootNode
-    400006: MAIN
-    400008: RL
-    400010: RR
-    2100000: MAIN6
-    2100002: WINDOWS
-    2300000: FL
-    2300002: FR
-    2300004: MAIN
-    2300006: RL
-    2300008: RR
-    3300000: FL
-    3300002: FR
-    3300004: MAIN
-    3300006: RL
-    3300008: RR
-    4300000: MAIN
-    4300002: RL
-    4300004: FL
-    4300006: RR
-    4300008: FR
+    100000: //RootNode
+    400000: //RootNode
+    2100000: CONE
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
     9500000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: MAIN6
-    second: {fileID: 2100000, guid: dca4bf70741afc04eb6c1cf547b0687b, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: WINDOWS
-    second: {fileID: 2100000, guid: 9f03159dfe5c1634882990ccdbef3b3a, type: 2}
+      name: CONE
+    second: {fileID: 2100000, guid: 765fff5e149858043bfdb6a3a7879b38, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

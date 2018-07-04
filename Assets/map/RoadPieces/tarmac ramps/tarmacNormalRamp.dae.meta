@@ -1,64 +1,28 @@
 fileFormatVersion: 2
-guid: 41a49613e0716fb4582fa5f720094260
-timeCreated: 1516045545
+guid: 3698b2b61aad1be438f32053b8d21db5
+timeCreated: 1530207296
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: FL
-    100002: FR
-    100004: MAIN
-    100006: RL
-    100008: RR
-    100010: //RootNode
-    400000: FL
-    400002: FR
-    400004: MAIN
-    400006: RL
-    400008: RR
-    400010: //RootNode
-    2300000: FL
-    2300002: FR
-    2300004: MAIN
-    2300006: RL
-    2300008: RR
-    3300000: FL
-    3300002: FR
-    3300004: MAIN
-    3300006: RL
-    3300008: RR
-    4300000: MAIN
-    4300002: FL
-    4300004: RL
-    4300006: FR
-    4300008: RR
+    100000: //RootNode
+    400000: //RootNode
+    2100000: Material
+    2300000: //RootNode
+    3300000: //RootNode
+    4300000: Cube
     9500000: //RootNode
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
-      name: MAIN
-    second: {fileID: 2100000, guid: 47582f721a954c54c8c36275abcc4cde, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: WINDOWS
-    second: {fileID: 2100000, guid: dc044fde374e97c44a3713704f704f52, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lightB
-    second: {fileID: 2100000, guid: 7958ee9817273564b8148220125a73ff, type: 2}
-  - first:
-      type: UnityEngine:Material
-      assembly: UnityEngine.CoreModule
-      name: lightF
-    second: {fileID: 2100000, guid: 3f96e2f9a7655c940b0f70044a3bf61c, type: 2}
+      name: Material
+    second: {fileID: 2100000, guid: a6bffb13f91bb0448b312b7ad8f5aa18, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
     materialSearch: 1
-    materialLocation: 0
+    materialLocation: 1
   animations:
     legacyGenerateAnimations: 4
     bakeSimulation: 0
@@ -96,6 +60,8 @@ ModelImporter:
     optimizeMeshForGPU: 1
     keepQuads: 0
     weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
     secondaryUVAngleDistortion: 8
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88

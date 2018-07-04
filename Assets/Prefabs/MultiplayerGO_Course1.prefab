@@ -585,7 +585,7 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a, type: 2}
-  - {fileID: 1457936637991408, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
+  - {fileID: 0}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
   - {fileID: 0}
   - {fileID: 1342470044116918, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
@@ -647,12 +647,12 @@ MonoBehaviour:
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   Cars:
-  - {fileID: 1457936637991408, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
+  - {fileID: 1107181892752892, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
   - {fileID: 1189740919712952, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1859795861950534, guid: a5c30d720892ae24d921bdbb5e7d2c79, type: 2}
   - {fileID: 1342470044116918, guid: 17b7f7d8c2bf9794c8947a2f516a169b, type: 2}
-  - {fileID: 1057833200655696, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
+  - {fileID: 1275164165662146, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
   - {fileID: 1447520815088844, guid: a156f27c6c72f75408a8765b10a4ee34, type: 2}
   SpawnPositions:
   - {fileID: 1328735816986672, guid: f54c530610d41e744b9245757042e4e5, type: 2}

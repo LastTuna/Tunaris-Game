@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 
 public class Spinner : MonoBehaviour {
-    public float rotSpeed = 20.0f;
+    public float rotSpeed = 1.0f;
 
 	void Update () {
-        gameObject.transform.Rotate(new Vector3(0, 1, rotSpeed * Time.deltaTime));
-	}
+        gameObject.transform.rotation *= Quaternion.AngleAxis(rotSpeed, new Vector3(0, 1, 0));
+    }
 }
