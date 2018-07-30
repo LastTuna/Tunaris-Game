@@ -32,6 +32,7 @@ public class RaceStart : MonoBehaviour {
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
     public float countdown;//countdown begins at end race
+    public bool raceEnds;//flag to use with other users in multiplayer
 
     public bool lapCompleted;//flag for when checkpoints array values are all true
 
@@ -46,10 +47,11 @@ public class RaceStart : MonoBehaviour {
         }
         AudioSource.PlayOneShot(RaceStartSounds[RaceStartSounds.Count - 1]);
         IsRaceStarted = true;
-
     }
 
-    public void StartRace(int position) {
+    public void StartRace(int position)
+    {
+        currentLapText.text = ("LAP: " + currentLap + "/" + laps);
         StartCoroutine(CountDown());
         i = 0;
         foreach (GameObject e in checkpoints)
@@ -68,7 +70,13 @@ public class RaceStart : MonoBehaviour {
         if (IsRaceStarted) {
             LaptimeTicker();
             CheckpointUpdates();
-            if (laps < currentLap) {
+            //foreach call to check if any player has crossed the finish line
+            //if has, then raceEnds = true
+
+            if (laps < currentLap || raceEnds)
+            {
+                //change this, to check EVERY PLAYERS VALUE OF RACE COMPLETE. IF RACE IS COMPLETE FOR SOMEONE
+                //THEN TRIGGER END RACE
                 IsRaceStarted = false;
                 StartCoroutine(EndRace());
             }
@@ -106,6 +114,7 @@ public class RaceStart : MonoBehaviour {
         {
             lapCompleted = false;
             currentLap++;
+            currentLapText.text = ("LAP: " + currentLap + "/" + laps);
             laptimes.Add(CurrentLapTime);//tally current lap time to List
             CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
             i = 0;
@@ -144,6 +153,7 @@ public class RaceStart : MonoBehaviour {
         i = 30;
         while (i > 0)
         {
+            //countdown down 30sec, after first placer crosses line. after that trigger post race
             countdownText.text = i.ToString();
             i--;
             yield return new WaitForSecondsRealtime(1);

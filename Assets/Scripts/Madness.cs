@@ -186,10 +186,14 @@ public class Madness : MonoBehaviour
         //count the flips during airborne, and apply with a delay after processed
 
 
+
     }
+
     public void CarDamage(Collision collision)
     {
-        damage += 10;
+        damage += (Mathf.Abs(car.GetComponent<Rigidbody>().velocity.x)
+            + Mathf.Abs(car.GetComponent<Rigidbody>().velocity.y)
+            + Mathf.Abs(car.GetComponent<Rigidbody>().velocity.z)) / 3 / (maxMag / 10);
     }
 
     public void CarDeform(Vector3 impactPoint, float radius)

@@ -88,6 +88,18 @@ public class DataController : MonoBehaviour {
             LoadedData.PlayerName = value;
         }
     }
+    //online;
+    public string IP
+    {
+        get
+        {
+            return LoadedData.IP;
+        }
+        set
+        {
+            LoadedData.IP = value;
+        }
+    }
     #endregion
 
 

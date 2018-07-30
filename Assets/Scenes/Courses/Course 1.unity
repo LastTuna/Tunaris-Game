@@ -354,6 +354,8 @@ MonoBehaviour:
   - {fileID: 40287490}
   i: 0
   raceFinished: 0
+  countdown: 0
+  raceEnds: 0
   lapCompleted: 0
 --- !u!1 &199590945
 GameObject:
@@ -2255,7 +2257,7 @@ RectTransform:
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
   m_AnchoredPosition: {x: 314, y: 280.47266}
-  m_SizeDelta: {x: 112.9, y: 27.2}
+  m_SizeDelta: {x: 140.5, y: 27.2}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &1080847199
 MonoBehaviour:

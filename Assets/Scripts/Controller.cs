@@ -13,6 +13,7 @@ public class Controller : MonoBehaviour {
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
     public Canvas TuneScreenCanvas;
+    public Canvas OnlineCanvas;
 
     public Canvas LoadingScreenCanvas;
 
@@ -101,6 +102,18 @@ public class Controller : MonoBehaviour {
         GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value = (int)data.Gearbox;
     }
 
+    public void OpenOnlineScreen()
+    {
+        GoRaceCanvas.gameObject.SetActive(false);
+        OnlineCanvas.gameObject.SetActive(true);
+        //fetch values from save data
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("IP Address").GetComponent<Text>().text = data.IP;
+        GameObject.Find("Username").GetComponent<Text>().text = data.PlayerName;
+
+    }
+
+
     // Main menu button callbacks
     public void GoRace() {
         StartCoroutine(GoRaceCoroutine());
@@ -166,6 +179,13 @@ public class Controller : MonoBehaviour {
         
         Cancel();
     }
+    //online IP validation. this is called from Cancel().
+    public void ValidateOnline()
+    {
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
+        data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
+    }
 
     // Global cancel callback
     public AudioClip cancelClip;
@@ -217,6 +237,14 @@ public class Controller : MonoBehaviour {
         // Tuning -> Go Race
         if (TuneScreenCanvas.gameObject.activeSelf) {
             TuneScreenCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
+
+        // Online -> Go Race
+        if (OnlineCanvas.gameObject.activeSelf)
+        {
+            ValidateOnline();
+            OnlineCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
         }
 
