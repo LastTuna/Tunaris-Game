@@ -3019,6 +3019,8 @@ MonoBehaviour:
     SpringStiffness: 0
     BrakeStiffness: 0
     Gearbox: 0
+    Dirtiness: []
+    Cash: 0
     IsMultiplayer: 0
     IP: 
     PlayerName: 

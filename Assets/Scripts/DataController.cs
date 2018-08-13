@@ -100,6 +100,28 @@ public class DataController : MonoBehaviour {
             LoadedData.IP = value;
         }
     }
+    public float[] Dirtiness
+    {
+        get
+        {
+            return LoadedData.Dirtiness;
+        }
+        set
+        {
+            LoadedData.Dirtiness = value;
+        }
+    }
+    public int Cash
+    {
+        get
+        {
+            return LoadedData.Cash;
+        }
+        set
+        {
+            LoadedData.Cash = value;
+        }
+    }
     #endregion
 
 
@@ -140,6 +162,8 @@ public class DataController : MonoBehaviour {
             BrakeStiffness = 0;
             Gearbox = 0;
             PlayerName = "Player";
+            Cash = 10;
+            Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
 
             SaveGameData();
         }
@@ -165,6 +189,9 @@ public class GameData {
     public float SpringStiffness;
     public float BrakeStiffness;
     public float Gearbox;
+    public float[] Dirtiness;
+    public int Cash;
+
     public bool IsMultiplayer;
     public string IP;
     public string PlayerName;

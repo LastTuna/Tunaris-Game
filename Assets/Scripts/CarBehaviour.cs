@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
@@ -9,6 +10,9 @@ public class CarBehaviour : NetworkBehaviour {
 
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
+    public Material dirt; //dirt MATERIAL. apply cars corresponding dirt mat.
+    public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
+    //end of race will store and call to savedata to store dirtiness level
     public RectTransform pointer;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
@@ -54,6 +58,7 @@ public class CarBehaviour : NetworkBehaviour {
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
+
     public JointSpring springs = new JointSpring {
         spring = 8000,
         damper = 800,
@@ -89,6 +94,18 @@ public class CarBehaviour : NetworkBehaviour {
             ratio = dataController.FinalDrive;
             tyreBias = dataController.TireBias;
             manual = true;
+            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
+            //loop to get index of car, fuck me
+            int carIndex = 0;
+            foreach (GameObject e in networkmanager.Cars)
+            {
+                if (gameObject.name.Equals(e.name))
+                {
+                    break;
+                }
+                carIndex++;
+            }
+            dirtiness = dataController.Dirtiness[carIndex];
 
             //spring stiffness set (dampers = spring / 10)
             springs.spring = springStiffness;
@@ -98,10 +115,6 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.suspensionSpring = springs;
             wheelRL.suspensionSpring = springs;
             wheelRR.suspensionSpring = springs;
-
-
-
-
         }
     }
 
@@ -174,6 +187,8 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
             WheelPosition(); //graphical update - wheel positions 
         }
+        dirt.color = new Color(200, 200, 200, dirtiness);
+        
     }
 
     IEnumerator engine()
