@@ -171,6 +171,8 @@ public class RaceStart : MonoBehaviour {
         //make the button to restart/exit
         //comes in english
         FindObjectOfType<PostRace>().enabled = true;
+        DataController dataController = FindObjectOfType<DataController>();
+        dataController.Dirtiness[FindObjectOfType<CarBehaviour>().carIndex] = FindObjectOfType<CarBehaviour>().dirtiness;
 
         yield return new WaitForSecondsRealtime(4);
         Time.timeScale = 1.0F;

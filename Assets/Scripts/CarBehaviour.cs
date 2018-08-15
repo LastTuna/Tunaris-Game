@@ -57,7 +57,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
     public bool shifting = false;//shifter delay
-
+    public int carIndex;
 
     public JointSpring springs = new JointSpring {
         spring = 8000,
@@ -96,10 +96,10 @@ public class CarBehaviour : NetworkBehaviour {
             manual = true;
             TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
             //loop to get index of car, fuck me
-            int carIndex = 0;
+            carIndex = 0;
             foreach (GameObject e in networkmanager.Cars)
             {
-                if (gameObject.name.Equals(e.name))
+                if (dataController.SelectedCar.Equals(e.name))
                 {
                     break;
                 }
@@ -369,6 +369,11 @@ public class CarBehaviour : NetworkBehaviour {
                 }
                 // On sand, wheelpreload was set to 0.1f as constant
                 wheelpreload = 0.1f;
+
+                if (dirtiness < 0.01f)//increases dirtiness, caps at 0.01f
+                {
+                    dirtiness += 0.0000001f * currentSpeed;
+                }
             } else {
                 if (currentGrip > 1.3f) {
                     currentGrip = 1.3f;
