@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -55,8 +56,13 @@ public class Controller : MonoBehaviour {
             // 3D garage
             Garage3DCanvas.gameObject.SetActive(true);
 
-            for(int i=0; i < carsPrefabs.Count; i++) {
-
+            // Can't be bothered
+            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
+            for (int i=0; i < carsPrefabs.Count; i++) {
+                if (carsPrefabs[i].name == selectedCarName) {
+                    CarIndex = i;
+                    break;
+                }
             }
         } else {
             // Classic GT2 garage
@@ -97,25 +103,73 @@ public class Controller : MonoBehaviour {
     }
 
     public GameObject Garage3DModel;
+    public GameObject Garage3DCarRoot;
     private int CarIndex = 0;
     public void Garage3DLeft() {
+        CarIndex--;
+        if (CarIndex < 0) CarIndex = carsPrefabs.Count - 1;
         StartCoroutine(Move3DGarageModel(2));
     }
 
     public void Garage3DRight() {
+        CarIndex++;
+        if (CarIndex > carsPrefabs.Count - 1) CarIndex = 0;
         StartCoroutine(Move3DGarageModel(-2));
     }
 
     public IEnumerator Move3DGarageModel(float direction) {
+        // Close door
         Garage3DModel.gameObject.GetComponent<GarageDoorScript>().CloseDoor();
+
+        // Run "fake" translation
         float acc = 0;
         while(Math.Abs(acc) < 70) {
             Garage3DModel.gameObject.transform.Translate(direction, 0, 0);
             acc += direction;
             yield return new WaitForEndOfFrame();
         }
+
+        // Delete old car model
+        foreach(Transform child in Garage3DCarRoot.transform) {
+            Destroy(child.gameObject);
+        }
+
+        // Instantiate new car model
+        GameObject spinner = Instantiate(carsPrefabs[CarIndex], Garage3DCarRoot.transform);
+
+        // Disable wheel colliders or unity spergs in the log
+        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>()) {
+            Destroy(wc);
+        }
+        // Disable network scripts
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransform>()) {
+            Destroy(c);
+        }
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>()) {
+            Destroy(c);
+        }
+        // Disable car driving scripts
+        foreach (Behaviour c in spinner.GetComponents<Behaviour>()) {
+            Destroy(c);
+        }
+        // Disable main rigidbody
+        Destroy(spinner.GetComponent<Rigidbody>());
+
+        // Set transform
+        //spinner.transform.localScale = new Vector3(120, 120, 120);
+        StartCoroutine(SetPosition(spinner));
+
+        // Return to initial position and open door
         Garage3DModel.gameObject.transform.Translate(-acc, 0, 0);
         Garage3DModel.gameObject.GetComponent<GarageDoorScript>().OpenDoor();
+    }
+
+    private IEnumerator SetPosition(GameObject spinner) {
+        // We do this thing because doing it all in Move3DGarageModel doesn't work
+        // My guess is, all the scripts to be disabled (esp rigidbody) 
+        // don't play nicely with setting the position
+        yield return new WaitForEndOfFrame();
+        spinner.transform.localPosition = new Vector3(0, 0, 0);
     }
 
     private IEnumerator SetSelectedGameObject(GameObject select) {
