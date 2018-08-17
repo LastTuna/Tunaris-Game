@@ -12,6 +12,7 @@ public class Controller : MonoBehaviour {
 
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
+    public GameObject Garage3DCanvas;
     public Canvas TuneScreenCanvas;
     public Canvas OnlineCanvas;
 
@@ -47,40 +48,47 @@ public class Controller : MonoBehaviour {
 
     public void OpenGarage() {
         GoRaceCanvas.gameObject.SetActive(false);
-        GarageCanvas.gameObject.SetActive(true);
 
-        string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
+        // Show the proper garage
+        if (FindObjectOfType<DataController>().Garage3D) {
+            // 3D garage
+            Garage3DCanvas.gameObject.SetActive(true);
+        } else {
+            // Classic GT2 garage
+            GarageCanvas.gameObject.SetActive(true);
 
-        // Add the car buttons
-        createdGarageButtons = new List<GameObject>();
-        int offset = 0;
-        GameObject selectedCar = null;
-        foreach(GameObject prefab in carsPrefabs) {
-            GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
+            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
 
-            // Set labels
-            button.name = prefab.name;
-            button.GetComponentInChildren<Text>().text = prefab.name;
+            // Add the car buttons
+            createdGarageButtons = new List<GameObject>();
+            int offset = 0;
+            GameObject selectedCar = null;
+            foreach (GameObject prefab in carsPrefabs) {
+                GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
 
-            // Set car model instantiation parameters
-            button.GetComponent<ButtonProperties>().carPrefab = prefab;
-            button.GetComponent<ButtonProperties>().parent = GarageCanvas;
-            createdGarageButtons.Add(button);
+                // Set labels
+                button.name = prefab.name;
+                button.GetComponentInChildren<Text>().text = prefab.name;
 
-            // Add car select callback
-            button.GetComponent<Button>().onClick.AddListener(CarSelection);
+                // Set car model instantiation parameters
+                button.GetComponent<ButtonProperties>().carPrefab = prefab;
+                button.GetComponent<ButtonProperties>().parent = GarageCanvas;
+                createdGarageButtons.Add(button);
 
-            // Move the button to its correct position using a lot of unity code soup
-            (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
-            offset -= 70;
+                // Add car select callback
+                button.GetComponent<Button>().onClick.AddListener(CarSelection);
 
-            // Detect default focused button
-            if (prefab.name == selectedCarName) selectedCar = button;
+                // Move the button to its correct position using a lot of unity code soup
+                (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
+                offset -= 70;
+
+                // Detect default focused button
+                if (prefab.name == selectedCarName) selectedCar = button;
+            }
+
+            // Set focus to the button corresponding to the last selected car
+            StartCoroutine(SetSelectedGameObject(selectedCar));
         }
-
-        // Set focus to the button corresponding to the last selected car
-        StartCoroutine(SetSelectedGameObject(selectedCar));
-
     }
 
     private IEnumerator SetSelectedGameObject(GameObject select) {
@@ -134,6 +142,10 @@ public class Controller : MonoBehaviour {
         yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
         OptionsCanvas.gameObject.SetActive(true);
+
+        //fetch values from save data
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = data.Garage3D;
     }
 
     public void ExitGame() {
@@ -187,6 +199,14 @@ public class Controller : MonoBehaviour {
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
     }
 
+    // Save options
+    public void SaveOptions() {
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
+        Debug.Log(data.Garage3D);
+        Cancel();
+    }
+
     // Global cancel callback
     public AudioClip cancelClip;
     public void Cancel() {
@@ -232,6 +252,13 @@ public class Controller : MonoBehaviour {
             foreach(GameObject button in createdGarageButtons) {
                 Destroy(button);
             }
+            createdGarageButtons.Clear();
+        }
+
+        // Garage 3D -> Go Race
+        if (Garage3DCanvas.gameObject.activeSelf) {
+            GoRaceCanvas.gameObject.SetActive(true);
+            Garage3DCanvas.gameObject.SetActive(false);
         }
 
         // Tuning -> Go Race
