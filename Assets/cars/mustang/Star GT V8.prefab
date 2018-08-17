@@ -88,7 +88,7 @@ GameObject:
   - component: {fileID: 33339810109856058}
   - component: {fileID: 23314057137417178}
   m_Layer: 0
-  m_Name: StarGTV8dirt
+  m_Name: dirt
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1507,6 +1507,7 @@ MonoBehaviour:
   - 1.6
   gear: 0
   shifting: 0
+  carIndex: 0
   CenterOfGravity: {x: 0, y: -0.3, z: 0.3}
 --- !u!114 &114700523876414560
 MonoBehaviour:

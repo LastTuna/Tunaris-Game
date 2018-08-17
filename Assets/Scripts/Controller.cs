@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -17,8 +18,7 @@ public class Controller : MonoBehaviour {
     public Canvas GoWashCanvas;
 
     public Canvas LoadingScreenCanvas;
-
-
+    public static List<GameObject> currentCars = new List<GameObject>();
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
     }
@@ -188,14 +188,88 @@ public class Controller : MonoBehaviour {
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
     }
     //car wash save
-    public void ValidateWash()
+    public void OpenWash()
     {
-        //call to data contorller; dirtiness array.
-        //remove credits
-
+        GoWashCanvas.gameObject.SetActive(true);
+        GoRaceCanvas.gameObject.SetActive(false);
+        DataController dataController = FindObjectOfType<DataController>();
+        int carIndex = GetIndex();
+        string selectedCarName = dataController.SelectedCar;
         GameObject selectedCar = null;
 
+        selectedCar = carsPrefabs[carIndex];
+        selectedCar = Instantiate(carsPrefabs[carIndex], GoWashCanvas.transform);
+        CarScriptKill(selectedCar);
+        selectedCar.transform.localScale = new Vector3(100, 100, 100);
+        selectedCar.transform.localPosition = new Vector3(0, -50, -200);
+        // Add rotation script
+        selectedCar.AddComponent<Spinner>();
+        selectedCar.AddComponent<CarWash>();
+        currentCars.Add(selectedCar);
     }
+    public void WashMe()
+    {
+        DataController dataController = FindObjectOfType<DataController>();
+        if (dataController.Cash >= 5)
+        {
+            StartCoroutine(Washer());
+        }
+    }
+    public IEnumerator Washer()
+    {
+        DataController dataController = FindObjectOfType<DataController>();
+
+        int carIndex = GetIndex();
+        dataController.Cash += -5;
+        FindObjectOfType<Spinner>().rotSpeed = 9f;
+        while (dataController.Dirtiness[carIndex] > 0)
+        {
+        dataController.Dirtiness[carIndex] += -0.0005f;
+        yield return new WaitForSeconds(0.1f);
+        }
+        if (dataController.Dirtiness[carIndex] < 0)
+        {
+        dataController.Dirtiness[carIndex] = 0;
+        }
+        FindObjectOfType<Spinner>().rotSpeed = 1f;
+    }
+    public int GetIndex()
+    {
+        int carIndex = 0;
+        DataController dataController = FindObjectOfType<DataController>();
+        foreach (GameObject e in carsPrefabs)
+        {//get cars index
+            if (dataController.SelectedCar.Equals(e.name))
+            {
+                break;
+            }
+            carIndex++;
+        }
+        return carIndex;
+    }
+
+    public void CarScriptKill (GameObject spinner)
+    {
+        // Disable wheel colliders or unity spergs in the log
+        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>())
+        {
+            Destroy(wc);
+        }
+        // Disable network scripts
+        Destroy(spinner.GetComponent<NetworkTransform>());
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>())
+        {
+            Destroy(c);
+        }
+        // Disable car driving scripts
+        foreach (Behaviour c in spinner.GetComponents<Behaviour>())
+        {
+            Destroy(c);
+        }
+        // Disable main rigidbody
+        Destroy(spinner.GetComponent<Rigidbody>());
+    }
+
 
     // Global cancel callback
     public AudioClip cancelClip;
@@ -261,9 +335,13 @@ public class Controller : MonoBehaviour {
         //CarWash -> Go Race
         if (GoWashCanvas.gameObject.activeSelf)
         {
-            ValidateWash();
+            foreach (GameObject carro in currentCars)
+            {
+                Destroy(carro);
+            }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
+
         }
 
         yield return null;
