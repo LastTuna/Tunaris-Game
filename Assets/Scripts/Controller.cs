@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
@@ -53,6 +54,10 @@ public class Controller : MonoBehaviour {
         if (FindObjectOfType<DataController>().Garage3D) {
             // 3D garage
             Garage3DCanvas.gameObject.SetActive(true);
+
+            for(int i=0; i < carsPrefabs.Count; i++) {
+
+            }
         } else {
             // Classic GT2 garage
             GarageCanvas.gameObject.SetActive(true);
@@ -89,6 +94,28 @@ public class Controller : MonoBehaviour {
             // Set focus to the button corresponding to the last selected car
             StartCoroutine(SetSelectedGameObject(selectedCar));
         }
+    }
+
+    public GameObject Garage3DModel;
+    private int CarIndex = 0;
+    public void Garage3DLeft() {
+        StartCoroutine(Move3DGarageModel(2));
+    }
+
+    public void Garage3DRight() {
+        StartCoroutine(Move3DGarageModel(-2));
+    }
+
+    public IEnumerator Move3DGarageModel(float direction) {
+        Garage3DModel.gameObject.GetComponent<GarageDoorScript>().CloseDoor();
+        float acc = 0;
+        while(Math.Abs(acc) < 70) {
+            Garage3DModel.gameObject.transform.Translate(direction, 0, 0);
+            acc += direction;
+            yield return new WaitForEndOfFrame();
+        }
+        Garage3DModel.gameObject.transform.Translate(-acc, 0, 0);
+        Garage3DModel.gameObject.GetComponent<GarageDoorScript>().OpenDoor();
     }
 
     private IEnumerator SetSelectedGameObject(GameObject select) {

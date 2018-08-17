@@ -6,23 +6,24 @@ public class GarageDoorScript : MonoBehaviour {
     public GameObject GarageDoor;
     public int Command = 0;
 
-    public int Closed = -30;
-    public int Opened = -4;
+    public int Closed = 0;
+    public int Opened = 30;
 
-    public void Start() {
+    public void FixedUpdate() {
         StartCoroutine(MoveDoorCoroutine());
     }
 
     public void OpenDoor() {
-        Command = 1;
+        Command = 1; 
     }
 
     IEnumerator MoveDoorCoroutine() {
         // Nothing to do, so let's do nothing
         if (Command == 0
-            || GarageDoor.transform.position.y < Closed
-            || GarageDoor.transform.position.y > Opened) {
-            yield return new WaitForEndOfFrame();
+            || (Command < 0 && GarageDoor.transform.position.y < Closed)
+            || (Command > 0 && GarageDoor.transform.position.y > Opened)) {
+            Command = 0;
+            yield return new WaitForFixedUpdate();
         }
 
         // Move the door
@@ -32,6 +33,6 @@ public class GarageDoorScript : MonoBehaviour {
     }
 
     public void CloseDoor() {
-        Command = -1;
+        Command = -3;
     }
 }
