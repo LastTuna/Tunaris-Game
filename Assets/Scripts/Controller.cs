@@ -47,6 +47,7 @@ public class Controller : MonoBehaviour {
     private List<GameObject> createdGarageButtons;
     public GameObject buttonPrefab;
     public List<GameObject> carsPrefabs;
+    public List<Material> carLogos;
 
     public void OpenGarage() {
         GoRaceCanvas.gameObject.SetActive(false);
@@ -64,7 +65,7 @@ public class Controller : MonoBehaviour {
                     break;
                 }
             }
-            Move3DGarageModel(0);
+            StartCoroutine(Move3DGarageModel(0));
         } else {
             // Classic GT2 garage
             GarageCanvas.gameObject.SetActive(true);
@@ -105,6 +106,8 @@ public class Controller : MonoBehaviour {
 
     public GameObject Garage3DModel;
     public GameObject Garage3DCarRoot;
+    public GameObject Garage3DCarLogo;
+    public GameObject Garage3DCarName;
     private int CarIndex = 0;
     public void Garage3DLeft() {
         CarIndex--;
@@ -135,7 +138,6 @@ public class Controller : MonoBehaviour {
         // accumulator to restore translation
         float acc = 0;
         if (direction != 0) {
-            Debug.Log("Moving garage in " + direction);
             // Close door
             Garage3DModel.gameObject.GetComponent<GarageDoorScript>().CloseDoor();
 
@@ -146,7 +148,13 @@ public class Controller : MonoBehaviour {
                 yield return new WaitForEndOfFrame();
             }
         }
-        Debug.Log("Move done");
+
+        // Set logo material
+        Material logo = CarIndex > carLogos.Count - 2 ? carLogos[0] : carLogos[CarIndex+1];
+        Garage3DCarLogo.GetComponent<MeshRenderer>().material = logo;
+
+        // Set car name
+        Garage3DCarName.GetComponent<Text>().text = carsPrefabs[CarIndex].name;
 
         // Delete old car model
         foreach(Transform child in Garage3DCarRoot.transform) {
@@ -181,7 +189,6 @@ public class Controller : MonoBehaviour {
         // Return to initial position and open door
         Garage3DModel.gameObject.transform.Translate(-acc, 0, 0);
         Garage3DModel.gameObject.GetComponent<GarageDoorScript>().OpenDoor();
-        Debug.Log("All done");
     }
 
     private IEnumerator SetPosition(GameObject spinner) {
