@@ -14,6 +14,7 @@ public class Controller : MonoBehaviour {
     public Canvas GarageCanvas;
     public Canvas TuneScreenCanvas;
     public Canvas OnlineCanvas;
+    public Canvas GoWashCanvas;
 
     public Canvas LoadingScreenCanvas;
 
@@ -186,6 +187,15 @@ public class Controller : MonoBehaviour {
         data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
     }
+    //car wash save
+    public void ValidateWash()
+    {
+        //call to data contorller; dirtiness array.
+        //remove credits
+
+        GameObject selectedCar = null;
+
+    }
 
     // Global cancel callback
     public AudioClip cancelClip;
@@ -245,6 +255,14 @@ public class Controller : MonoBehaviour {
         {
             ValidateOnline();
             OnlineCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
+
+        //CarWash -> Go Race
+        if (GoWashCanvas.gameObject.activeSelf)
+        {
+            ValidateWash();
+            GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
         }
 
