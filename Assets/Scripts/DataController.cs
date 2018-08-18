@@ -130,6 +130,14 @@ public class DataController : MonoBehaviour {
             LoadedData.Garage3D = value;
         }
     }
+    public float MenuAudio {
+        get {
+            return LoadedData.MenuAudio;
+        }
+        set {
+            LoadedData.MenuAudio = value;
+        }
+    }
     #endregion
 
 
@@ -173,6 +181,7 @@ public class DataController : MonoBehaviour {
             Cash = 10;
             Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
             Garage3D = false;
+            MenuAudio = 0.4f;
 
             SaveGameData();
         }
@@ -193,6 +202,7 @@ public class GameData {
     public string SelectedCourse;
 
     public bool Garage3D;
+    public float MenuAudio;
 
     public float TireBias;
     public float FinalDrive;

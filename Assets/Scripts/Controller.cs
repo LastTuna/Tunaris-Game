@@ -130,7 +130,6 @@ public class Controller : MonoBehaviour {
                 break;
             }
         }
-        Debug.Log("TI x" + CarIndex);
         StartCoroutine(Move3DGarageModel(0));
     }
 
@@ -254,6 +253,7 @@ public class Controller : MonoBehaviour {
         //fetch values from save data
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
         GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = data.Garage3D;
+        GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
     public void ExitGame() {
@@ -394,7 +394,10 @@ public class Controller : MonoBehaviour {
     public void SaveOptions() {
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
         data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
-        Debug.Log(data.Garage3D);
+        data.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
+
+        GameObject.Find("MenuAudio").GetComponent<MenuAudio>().SetVolume();
+
         Cancel();
     }
 
