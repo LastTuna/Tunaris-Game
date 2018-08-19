@@ -19,6 +19,7 @@ public class Controller : MonoBehaviour {
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
 
+    public static bool washing;
     public Canvas LoadingScreenCanvas;
     public static List<GameObject> currentCars = new List<GameObject>();
     public void DefaultCallback() {
@@ -329,8 +330,9 @@ public class Controller : MonoBehaviour {
     public void WashMe()
     {
         DataController dataController = FindObjectOfType<DataController>();
-        if (dataController.Cash >= 5)
+        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.003f && !washing)
         {
+            washing = true;
             StartCoroutine(Washer());
         }
     }
@@ -351,6 +353,7 @@ public class Controller : MonoBehaviour {
         dataController.Dirtiness[carIndex] = 0;
         }
         FindObjectOfType<Spinner>().rotSpeed = 1f;
+        washing = false;
     }
     public int GetIndex()
     {
