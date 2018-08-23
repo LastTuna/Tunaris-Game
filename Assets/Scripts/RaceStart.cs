@@ -51,7 +51,7 @@ public class RaceStart : MonoBehaviour {
 
     public void StartRace(int position)
     {
-        currentLapText.text = ("LAP: " + currentLap + "/" + laps);
+        currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + laps);
         StartCoroutine(CountDown());
         i = 0;
         foreach (GameObject e in checkpoints)
@@ -114,7 +114,7 @@ public class RaceStart : MonoBehaviour {
         {
             lapCompleted = false;
             currentLap++;
-            currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps + 1));
+            currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps));
             laptimes.Add(CurrentLapTime);//tally current lap time to List
             CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
             i = 0;

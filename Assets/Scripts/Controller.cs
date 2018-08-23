@@ -327,7 +327,7 @@ public class Controller : MonoBehaviour {
     }
     public void WashMe()
     {
-        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.003f && !washing)
+        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.03f && !washing)
         {
             washing = true;
             StartCoroutine(Washer());
@@ -340,7 +340,7 @@ public class Controller : MonoBehaviour {
         FindObjectOfType<Spinner>().rotSpeed = 9f;
         while (dataController.Dirtiness[carIndex] > 0)
         {
-        dataController.Dirtiness[carIndex] += -0.0005f;
+        dataController.Dirtiness[carIndex] += -0.03f;
         yield return new WaitForSeconds(0.1f);
         }
         if (dataController.Dirtiness[carIndex] < 0)

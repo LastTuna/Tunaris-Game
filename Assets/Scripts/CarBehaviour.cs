@@ -187,7 +187,7 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
             WheelPosition(); //graphical update - wheel positions 
         }
-        dirt.color = new Color(200, 200, 200, dirtiness);
+        dirt.color = new Color(1,1,1, dirtiness);
         
     }
 
@@ -370,7 +370,7 @@ public class CarBehaviour : NetworkBehaviour {
                 // On sand, wheelpreload was set to 0.1f as constant
                 wheelpreload = 0.1f;
 
-                if (dirtiness < 0.01f)//increases dirtiness, caps at 0.01f
+                if (dirtiness < 2f)//increases dirtiness, caps at 2f
                 {
                     dirtiness += 0.0000001f * currentSpeed;
                 }

@@ -14,7 +14,6 @@ public class CarWash : MonoBehaviour {
 
 	void Start () {
         dataController = FindObjectOfType<DataController>();
-        controller = FindObjectOfType<Controller>();
         washerButton = GameObject.Find("WasherButton").GetComponent<Button>();
         foreach (GameObject e in controller.carsPrefabs)
         {//get cars index
@@ -31,20 +30,8 @@ public class CarWash : MonoBehaviour {
 	void Update ()
     {
         dirtiness = dataController.Dirtiness[carIndex];
-        dirt.color = new Color(200, 200, 200, dirtiness);
+        dirt.color = new Color(1, 1, 1, dirtiness);
 
-    }
-    public void WashMe ()
-    {
-        dataController.Cash += -5;
-        while (dataController.Dirtiness[carIndex] > 0)
-        {
-            dataController.Dirtiness[carIndex] += -0.001f;
-        }
-        if(dataController.Dirtiness[carIndex] < 0)
-        {
-            dataController.Dirtiness[carIndex] = 0;
-        }
     }
 
 }
