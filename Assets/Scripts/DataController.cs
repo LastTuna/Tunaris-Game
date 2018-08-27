@@ -138,6 +138,14 @@ public class DataController : MonoBehaviour {
             LoadedData.MenuAudio = value;
         }
     }
+    public bool CuntUI {
+        get {
+            return LoadedData.CuntUI;
+        }
+        set {
+            LoadedData.CuntUI = value;
+        }
+    }
     #endregion
 
 
@@ -203,6 +211,7 @@ public class GameData {
 
     public bool Garage3D;
     public float MenuAudio;
+    public bool CuntUI;
 
     public float TireBias;
     public float FinalDrive;

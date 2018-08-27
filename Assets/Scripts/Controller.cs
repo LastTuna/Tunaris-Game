@@ -12,6 +12,8 @@ public class Controller : MonoBehaviour {
     public Canvas GoRaceCanvas;
     public Canvas OptionsCanvas;
 
+    public Canvas CuntUI;
+
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
     public GameObject Garage3DCanvas;
@@ -239,7 +241,12 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
-        GoRaceCanvas.gameObject.SetActive(true);
+        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+        if (dataController.CuntUI) {
+            CuntUI.gameObject.SetActive(true);
+        } else {
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
     }
 
     public void Options() {
@@ -398,6 +405,7 @@ public class Controller : MonoBehaviour {
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
         data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
         data.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
+        data.CuntUI = GameObject.Find("ImAFuckingCunt").GetComponent<Toggle>().isOn;
 
         GameObject.Find("MenuAudio").GetComponent<MenuAudio>().SetVolume();
 
@@ -414,7 +422,8 @@ public class Controller : MonoBehaviour {
         if (MainMenuCanvas.gameObject.activeSelf) yield return null;
 
         // Always save settings
-        GameObject.Find("DataController").GetComponent<DataController>().SaveGameData();
+        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+       dataController.SaveGameData();
 
         // Play cancel sound
         AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
@@ -437,7 +446,11 @@ public class Controller : MonoBehaviour {
 
         // Course -> Go Race
         if (CourseSelectCanvas.gameObject.activeSelf) {
-            GoRaceCanvas.gameObject.SetActive(true);
+            if (dataController.CuntUI) {
+                CuntUI.gameObject.SetActive(true);
+            } else {
+                GoRaceCanvas.gameObject.SetActive(true);
+            }
             CourseSelectCanvas.gameObject.SetActive(false);
         }
 
