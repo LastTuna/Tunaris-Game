@@ -14,6 +14,7 @@ public class CarWash : MonoBehaviour {
 
 	void Start () {
         dataController = FindObjectOfType<DataController>();
+        controller = FindObjectOfType<Controller>();
         washerButton = GameObject.Find("WasherButton").GetComponent<Button>();
         foreach (GameObject e in controller.carsPrefabs)
         {//get cars index
