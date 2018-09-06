@@ -8626,7 +8626,7 @@ MonoBehaviour:
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
-  - {fileID: 1967233072844966, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
+  - {fileID: 1551617848193042, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
   - {fileID: 1189740919712952, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1062719187960338, guid: ce3f62544da1c564ba9753d45d668530, type: 2}
