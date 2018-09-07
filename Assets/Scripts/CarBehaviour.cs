@@ -44,7 +44,7 @@ public class CarBehaviour : NetworkBehaviour {
     // FrontPower = engineOutput * FrontWheelDriveBias
     // RearPower = engineOutput * (1-FrontWheelDriveBias)
     // Chaning this while the car is driving is an effective way of having a center diff
-
+    public float lsd = 0.5f;
 
     //end tuneable stats
     public float engineRPM;
@@ -233,7 +233,8 @@ public class CarBehaviour : NetworkBehaviour {
             unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
         }
         if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
-        {//throttle & rev limit
+        {//throttle & rev limit, LSD
+
             wheelFR.motorTorque = 0 * FrontWheelDriveBias;
             wheelFL.motorTorque = 0 * FrontWheelDriveBias;
 
@@ -242,11 +243,10 @@ public class CarBehaviour : NetworkBehaviour {
         }
         else
         {
-            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
-            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias;
-
-            wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
-            wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias);
+            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFR, wheelFL);
+            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFL, wheelFR);
+            wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRR, wheelRL);
+            wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRL, wheelRR);
         }
 
 
@@ -267,11 +267,21 @@ public class CarBehaviour : NetworkBehaviour {
             turboSpool = 0.1f;
             spooled = false;
         }
-
-
         //SOUND UPDATES
-
         EngineAudio.ProcessSounds(engineRPM, spooled);
+    }
+
+    public float Differential (WheelCollider left, WheelCollider right)
+    {
+        if((left.rpm - right.rpm) * lsd > 0 && (left.rpm - right.rpm) * lsd < right.rpm)
+        {
+            Debug.Log((left.rpm - right.rpm) * lsd);
+            return (left.rpm - right.rpm) * lsd;
+        }
+        else
+        {
+            return 0;
+        }
     }
 
     // Gearbox managed, called each frame
