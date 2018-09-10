@@ -12,6 +12,8 @@ public class Controller : MonoBehaviour {
     public Canvas GoRaceCanvas;
     public Canvas OptionsCanvas;
 
+    public Canvas CuntUI;
+
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
     public GameObject Garage3DCanvas;
@@ -22,14 +24,10 @@ public class Controller : MonoBehaviour {
     public static bool washing;
     public Canvas LoadingScreenCanvas;
     public static List<GameObject> currentCars = new List<GameObject>();
-    public static DataController dataController;
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
     }
-    private void Start()
-    {
-        dataController = FindObjectOfType<DataController>();
-    }
+
     // Go race callbacks
     public void StartRace() {
         LoadingScreenCanvas.gameObject.SetActive(true);
@@ -38,7 +36,7 @@ public class Controller : MonoBehaviour {
 
     IEnumerator LoadRace() {
         yield return new WaitForSeconds(5);
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(dataController.SelectedCourse);
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(FindObjectOfType<DataController>().SelectedCourse);
         while (!asyncLoad.isDone) {
             yield return null;
         }
@@ -58,12 +56,12 @@ public class Controller : MonoBehaviour {
         GoRaceCanvas.gameObject.SetActive(false);
 
         // Show the proper garage
-        if (dataController.Garage3D) {
+        if (FindObjectOfType<DataController>().Garage3D) {
             // 3D garage
             Garage3DCanvas.gameObject.SetActive(true);
 
             // Can't be bothered
-            string selectedCarName = dataController.SelectedCar;
+            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
             for (int i=0; i < carsPrefabs.Count; i++) {
                 if (carsPrefabs[i].name == selectedCarName) {
                     CarIndex = i;
@@ -75,7 +73,7 @@ public class Controller : MonoBehaviour {
             // Classic GT2 garage
             GarageCanvas.gameObject.SetActive(true);
 
-            string selectedCarName = dataController.SelectedCar;
+            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
 
             // Add the car buttons
             createdGarageButtons = new List<GameObject>();
@@ -213,12 +211,13 @@ public class Controller : MonoBehaviour {
         TuneScreenCanvas.gameObject.SetActive(true);
 
         // Restore tuning values from save data
-        GameObject.Find("Tire Bias").GetComponent<Slider>().value = dataController.TireBias;
-        GameObject.Find("Final Drive").GetComponent<Slider>().value = dataController.FinalDrive;
-        GameObject.Find("Aero").GetComponent<Slider>().value = dataController.Aero;
-        GameObject.Find("Spring Stiffness").GetComponent<Slider>().value = dataController.SpringStiffness;
-        GameObject.Find("Brake Stiffness").GetComponent<Slider>().value = dataController.BrakeStiffness;
-        GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value = (int)dataController.Gearbox;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("Tire Bias").GetComponent<Slider>().value = data.TireBias;
+        GameObject.Find("Final Drive").GetComponent<Slider>().value = data.FinalDrive;
+        GameObject.Find("Aero").GetComponent<Slider>().value = data.Aero;
+        GameObject.Find("Spring Stiffness").GetComponent<Slider>().value = data.SpringStiffness;
+        GameObject.Find("Brake Stiffness").GetComponent<Slider>().value = data.BrakeStiffness;
+        GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value = (int)data.Gearbox;
     }
 
     public void OpenOnlineScreen()
@@ -226,8 +225,9 @@ public class Controller : MonoBehaviour {
         GoRaceCanvas.gameObject.SetActive(false);
         OnlineCanvas.gameObject.SetActive(true);
         //fetch values from save data
-        GameObject.Find("IP Address").GetComponent<Text>().text = dataController.IP;
-        GameObject.Find("Username").GetComponent<Text>().text = dataController.PlayerName;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("IP Address").GetComponent<Text>().text = data.IP;
+        GameObject.Find("Username").GetComponent<Text>().text = data.PlayerName;
 
     }
 
@@ -241,7 +241,12 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
-        GoRaceCanvas.gameObject.SetActive(true);
+        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+        if (dataController.CuntUI) {
+            CuntUI.gameObject.SetActive(true);
+        } else {
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
     }
 
     public void Options() {
@@ -254,8 +259,9 @@ public class Controller : MonoBehaviour {
         OptionsCanvas.gameObject.SetActive(true);
 
         //fetch values from save data
-        GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = dataController.Garage3D;
-        GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = dataController.MenuAudio;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = data.Garage3D;
+        GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
     public void ExitGame() {
@@ -272,7 +278,7 @@ public class Controller : MonoBehaviour {
         yield return new WaitForEndOfFrame();
 
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-        dataController.SelectedCourse = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+        GameObject.Find("DataController").GetComponent<DataController>().SelectedCourse = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
 
@@ -285,32 +291,35 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-        dataController.SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+        GameObject.Find("DataController").GetComponent<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
 
     // Tuning validation
     public void ValidateTuning() {
-        dataController.TireBias = GameObject.Find("Tire Bias").GetComponent<Slider>().value;
-        dataController.FinalDrive = GameObject.Find("Final Drive").GetComponent<Slider>().value;
-        dataController.Aero = GameObject.Find("Aero").GetComponent<Slider>().value;
-        dataController.SpringStiffness = GameObject.Find("Spring Stiffness").GetComponent<Slider>().value;
-        dataController.BrakeStiffness = GameObject.Find("Brake Stiffness").GetComponent<Slider>().value;
-        dataController.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        data.TireBias = GameObject.Find("Tire Bias").GetComponent<Slider>().value;
+        data.FinalDrive = GameObject.Find("Final Drive").GetComponent<Slider>().value;
+        data.Aero = GameObject.Find("Aero").GetComponent<Slider>().value;
+        data.SpringStiffness = GameObject.Find("Spring Stiffness").GetComponent<Slider>().value;
+        data.BrakeStiffness = GameObject.Find("Brake Stiffness").GetComponent<Slider>().value;
+        data.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
         
         Cancel();
     }
     //online IP validation. this is called from Cancel().
     public void ValidateOnline()
     {
-        dataController.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
-        dataController.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
+        data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
     }
     //car wash save
     public void OpenWash()
     {
         GoWashCanvas.gameObject.SetActive(true);
         GoRaceCanvas.gameObject.SetActive(false);
+        DataController dataController = FindObjectOfType<DataController>();
         int carIndex = GetIndex();
         string selectedCarName = dataController.SelectedCar;
         GameObject selectedCar = null;
@@ -327,7 +336,8 @@ public class Controller : MonoBehaviour {
     }
     public void WashMe()
     {
-        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.03f && !washing)
+        DataController dataController = FindObjectOfType<DataController>();
+        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.003f && !washing)
         {
             washing = true;
             StartCoroutine(Washer());
@@ -335,12 +345,14 @@ public class Controller : MonoBehaviour {
     }
     public IEnumerator Washer()
     {
+        DataController dataController = FindObjectOfType<DataController>();
+
         int carIndex = GetIndex();
         dataController.Cash += -5;
         FindObjectOfType<Spinner>().rotSpeed = 9f;
         while (dataController.Dirtiness[carIndex] > 0)
         {
-        dataController.Dirtiness[carIndex] += -0.03f;
+        dataController.Dirtiness[carIndex] += -0.0005f;
         yield return new WaitForSeconds(0.1f);
         }
         if (dataController.Dirtiness[carIndex] < 0)
@@ -353,6 +365,7 @@ public class Controller : MonoBehaviour {
     public int GetIndex()
     {
         int carIndex = 0;
+        DataController dataController = FindObjectOfType<DataController>();
         foreach (GameObject e in carsPrefabs)
         {//get cars index
             if (dataController.SelectedCar.Equals(e.name))
@@ -389,8 +402,10 @@ public class Controller : MonoBehaviour {
 
     // Save options
     public void SaveOptions() {
-        dataController.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
-        dataController.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
+        data.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
+        data.CuntUI = GameObject.Find("ImAFuckingCunt").GetComponent<Toggle>().isOn;
 
         GameObject.Find("MenuAudio").GetComponent<MenuAudio>().SetVolume();
 
@@ -407,7 +422,8 @@ public class Controller : MonoBehaviour {
         if (MainMenuCanvas.gameObject.activeSelf) yield return null;
 
         // Always save settings
-        dataController.SaveGameData();
+        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+       dataController.SaveGameData();
 
         // Play cancel sound
         AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
@@ -430,7 +446,11 @@ public class Controller : MonoBehaviour {
 
         // Course -> Go Race
         if (CourseSelectCanvas.gameObject.activeSelf) {
-            GoRaceCanvas.gameObject.SetActive(true);
+            if (dataController.CuntUI) {
+                CuntUI.gameObject.SetActive(true);
+            } else {
+                GoRaceCanvas.gameObject.SetActive(true);
+            }
             CourseSelectCanvas.gameObject.SetActive(false);
         }
 
@@ -474,6 +494,7 @@ public class Controller : MonoBehaviour {
             }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
+
         }
 
         yield return null;
