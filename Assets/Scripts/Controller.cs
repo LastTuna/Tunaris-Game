@@ -53,7 +53,11 @@ public class Controller : MonoBehaviour {
     public List<Material> carLogos;
 
     public void OpenGarage() {
-        GoRaceCanvas.gameObject.SetActive(false);
+        if (FindObjectOfType<DataController>().CuntUI) {
+            CuntUI.gameObject.SetActive(false);
+        } else {
+            GoRaceCanvas.gameObject.SetActive(false);
+        }
 
         // Show the proper garage
         if (FindObjectOfType<DataController>().Garage3D) {

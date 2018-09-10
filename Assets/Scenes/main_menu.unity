@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -596,7 +596,7 @@ Transform:
   - {fileID: 244788680}
   - {fileID: 943693697}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &29295239
 GameObject:
@@ -2625,11 +2625,13 @@ MonoBehaviour:
     m_LineSpacing: 1
   m_Text: 'TODAYS TODO LIST:
 
-    -can the gt3 mod
+    -dont make gt three car
 
-    -delete gran turismo two save data from memor kard
+    -put tunari in cooldown
 
-    -put tunari in cooldown'
+    -jerk off to assetto corsa shader modz
+
+    -touch pee pee'
 --- !u!222 &236755955
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -7902,8 +7904,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: StartRace
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -7974,7 +7976,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: StartRace
         m_Mode: 1
         m_Arguments:
@@ -8039,7 +8041,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: 50, y: -249}
+  m_AnchoredPosition: {x: -263, y: -520}
   m_SizeDelta: {x: 100, y: 150}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &814485715
@@ -9414,8 +9416,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: OpenWash
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -9486,7 +9488,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: OpenWash
         m_Mode: 1
         m_Arguments:
@@ -9783,8 +9785,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: OpenOnlineScreen
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -9855,7 +9857,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: OpenOnlineScreen
         m_Mode: 1
         m_Arguments:
@@ -10486,8 +10488,8 @@ Canvas:
   m_GameObject: {fileID: 1085669283}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
+  m_RenderMode: 1
+  m_Camera: {fileID: 444863025}
   m_PlaneDistance: 100
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
@@ -10526,7 +10528,7 @@ RectTransform:
   - {fileID: 236755952}
   - {fileID: 1571249463}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 12
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -12811,8 +12813,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: CourseSelect
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -12883,7 +12885,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: CourseSelect
         m_Mode: 1
         m_Arguments:
@@ -14210,8 +14212,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: OpenGarage
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -14282,7 +14284,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: OpenGarage
         m_Mode: 1
         m_Arguments:
@@ -14746,7 +14748,7 @@ RectTransform:
   - {fileID: 2028370891}
   - {fileID: 337964739}
   m_Father: {fileID: 0}
-  m_RootOrder: 12
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -17303,8 +17305,8 @@ MonoBehaviour:
     callback:
       m_PersistentCalls:
         m_Calls:
-        - m_Target: {fileID: 0}
-          m_MethodName: Cancel
+        - m_Target: {fileID: 1057594253}
+          m_MethodName: OpenTuneScreen
           m_Mode: 1
           m_Arguments:
             m_ObjectArgument: {fileID: 0}
@@ -17375,7 +17377,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 1057594253}
         m_MethodName: OpenTuneScreen
         m_Mode: 1
         m_Arguments:
