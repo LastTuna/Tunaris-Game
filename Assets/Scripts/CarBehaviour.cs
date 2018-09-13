@@ -130,11 +130,6 @@ public class CarBehaviour : NetworkBehaviour {
 
             if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
             {
-                wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, 0.4f);
-                wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
-                wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, 0.4f);
-                wheelRR.forwardFriction = SetStiffness(wheelRR.sidewaysFriction, 0.4f);
-
                 wheelRL.brakeTorque = 300;
                 wheelRR.brakeTorque = 300;
             } else {
@@ -164,21 +159,10 @@ public class CarBehaviour : NetworkBehaviour {
         }
     }
 
-    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness) {
-        return new WheelFrictionCurve() {
-            asymptoteSlip = wheelRL.sidewaysFriction.asymptoteSlip,
-            asymptoteValue = wheelRL.sidewaysFriction.asymptoteValue,
-            extremumSlip = wheelRL.sidewaysFriction.extremumSlip,
-            extremumValue = wheelRL.sidewaysFriction.extremumValue,
-            stiffness = newStiffness
-        };
-    }
-
     void Update() {
         if (isLocalPlayer) {
             StartCoroutine(gearbox());//gearbox update 
             HUDUpdate();
-            SetSurfaceProperties();
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -365,53 +349,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     // Sets the surface properties, based on what the front left (?) wheel is doing
     // Called each frame
-    void SetSurfaceProperties() {
-        WheelHit FLhit;
-        float wheelpreload;
 
-        // Ground surface detection
-        if (wheelFL.GetGroundHit(out FLhit)) {
-            if (FLhit.collider.gameObject.CompareTag("sand")) {
-                if (currentGrip > 1.1f) {
-                    currentGrip = 1.1f;
-                } else {
-                    currentGrip = 1 - tyreBias + 0.4f;//OFFROAD
-                }
-                // On sand, wheelpreload was set to 0.1f as constant
-                wheelpreload = 0.1f;
-
-                if (dirtiness < 2f)//increases dirtiness, caps at 2f
-                {
-                    dirtiness += 0.0000001f * currentSpeed;
-                }
-            } else {
-                if (currentGrip > 1.3f) {
-                    currentGrip = 1.3f;
-                } else {
-                    currentGrip = 1 * tyreBias + 0.4f;//TARMAC
-                }
-                if (currentGrip > 0.9f)//drive wheel preload - provides extra grip to drive wheels.
-                {//make sure to change application accordingly!!!! (RWD, FWD, AWD)
-                    wheelpreload = 0f; //this setting applies to TARMAC ONLY!!! change offroad value accordingly
-                } else {
-                    wheelpreload = 0.2f;
-                }
-            }
-            // Those are always called, might as well take them out of the if blocks
-            // Front wheels
-
-
-            wheelFR.sidewaysFriction = SetStiffness(wheelFR.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
-            wheelFL.sidewaysFriction = SetStiffness(wheelFL.sidewaysFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
-            wheelFR.forwardFriction = SetStiffness(wheelFR.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
-            wheelFL.forwardFriction = SetStiffness(wheelFL.forwardFriction, currentGrip + (wheelpreload * FrontWheelDriveBias));
-            // Rear wheels
-            wheelRR.sidewaysFriction = SetStiffness(wheelRR.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
-            wheelRL.sidewaysFriction = SetStiffness(wheelRL.sidewaysFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
-            wheelRR.forwardFriction = SetStiffness(wheelRR.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
-            wheelRL.forwardFriction = SetStiffness(wheelRL.forwardFriction, currentGrip + (wheelpreload * (1 - FrontWheelDriveBias)));
-        }
-    }
 
     // Updates the HUD
     void HUDUpdate() {
