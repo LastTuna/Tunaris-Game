@@ -9,6 +9,9 @@ public class TireBehavior : MonoBehaviour
     public float tyreType;
     public float TreadHealth = 100;
     public float diameter;
+    public float groundDampness;//get this value from to-be-implemented weather controller.
+    public float currentGrip;
+    //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
 
     // Use this for initialization
@@ -23,7 +26,7 @@ public class TireBehavior : MonoBehaviour
     {
         TyreWear();
         GripManager();
-
+        
 
 
     }
@@ -31,38 +34,53 @@ public class TireBehavior : MonoBehaviour
     {
         WheelHit GroundHit;
         tyre.GetGroundHit(out GroundHit);
-
-        if (Mathf.Abs(GroundHit.sidewaysSlip) > .6)
-        {
-            TreadHealth = TreadHealth - GroundHit.sidewaysSlip / 10;
-        }
+        
+            TreadHealth = TreadHealth - (Mathf.Abs(GroundHit.sidewaysSlip) + Mathf.Abs(GroundHit.forwardSlip)) / 200;
     }
     public void GripManager()
     {
-         WheelHit FLhit;
+         WheelHit wheelhit;
 
         //manage surfaces, and grip.
         // Ground surface detection
-        if (tyre.GetGroundHit(out FLhit))
-         {
-             if (FLhit.collider.gameObject.CompareTag("sand"))
-             {
-             
-             }
-             //something for dampness adjust
-             //something for puddles
-             //something for tarmac
-             //something for grass
-         }
-
-         
-
-
-
-        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, 1);
+        if (tyre.GetGroundHit(out wheelhit))
+        {
+            if (wheelhit.collider.gameObject.CompareTag("sand"))
+            {//gravel/offroad
+                currentGrip = (1 - tyreType) - Dampness() - ((100 - TreadHealth) / 5000);
+            }
+            if (wheelhit.collider.gameObject.CompareTag("tarmac") || wheelhit.collider.gameObject.CompareTag("puddle"))
+            {//TARMAC/puddle
+                currentGrip = tyreType - Dampness() - ((100 - TreadHealth) / 5000);
+            }
+            if (wheelhit.collider.gameObject.CompareTag("grass"))
+            {//grass
+                currentGrip = (tyreType / 2) - Dampness() - ((100 - TreadHealth) / 5000);
+            }
+            if (currentGrip <= 0f)
+            {//if grip goes below 0, give wheels minimum 0.13 grip.
+                currentGrip = 0.2f;
+            }
+            else if(Dampness() != 1)
+            {//grip preload, to apply some extra grip. do not apply extra grip if in puddle
+                currentGrip += 0.2f;
+            }
+        }
+        tyre.forwardFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
         // Rear wheels
-        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, 1);
+        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
     }
+    public float Dampness()
+    {
+        WheelHit wheelhit;
+        tyre.GetGroundHit(out wheelhit);
+        if (wheelhit.collider.gameObject.CompareTag("puddle"))
+        {
+            return 1f;
+        }
+            return groundDampness * 0.001f;
+    }
+
 
     WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness)
     {

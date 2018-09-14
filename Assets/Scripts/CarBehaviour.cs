@@ -32,7 +32,6 @@ public class CarBehaviour : NetworkBehaviour {
     public float brakeStrength = 200; //brake strength
     public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
     public float ratio; //final drive
-    public float tyreBias = 0.6f; //tyre bias - smaller value = offroad - higher value = tarmac (0-1) BASE TIRE GRIP VALUE = 1
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
     /// 0: no power to front, 100% power to rear
@@ -92,7 +91,6 @@ public class CarBehaviour : NetworkBehaviour {
             brakeStrength = dataController.BrakeStiffness;
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
-            tyreBias = dataController.TireBias;
             manual = true;
             TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
             //loop to get index of car, fuck me

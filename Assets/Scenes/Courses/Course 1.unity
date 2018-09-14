@@ -1680,6 +1680,10 @@ Prefab:
       propertyPath: m_TagString
       value: sand
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 343f23aa384621743b3d219faf2481e6, type: 3}
+      propertyPath: m_TagString
+      value: tarmac
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2300000, guid: 343f23aa384621743b3d219faf2481e6, type: 3}
     - {fileID: 2300004, guid: 343f23aa384621743b3d219faf2481e6, type: 3}
@@ -2492,8 +2496,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7025b60b75d3c8442a68ed68545a1416, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  TimeScale: 6000
-  Hours: 0
+  TimeScale: 3
+  Hours: 10
   Minutes: 0
   SunSettings:
   - StartHour: 0
@@ -2666,7 +2670,7 @@ Light:
   m_SpotAngle: 30
   m_CookieSize: 10
   m_Shadows:
-    m_Type: 0
+    m_Type: 1
     m_Resolution: -1
     m_CustomResolution: -1
     m_Strength: 1
@@ -3446,7 +3450,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1244692926
 MonoBehaviour:
   m_ObjectHideFlags: 0
