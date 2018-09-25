@@ -287,6 +287,10 @@ Prefab:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 100000, guid: 3698b2b61aad1be438f32053b8d21db5, type: 3}
+      propertyPath: m_TagString
+      value: tarmac
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3698b2b61aad1be438f32053b8d21db5, type: 3}
   m_IsPrefabParent: 0
@@ -544,7 +548,7 @@ GameObject:
   - component: {fileID: 321135901}
   m_Layer: 0
   m_Name: ramp
-  m_TagString: Untagged
+  m_TagString: tarmac
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1138,7 +1142,7 @@ GameObject:
   - component: {fileID: 721943800}
   m_Layer: 0
   m_Name: Plane
-  m_TagString: Untagged
+  m_TagString: tarmac
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1599,7 +1603,7 @@ GameObject:
   - component: {fileID: 995049877}
   m_Layer: 0
   m_Name: ramp
-  m_TagString: Untagged
+  m_TagString: tarmac
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -3013,6 +3017,9 @@ MonoBehaviour:
   settings:
     SelectedCar: 
     SelectedCourse: 
+    Garage3D: 0
+    MenuAudio: 0
+    CuntUI: 0
     TireBias: 0
     FinalDrive: 0
     Aero: 0

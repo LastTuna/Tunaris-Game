@@ -167,6 +167,8 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRLTrans.Rotate(wheelRL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
             wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
+            wheelRRTrans.localEulerAngles = new Vector3(wheelRRTrans.localEulerAngles.x, wheelRR.steerAngle - wheelRRTrans.localEulerAngles.z, wheelRRTrans.localEulerAngles.z);
+            wheelRLTrans.localEulerAngles = new Vector3(wheelRLTrans.localEulerAngles.x, wheelRL.steerAngle - wheelRLTrans.localEulerAngles.z, wheelRLTrans.localEulerAngles.z);
             WheelPosition(); //graphical update - wheel positions 
         }
         dirt.color = new Color(1,1,1, dirtiness);
@@ -257,7 +259,6 @@ public class CarBehaviour : NetworkBehaviour {
     {
         if((left.rpm - right.rpm) * lsd > 0 && (left.rpm - right.rpm) * lsd < right.rpm)
         {
-            Debug.Log((left.rpm - right.rpm) * lsd);
             return (left.rpm - right.rpm) * lsd;
         }
         else
