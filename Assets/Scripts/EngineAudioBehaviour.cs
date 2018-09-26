@@ -5,11 +5,13 @@ using UnityEngine;
 
 public class EngineAudioBehaviour : MonoBehaviour
 {
-    // Car attached source
-    public AudioSource CarEngine;
+    // Car attached sources
+    public AudioSource CarEngine1;
+    public AudioSource CarEngine2;
 
     // Engine sounds
     public EngineSample[] sounds;
+
 
     // Turbo related stuff
     public bool hasTurbo;
@@ -24,8 +26,8 @@ public class EngineAudioBehaviour : MonoBehaviour
     // Initialize audio
     void Start()
     {
-        CarEngine.clip = sounds[lastIndex].clip;
-        CarEngine.Play();
+        CarEngine1.clip = sounds[lastIndex].sample;
+        CarEngine1.Play();
     }
 
     // Called from CarBehaviour, processes sounds
@@ -51,23 +53,22 @@ public class EngineAudioBehaviour : MonoBehaviour
                 currentIndex++;
             }
         }
-
         // At this point currentIndex points to the correct rev range
         // If it's a new sound, play it
         if (lastIndex != currentIndex)
         {
-            CarEngine.clip = sounds[currentIndex].clip;
-            CarEngine.pitch = 1f;
-            CarEngine.Play();
+            CarEngine1.clip = sounds[currentIndex].sample;
+            CarEngine1.pitch = 1f;
+            CarEngine1.Play();
             lastIndex = currentIndex;
         }
 
         // Apply the modifiers
-        CarEngine.volume = sounds[currentIndex].relativeVolume;
-        if (sounds[currentIndex].isPitchModified)
-        {
-            CarEngine.pitch = (revs / 1000) / 4;
-        }
+        //CarEngine1.volume = sounds[currentIndex].relativeVolume; APPLIES VOLUME
+        //if (sounds[currentIndex].isPitchModified)
+        //{
+            //CarEngine1.pitch = (revs / 1000) / 4;
+        //}
 
         // Process turbo sound
         if (hasTurbo)
@@ -98,8 +99,7 @@ public struct EngineSample
 {
     public int lowRev;
     public int highRev;
-    public AudioClip clip;
-    public float relativeVolume;
-    // Maybe find a way to replace that with a way to parametrize the formula
-    public bool isPitchModified;
+    public AudioClip sample;
+    public AnimationCurve volumeCurve;
+    public AnimationCurve pitchCurve;
 }
