@@ -17,14 +17,14 @@ public class ATTESA : MonoBehaviour {
     // Update is called once per frame
     void Update()
     {
-        WheelHit wheelhit;
-        if (wheelRL.GetGroundHit(out wheelhit))
+        WheelHit wheelhitL;
+        WheelHit wheelhitR;
+        if (wheelRL.GetGroundHit(out wheelhitL) && wheelRR.GetGroundHit(out wheelhitR))
         {
-            if(wheelhit.sidewaysSlip > 0.05f)
+            if(wheelhitL.sidewaysSlip > 0.05f || wheelhitR.sidewaysSlip > 0.05f)
             {
-                wheelRL.steerAngle = wheelhit.sidewaysSlip * 30 + ( - wheelFL.steerAngle / 6);
-                wheelRR.steerAngle = wheelhit.sidewaysSlip * 30 + ( - wheelFR.steerAngle / 6);
-                Debug.Log(wheelhit.sidewaysSlip);
+                wheelRL.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + ( - wheelFL.steerAngle / 6);
+                wheelRR.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + ( - wheelFR.steerAngle / 6);
             }
             else
             {
@@ -32,6 +32,11 @@ public class ATTESA : MonoBehaviour {
                 wheelRR.steerAngle = -wheelFR.steerAngle / 6;
             }
         }
+    }
+
+    float SlipAvg(WheelHit wheelL, WheelHit wheelR)
+    {
+        return (wheelL.sidewaysSlip + wheelR.sidewaysSlip) / 2; ;
     }
 
 }
