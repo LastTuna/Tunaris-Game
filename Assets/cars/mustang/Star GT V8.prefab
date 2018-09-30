@@ -204,6 +204,7 @@ GameObject:
   - component: {fileID: 95645355971446170}
   - component: {fileID: 54027272101547948}
   - component: {fileID: 114375162719612438}
+  - component: {fileID: 114023716595952782}
   - component: {fileID: 114632558704299734}
   - component: {fileID: 82434177898440780}
   - component: {fileID: 82994338170122164}
@@ -213,7 +214,6 @@ GameObject:
   - component: {fileID: 114596923276377522}
   - component: {fileID: 114492040118552268}
   - component: {fileID: 114351664295908144}
-  - component: {fileID: 114023716595952782}
   m_Layer: 0
   m_Name: Star GT V8
   m_TagString: Untagged
@@ -1357,6 +1357,7 @@ MonoBehaviour:
   wheelFR: {fileID: 146271611345943506}
   wheelRL: {fileID: 146057274657975824}
   wheelRR: {fileID: 146876951435858402}
+  carBehaviour: {fileID: 114375162719612438}
 --- !u!114 &114060844466162736
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1619,18 +1620,39 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ff73f5ea878f84b8086feaf0db8bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CarEngine: {fileID: 82434177898440780}
+  CarEngine1: {fileID: 0}
+  CarEngine2: {fileID: 0}
   sounds:
   - lowRev: 0
     highRev: 830
-    clip: {fileID: 8300000, guid: c8c6e4af94d28e84d84407657d3e5f89, type: 3}
-    relativeVolume: 1
-    isPitchModified: 0
+    sample: {fileID: 0}
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    pitchCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   - lowRev: 831
     highRev: 9500
-    clip: {fileID: 8300000, guid: 9fd69c43ea8861f49b3dc5c571d9f2ad, type: 3}
-    relativeVolume: 1
-    isPitchModified: 1
+    sample: {fileID: 0}
+    volumeCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    pitchCurve:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
   hasTurbo: 0
   boostSource: {fileID: 82994338170122164}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
