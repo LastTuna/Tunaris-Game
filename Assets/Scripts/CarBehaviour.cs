@@ -13,11 +13,18 @@ public class CarBehaviour : NetworkBehaviour {
     public Material dirt; //dirt MATERIAL. apply cars corresponding dirt mat.
     public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
+    public Transform drivingWheel;
     public RectTransform pointer;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
     public WheelCollider wheelRR;
+
+    public Transform wheelFLCalp;
+    public Transform wheelFRCalp;
+    public Transform wheelRLCalp;
+    public Transform wheelRRCalp;
+
     public Transform wheelFLTrans;
     public Transform wheelFRTrans;
     public Transform wheelRLTrans;
@@ -170,6 +177,7 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRRTrans.localEulerAngles = new Vector3(wheelRRTrans.localEulerAngles.x, wheelRR.steerAngle - wheelRRTrans.localEulerAngles.z, wheelRRTrans.localEulerAngles.z);
             wheelRLTrans.localEulerAngles = new Vector3(wheelRLTrans.localEulerAngles.x, wheelRL.steerAngle - wheelRLTrans.localEulerAngles.z, wheelRLTrans.localEulerAngles.z);
             WheelPosition(); //graphical update - wheel positions 
+            drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
         }
         dirt.color = new Color(1,1,1, dirtiness);
         
@@ -322,6 +330,7 @@ public class CarBehaviour : NetworkBehaviour {
         } else {
             wheelPos = wheelFL.transform.position - wheelFL.transform.up * wheelFL.suspensionDistance;
         }
+        wheelFLCalp.position = wheelPos;
         wheelFLTrans.position = wheelPos;
         //FR
         if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up, out hit, wheelFR.radius + wheelFR.suspensionDistance)) {
@@ -329,6 +338,7 @@ public class CarBehaviour : NetworkBehaviour {
         } else {
             wheelPos = wheelFR.transform.position - wheelFR.transform.up * wheelFR.suspensionDistance;
         }
+        wheelFRCalp.position = wheelPos;
         wheelFRTrans.position = wheelPos;
         //RL
         if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up, out hit, wheelRL.radius + wheelRL.suspensionDistance)) {
@@ -336,6 +346,7 @@ public class CarBehaviour : NetworkBehaviour {
         } else {
             wheelPos = wheelRL.transform.position - wheelRL.transform.up * wheelRL.suspensionDistance;
         }
+        wheelRLCalp.position = wheelPos;
         wheelRLTrans.position = wheelPos;
         //RR
         if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up, out hit, wheelRR.radius + wheelRR.suspensionDistance)) {
@@ -343,6 +354,7 @@ public class CarBehaviour : NetworkBehaviour {
         } else {
             wheelPos = wheelRR.transform.position - wheelRR.transform.up * wheelRR.suspensionDistance;
         }
+        wheelRRCalp.position = wheelPos;
         wheelRRTrans.position = wheelPos;
     }
 

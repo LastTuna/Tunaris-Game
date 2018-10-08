@@ -37,7 +37,7 @@ public class CarCamera : MonoBehaviour {
                 // 1: cockpit cam
                 case 1: {
                         transform.position = car.position;
-                        transform.position += Vector3.up * 0.5f;
+                        transform.position += new Vector3(0,0.5f,0);
                         transform.rotation = car.rotation;
                         
                         car.Find("Cockpit").gameObject.SetActive(true);
