@@ -1,41 +1,131 @@
 fileFormatVersion: 2
-guid: af1424d80a6cb204ab32ee07a12bc0c3
-timeCreated: 1530735286
+guid: b347608314799e444b7241b39819043a
+timeCreated: 1539349293
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: FL
-    100002: FR
-    100004: //RootNode
-    100006: RL
-    100008: RR
-    100010: StarGTV8
-    400000: FL
-    400002: FR
-    400004: //RootNode
-    400006: RL
-    400008: RR
-    400010: StarGTV8
+    100000: DIRT
+    100002: FL
+    100004: FLcalp
+    100006: FLdirt
+    100008: FR
+    100010: FRcalp
+    100012: FRdirt
+    100014: Interior
+    100016: Interior_001
+    100018: //RootNode
+    100020: RL
+    100022: RLcalp
+    100024: RLdirt
+    100026: RR
+    100028: RRcalp
+    100030: RRdirt
+    100032: StarGTV8
+    100034: Wheel
+    100036: WiperF0
+    100038: WiperF1
+    100040: WiperR
+    400000: DIRT
+    400002: FL
+    400004: FLcalp
+    400006: FLdirt
+    400008: FR
+    400010: FRcalp
+    400012: FRdirt
+    400014: Interior
+    400016: Interior_001
+    400018: //RootNode
+    400020: RL
+    400022: RLcalp
+    400024: RLdirt
+    400026: RR
+    400028: RRcalp
+    400030: RRdirt
+    400032: StarGTV8
+    400034: Wheel
+    400036: WiperF0
+    400038: WiperF1
+    400040: WiperR
     2100000: MAIN
     2100002: WINDOWS
-    2300000: FL
-    2300002: FR
-    2300004: RL
-    2300006: RR
-    2300008: StarGTV8
-    3300000: FL
-    3300002: FR
-    3300004: RL
-    3300006: RR
-    3300008: StarGTV8
+    2100004: WHEELS
+    2100006: DISC
+    2100008: INTERIOR
+    2100010: dirt
+    2100012: dirtW
+    2300000: DIRT
+    2300002: FL
+    2300004: FLcalp
+    2300006: FLdirt
+    2300008: FR
+    2300010: FRcalp
+    2300012: FRdirt
+    2300014: Interior
+    2300016: Interior_001
+    2300018: RL
+    2300020: RLcalp
+    2300022: RLdirt
+    2300024: RR
+    2300026: RRcalp
+    2300028: RRdirt
+    2300030: StarGTV8
+    2300032: Wheel
+    2300034: WiperF0
+    2300036: WiperF1
+    2300038: WiperR
+    3300000: DIRT
+    3300002: FL
+    3300004: FLcalp
+    3300006: FLdirt
+    3300008: FR
+    3300010: FRcalp
+    3300012: FRdirt
+    3300014: Interior
+    3300016: Interior_001
+    3300018: RL
+    3300020: RLcalp
+    3300022: RLdirt
+    3300024: RR
+    3300026: RRcalp
+    3300028: RRdirt
+    3300030: StarGTV8
+    3300032: Wheel
+    3300034: WiperF0
+    3300036: WiperF1
+    3300038: WiperR
     4300000: StarGTV8
     4300002: FL
-    4300004: RL
-    4300006: RR
-    4300008: FR
+    4300004: Interior
+    4300006: Wheel
+    4300008: WiperF1
+    4300010: DIRT
+    4300012: FLcalp
+    4300014: RL
+    4300016: RLcalp
+    4300018: FLdirt
+    4300020: RLdirt
+    4300022: WiperF0
+    4300024: WiperR
+    4300026: RRdirt
+    4300028: RRcalp
+    4300030: RR
+    4300032: FR
+    4300034: FRcalp
+    4300036: FRdirt
+    4300038: Interior_001
     9500000: //RootNode
   externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DISC
+    second: {fileID: 2100000, guid: 606ce7fee7877074cb4946032e59504c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: INTERIOR
+    second: {fileID: 2100000, guid: 70f35b6d302a4564db65f04bde8ed42d, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
@@ -44,8 +134,23 @@ ModelImporter:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: WHEELS
+    second: {fileID: 2100000, guid: 1e2690cc6a602134289eb30a9c84ed42, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: WINDOWS
     second: {fileID: 2100000, guid: dc044fde374e97c44a3713704f704f52, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dirt
+    second: {fileID: 2100000, guid: 7118175af512d934495a61b73a16ea81, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dirtW
+    second: {fileID: 2100000, guid: 3fd780857ad745d4da4249ac3d812117, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

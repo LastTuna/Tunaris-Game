@@ -10,7 +10,8 @@ public class EngineAudioBehaviour : MonoBehaviour
     public AudioSource CarEngine2;
 
     // Engine sounds
-    public EngineSample[] sounds;
+    public EngineSample[] layer0;
+    public EngineSample[] layer1;
 
 
     // Turbo related stuff
@@ -26,29 +27,29 @@ public class EngineAudioBehaviour : MonoBehaviour
     // Initialize audio
     void Start()
     {
-        CarEngine1.clip = sounds[lastIndex].sample;
+        CarEngine1.clip = layer0[lastIndex].sample;
         CarEngine1.Play();
     }
 
     // Called from CarBehaviour, processes sounds
     public void ProcessSounds(float revs, bool spooled)
     {
-        if (sounds.Length == 0) return;
+        if (layer0.Length == 0) return;
         int currentIndex = lastIndex;
 
         // Which direction to go in the sound range
-        if (sounds[currentIndex].lowRev > revs)
+        if (layer0[currentIndex].lowRev > revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].lowRev > revs && lastIndex >= 0)
+            while (layer0[currentIndex].lowRev > revs && lastIndex >= 0)
             {
                 currentIndex--;
             }
         }
-        else if (sounds[currentIndex].highRev < revs)
+        else if (layer0[currentIndex].highRev < revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].highRev < revs && lastIndex < sounds.Length - 1)
+            while (layer0[currentIndex].highRev < revs && lastIndex < layer0.Length - 1)
             {
                 currentIndex++;
             }
@@ -57,7 +58,7 @@ public class EngineAudioBehaviour : MonoBehaviour
         // If it's a new sound, play it
         if (lastIndex != currentIndex)
         {
-            CarEngine1.clip = sounds[currentIndex].sample;
+            CarEngine1.clip = layer0[currentIndex].sample;
             CarEngine1.pitch = 1f;
             CarEngine1.Play();
             lastIndex = currentIndex;
