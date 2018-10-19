@@ -19,9 +19,13 @@ public class Wipers : MonoBehaviour {
         {
             Wiper();
         }
-        if (Input.GetKeyDown("h"))
+        if (Input.GetKeyDown("h") && !wiping)
         {
             wiping = true;
+        }
+        else if (Input.GetKeyDown("h") && wiping)
+        {
+            wiping = false;
         }
 
     }
