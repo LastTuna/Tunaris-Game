@@ -88,7 +88,12 @@ public class CarBehaviour : NetworkBehaviour {
             Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-            
+
+            wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
+            wheelFL.ConfigureVehicleSubsteps(20, 30, 10);
+            wheelRL.ConfigureVehicleSubsteps(20, 30, 10);
+            wheelRR.ConfigureVehicleSubsteps(20, 30, 10);
+
 
             HUDUpdate();
             //stats update
