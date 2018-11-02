@@ -10,7 +10,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
-    public Material dirt; //dirt MATERIAL. apply cars corresponding dirt mat.
+    public Material dirt; //dirt MATERIAL.
+    public Renderer dirtMesh; //fetches and instantiates dirt material
     public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
@@ -88,6 +89,7 @@ public class CarBehaviour : NetworkBehaviour {
             Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
+            dirt = dirtMesh.GetComponent<Renderer>().material;
 
             wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
             wheelFL.ConfigureVehicleSubsteps(20, 30, 10);
@@ -138,27 +140,7 @@ public class CarBehaviour : NetworkBehaviour {
                 transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
             }
 
-            if (Input.GetAxis("Handbrake") > 0f)//HANDBRAKE
-            {
-                wheelRL.brakeTorque = 300;
-                wheelRR.brakeTorque = 300;
-            } else {
-                wheelRL.brakeTorque = 0;
-                wheelRR.brakeTorque = 0;
-            }
 
-
-            if (Input.GetAxis("Brake") > 0f) {//brakes
-                wheelFL.brakeTorque = brakeStrength;
-                wheelFR.brakeTorque = brakeStrength;
-                wheelRL.brakeTorque = brakeStrength;
-                wheelRR.brakeTorque = brakeStrength;
-            } else {
-                wheelFL.brakeTorque = 0;
-                wheelFR.brakeTorque = 0;
-                wheelRL.brakeTorque = 0;
-                wheelRR.brakeTorque = 0;
-            }
 
             wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
             wheelFL.steerAngle = 20 * Input.GetAxis("Steering");

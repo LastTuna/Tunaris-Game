@@ -8,15 +8,26 @@ public class TireBehavior : MonoBehaviour
     public WheelCollider tyre;
     public float treadType;
     public float TreadHealth = 100;
+    public float brakeStrength = 300;
+    public bool handbrake = false;
+    public float brakeHeat = 26;//celsius
     public float diameter;
     public float groundDampness;//get this value from to-be-implemented weather controller.
     public float currentGrip;
     //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
-
+    public Material brakeMat;
+    public Renderer disc;
+    public AnimationCurve brakeFadeCurve = new AnimationCurve(
+        new Keyframe(0, 0.4f),
+        new Keyframe(420, 1f),
+        new Keyframe(600, 1f),
+        new Keyframe(800, 0.3f)
+        );
     // Use this for initialization
     void Start()
     {
+        brakeMat = disc.GetComponent<Renderer>().materials[1];
         treadType = FindObjectOfType<DataController>().TireBias;
         diameter = tyre.radius;
     }
@@ -26,7 +37,7 @@ public class TireBehavior : MonoBehaviour
     {
         TyreWear();
         GripManager();
-
+        Brakes();
     }
 
     public void TyreWear()
@@ -43,7 +54,6 @@ public class TireBehavior : MonoBehaviour
             tyre.radius = diameter - 0.1f;
             burst = true;
         }
-            
     }
 
     public void GripManager()
@@ -95,12 +105,38 @@ public class TireBehavior : MonoBehaviour
             return groundDampness * 0.001f;
     }
 
+    void Brakes()
+    {
+        if (Input.GetAxis("Brake") > 0f)
+        {//brakes
+            if (brakeHeat < 800)
+            {
+                brakeHeat += Mathf.Abs(tyre.rpm) / 50;
+            }
+            tyre.brakeTorque = brakeStrength * brakeFadeCurve.Evaluate(brakeHeat);
+        }
+        else
+        {
+            if(brakeHeat > 50)
+            {
+                brakeHeat = brakeHeat - brakeHeat / 500;
+            }
+            tyre.brakeTorque = 0;
+        }
+        if (Input.GetAxis("Handbrake") > 0f && handbrake)//HANDBRAKE
+        {
+            tyre.brakeTorque = 700;
+        }
+        if(brakeHeat > 400)
+        brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
+    }
 
     WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness)
     {
         //sets tire grip
         return new WheelFrictionCurve()
         {
+            
             asymptoteSlip = tyre.sidewaysFriction.asymptoteSlip,
             asymptoteValue = tyre.sidewaysFriction.asymptoteValue,
             extremumSlip = tyre.sidewaysFriction.extremumSlip,
