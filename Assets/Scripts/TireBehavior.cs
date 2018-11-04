@@ -17,7 +17,10 @@ public class TireBehavior : MonoBehaviour
     //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
     public Material brakeMat;
+    public Material dirt; //dirt MATERIAL.
     public Renderer disc;
+    public Renderer dirtMesh; //fetches and instantiates dirt material
+    public float dirtiness;
     public AnimationCurve brakeFadeCurve = new AnimationCurve(
         new Keyframe(0, 0.4f),
         new Keyframe(420, 1f),
@@ -28,6 +31,7 @@ public class TireBehavior : MonoBehaviour
     void Start()
     {
         brakeMat = disc.GetComponent<Renderer>().materials[1];
+        dirt = dirtMesh.GetComponent<Renderer>().material;
         treadType = FindObjectOfType<DataController>().TireBias;
         diameter = tyre.radius;
     }
@@ -38,6 +42,10 @@ public class TireBehavior : MonoBehaviour
         TyreWear();
         GripManager();
         Brakes();
+    }
+    void Update()
+    {
+        dirt.color = new Color(1, 1, 1, dirtiness);
     }
 
     public void TyreWear()
@@ -67,6 +75,7 @@ public class TireBehavior : MonoBehaviour
             if (wheelhit.collider.gameObject.CompareTag("sand"))
             {//gravel/offroad
                 currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
+                if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
             }
             if (wheelhit.collider.gameObject.CompareTag("tarmac") || wheelhit.collider.gameObject.CompareTag("puddle"))
             {//TARMAC/puddle
@@ -117,18 +126,16 @@ public class TireBehavior : MonoBehaviour
         }
         else
         {
-            if(brakeHeat > 50)
-            {
-                brakeHeat = brakeHeat - brakeHeat / 500;
-            }
             tyre.brakeTorque = 0;
         }
         if (Input.GetAxis("Handbrake") > 0f && handbrake)//HANDBRAKE
         {
             tyre.brakeTorque = 700;
         }
-        if(brakeHeat > 400)
-        brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
+        if (brakeHeat > 50)
+            brakeHeat = brakeHeat - brakeHeat / 500;
+        if (brakeHeat > 400)
+            brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
     }
 
     WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness)

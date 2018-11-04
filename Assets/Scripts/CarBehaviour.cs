@@ -10,6 +10,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
+    public GameObject frontLights;
+    public GameObject rearLights;
     public Material dirt; //dirt MATERIAL.
     public Renderer dirtMesh; //fetches and instantiates dirt material
     public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
@@ -170,12 +172,11 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
 
-
+            LightsOn();
             WheelPosition(); //graphical update - wheel positions 
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
         }
         dirt.color = new Color(1,1,1, dirtiness);
-        
     }
 
     IEnumerator engine()
@@ -322,6 +323,11 @@ public class CarBehaviour : NetworkBehaviour {
         //FL
         if (Physics.Raycast(wheelFL.transform.position, -wheelFL.transform.up, out hit, wheelFL.radius + wheelFL.suspensionDistance)) {
             wheelPos = hit.point + wheelFL.transform.up * wheelFL.radius;
+            //UPDATE DIRTINESS
+            if (hit.collider.gameObject.CompareTag("sand") && dirtiness < 1)
+            {
+                dirtiness += Mathf.Abs(wheelFL.rpm) / 500000;
+            }
         } else {
             wheelPos = wheelFL.transform.position - wheelFL.transform.up * wheelFL.suspensionDistance;
         }
@@ -351,11 +357,29 @@ public class CarBehaviour : NetworkBehaviour {
         }
         wheelRRCalp.position = wheelPos;
         wheelRRTrans.position = wheelPos;
+        
     }
 
-    // Sets the surface properties, based on what the front left (?) wheel is doing
-    // Called each frame
+    void LightsOn()
+    {
+        if (Input.GetKeyDown("u") && !frontLights.activeSelf)
+        {
+            frontLights.SetActive(true);
+        }
+        else if (Input.GetKeyDown("u") && frontLights.activeSelf)
+        {
+            frontLights.SetActive(false);
+        }
 
+        if (Input.GetAxis("Brake") > 0f && frontLights.activeSelf)
+        {//brakes
+            rearLights.SetActive(true);
+        }
+        else
+        {
+            rearLights.SetActive(false);
+        }
+    }
 
     // Updates the HUD
     void HUDUpdate() {
