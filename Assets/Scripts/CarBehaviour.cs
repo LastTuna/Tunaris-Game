@@ -14,34 +14,39 @@ public class CarBehaviour : NetworkBehaviour {
     public GameObject rearLights;
     public Material dirt; //dirt MATERIAL.
     public Renderer dirtMesh; //fetches and instantiates dirt material
-    public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
-    //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
     public RectTransform pointer;
     public WheelCollider wheelFL;
     public WheelCollider wheelFR;
     public WheelCollider wheelRL;
     public WheelCollider wheelRR;
-
+    public WheelCollider engineCrank;
     public Transform wheelFLCalp;
     public Transform wheelFRCalp;
     public Transform wheelRLCalp;
     public Transform wheelRRCalp;
-
     public Transform wheelFLTrans;
     public Transform wheelFRTrans;
     public Transform wheelRLTrans;
     public Transform wheelRRTrans;
+    //debug values
+    public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
+    //end of race will store and call to savedata to store dirtiness level
     public float currentSpeed;
     public float wheelRPM;
-
-    public bool manual = false; //manual(true) auto(false)
-    public float currentGrip; //value manipulated by road type
+    public float engineRPM;
+    public float turboSpool = 0.1f;//turbo boost value
+    public bool spooled = false;//determine whether to play wastegate sound or not
+    public int gear;//current gear
+    public bool shifting = false;//shifter delay
+    public float clutchPressure;//0-1. clutch in/out. float for pedal support later on
+    public bool runnin = true;
     //tuneable stats
     public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
     public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
     public float ratio; //final drive
+    public bool manual = false; //manual(true) auto(false)
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
     /// 0: no power to front, 100% power to rear
@@ -53,29 +58,18 @@ public class CarBehaviour : NetworkBehaviour {
     // FrontPower = engineOutput * FrontWheelDriveBias
     // RearPower = engineOutput * (1-FrontWheelDriveBias)
     // Chaning this while the car is driving is an effective way of having a center diff
-    public float lsd = 0.5f;
-
-    //end tuneable stats
-    public float engineRPM;
+    public float lsd = 1f;//clamped 0-1. 0 open 1 full lock
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
-    public float engineTORQUE = 120;//engine power - CHANGE TO 200 IF TRUCK
-    public float turboSpool = 0.1f;//turbo boost value
-    public bool spooled = false;//determine whether to play wastegate sound or not
-    public float unitOutput;
-    //gears
-    public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
-    public int gear;//current gear
-    public bool shifting = false;//shifter delay
-    public int carIndex;
+    public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));
 
+    public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };//gears
+    public int carIndex;//CARS INDEX IN DATA MANAGER
     public JointSpring springs = new JointSpring {
         spring = 8000,
         damper = 800,
         targetPosition = 0.1f,
     };
-
-    // CoG
-    public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
+    public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);//CoG
 
     void Start() {
         if (isLocalPlayer) {
@@ -108,19 +102,8 @@ public class CarBehaviour : NetworkBehaviour {
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
             manual = true;
-            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
-            //loop to get index of car, fuck me
-            carIndex = 0;
-            foreach (GameObject e in networkmanager.Cars)
-            {
-                if (dataController.SelectedCar.Equals(e.name))
-                {
-                    break;
-                }
-                carIndex++;
-            }
             dirtiness = dataController.Dirtiness[carIndex];
-
+            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
             //spring stiffness set (dampers = spring / 10)
             springs.spring = springStiffness;
             springs.damper = springStiffness / 10;
@@ -134,7 +117,10 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
-            StartCoroutine(engine());
+            Sparker();
+            Engine();
+            Differential();
+            StartCoroutine(Clutch());
 
             if (Input.GetButtonDown("Reset")) {
                 Debug.Log("Reset was pressed");
@@ -142,21 +128,20 @@ public class CarBehaviour : NetworkBehaviour {
                 transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
             }
 
-
-
             wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
             wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
 
             wheelRPM = (wheelFL.rpm + wheelRL.rpm) / 2; //speed counter
-            currentSpeed = 2 * 22 / 7 * wheelFL.radius * wheelRL.rpm * 60 / 1000;
+            currentSpeed = 2 * 22 / 7 * wheelFL.rpm * wheelFL.radius * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
         }
     }
 
     void Update() {
         if (isLocalPlayer) {
-            StartCoroutine(gearbox());//gearbox update 
+            StartCoroutine(Gearbox());//gearbox update 
             HUDUpdate();
+            LightsOn();
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -171,73 +156,37 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRLCalp.localEulerAngles = new Vector3(wheelRLCalp.localEulerAngles.x, wheelRL.steerAngle - wheelRLCalp.localEulerAngles.z, wheelRLCalp.localEulerAngles.z);
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
-
-            LightsOn();
             WheelPosition(); //graphical update - wheel positions 
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
         }
         dirt.color = new Color(1,1,1, dirtiness);
     }
 
-    IEnumerator engine()
+    void Sparker()
+    {
+        if (Input.GetKeyDown("p"))
+        {
+            engineCrank.motorTorque = 30;
+        }
+
+    }
+
+    void Engine()
     {//engine
-        if (gear == 1)
-        {//neutral revs
 
-            if (engineRPM >= engineREDLINE)
-            {
-                engineRPM = engineRPM - 300;
-            }
-            else
-            {
-                if (Input.GetAxis("Throttle") > 0)
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    engineRPM = 100 + engineRPM;
-                }
-                else
-                {
-                    if (engineRPM > 800)
-                    {
-                        yield return new WaitForSeconds(0.05f);
-                        engineRPM = engineRPM - 100;
-                    }
-                }
-
-
-            }
-        }
-        else
-        { //drive revs
-            engineRPM = wheelRPM * gears[gear] * ratio + 800;
-        }
-
-        if (gear > 0)
+        //Input.GetAxis("Throttle")
+        if(runnin)
         {
-            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTORQUE; //ENGINE OUTPUT TO WHEELS
+            engineCrank.motorTorque = (Input.GetAxis("Throttle") * (1 - clutchPressure)) * engineTorque.Evaluate(engineRPM) + (gears[1] * wheelRPM);
         }
-        else
-        {
-            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
+        if(engineRPM > engineREDLINE)
+        {//rev limiter
+            engineCrank.brakeTorque = 10;
+            engineCrank.motorTorque = 0;
         }
-        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
-        {//throttle & rev limit, LSD
-
-            wheelFR.motorTorque = 0 * FrontWheelDriveBias;
-            wheelFL.motorTorque = 0 * FrontWheelDriveBias;
-
-            wheelRR.motorTorque = 0 * (1 - FrontWheelDriveBias);
-            wheelRL.motorTorque = 0 * (1 - FrontWheelDriveBias);
-        }
-        else
-        {
-            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFR, wheelFL);
-            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFL, wheelFR);
-            wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRR, wheelRL);
-            wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRL, wheelRR);
-        }
-
-
+        engineRPM = engineCrank.rpm;
+        
+        //turbo manager
         if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
         {//when you step on the gas
 
@@ -259,31 +208,39 @@ public class CarBehaviour : NetworkBehaviour {
         EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
-    public float Differential (WheelCollider left, WheelCollider right)
-    {
-        if((left.rpm - right.rpm) * lsd > 0 && (left.rpm - right.rpm) * lsd < right.rpm)
-        {
-            return (left.rpm - right.rpm) * lsd;
-        }
-        else
-        {
-            return 0;
-        }
-    }
-
-    // Gearbox managed, called each frame
-    IEnumerator gearbox()
+    IEnumerator Clutch()
     {
         if (manual)
         {
-            if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
+            clutchPressure = Input.GetAxis("Clutch");
+            //code for manual
+            //float CLUTCH CLAMPED TO 0-1 DISENGAGED-ENGAGED
+        }
+        else
+        {
+            yield return new WaitForSeconds(0.1f);
+            //code for auto clutch
+        }
+    }
+
+    void Differential()
+    {
+
+    }
+
+    // Gearbox managed, called each frame
+    IEnumerator Gearbox()
+    {
+        if (manual)
+        {
+            if (Input.GetButtonDown("ShiftUp") && gear < gears.Length - 1 && !shifting && clutchPressure > 0.4f)
             {
                 shifting = true;
                 gear = gear + 1;
-                yield return new WaitForSeconds(0.3f);
+                yield return new WaitForSeconds(0.1f);
                 shifting = false;
             }
-            if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
+            if (Input.GetButtonDown("ShiftDown") && gear > 0 && !shifting && clutchPressure > 0.4f)
             {
                 shifting = true;
                 gear = gear - 1;
@@ -293,25 +250,7 @@ public class CarBehaviour : NetworkBehaviour {
         }//END MANUAL
         else
         {
-            {//START OF AUTOMATIC TRANS
-                if (engineRPM > (engineREDLINE - 1000) && gear < 7 && shifting == false)//upshift
-                {
-                    shifting = true;
-                    gear = gear + 1;
-                    yield return new WaitForSeconds(0.3f);
-                    shifting = false;
-                }//end upshift
-                if (engineRPM < 5000 && gear > 0 && shifting == false && currentSpeed > 30)//downshift
-                {
-                    shifting = true;
-                    gear = gear - 1;
-                    yield return new WaitForSeconds(0.1f);
-                    shifting = false;
-
-
-                } //downshiftEND
-
-            }
+            //autotragic
         }
     }
     
