@@ -35,6 +35,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float currentSpeed;
     public float wheelRPM;
     public float engineRPM;
+    public float unitOutput;
     public float turboSpool = 0.1f;//turbo boost value
     public bool spooled = false;//determine whether to play wastegate sound or not
     public int gear;//current gear
@@ -103,7 +104,6 @@ public class CarBehaviour : NetworkBehaviour {
             ratio = dataController.FinalDrive;
             manual = true;
             dirtiness = dataController.Dirtiness[carIndex];
-            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
             //spring stiffness set (dampers = spring / 10)
             springs.spring = springStiffness;
             springs.damper = springStiffness / 10;
@@ -164,9 +164,10 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Sparker()
     {
-        if (Input.GetKeyDown("p"))
+        if (Input.GetKeyDown("p") && !runnin)
         {
-            engineCrank.motorTorque = 30;
+            engineCrank.motorTorque = 700;
+            runnin = true;
         }
 
     }
@@ -181,7 +182,11 @@ public class CarBehaviour : NetworkBehaviour {
             if(engineRPM < 1000)
             {
                 //idle
-                engineCrank.motorTorque = 10;
+                engineCrank.motorTorque = 30;
+            }
+            if (engineRPM < 500)
+            {
+                runnin = false;
             }
         }
         if(engineRPM > engineREDLINE)
@@ -191,6 +196,15 @@ public class CarBehaviour : NetworkBehaviour {
         }
         engineRPM = engineCrank.rpm;
         
+
+
+
+
+
+
+
+
+
         //turbo manager
         if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
         {//when you step on the gas
@@ -230,7 +244,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Differential()
     {
-
+        wheelFL.motorTorque = engineTorque.Evaluate(engineRPM) * gears[gear];
     }
     //* ratio / gears[gear]
     //engineTorque.Evaluate(engineRPM) 
