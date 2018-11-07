@@ -35,7 +35,7 @@ public class PostRace : MonoBehaviour {
     IEnumerator TallyLaps()
     {
         checkum = false;
-        while (count <= laps)
+        while (count < laps)
         {
             
             Debug.Log(count);
