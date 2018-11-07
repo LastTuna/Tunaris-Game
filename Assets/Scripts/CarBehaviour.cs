@@ -177,7 +177,12 @@ public class CarBehaviour : NetworkBehaviour {
         //Input.GetAxis("Throttle")
         if(runnin)
         {
-            engineCrank.motorTorque = (Input.GetAxis("Throttle") * (1 - clutchPressure)) * engineTorque.Evaluate(engineRPM) + (gears[1] * wheelRPM);
+            engineCrank.motorTorque = (Input.GetAxis("Throttle") * (1 - clutchPressure)) * engineTorque.Evaluate(engineRPM);
+            if(engineRPM < 1000)
+            {
+                //idle
+                engineCrank.motorTorque = 10;
+            }
         }
         if(engineRPM > engineREDLINE)
         {//rev limiter
@@ -227,7 +232,8 @@ public class CarBehaviour : NetworkBehaviour {
     {
 
     }
-
+    //* ratio / gears[gear]
+    //engineTorque.Evaluate(engineRPM) 
     // Gearbox managed, called each frame
     IEnumerator Gearbox()
     {

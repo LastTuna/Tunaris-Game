@@ -857,7 +857,6 @@ GameObject:
   - component: {fileID: 114035302443552396}
   - component: {fileID: 114952427004055946}
   - component: {fileID: 114268028094903634}
-  - component: {fileID: 114357678731594510}
   - component: {fileID: 114589659725324924}
   - component: {fileID: 114267490221205256}
   - component: {fileID: 114379530894070160}
@@ -2999,22 +2998,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &114357678731594510
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1831861695709322}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0f59d9ad6e3fe0149883c4deb4ddcff2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wheelFL: {fileID: 146743710300112616}
-  wheelFR: {fileID: 146378484983229174}
-  wheelRL: {fileID: 146812199402813614}
-  wheelRR: {fileID: 146163022487577680}
-  carBehaviour: {fileID: 114952427004055946}
 --- !u!114 &114379530894070160
 MonoBehaviour:
   m_ObjectHideFlags: 1
