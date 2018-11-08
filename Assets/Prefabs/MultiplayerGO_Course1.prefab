@@ -647,7 +647,7 @@ MonoBehaviour:
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   Cars:
-  - {fileID: 1831861695709322, guid: 15db79f19daa0db42afbcd47e2bd42fe, type: 2}
+  - {fileID: 1891240142232322, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1611217729977992, guid: e410e65a001183a43909f196d911070f, type: 2}
   - {fileID: 1189740919712952, guid: ff461d1f80a9eb042a945235628ceb2a, type: 2}
   - {fileID: 1859795861950534, guid: a5c30d720892ae24d921bdbb5e7d2c79, type: 2}
