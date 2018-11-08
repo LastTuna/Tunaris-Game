@@ -58,7 +58,7 @@ public class CarBehaviour : NetworkBehaviour {
     //end tuneable stats
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
-    public float engineTORQUE = 120;//engine power - CHANGE TO 200 IF TRUCK
+    public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
     public float turboSpool = 0.1f;//turbo boost value
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
@@ -134,7 +134,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
-            StartCoroutine(engine());
+            StartCoroutine(Engine());
 
             if (Input.GetButtonDown("Reset")) {
                 Debug.Log("Reset was pressed");
@@ -155,7 +155,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Update() {
         if (isLocalPlayer) {
-            StartCoroutine(gearbox());//gearbox update 
+            StartCoroutine(Gearbox());//gearbox update 
             HUDUpdate();
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -179,7 +179,7 @@ public class CarBehaviour : NetworkBehaviour {
         dirt.color = new Color(1,1,1, dirtiness);
     }
 
-    IEnumerator engine()
+    IEnumerator Engine()
     {//engine
         if (gear == 1)
         {//neutral revs
@@ -214,11 +214,11 @@ public class CarBehaviour : NetworkBehaviour {
 
         if (gear > 0)
         {
-            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTORQUE; //ENGINE OUTPUT TO WHEELS
+            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTorque.Evaluate(engineRPM); //ENGINE OUTPUT TO WHEELS
         }
         else
         {
-            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
+            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTorque.Evaluate(engineRPM); //reverse output
         }
         if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
         {//throttle & rev limit, LSD
@@ -272,7 +272,7 @@ public class CarBehaviour : NetworkBehaviour {
     }
 
     // Gearbox managed, called each frame
-    IEnumerator gearbox()
+    IEnumerator Gearbox()
     {
         if (manual)
         {
