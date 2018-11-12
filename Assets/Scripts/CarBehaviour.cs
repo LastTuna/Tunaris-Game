@@ -108,17 +108,6 @@ public class CarBehaviour : NetworkBehaviour {
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
             manual = true;
-            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
-            //loop to get index of car, fuck me
-            carIndex = 0;
-            foreach (GameObject e in networkmanager.Cars)
-            {
-                if (dataController.SelectedCar.Equals(e.name))
-                {
-                    break;
-                }
-                carIndex++;
-            }
             dirtiness = dataController.Dirtiness[carIndex];
 
             //spring stiffness set (dampers = spring / 10)

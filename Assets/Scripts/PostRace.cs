@@ -1,73 +1,83 @@
 ﻿using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using System.Linq;
 
-public class PostRace : MonoBehaviour {
+public class PostRace : MonoBehaviour
+{
+
     public bool checkum;
     public int laps;
-    public Text laptime1;
-    public Text laptime2;
-    public Text laptime3;
-    public Text laptime4;
-    public Text laptime5;
-    public Text laptime6;
-    public Text laptime7;
-    public Text laptime8;
-    public Text laptime9;
-    public Text laptime10;
-
-
+    public int count;
+    public GameObject textInstance;
+    public List<GameObject> textInstances = new List<GameObject>();
+    public Vector3 spawnPos;
     public List<TimeSpan> lapTally = new List<TimeSpan>();
+    public Canvas mainCanvas;
+
     // Use this for initialization
-    void Start ()
+    void Start()
     {
         checkum = true;
         lapTally = GameObject.Find("CourseController").GetComponent<RaceStart>().laptimes;
         laps = lapTally.Count - 1;
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
 
 
-        if (GameObject.Find("lap1") && checkum)
+        if (GameObject.Find("0") && checkum)
         {
+            mainCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
             StartCoroutine(TallyLaps());
         }
-	}
+    }
 
     IEnumerator TallyLaps()
     {
         checkum = false;
-        laptime1 = GameObject.Find("lap1").GetComponent<Text>();
-        laptime2 = GameObject.Find("lap2").GetComponent<Text>();
-        laptime3 = GameObject.Find("lap3").GetComponent<Text>();
-        laptime4 = GameObject.Find("lap4").GetComponent<Text>();
-        laptime5 = GameObject.Find("lap5").GetComponent<Text>();
-        laptime6 = GameObject.Find("lap6").GetComponent<Text>();
-        laptime7 = GameObject.Find("lap7").GetComponent<Text>();
-        laptime8 = GameObject.Find("lap8").GetComponent<Text>();
-        laptime9 = GameObject.Find("lap9").GetComponent<Text>();
-        laptime10 = GameObject.Find("lap10").GetComponent<Text>();
-        laptime1.text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[0].Minutes, lapTally[0].Seconds, lapTally[0].Milliseconds);
-        laptime2.text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[1].Minutes, lapTally[1].Seconds, lapTally[1].Milliseconds);
-        laptime3.text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[2].Minutes, lapTally[2].Seconds, lapTally[2].Milliseconds);
-        laptime4.text = string.Format("{0:00}:{1:00}:{2:000}", lapTally.Min().Minutes, lapTally.Min().Seconds, lapTally.Min().Milliseconds);
-        laptime5.text = "null";
-        laptime6.text = "null";
-        laptime7.text = "null";
-        laptime8.text = "null";
-        laptime9.text = "null";
-        laptime10.text = "will be fixed later";
-        //laptime1.text = string.Format("{0:00}:{1:00}:{2:000}", laptally[0].Minutes, laptimes[0].Seconds, laptimes[0].Milliseconds);
+        float raise = 0;//raise next element by x amount
+        GameObject despacito;
+        foreach (TimeSpan e in lapTally)
+        {
+            despacito = null;//clears object reference
+            despacito = Instantiate(textInstance, new Vector3(spawnPos.x, spawnPos.y + raise, 0), new Quaternion(0, 0, 0, 0));
+            //create new laptime object/element
+            despacito.GetComponent<Text>().text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds);
+            if (e.Equals(lapTally.Min()))
+            {//bestest lap time
+                despacito.GetComponent<Text>().text += " BEST";
+            }
+            despacito.transform.SetParent(mainCanvas.transform);//applies canvas as parent so element is displayed on UI
+            textInstances.Add(despacito);//add all elements to list (will use later)
+            raise += 30;//raise by x amount
+            count++;//tally/loop
+            yield return new WaitForSeconds(0.1f);
+            Debug.Log(count);
+        }
+        // To do:
+        // patch so the text is spawned at correct place
+
+        //fcr when u get those done^ u can leave rest to me
+
+        // make fucking unity stop sperging about null exceptions despite all laps being shown lol - DONE!
+        // Make a dynamic lap tally (this WILL crash if it's above 10 laps!!!) - DONE!
+        //achieve by using instantiate() and make a prefab with text element - DONE!
+        // Add "Best Lap" option @ - DONE
+
+
+        //laptime[count] = GameObject.Find(Convert.ToString(count)).GetComponent<Text>();
+        //laptime[count].text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds); 
+
         yield return new WaitForSecondsRealtime(4);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
+        //disabled scene load for easier debugging
 
-        
 
     }
 }

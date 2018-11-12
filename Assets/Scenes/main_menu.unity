@@ -12088,16 +12088,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   checkum: 0
   laps: 0
-  laptime1: {fileID: 0}
-  laptime2: {fileID: 0}
-  laptime3: {fileID: 0}
-  laptime4: {fileID: 0}
-  laptime5: {fileID: 0}
-  laptime6: {fileID: 0}
-  laptime7: {fileID: 0}
-  laptime8: {fileID: 0}
-  laptime9: {fileID: 0}
-  laptime10: {fileID: 0}
+  count: 0
+  textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
+    type: 2}
+  textInstances: []
+  spawnPos: {x: 0, y: 0, z: 0}
+  mainCanvas: {fileID: 0}
 --- !u!1 &1280593057
 GameObject:
   m_ObjectHideFlags: 0

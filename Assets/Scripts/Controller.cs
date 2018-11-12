@@ -171,22 +171,7 @@ public class Controller : MonoBehaviour {
         GameObject spinner = Instantiate(carsPrefabs[CarIndex], Garage3DCarRoot.transform);
 
         // Disable wheel colliders or unity spergs in the log
-        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>()) {
-            Destroy(wc);
-        }
-        // Disable network scripts
-        foreach (Behaviour c in spinner.GetComponents<NetworkTransform>()) {
-            Destroy(c);
-        }
-        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>()) {
-            Destroy(c);
-        }
-        // Disable car driving scripts
-        foreach (Behaviour c in spinner.GetComponents<Behaviour>()) {
-            Destroy(c);
-        }
-        // Disable main rigidbody
-        Destroy(spinner.GetComponent<Rigidbody>());
+        CarScriptKill(spinner);
 
         // Set transform
         //spinner.transform.localScale = new Vector3(120, 120, 120);
@@ -341,7 +326,7 @@ public class Controller : MonoBehaviour {
     public void WashMe()
     {
         DataController dataController = FindObjectOfType<DataController>();
-        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.003f && !washing)
+        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.03f && !washing)
         {
             washing = true;
             StartCoroutine(Washer());
@@ -356,7 +341,7 @@ public class Controller : MonoBehaviour {
         FindObjectOfType<Spinner>().rotSpeed = 9f;
         while (dataController.Dirtiness[carIndex] > 0)
         {
-        dataController.Dirtiness[carIndex] += -0.0005f;
+        dataController.Dirtiness[carIndex] += -0.02f;
         yield return new WaitForSeconds(0.1f);
         }
         if (dataController.Dirtiness[carIndex] < 0)
@@ -388,14 +373,21 @@ public class Controller : MonoBehaviour {
         {
             Destroy(wc);
         }
+        // Disable car driving scripts
+        foreach (Behaviour c in spinner.GetComponents<Behaviour>())
+        {
+            Destroy(c);
+        }
         // Disable network scripts
-        Destroy(spinner.GetComponent<NetworkTransform>());
         foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>())
         {
             Destroy(c);
         }
-        // Disable car driving scripts
-        foreach (Behaviour c in spinner.GetComponents<Behaviour>())
+        Destroy(spinner.GetComponent<NetworkTransform>());
+        Destroy(spinner.GetComponent<NetworkIdentity>());
+        Debug.Log("ignore error, only occurs due to script kill method removing network behavior in wrong order");
+        //disable tyre behavior
+        foreach (Behaviour c in spinner.GetComponentsInChildren<TireBehavior>())
         {
             Destroy(c);
         }
