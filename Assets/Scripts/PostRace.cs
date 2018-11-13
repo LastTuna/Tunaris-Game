@@ -46,14 +46,14 @@ public class PostRace : MonoBehaviour
         foreach (TimeSpan e in lapTally)
         {
             despacito = null;//clears object reference
-            despacito = Instantiate(textInstance, new Vector3(spawnPos.x, spawnPos.y + raise, 0), new Quaternion(0, 0, 0, 0));
+            despacito = Instantiate(textInstance, new Vector3(spawnPos.x, spawnPos.y + raise, 0), new Quaternion(0, 0, 0, 0), mainCanvas.transform);
             //create new laptime object/element
             despacito.GetComponent<Text>().text = string.Format("{0:00}:{1:00}:{2:000}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds);
             if (e.Equals(lapTally.Min()))
             {//bestest lap time
                 despacito.GetComponent<Text>().text += " BEST";
+                despacito.GetComponent<Text>().color = new Color(200,0,0);
             }
-            despacito.transform.SetParent(mainCanvas.transform);//applies canvas as parent so element is displayed on UI
             textInstances.Add(despacito);//add all elements to list (will use later)
             raise += 30;//raise by x amount
             count++;//tally/loop

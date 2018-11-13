@@ -12092,7 +12092,7 @@ MonoBehaviour:
   textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
     type: 2}
   textInstances: []
-  spawnPos: {x: 0, y: 0, z: 0}
+  spawnPos: {x: 120, y: 90, z: 0}
   mainCanvas: {fileID: 0}
 --- !u!1 &1280593057
 GameObject:
