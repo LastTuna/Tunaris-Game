@@ -10084,7 +10084,7 @@ Prefab:
         type: 2}
       propertyPath: m_Sprite
       value: 
-      objectReference: {fileID: 21300000, guid: 57f7a190ad3c249428ffc891ac8054d6,
+      objectReference: {fileID: 21300000, guid: 322023b12d28d4d49957fa6451a0cb46,
         type: 3}
     - target: {fileID: 114406927203385012, guid: b555b599761871c44a814d6590f33ed3,
         type: 2}
@@ -12092,7 +12092,7 @@ MonoBehaviour:
   textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
     type: 2}
   textInstances: []
-  spawnPos: {x: 120, y: 90, z: 0}
+  spawnPos: {x: 200, y: 90}
   mainCanvas: {fileID: 0}
 --- !u!1 &1280593057
 GameObject:

@@ -17,22 +17,9 @@ public class ShowCarSpinner : StateMachineBehaviour {
         GameObject spinner = Instantiate(data.carPrefab, data.parent.transform);
 
         // Disable wheel colliders or unity spergs in the log
-        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>()) {
-            Destroy(wc);
-        }
-        // Disable network scripts
-        foreach (Behaviour c in spinner.GetComponents<NetworkTransform>()) {
-            Destroy(c);
-        }
-        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>()) {
-            Destroy(c);
-        }
-        // Disable car driving scripts
-        foreach (Behaviour c in spinner.GetComponents<Behaviour>()) {
-            Destroy(c);
-        }
-        // Disable main rigidbody
-        Destroy(spinner.GetComponent<Rigidbody>());
+
+        Controller controller = FindObjectOfType<Controller>();
+        controller.CarScriptKill(spinner);
 
         // Set transform
         spinner.transform.localScale = new Vector3(120, 120, 120);

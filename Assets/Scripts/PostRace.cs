@@ -14,7 +14,7 @@ public class PostRace : MonoBehaviour
     public int count;
     public GameObject textInstance;
     public List<GameObject> textInstances = new List<GameObject>();
-    public Vector3 spawnPos;
+    public Vector2 spawnPos;
     public List<TimeSpan> lapTally = new List<TimeSpan>();
     public Canvas mainCanvas;
 
@@ -53,7 +53,11 @@ public class PostRace : MonoBehaviour
             {//bestest lap time
                 despacito.GetComponent<Text>().text += " BEST";
                 despacito.GetComponent<Text>().color = new Color(200,0,0);
+                //DataController dataController = FindObjectOfType<DataController>();
+                //dataController.BestestLapTimes[0] = e;
+                //may be borked, havent tried yet. essentially saves best lap time to gamesave
             }
+            despacito.transform.position = new Vector3(spawnPos.x, spawnPos.y + raise, 0);
             textInstances.Add(despacito);//add all elements to list (will use later)
             raise += 30;//raise by x amount
             count++;//tally/loop
