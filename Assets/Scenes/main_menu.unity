@@ -12094,6 +12094,7 @@ MonoBehaviour:
   textInstances: []
   spawnPos: {x: 200, y: 90}
   mainCanvas: {fileID: 0}
+  dataController: {fileID: 1271179947}
 --- !u!1 &1280593057
 GameObject:
   m_ObjectHideFlags: 0

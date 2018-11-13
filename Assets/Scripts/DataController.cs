@@ -32,7 +32,7 @@ public class DataController : MonoBehaviour {
             LoadedData.SelectedCourse = value;
         }
     }
-    public TimeSpan[] BestestLapTimes
+    public string[] BestestLapTimes
     {
         get
         {
@@ -190,20 +190,18 @@ public class DataController : MonoBehaviour {
             SelectedCar = "Star GT V8";
             SelectedCourse = "Course 1";
 
-            TireBias = 0;
-            FinalDrive = 0;
-            Aero = 1;
+            TireBias = 1;
+            FinalDrive = 4.3f;
+            Aero = 15;
             SpringStiffness = 100;
-            BrakeStiffness = 0;
+            BrakeStiffness = 200;
             Gearbox = 0;
             PlayerName = "Player";
             Cash = 100;
             Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
             Garage3D = false;
             MenuAudio = 0.4f;
-            BestestLapTimes = new TimeSpan[]{
-                new TimeSpan(00,00,00), new TimeSpan(00,00,00)
-            };
+            BestestLapTimes = new string[]{"1:25:70","1:27.10"};
             SaveGameData();
         }
     }
@@ -221,7 +219,7 @@ public class DataController : MonoBehaviour {
 public class GameData {
     public string SelectedCar;
     public string SelectedCourse;
-    public TimeSpan[] BestestLapTimes;
+    public string[] BestestLapTimes;
 
     public bool Garage3D;
     public float MenuAudio;
