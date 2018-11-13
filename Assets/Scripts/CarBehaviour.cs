@@ -10,6 +10,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     public Text speedDisplay;//output of speed to meter - by default MPH
     public Text gearDisplay;
+    public GameObject frontLights;
+    public GameObject rearLights;
     public Material dirt; //dirt MATERIAL.
     public Renderer dirtMesh; //fetches and instantiates dirt material
     public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
@@ -56,7 +58,7 @@ public class CarBehaviour : NetworkBehaviour {
     //end tuneable stats
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
-    public float engineTORQUE = 120;//engine power - CHANGE TO 200 IF TRUCK
+    public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
     public float turboSpool = 0.1f;//turbo boost value
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
@@ -106,17 +108,6 @@ public class CarBehaviour : NetworkBehaviour {
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
             manual = true;
-            TGNetworkManager networkmanager = FindObjectOfType<TGNetworkManager>();
-            //loop to get index of car, fuck me
-            carIndex = 0;
-            foreach (GameObject e in networkmanager.Cars)
-            {
-                if (dataController.SelectedCar.Equals(e.name))
-                {
-                    break;
-                }
-                carIndex++;
-            }
             dirtiness = dataController.Dirtiness[carIndex];
 
             //spring stiffness set (dampers = spring / 10)
@@ -132,7 +123,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
-            StartCoroutine(engine());
+            StartCoroutine(Engine());
 
             if (Input.GetButtonDown("Reset")) {
                 Debug.Log("Reset was pressed");
@@ -153,7 +144,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Update() {
         if (isLocalPlayer) {
-            StartCoroutine(gearbox());//gearbox update 
+            StartCoroutine(Gearbox());//gearbox update 
             HUDUpdate();
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -170,15 +161,14 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
 
-
+            LightsOn();
             WheelPosition(); //graphical update - wheel positions 
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
         }
         dirt.color = new Color(1,1,1, dirtiness);
-        
     }
 
-    IEnumerator engine()
+    IEnumerator Engine()
     {//engine
         if (gear == 1)
         {//neutral revs
@@ -213,11 +203,11 @@ public class CarBehaviour : NetworkBehaviour {
 
         if (gear > 0)
         {
-            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTORQUE; //ENGINE OUTPUT TO WHEELS
+            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTorque.Evaluate(engineRPM); //ENGINE OUTPUT TO WHEELS
         }
         else
         {
-            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTORQUE; //reverse output
+            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTorque.Evaluate(engineRPM); //reverse output
         }
         if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
         {//throttle & rev limit, LSD
@@ -271,7 +261,7 @@ public class CarBehaviour : NetworkBehaviour {
     }
 
     // Gearbox managed, called each frame
-    IEnumerator gearbox()
+    IEnumerator Gearbox()
     {
         if (manual)
         {
@@ -322,6 +312,11 @@ public class CarBehaviour : NetworkBehaviour {
         //FL
         if (Physics.Raycast(wheelFL.transform.position, -wheelFL.transform.up, out hit, wheelFL.radius + wheelFL.suspensionDistance)) {
             wheelPos = hit.point + wheelFL.transform.up * wheelFL.radius;
+            //UPDATE DIRTINESS
+            if (hit.collider.gameObject.CompareTag("sand") && dirtiness < 1)
+            {
+                dirtiness += Mathf.Abs(wheelFL.rpm) / 500000;
+            }
         } else {
             wheelPos = wheelFL.transform.position - wheelFL.transform.up * wheelFL.suspensionDistance;
         }
@@ -351,11 +346,29 @@ public class CarBehaviour : NetworkBehaviour {
         }
         wheelRRCalp.position = wheelPos;
         wheelRRTrans.position = wheelPos;
+        
     }
 
-    // Sets the surface properties, based on what the front left (?) wheel is doing
-    // Called each frame
+    void LightsOn()
+    {
+        if (Input.GetKeyDown("u") && !frontLights.activeSelf)
+        {
+            frontLights.SetActive(true);
+        }
+        else if (Input.GetKeyDown("u") && frontLights.activeSelf)
+        {
+            frontLights.SetActive(false);
+        }
 
+        if (Input.GetAxis("Brake") > 0f && frontLights.activeSelf)
+        {//brakes
+            rearLights.SetActive(true);
+        }
+        else
+        {
+            rearLights.SetActive(false);
+        }
+    }
 
     // Updates the HUD
     void HUDUpdate() {

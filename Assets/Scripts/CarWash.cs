@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 
 public class CarWash : MonoBehaviour {
@@ -10,12 +8,20 @@ public class CarWash : MonoBehaviour {
     public int carIndex = 0;
     public float dirtiness;
     public Material dirt;
+    public Material[] wheelDirt = new Material[4];
     public Button washerButton;
 
 	void Start () {
         dataController = FindObjectOfType<DataController>();
         controller = FindObjectOfType<Controller>();
         washerButton = GameObject.Find("WasherButton").GetComponent<Button>();
+
+        dirt = GameObject.Find("DIRT").GetComponent<Renderer>().material;
+        wheelDirt[0] = GameObject.Find("FLdirt").GetComponent<Renderer>().material;
+        wheelDirt[1] = GameObject.Find("FRdirt").GetComponent<Renderer>().material;
+        wheelDirt[2] = GameObject.Find("RLdirt").GetComponent<Renderer>().material;
+        wheelDirt[3] = GameObject.Find("RRdirt").GetComponent<Renderer>().material;
+
         foreach (GameObject e in controller.carsPrefabs)
         {//get cars index
             if (dataController.SelectedCar.Equals(e.name))
@@ -24,7 +30,6 @@ public class CarWash : MonoBehaviour {
             }
             carIndex++;
         }
-        dirt = GameObject.Find("dirt").GetComponent<Renderer>().material;
     }
 	
 	// Update is called once per frame
@@ -32,7 +37,10 @@ public class CarWash : MonoBehaviour {
     {
         dirtiness = dataController.Dirtiness[carIndex];
         dirt.color = new Color(1, 1, 1, dirtiness);
-
+        foreach(Material e in wheelDirt)
+        {
+            e.color = new Color(1, 1, 1, dirtiness);
+        }
     }
 
 }

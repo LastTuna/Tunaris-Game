@@ -32,6 +32,17 @@ public class DataController : MonoBehaviour {
             LoadedData.SelectedCourse = value;
         }
     }
+    public TimeSpan[] BestestLapTimes
+    {
+        get
+        {
+            return LoadedData.BestestLapTimes;
+        }
+        set
+        {
+            LoadedData.BestestLapTimes = value;
+        }
+    }
     public float TireBias {
         get {
             return LoadedData.TireBias;
@@ -176,7 +187,7 @@ public class DataController : MonoBehaviour {
         } else {
             Debug.LogError("Cannot load game data! Creating new gamedata file.");
             LoadedData = new GameData();
-            SelectedCar = "Nasan GRT";
+            SelectedCar = "Star GT V8";
             SelectedCourse = "Course 1";
 
             TireBias = 0;
@@ -186,11 +197,13 @@ public class DataController : MonoBehaviour {
             BrakeStiffness = 0;
             Gearbox = 0;
             PlayerName = "Player";
-            Cash = 10;
+            Cash = 100;
             Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
             Garage3D = false;
             MenuAudio = 0.4f;
-
+            BestestLapTimes = new TimeSpan[]{
+                new TimeSpan(00,00,00), new TimeSpan(00,00,00)
+            };
             SaveGameData();
         }
     }
@@ -208,6 +221,7 @@ public class DataController : MonoBehaviour {
 public class GameData {
     public string SelectedCar;
     public string SelectedCourse;
+    public TimeSpan[] BestestLapTimes;
 
     public bool Garage3D;
     public float MenuAudio;

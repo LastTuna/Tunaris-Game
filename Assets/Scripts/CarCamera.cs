@@ -3,6 +3,7 @@ using System.Collections;
 
 public class CarCamera : MonoBehaviour {
     public Transform car;
+    public GameObject interiorCam;
     public float distance = 6.4f;
     public float height = 1.4f;
     public float rotationDamping = 3.0f;
@@ -13,6 +14,7 @@ public class CarCamera : MonoBehaviour {
 
     // Variable to store the selected camera
     public int chosenCamera = 0;
+    
 
     void LateUpdate() {
         if (car != null) {
@@ -36,8 +38,8 @@ public class CarCamera : MonoBehaviour {
                     break;
                 // 1: cockpit cam
                 case 1: {
-                        transform.position = car.position;
-                        transform.position += new Vector3(0,0.5f,0);
+                        interiorCam = GameObject.Find("Interior Cam");
+                        transform.position = interiorCam.transform.position;
                         transform.rotation = car.rotation;
                         
                         car.Find("Cockpit").gameObject.SetActive(true);
