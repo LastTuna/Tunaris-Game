@@ -10250,6 +10250,7 @@ MonoBehaviour:
   OnlineCanvas: {fileID: 1410234047}
   GoWashCanvas: {fileID: 1606900355}
   LoadingScreenCanvas: {fileID: 1521312208}
+  menuMusic: {fileID: 1899132090}
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
@@ -12061,6 +12062,7 @@ MonoBehaviour:
   LoadedData:
     SelectedCar: 
     SelectedCourse: 
+    BestestLapTimes: []
     Garage3D: 0
     MenuAudio: 0
     CuntUI: 0
@@ -16760,7 +16762,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0.4
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
