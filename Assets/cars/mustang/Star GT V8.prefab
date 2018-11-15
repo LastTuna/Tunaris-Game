@@ -2899,6 +2899,7 @@ MonoBehaviour:
   angle: 0
   maxAngle: 90
   despacito: 0
+  e: 0
 --- !u!114 &114217454437246068
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3014,7 +3015,30 @@ MonoBehaviour:
   lsd: 1
   engineRPM: 0
   engineREDLINE: 9000
-  engineTORQUE: 200
+  engineTorque:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 130
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 5000
+      value: 250
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 9000
+      value: 200
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
@@ -3248,6 +3272,7 @@ MonoBehaviour:
   angle: 0
   maxAngle: 90
   despacito: 0
+  e: 0
 --- !u!114 &114534624645936688
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3260,10 +3285,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wiping: 0
-  speed: 1.79
+  speed: 2
   angle: 0
   maxAngle: 80
   despacito: 0
+  e: 0
 --- !u!114 &114599405650413392
 MonoBehaviour:
   m_ObjectHideFlags: 1

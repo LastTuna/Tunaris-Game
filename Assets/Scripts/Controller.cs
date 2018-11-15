@@ -23,6 +23,7 @@ public class Controller : MonoBehaviour {
 
     public static bool washing;
     public Canvas LoadingScreenCanvas;
+    public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
     public static List<GameObject> currentCars = new List<GameObject>();
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
