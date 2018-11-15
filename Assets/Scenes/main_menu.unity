@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.37311918, g: 0.3807398, b: 0.35872716, a: 1}
+  m_IndirectSpecularColor: {r: 0.37311953, g: 0.38074014, b: 0.3587274, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -10250,6 +10250,7 @@ MonoBehaviour:
   OnlineCanvas: {fileID: 1410234047}
   GoWashCanvas: {fileID: 1606900355}
   LoadingScreenCanvas: {fileID: 1521312208}
+  menuMusic: {fileID: 1899132090}
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
@@ -12061,6 +12062,7 @@ MonoBehaviour:
   LoadedData:
     SelectedCar: 
     SelectedCourse: 
+    BestestLapTimes: []
     Garage3D: 0
     MenuAudio: 0
     CuntUI: 0
@@ -12089,17 +12091,12 @@ MonoBehaviour:
   checkum: 0
   laps: 0
   count: 0
-<<<<<<< HEAD
-  textInstance: {fileID: 1429562697274632, guid: 3dc24e4dadebbac499c1155b3ff6eb1f,
-    type: 2}
-  spawnPos: {x: 30, y: 60}
-=======
   textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
     type: 2}
   textInstances: []
   spawnPos: {x: 200, y: 90}
   mainCanvas: {fileID: 0}
->>>>>>> master
+  dataController: {fileID: 1271179947}
 --- !u!1 &1280593057
 GameObject:
   m_ObjectHideFlags: 0
@@ -16765,7 +16762,7 @@ AudioSource:
   m_PlayOnAwake: 0
   m_Volume: 0.4
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
