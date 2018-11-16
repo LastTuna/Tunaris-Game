@@ -20,6 +20,7 @@ public class Controller : MonoBehaviour {
     public Canvas TuneScreenCanvas;
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
+    public Canvas CreditsCanvas;
 
     public static bool washing;
     public Canvas LoadingScreenCanvas;
@@ -297,6 +298,12 @@ public class Controller : MonoBehaviour {
         
         Cancel();
     }
+    public void OpenCredits()
+    {
+        GoRaceCanvas.gameObject.SetActive(false);
+        CreditsCanvas.gameObject.SetActive(true);
+    }
+
     //online IP validation. this is called from Cancel().
     public void ValidateOnline()
     {
@@ -491,9 +498,13 @@ public class Controller : MonoBehaviour {
             }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
-
         }
-
+        //Credits -> Go Race
+        if(CreditsCanvas.gameObject.activeSelf)
+        {
+            CreditsCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
         yield return null;
     }
 }

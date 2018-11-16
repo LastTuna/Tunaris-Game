@@ -18,6 +18,7 @@ public class PostRace : MonoBehaviour
     public List<TimeSpan> lapTally = new List<TimeSpan>();
     public Canvas mainCanvas;
     public DataController dataController;
+    public TimeSpan personalBest;
 
     // Use this for initialization
     void Start()
@@ -41,6 +42,12 @@ public class PostRace : MonoBehaviour
 
     IEnumerator TallyLaps()
     {
+        personalBest = new TimeSpan(0,0,
+            Convert.ToInt32(dataController.BestestLapTimes[0].Substring(0, 2)),
+            Convert.ToInt32(dataController.BestestLapTimes[0].Substring(3, 2)),
+            Convert.ToInt32(dataController.BestestLapTimes[0].Substring(6, 3)));
+
+        //PARSE FROM SUBSTRING TO INT AND TURN TO TIMESPAN
         checkum = false;
         float raise = 0;//raise next element by x amount
         GameObject despacito;
@@ -52,10 +59,16 @@ public class PostRace : MonoBehaviour
             despacito.GetComponent<Text>().text = string.Format("Lap {0}: {1:00}:{2:00}:{3:000}", count + 1, lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds);
             if (e.Equals(lapTally.Min()))
             {//bestest lap time
-                despacito.GetComponent<Text>().text += " BEST";
+                if (e < personalBest)
+                {
+                    despacito.GetComponent<Text>().text += " PB";
+                }
+                else
+                {
+                    despacito.GetComponent<Text>().text += " BEST";
+                }
                 despacito.GetComponent<Text>().color = new Color(200,0,0);
                 dataController.BestestLapTimes[0] = string.Format("{0:00}:{1:00}.{2:000}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds);
-                //may be borked, havent tried yet. essentially saves best lap time to gamesave
             }
             despacito.transform.position = new Vector3(spawnPos.x, spawnPos.y + raise, 0);
             textInstances.Add(despacito);//add all elements to list (will use later)
