@@ -5,13 +5,14 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.Linq;
+using UnityEngine.Networking;
 
 public class PostRace : MonoBehaviour
 {
-
     public bool checkum;
     public int laps;
     public int count;
+    public int carIndex;
     public GameObject textInstance;
     public List<GameObject> textInstances = new List<GameObject>();
     public Vector2 spawnPos;
@@ -19,6 +20,7 @@ public class PostRace : MonoBehaviour
     public Canvas mainCanvas;
     public DataController dataController;
     public TimeSpan personalBest;
+    public GameObject[] carPrefabs;
 
     // Use this for initialization
     void Start()
@@ -26,18 +28,52 @@ public class PostRace : MonoBehaviour
         checkum = true;
         lapTally = GameObject.Find("CourseController").GetComponent<RaceStart>().laptimes;
         laps = lapTally.Count - 1;
+        carIndex = FindObjectOfType<CarBehaviour>().carIndex;
     }
 
     // Update is called once per frame
     void Update()
     {
-
-
         if (GameObject.Find("0") && checkum)
         {
+            Vector3 spawnPosition = GameObject.Find("spawnPos").transform.position;
+            GameObject carro = null;
+            carro = Instantiate(carPrefabs[carIndex], spawnPosition, new Quaternion(0, 0, 0, 0));
+            CarScriptKill(carro);
             mainCanvas = GameObject.Find("Canvas").GetComponent<Canvas>();
             StartCoroutine(TallyLaps());
         }
+    }
+
+    public void CarScriptKill(GameObject spinner)
+    {
+        // Disable wheel colliders or unity spergs in the log
+        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>())
+        {
+            Destroy(wc);
+        }
+        // Disable car driving scripts
+        foreach (Behaviour c in spinner.GetComponents<Behaviour>())
+        {
+            Destroy(c);
+        }
+        // Disable network scripts
+        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>())
+        {
+            Destroy(c);
+        }
+        Destroy(spinner.GetComponent<NetworkTransform>());
+        Destroy(spinner.GetComponent<NetworkIdentity>());
+        Debug.Log("ignore error, only occurs due to script kill method removing network behavior in wrong order");
+        //disable tyre behavior
+        foreach (Behaviour c in spinner.GetComponentsInChildren<TireBehavior>())
+        {
+            Destroy(c);
+        }
+        // Disable main rigidbody
+        Destroy(spinner.GetComponent<Rigidbody>());
+        //add spinner script
+        spinner.AddComponent<Spinner>();
     }
 
     IEnumerator TallyLaps()
@@ -83,7 +119,7 @@ public class PostRace : MonoBehaviour
 
         dataController.SaveGameData();
 
-        yield return new WaitForSecondsRealtime(4);
+        yield return new WaitForSecondsRealtime(6);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
         //disabled scene load for easier debugging
 

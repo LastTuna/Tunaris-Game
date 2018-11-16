@@ -25,6 +25,7 @@ public class Controller : MonoBehaviour {
     public static bool washing;
     public Canvas LoadingScreenCanvas;
     public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
+    public AudioClip[] TGmusic;
     public static List<GameObject> currentCars = new List<GameObject>();
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
@@ -302,6 +303,8 @@ public class Controller : MonoBehaviour {
     {
         GoRaceCanvas.gameObject.SetActive(false);
         CreditsCanvas.gameObject.SetActive(true);
+        menuMusic.clip = TGmusic[1];
+        menuMusic.Play();
     }
 
     //online IP validation. this is called from Cancel().
@@ -504,6 +507,8 @@ public class Controller : MonoBehaviour {
         {
             CreditsCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
+            menuMusic.clip = TGmusic[0];
+            menuMusic.Play();
         }
         yield return null;
     }
