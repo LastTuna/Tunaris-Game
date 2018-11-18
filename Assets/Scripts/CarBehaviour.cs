@@ -351,11 +351,11 @@ public class CarBehaviour : NetworkBehaviour {
 
     void LightsOn()
     {
-        if (Input.GetKeyDown("u") && !frontLights.activeSelf)
+        if (Input.GetButtonDown("Lights") && !frontLights.activeSelf)
         {
             frontLights.SetActive(true);
         }
-        else if (Input.GetKeyDown("u") && frontLights.activeSelf)
+        else if (Input.GetButtonDown("Lights") && frontLights.activeSelf)
         {
             frontLights.SetActive(false);
         }

@@ -5,7 +5,11 @@ licenseType: Free
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
+      type: 2}
+  - mainCanvas: {instanceID: 0}
+  - dataController: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

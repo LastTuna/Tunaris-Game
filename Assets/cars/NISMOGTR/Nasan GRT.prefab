@@ -1032,11 +1032,21 @@ MonoBehaviour:
   EngineAudio: {fileID: 114545652239467050}
   speedDisplay: {fileID: 0}
   gearDisplay: {fileID: 0}
+  frontLights: {fileID: 0}
+  rearLights: {fileID: 0}
+  dirt: {fileID: 0}
+  dirtMesh: {fileID: 0}
+  dirtiness: 0
+  drivingWheel: {fileID: 0}
   pointer: {fileID: 0}
   wheelFL: {fileID: 146514163765238322}
   wheelFR: {fileID: 146993267297175698}
   wheelRL: {fileID: 146171899220958482}
   wheelRR: {fileID: 146499493734043172}
+  wheelFLCalp: {fileID: 0}
+  wheelFRCalp: {fileID: 0}
+  wheelRLCalp: {fileID: 0}
+  wheelRRCalp: {fileID: 0}
   wheelFLTrans: {fileID: 4868082206692914}
   wheelFRTrans: {fileID: 4275258794207036}
   wheelRLTrans: {fileID: 4580283365950680}
@@ -1049,11 +1059,34 @@ MonoBehaviour:
   brakeStrength: 200
   aero: 15
   ratio: 0
-  tyreBias: 1
   FrontWheelDriveBias: 0.3
+  lsd: 0.5
   engineRPM: 0
   engineREDLINE: 9000
-  engineTORQUE: 200
+  engineTorque:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 130
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 5000
+      value: 250
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 9000
+      value: 200
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
   turboSpool: 0.1
   spooled: 1
   unitOutput: 0
@@ -1068,6 +1101,7 @@ MonoBehaviour:
   - 1.6
   gear: 0
   shifting: 0
+  carIndex: 1
   CenterOfGravity: {x: 0, y: -0.3, z: 0.1}
 --- !u!114 &114224273390218380
 MonoBehaviour:
@@ -1155,23 +1189,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ff73f5ea878f84b8086feaf0db8bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CarEngine: {fileID: 82545857142644692}
-  sounds:
-  - lowRev: 0
-    highRev: 830
-    clip: {fileID: 8300000, guid: 81920f567d2198e47bbe51364f7a4490, type: 3}
-    relativeVolume: 1
-    isPitchModified: 0
-  - lowRev: 830
-    highRev: 8800
-    clip: {fileID: 8300000, guid: 19d04fe972bd2004db15590758614af3, type: 3}
-    relativeVolume: 1
-    isPitchModified: 1
-  - lowRev: 8800
-    highRev: 10000
-    clip: {fileID: 8300000, guid: db28d581067f77d4096ad05c08a0770c, type: 3}
-    relativeVolume: 1
-    isPitchModified: 0
+  SoundArray: []
   hasTurbo: 1
   boostSource: {fileID: 82581044867460750}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}

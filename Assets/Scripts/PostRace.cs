@@ -22,14 +22,16 @@ public class PostRace : MonoBehaviour
     public TimeSpan personalBest;
     public GameObject[] carPrefabs;
 
-    // Use this for initialization
     void Start()
     {
+        dataController = FindObjectOfType<DataController>();
         checkum = true;
         lapTally = GameObject.Find("CourseController").GetComponent<RaceStart>().laptimes;
         laps = lapTally.Count - 1;
         carIndex = FindObjectOfType<CarBehaviour>().carIndex;
+
     }
+
 
     // Update is called once per frame
     void Update()
@@ -104,7 +106,7 @@ public class PostRace : MonoBehaviour
                     despacito.GetComponent<Text>().text += " BEST";
                 }
                 despacito.GetComponent<Text>().color = new Color(200,0,0);
-                dataController.BestestLapTimes[0] = string.Format("{0:00}:{1:00}.{2:000}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds);
+                dataController.BestestLapTimes[0] = string.Format("{0:00}:{1:00}.{2:000}_{3}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds, carIndex);
             }
             despacito.transform.position = new Vector3(spawnPos.x, spawnPos.y + raise, 0);
             textInstances.Add(despacito);//add all elements to list (will use later)
@@ -122,7 +124,10 @@ public class PostRace : MonoBehaviour
         yield return new WaitForSecondsRealtime(6);
         SceneManager.LoadScene(0, LoadSceneMode.Single);
         //disabled scene load for easier debugging
-
-
+        PostRace h = null;
+        h = gameObject.AddComponent<PostRace>();
+        h.enabled = false;
+        h.textInstance = textInstance;
+        Destroy(this);
     }
 }
