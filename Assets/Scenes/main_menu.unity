@@ -10938,7 +10938,7 @@ MonoBehaviour:
     type: 2}
   carsPrefabs:
   - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
-  - {fileID: 1275164165662146, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
+  - {fileID: 1938152199678074, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   carLogos:
   - {fileID: 2100000, guid: a3b15e0db0c9f9146bf9374b53168543, type: 2}
   - {fileID: 2100000, guid: 18b1f79c907b24a4d925723875373593, type: 2}
@@ -13057,7 +13057,7 @@ MonoBehaviour:
   dataController: {fileID: 1271179947}
   carPrefabs:
   - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
-  - {fileID: 1275164165662146, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
+  - {fileID: 1938152199678074, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
 --- !u!1 &1280593057
 GameObject:
   m_ObjectHideFlags: 0

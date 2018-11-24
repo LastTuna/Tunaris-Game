@@ -648,7 +648,7 @@ MonoBehaviour:
   matchMaker: {fileID: 0}
   Cars:
   - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
-  - {fileID: 1275164165662146, guid: 78b14cfab6733f84e8027682d89c777e, type: 2}
+  - {fileID: 1938152199678074, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   SpawnPositions:
   - {fileID: 1328735816986672, guid: f54c530610d41e744b9245757042e4e5, type: 2}
   - {fileID: 1892083566452224, guid: acb52ff8f4293414795ddd2c4d600c9d, type: 2}
