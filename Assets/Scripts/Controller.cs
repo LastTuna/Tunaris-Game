@@ -314,6 +314,7 @@ public class Controller : MonoBehaviour {
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
         data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
+        data.SaveGameData();
     }
     //car wash save
     public void OpenWash()
