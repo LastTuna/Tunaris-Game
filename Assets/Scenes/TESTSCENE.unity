@@ -3018,6 +3018,7 @@ MonoBehaviour:
   settings:
     SelectedCar: 
     SelectedCourse: 
+    BestestLapTimes: []
     Garage3D: 0
     MenuAudio: 0
     CuntUI: 0

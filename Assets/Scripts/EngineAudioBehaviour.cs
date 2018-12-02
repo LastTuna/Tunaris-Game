@@ -5,11 +5,11 @@ using UnityEngine;
 
 public class EngineAudioBehaviour : MonoBehaviour
 {
-    // Car attached sources
+    // Car attached source
+    public AudioSource CarEngine;
 
     // Engine sounds
-    public EngineSample[] SoundArray;
-
+    public EngineSample[] sounds;
 
     // Turbo related stuff
     public bool hasTurbo;
@@ -24,49 +24,50 @@ public class EngineAudioBehaviour : MonoBehaviour
     // Initialize audio
     void Start()
     {
-        SoundArray[0].sample = SoundArray[lastIndex].sample;
-        SoundArray[0].output.Play();
+        CarEngine.clip = sounds[lastIndex].clip;
+        CarEngine.Play();
     }
 
     // Called from CarBehaviour, processes sounds
     public void ProcessSounds(float revs, bool spooled)
     {
-        if (SoundArray.Length == 0) return;
+        if (sounds.Length == 0) return;
         int currentIndex = lastIndex;
 
         // Which direction to go in the sound range
-        if (SoundArray[currentIndex].lowRev > revs)
+        if (sounds[currentIndex].lowRev > revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (SoundArray[currentIndex].lowRev > revs && lastIndex >= 0)
+            while (sounds[currentIndex].lowRev > revs && lastIndex >= 0)
             {
                 currentIndex--;
             }
         }
-        else if (SoundArray[currentIndex].highRev < revs)
+        else if (sounds[currentIndex].highRev < revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (SoundArray[currentIndex].highRev < revs && lastIndex < SoundArray.Length - 1)
+            while (sounds[currentIndex].highRev < revs && lastIndex < sounds.Length - 1)
             {
                 currentIndex++;
             }
         }
+
         // At this point currentIndex points to the correct rev range
         // If it's a new sound, play it
         if (lastIndex != currentIndex)
         {
-            SoundArray[0].sample = SoundArray[currentIndex].sample;
-            SoundArray[0].output.volume = 1f;
-            SoundArray[0].output.Play();
+            CarEngine.clip = sounds[currentIndex].clip;
+            CarEngine.pitch = 1f;
+            CarEngine.Play();
             lastIndex = currentIndex;
         }
 
         // Apply the modifiers
-        //CarEngine1.volume = sounds[currentIndex].relativeVolume; APPLIES VOLUME
-        //if (sounds[currentIndex].isPitchModified)
-        //{
-            //CarEngine1.pitch = (revs / 1000) / 4;
-        //}
+        CarEngine.volume = sounds[currentIndex].relativeVolume;
+        if (sounds[currentIndex].isPitchModified)
+        {
+            CarEngine.pitch = (revs / 1000) / 4;
+        }
 
         // Process turbo sound
         if (hasTurbo)
@@ -95,10 +96,10 @@ public class EngineAudioBehaviour : MonoBehaviour
 [System.Serializable]
 public struct EngineSample
 {
-    public int lowRev;//engagement RPM
-    public int highRev;//disengagement RPM
-    public AudioClip sample;//sample to play
-    public AudioSource output;//output audio source. first,second,first,second..
-    public AnimationCurve volumeCurve;//volume curve. starts from 0 - 100. eval by mathf.lerp(lowrev - highrev)
-    public AnimationCurve pitchCurve;//pitch curve. same as volume curve pretty much
+    public int lowRev;
+    public int highRev;
+    public AudioClip clip;
+    public float relativeVolume;
+    // Maybe find a way to replace that with a way to parametrize the formula
+    public bool isPitchModified;
 }

@@ -73,7 +73,7 @@ public class RaceStart : MonoBehaviour {
             //if has, then raceEnds = true
             currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps));
 
-            if (laps < currentLap || raceEnds)
+            if (laps <= currentLap || raceEnds)
             {
                 //change this, to check EVERY PLAYERS VALUE OF RACE COMPLETE. IF RACE IS COMPLETE FOR SOMEONE
                 //THEN TRIGGER END RACE

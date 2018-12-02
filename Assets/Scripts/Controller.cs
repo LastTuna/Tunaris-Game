@@ -20,10 +20,12 @@ public class Controller : MonoBehaviour {
     public Canvas TuneScreenCanvas;
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
+    public Canvas CreditsCanvas;
 
     public static bool washing;
     public Canvas LoadingScreenCanvas;
     public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
+    public AudioClip[] TGmusic;
     public static List<GameObject> currentCars = new List<GameObject>();
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
@@ -32,6 +34,7 @@ public class Controller : MonoBehaviour {
     // Go race callbacks
     public void StartRace() {
         LoadingScreenCanvas.gameObject.SetActive(true);
+        GoRaceCanvas.gameObject.SetActive(false);
         StartCoroutine(LoadRace());
     }
 
@@ -297,12 +300,21 @@ public class Controller : MonoBehaviour {
         
         Cancel();
     }
+    public void OpenCredits()
+    {
+        GoRaceCanvas.gameObject.SetActive(false);
+        CreditsCanvas.gameObject.SetActive(true);
+        menuMusic.clip = TGmusic[1];
+        menuMusic.Play();
+    }
+
     //online IP validation. this is called from Cancel().
     public void ValidateOnline()
     {
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
         data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
+        data.SaveGameData();
     }
     //car wash save
     public void OpenWash()
@@ -395,7 +407,38 @@ public class Controller : MonoBehaviour {
         // Disable main rigidbody
         Destroy(spinner.GetComponent<Rigidbody>());
     }
+    void Update()
+    {
+        TGControlTest();
+    }
 
+    public GameObject carro;
+    public GameObject bestest;
+
+    public void TGControlTest()
+    {
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        if (MainMenuCanvas.gameObject.activeSelf)
+        {
+            if (Input.GetKeyDown("t") && !bestest.activeSelf)
+            {
+                carro = Instantiate(carsPrefabs[Convert.ToInt32(data.BestestLapTimes[0].Substring(10, 1))], new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
+                CarScriptKill(carro);
+                bestest.SetActive(true);
+                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", data.BestestLapTimes[0].Substring(0, 2), data.BestestLapTimes[0].Substring(3, 2), data.BestestLapTimes[0].Substring(6, 3));
+            }
+            else if (Input.GetKeyDown("t") && bestest.activeSelf)
+            {
+                Destroy(carro);
+                bestest.SetActive(false);
+            }
+        }
+        if (!MainMenuCanvas.gameObject.activeSelf && bestest.activeSelf)
+        {
+            bestest.SetActive(false);
+            Destroy(carro);
+        }
+    }
 
     // Save options
     public void SaveOptions() {
@@ -491,9 +534,15 @@ public class Controller : MonoBehaviour {
             }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
-
         }
-
+        //Credits -> Go Race
+        if(CreditsCanvas.gameObject.activeSelf)
+        {
+            CreditsCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+            menuMusic.clip = TGmusic[0];
+            menuMusic.Play();
+        }
         yield return null;
     }
 }

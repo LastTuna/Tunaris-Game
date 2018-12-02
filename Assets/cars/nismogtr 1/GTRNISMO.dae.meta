@@ -1,0 +1,232 @@
+fileFormatVersion: 2
+guid: c2367e855ed60a444a4dfff47e462a22
+timeCreated: 1543054314
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: DIRT
+    100002: FL
+    100004: FLcalp
+    100006: FLdirt
+    100008: FR
+    100010: FRcalp
+    100012: FRdirt
+    100014: //RootNode
+    100016: Interior
+    100018: NasanGRT
+    100020: RL
+    100022: RLcalp
+    100024: RLdirt
+    100026: RR
+    100028: RRcalp
+    100030: RRdirt
+    100032: SecondSeat
+    100034: WHEEL
+    100036: WiperF0
+    100038: WiperF1
+    100040: WiperR
+    400000: DIRT
+    400002: FL
+    400004: FLcalp
+    400006: FLdirt
+    400008: FR
+    400010: FRcalp
+    400012: FRdirt
+    400014: //RootNode
+    400016: Interior
+    400018: NasanGRT
+    400020: RL
+    400022: RLcalp
+    400024: RLdirt
+    400026: RR
+    400028: RRcalp
+    400030: RRdirt
+    400032: SecondSeat
+    400034: WHEEL
+    400036: WiperF0
+    400038: WiperF1
+    400040: WiperR
+    2100000: INTERIOR
+    2100002: dirtW
+    2100004: WHEELS
+    2100006: DISC
+    2100008: MAIN
+    2100010: WINDOWS
+    2100012: DIRT
+    2300000: DIRT
+    2300002: FL
+    2300004: FLcalp
+    2300006: FLdirt
+    2300008: FR
+    2300010: FRcalp
+    2300012: FRdirt
+    2300014: Interior
+    2300016: NasanGRT
+    2300018: RL
+    2300020: RLcalp
+    2300022: RLdirt
+    2300024: RR
+    2300026: RRcalp
+    2300028: RRdirt
+    2300030: SecondSeat
+    2300032: WHEEL
+    2300034: WiperF0
+    2300036: WiperF1
+    2300038: WiperR
+    3300000: DIRT
+    3300002: FL
+    3300004: FLcalp
+    3300006: FLdirt
+    3300008: FR
+    3300010: FRcalp
+    3300012: FRdirt
+    3300014: Interior
+    3300016: NasanGRT
+    3300018: RL
+    3300020: RLcalp
+    3300022: RLdirt
+    3300024: RR
+    3300026: RRcalp
+    3300028: RRdirt
+    3300030: SecondSeat
+    3300032: WHEEL
+    3300034: WiperF0
+    3300036: WiperF1
+    3300038: WiperR
+    4300000: WiperF0
+    4300002: FLdirt
+    4300004: FLcalp
+    4300006: FL
+    4300008: NasanGRT
+    4300010: Interior
+    4300012: RLcalp
+    4300014: WHEEL
+    4300016: SecondSeat
+    4300018: FRcalp
+    4300020: DIRT
+    4300022: FRdirt
+    4300024: RRcalp
+    4300026: WiperF1
+    4300028: WiperR
+    4300030: RL
+    4300032: RLdirt
+    4300034: RRdirt
+    4300036: RR
+    4300038: FR
+    9500000: //RootNode
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DIRT
+    second: {fileID: 2100000, guid: f0a4e76d46acd85498e77633a4c68e05, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DISC
+    second: {fileID: 2100000, guid: 9da32f40791482b4f9677d64d4d75ba2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: INTERIOR
+    second: {fileID: 2100000, guid: 5a46a2b251e3f1f44b1c1cff8883ce87, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAIN
+    second: {fileID: 2100000, guid: 371a066b695d2f34bb7b3ea130f0b3b4, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WHEELS
+    second: {fileID: 2100000, guid: ca7e50213a7453543a6627887c70094e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WINDOWS
+    second: {fileID: 2100000, guid: 1d7c3d76b5ef9dd4bb29dd14b6a33dff, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: dirtW
+    second: {fileID: 2100000, guid: cb126da8aae9ded48b7ae656f857e73f, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

@@ -33,7 +33,7 @@ public class CarCamera : MonoBehaviour {
                         transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
                         transform.LookAt(car);
 
-                        car.Find("Cockpit").gameObject.SetActive(false);
+                        //car.Find("Cockpit").gameObject.SetActive(false);
                     }
                     break;
                 // 1: cockpit cam
@@ -42,7 +42,7 @@ public class CarCamera : MonoBehaviour {
                         transform.position = interiorCam.transform.position;
                         transform.rotation = car.rotation;
                         
-                        car.Find("Cockpit").gameObject.SetActive(true);
+                        //car.Find("Cockpit").gameObject.SetActive(true);
                     }
                     break;
                 default: break;
