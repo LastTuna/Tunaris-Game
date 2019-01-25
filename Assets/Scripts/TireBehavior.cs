@@ -72,18 +72,29 @@ public class TireBehavior : MonoBehaviour
         // Ground surface detection
         if (tyre.GetGroundHit(out wheelhit) && !burst)
         {
-            if (wheelhit.collider.gameObject.CompareTag("sand"))
-            {//gravel/offroad
-                currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
-                if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
-            }
-            if (wheelhit.collider.gameObject.CompareTag("tarmac") || wheelhit.collider.gameObject.CompareTag("puddle"))
-            {//TARMAC/puddle
-                currentGrip = treadType - Dampness() - ((100 - TreadHealth) / 5000);
-            }
-            if (wheelhit.collider.gameObject.CompareTag("grass"))
-            {//grass
-                currentGrip = (treadType / 2) - Dampness() - ((100 - TreadHealth) / 5000);
+            string despacito = wheelhit.collider.gameObject.tag;
+
+            switch (despacito)
+            {
+                case "sand":
+                    //gravel/offroad
+                    currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
+                    if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
+                    break;
+                case "tarmac":
+                    //TARMAC/puddle
+                    currentGrip = treadType - Dampness() - ((100 - TreadHealth) / 5000);
+                    break;
+                case "grass":
+                    //grass
+                    currentGrip = (treadType / 2) - Dampness() - ((100 - TreadHealth) / 5000);
+                    break;
+                case "puddle":
+                    currentGrip = 0.1f;
+                    break;
+                case "":
+
+                    break;
             }
             if (currentGrip <= 0f)
             {//if grip goes below 0, give wheels minimum 0.13 grip.
