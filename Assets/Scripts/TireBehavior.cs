@@ -21,12 +21,14 @@ public class TireBehavior : MonoBehaviour
     public Renderer disc;
     public Renderer dirtMesh; //fetches and instantiates dirt material
     public float dirtiness;
+    public float defaultSusp;
     public AnimationCurve brakeFadeCurve = new AnimationCurve(
         new Keyframe(0, 0.4f),
         new Keyframe(420, 1f),
         new Keyframe(600, 1f),
         new Keyframe(800, 0.3f)
         );
+    public float wheelrpm;
     // Use this for initialization
     void Start()
     {
@@ -34,6 +36,7 @@ public class TireBehavior : MonoBehaviour
         dirt = dirtMesh.GetComponent<Renderer>().material;
         treadType = FindObjectOfType<DataController>().TireBias;
         diameter = tyre.radius;
+        defaultSusp = tyre.suspensionDistance;
     }
 
     // Update is called once per frame
@@ -73,17 +76,21 @@ public class TireBehavior : MonoBehaviour
         if (tyre.GetGroundHit(out wheelhit) && !burst)
         {
             string despacito = wheelhit.collider.gameObject.tag;
-
+            wheelrpm = tyre.rpm;
             switch (despacito)
             {
                 case "sand":
                     //gravel/offroad
                     currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
                     if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
+                    
+                    if(tyre.rpm > 1000) tyre.suspensionDistance = Random.value / 10;
+
                     break;
                 case "tarmac":
                     //TARMAC/puddle
                     currentGrip = treadType - Dampness() - ((100 - TreadHealth) / 5000);
+                    tyre.suspensionDistance = defaultSusp;
                     break;
                 case "grass":
                     //grass
