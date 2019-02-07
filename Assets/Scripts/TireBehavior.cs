@@ -99,9 +99,6 @@ public class TireBehavior : MonoBehaviour
                 case "puddle":
                     currentGrip = 0.1f;
                     break;
-                case "":
-
-                    break;
             }
             if (currentGrip <= 0f)
             {//if grip goes below 0, give wheels minimum 0.13 grip.

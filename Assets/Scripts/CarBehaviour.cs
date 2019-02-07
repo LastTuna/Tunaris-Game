@@ -68,6 +68,10 @@ public class CarBehaviour : NetworkBehaviour {
     public bool shifting = false;//shifter delay
     public int carIndex;
 
+    public float debug1;
+    public float debug2;
+    public float debug3;
+
     public JointSpring springs = new JointSpring {
         spring = 8000,
         damper = 800,
@@ -123,7 +127,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
-            StartCoroutine(Engine());
+            Engine();
 
             if (Input.GetButtonDown("Reset")) {
                 Debug.Log("Reset was pressed");
@@ -136,7 +140,6 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
             wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
 
-            wheelRPM = (wheelFL.rpm + wheelRL.rpm) / 2; //speed counter
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * wheelRL.rpm * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
         }
@@ -168,64 +171,35 @@ public class CarBehaviour : NetworkBehaviour {
         dirt.color = new Color(1,1,1, dirtiness);
     }
 
-    IEnumerator Engine()
+    void Engine()
     {//engine
-        if (gear == 1)
-        {//neutral revs
-
-            if (engineRPM >= engineREDLINE)
-            {
-                engineRPM = engineRPM - 300;
-            }
-            else
-            {
-                if (Input.GetAxis("Throttle") > 0)
-                {
-                    yield return new WaitForSeconds(0.1f);
-                    engineRPM = 100 + engineRPM;
-                }
-                else
-                {
-                    if (engineRPM > 800)
-                    {
-                        yield return new WaitForSeconds(0.05f);
-                        engineRPM = engineRPM - 100;
-                    }
-                }
-
-
-            }
-        }
-        else
-        { //drive revs
-            engineRPM = wheelRPM * gears[gear] * ratio + 800;
-        }
-
-        if (gear > 0)
+        if (engineRPM >= engineREDLINE)
         {
-            unitOutput = (engineRPM / 1000) * (engineRPM / 1000) + engineTorque.Evaluate(engineRPM); //ENGINE OUTPUT TO WHEELS
+            engineRPM -= 300;
         }
         else
         {
-            unitOutput = -(engineRPM / 1000) * (engineRPM / 1000) - engineTorque.Evaluate(engineRPM); //reverse output
+            engineRPM += engineTorque.Evaluate(engineRPM) * Input.GetAxis("Throttle");
+            if (engineRPM > 800 && Input.GetAxis("Throttle") == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
+            if (engineRPM < 800) engineRPM += 20;
         }
-        if (engineRPM > engineREDLINE || gear == 1 || Input.GetAxis("Throttle") < 0)
-        {//throttle & rev limit, LSD
 
-            wheelFR.motorTorque = 0 * FrontWheelDriveBias;
-            wheelFL.motorTorque = 0 * FrontWheelDriveBias;
-
-            wheelRR.motorTorque = 0 * (1 - FrontWheelDriveBias);
-            wheelRL.motorTorque = 0 * (1 - FrontWheelDriveBias);
+        if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
+        {
+            wheelFL.motorTorque = engineTorque.Evaluate(engineRPM);
+            wheelFR.motorTorque = engineTorque.Evaluate(engineRPM);
         }
         else
         {
-            wheelFR.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFR, wheelFL);
-            wheelFL.motorTorque = unitOutput * Input.GetAxis("Throttle") * FrontWheelDriveBias - Differential(wheelFL, wheelFR);
-            wheelRR.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRR, wheelRL);
-            wheelRL.motorTorque = unitOutput * Input.GetAxis("Throttle") * (1 - FrontWheelDriveBias) - Differential(wheelRL, wheelRR);
+            wheelFL.motorTorque = 0;
+            wheelFR.motorTorque = 0;
         }
+        wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
+    }
 
+
+    void Turbo()
+    { 
 
         if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
         {//when you step on the gas
@@ -375,7 +349,7 @@ public class CarBehaviour : NetworkBehaviour {
         float speedFactor = engineRPM / engineREDLINE;//dial rotation
         float rotationAngle = 0;
         if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(70, -160, speedFactor);
+            rotationAngle = Mathf.Lerp(90, -160, speedFactor);
             pointer.eulerAngles = new Vector3(0, 0, rotationAngle);
         }//end dial rot
 

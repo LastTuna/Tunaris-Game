@@ -35,6 +35,11 @@ public class STCSAWD : MonoBehaviour {
                 wheelRR.steerAngle = -wheelFR.steerAngle / 6;
             }
         }
+        else
+        {
+            wheelRL.steerAngle = 0;
+            wheelRR.steerAngle = 0;
+        }
     }
 
     float SlipAvg(WheelHit wheelL, WheelHit wheelR)

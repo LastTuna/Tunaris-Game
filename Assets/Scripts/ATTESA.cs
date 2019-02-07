@@ -35,6 +35,11 @@ public class ATTESA : MonoBehaviour {
             }
             ActiveDifferential(wheelhitL, wheelhitR);
         }
+        else
+        {
+            wheelRL.steerAngle = 0;
+            wheelRR.steerAngle = 0;
+        }
     }
 
     float SlipAvg(WheelHit wheelL, WheelHit wheelR)
