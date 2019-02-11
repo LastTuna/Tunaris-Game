@@ -56,6 +56,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float lsd = 0.5f;
 
     //end tuneable stats
+    public float airSpeed;
     public float engineRPM;
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
     public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
@@ -195,6 +196,9 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.motorTorque = 0;
         }
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
+        airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
+            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
+            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
     }
 
 
