@@ -63,6 +63,9 @@ public class CarBehaviour : NetworkBehaviour {
     public float turboSpool = 0.1f;//turbo boost value
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
+    //clutch
+    public float clutchPressure;
+    public float clutchRPM;
     //gears
     public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
