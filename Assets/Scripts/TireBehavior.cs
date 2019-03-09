@@ -84,7 +84,7 @@ public class TireBehavior : MonoBehaviour
                     currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
                     if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
                     
-                    if(tyre.rpm > 1000) tyre.suspensionDistance = Random.value / 10;
+                    if(tyre.rpm > 600) tyre.suspensionDistance = Random.value / 10;
 
                     break;
                 case "tarmac":

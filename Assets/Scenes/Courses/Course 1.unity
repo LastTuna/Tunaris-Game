@@ -3709,7 +3709,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4623404459184234, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}
       propertyPath: m_LocalPosition.z
-      value: -246.7381
+      value: -246.561
       objectReference: {fileID: 0}
     - target: {fileID: 4623404459184234, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}
       propertyPath: m_LocalRotation.x
@@ -3755,6 +3755,56 @@ Prefab:
         type: 2}
       propertyPath: m_AngularDrag
       value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 146638123654812354, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 146944535122665842, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_SidewaysFriction.m_Stiffness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 146638123654812354, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 146944535122665842, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_ForwardFriction.m_Stiffness
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 54703818589113970, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_Mass
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 114091055762642860, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: power
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 146638123654812354, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_Mass
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 146944535122665842, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_Mass
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 146638123654812354, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_WheelDampingRate
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 146944535122665842, guid: 1a1fa0b9dd75a3748a8e329018a04828,
+        type: 2}
+      propertyPath: m_WheelDampingRate
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}

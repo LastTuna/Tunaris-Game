@@ -10,6 +10,8 @@ public class BikeBehaviour : MonoBehaviour {
     public WheelCollider wheelR;
     public Transform wheelFTrans;
     public Transform wheelRTrans;
+    public Transform fork;
+    public float power;
 
     // Use this for initialization
     void Start () {
@@ -18,11 +20,10 @@ public class BikeBehaviour : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        gameObject.GetComponent<Rigidbody>().centerOfMass = centerofgrav;
         
         wheelF.steerAngle = 6 * Input.GetAxis("Steering");
 
-            wheelR.motorTorque = 100 * Input.GetAxis("Throttle");
+            wheelR.motorTorque = power * Input.GetAxis("Throttle");
         
 
         zVelocity = gameObject.GetComponent<Rigidbody>().angularVelocity;
@@ -45,11 +46,17 @@ public class BikeBehaviour : MonoBehaviour {
             wheelF.brakeTorque = 0;
             wheelR.brakeTorque = 0;
         }
+        WeightTransfer();
+    }
 
+    public void WeightTransfer()
+    {
+        centerofgrav = new Vector3(0, centerofgrav.y, -Input.GetAxis("WeightTransfer") * 5);
+        
+        gameObject.GetComponent<Rigidbody>().centerOfMass = centerofgrav;
 
 
     }
-
 
 
     // Graphical update - wheel positions 
