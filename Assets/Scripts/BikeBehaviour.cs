@@ -51,10 +51,11 @@ public class BikeBehaviour : MonoBehaviour {
 
     public void WeightTransfer()
     {
-        centerofgrav = new Vector3(0, centerofgrav.y, -Input.GetAxis("WeightTransfer") * 5);
-        
-        gameObject.GetComponent<Rigidbody>().centerOfMass = centerofgrav;
 
+        centerofgrav = new Vector3(0, centerofgrav.y, -Input.GetAxis("WeightTransfer") / 3);
+
+        gameObject.GetComponent<Rigidbody>().centerOfMass = centerofgrav;
+        //add weight transfer damping
 
     }
 
