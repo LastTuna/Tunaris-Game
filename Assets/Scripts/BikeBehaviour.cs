@@ -6,7 +6,6 @@ public class BikeBehaviour : MonoBehaviour {
 
     public Vector3 centerofgrav = new Vector3(0, -2f, 0);
     public Vector3 zVelocity;
-    public float Turn;
     public WheelCollider wheelF;
     public WheelCollider wheelR;
     public Transform wheelFTrans;
@@ -53,9 +52,7 @@ public class BikeBehaviour : MonoBehaviour {
 
     public void WeightTransfer()
     {
-
         centerofgrav = new Vector3(0, centerofgrav.y, -Input.GetAxis("WeightTransfer") / 3);
-
         gameObject.GetComponent<Rigidbody>().centerOfMass = centerofgrav;
         //add weight transfer damping
 
@@ -91,20 +88,18 @@ public class BikeBehaviour : MonoBehaviour {
 
     public void AngBike()
     {
-        float MaxTurn = 0.55f;
-        // This is a very hacky way (i guess) to fix the bike going apeshit issue
-        // the bike should be relatively stable, if not try adjusting MaxTurn (default 0.55f)
-        // or the angularDrag value
-        Turn = Mathf.Abs(zVelocity.y);
-        if (Turn >= MaxTurn)
+        //the 2 raycasts are basically one at 0° and another at 180°,
+        // if it hits it changes, it's not that far away from the bike so it touches when you're turning or
+        // when you're close to something
+        RaycastHit hit;
+        if (Physics.Raycast(wheelF.transform.position, wheelF.transform.right, out hit,1) || (Physics.Raycast(wheelF.transform.position, -wheelF.transform.right, out hit, 1)))
         {
-            gameObject.GetComponent<Rigidbody>().angularDrag = 3.5f;
+            gameObject.GetComponent<Rigidbody>().angularDrag = 4;
         }
         else
         {
             gameObject.GetComponent<Rigidbody>().angularDrag = 2;
         }
-        Debug.Log(gameObject.GetComponent<Rigidbody>().angularDrag);
     }
 
 
