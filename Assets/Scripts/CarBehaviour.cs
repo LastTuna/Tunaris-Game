@@ -225,7 +225,7 @@ public class CarBehaviour : NetworkBehaviour {
         //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
 
 
-        debug1 = (Differential(wheelFL, wheelFR) + Differential(wheelRL, wheelRR)) / 2;
+        debug1 = (Differential(wheelFL, wheelFR, 1) + Differential(wheelRL, wheelRR, 0)) / 2;
         debug2 = CenterDifferential();
 
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
@@ -262,7 +262,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     public float CenterDifferential ()
     {
-        if(Differential(wheelFL, wheelFR) < lsd + Differential(wheelRL, wheelRR))
+        if(Differential(wheelFL, wheelFR, 1) < lsd + Differential(wheelRL, wheelRR, 0))
         {
             return 1;
         }
@@ -272,9 +272,9 @@ public class CarBehaviour : NetworkBehaviour {
         }
     }
 
-    public float Differential(WheelCollider left, WheelCollider right)
+    public float Differential(WheelCollider left, WheelCollider right, int front)
     {
-        return (Mathf.Abs(left.rpm + right.rpm)) / 2;
+        return (Mathf.Abs(left.rpm + right.rpm) * Mathf.Abs(front - FrontWheelDriveBias)) / 2;
     }
 
     // Gearbox managed, called each frame
