@@ -12,7 +12,8 @@ public class BikeBehaviour : MonoBehaviour {
     public Transform wheelRTrans;
     public Transform fork;
     public float power;
-
+    // Change ang value to change the raycast angle (Check how it'd look in the editor when you have it running)
+    public int ang = 40;
     // Use this for initialization
     void Start () {
 		
@@ -22,10 +23,7 @@ public class BikeBehaviour : MonoBehaviour {
 	void Update () {
         
         wheelF.steerAngle = 6 * Input.GetAxis("Steering");
-
-            wheelR.motorTorque = power * Input.GetAxis("Throttle");
-        
-
+        wheelR.motorTorque = power * Input.GetAxis("Throttle");
         zVelocity = gameObject.GetComponent<Rigidbody>().angularVelocity;
 
         wheelFTrans.Rotate(wheelF.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
@@ -91,8 +89,10 @@ public class BikeBehaviour : MonoBehaviour {
         //the 2 raycasts are basically one at 0° and another at 180°,
         // if it hits it changes, it's not that far away from the bike so it touches when you're turning or
         // when you're close to something
+        Vector3 angle = Quaternion.AngleAxis(ang, wheelF.transform.up) * wheelF.transform.forward;
+        Vector3 revang = Quaternion.AngleAxis(ang, -wheelF.transform.up) * wheelF.transform.forward;
         RaycastHit hit;
-        if (Physics.Raycast(wheelF.transform.position, wheelF.transform.right, out hit,1) || (Physics.Raycast(wheelF.transform.position, -wheelF.transform.right, out hit, 1)))
+        if (Physics.Raycast(wheelF.transform.position, angle, out hit,1) || (Physics.Raycast(wheelF.transform.position, revang, out hit, 1)))
         {
             gameObject.GetComponent<Rigidbody>().angularDrag = 4;
         }
@@ -100,6 +100,10 @@ public class BikeBehaviour : MonoBehaviour {
         {
             gameObject.GetComponent<Rigidbody>().angularDrag = 2;
         }
+       // Debug info (current angular drag, raycasts)
+       Debug.Log(gameObject.GetComponent<Rigidbody>().angularDrag);
+       Debug.DrawRay(wheelF.transform.position,angle,Color.green);
+       Debug.DrawRay(wheelF.transform.position, revang, Color.green);
     }
 
 
