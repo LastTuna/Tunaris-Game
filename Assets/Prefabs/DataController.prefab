@@ -55,12 +55,18 @@ MonoBehaviour:
   LoadedData:
     SelectedCar: 
     SelectedCourse: 
+    BestestLapTimes: []
+    Garage3D: 0
+    MenuAudio: 0
+    CuntUI: 0
     TireBias: 0
     FinalDrive: 0
     Aero: 0
     SpringStiffness: 0
     BrakeStiffness: 0
     Gearbox: 0
+    Dirtiness: []
+    Cash: 0
     IsMultiplayer: 0
     IP: 
     PlayerName: 
@@ -75,3 +81,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 922b46d35c1712d4a8bf346f291863ab, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  checkum: 0
+  laps: 0
+  count: 0
+  carIndex: 0
+  textInstance: {fileID: 0}
+  textInstances: []
+  spawnPos: {x: 0, y: 0}
+  mainCanvas: {fileID: 0}
+  dataController: {fileID: 0}
+  carPrefabs: []

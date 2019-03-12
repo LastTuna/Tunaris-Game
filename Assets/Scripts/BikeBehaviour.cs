@@ -6,6 +6,7 @@ public class BikeBehaviour : MonoBehaviour {
 
     public Vector3 centerofgrav = new Vector3(0, -2f, 0);
     public Vector3 zVelocity;
+    public float Turn;
     public WheelCollider wheelF;
     public WheelCollider wheelR;
     public Transform wheelFTrans;
@@ -47,6 +48,7 @@ public class BikeBehaviour : MonoBehaviour {
             wheelR.brakeTorque = 0;
         }
         WeightTransfer();
+        AngBike();
     }
 
     public void WeightTransfer()
@@ -87,6 +89,23 @@ public class BikeBehaviour : MonoBehaviour {
         wheelRTrans.position = wheelPos;
     }
 
+    public void AngBike()
+    {
+        float MaxTurn = 0.55f;
+        // This is a very hacky way (i guess) to fix the bike going apeshit issue
+        // the bike should be relatively stable, if not try adjusting MaxTurn (default 0.55f)
+        // or the angularDrag value
+        Turn = Mathf.Abs(zVelocity.y);
+        if (Turn >= MaxTurn)
+        {
+            gameObject.GetComponent<Rigidbody>().angularDrag = 3.5f;
+        }
+        else
+        {
+            gameObject.GetComponent<Rigidbody>().angularDrag = 2;
+        }
+        Debug.Log(gameObject.GetComponent<Rigidbody>().angularDrag);
+    }
 
 
 
