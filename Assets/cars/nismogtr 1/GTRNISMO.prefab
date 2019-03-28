@@ -113,7 +113,7 @@ GameObject:
   - component: {fileID: 114182985723725132}
   - component: {fileID: 114089068783284646}
   m_Layer: 0
-  m_Name: GTRNISMO
+  m_Name: Nasan GRT
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2198,6 +2198,7 @@ MonoBehaviour:
   ratio: 0
   FrontWheelDriveBias: 0
   lsd: 1
+  airSpeed: 0
   engineRPM: 0
   engineREDLINE: 9000
   engineTorque:
@@ -2227,6 +2228,8 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
+  clutchPressure: 0
+  clutchRPM: 0
   gears:
   - -5
   - 0
@@ -2239,6 +2242,9 @@ MonoBehaviour:
   gear: 0
   shifting: 0
   carIndex: 0
+  debug1: 0
+  debug2: 0
+  debug3: 0
   CenterOfGravity: {x: 0, y: -0.4, z: 0.5}
 --- !u!114 &114159807241956988
 MonoBehaviour:
@@ -2266,6 +2272,7 @@ MonoBehaviour:
   disc: {fileID: 23065715955425720}
   dirtMesh: {fileID: 23939122688235886}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2296,6 +2303,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114182985723725132
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2437,6 +2445,7 @@ MonoBehaviour:
   disc: {fileID: 23131146629514104}
   dirtMesh: {fileID: 23273168977855588}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2467,6 +2476,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114699805383176952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2526,6 +2536,7 @@ MonoBehaviour:
   disc: {fileID: 23783561221111114}
   dirtMesh: {fileID: 23792750855780098}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2556,6 +2567,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114853348854667358
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2601,6 +2613,7 @@ MonoBehaviour:
   disc: {fileID: 23681878052853272}
   dirtMesh: {fileID: 23919672200631124}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -2631,6 +2644,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114935655724475540
 MonoBehaviour:
   m_ObjectHideFlags: 1

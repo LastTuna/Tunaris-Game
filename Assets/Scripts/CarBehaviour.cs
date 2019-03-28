@@ -225,8 +225,8 @@ public class CarBehaviour : NetworkBehaviour {
         //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
 
 
-        debug1 = (Differential(wheelFL, wheelFR, 1) + Differential(wheelRL, wheelRR, 0)) / 2;
-        debug2 = CenterDifferential();
+        debug1 = Differential(wheelFL, wheelFR, 1) - Differential(wheelRL, wheelRR, 0);
+        debug2 = 0;
 
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
