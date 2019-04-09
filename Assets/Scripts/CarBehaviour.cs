@@ -177,7 +177,7 @@ public class CarBehaviour : NetworkBehaviour {
     void Engine()
     {//engine
         if(gear == 1)
-        {
+        {//NEUTRAL
             if (engineRPM >= engineREDLINE)
             {
                 engineRPM -= 300;
@@ -194,17 +194,17 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRR.motorTorque = 0;
         }
         else
-        {
+        {//DRIVE
             engineRPM = (Mathf.Abs(wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * ratio * Mathf.Abs(gears[gear]);
             engineRPM += (Mathf.Abs(wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * ratio * Mathf.Abs(gears[gear]);
 
 
 
             //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = engineTorque.Evaluate(engineRPM) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * CenterDifferential();
-            wheelFR.motorTorque = engineTorque.Evaluate(engineRPM) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * CenterDifferential();
-            wheelRL.motorTorque = engineTorque.Evaluate(engineRPM) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * CenterDifferential();
-            wheelRR.motorTorque = engineTorque.Evaluate(engineRPM) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * CenterDifferential();
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -224,9 +224,8 @@ public class CarBehaviour : NetworkBehaviour {
         }
         //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
 
-
-        debug1 = Differential(wheelFL, wheelFR, 1) - Differential(wheelRL, wheelRR, 0);
-        debug2 = 0;
+        debug1 = Differential(wheelFR, wheelFL);
+        debug2 = Differential(wheelFL, wheelFR);
 
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
@@ -260,21 +259,28 @@ public class CarBehaviour : NetworkBehaviour {
         EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
-    public float CenterDifferential ()
+    public void CenterDifferential ()
     {
-        if(Differential(wheelFL, wheelFR, 1) < lsd + Differential(wheelRL, wheelRR, 0))
-        {
-            return 1;
-        }
-        else
+
+        //hmmmmmmmmmmmmmmmmmmmmmmmmm
+        //add alcohol
+        //maybe just an adjustable viscous lock
+        //possible traction control addon for babbies? very easy.
+    }
+
+    public float Differential(WheelCollider left, WheelCollider right)
+    {
+        //deduct power from inner tire to keep tyres in sync, but without cutting power completely
+        //if difference is lower than 0 (negative) return 0.
+
+        if(Mathf.Abs(right.rpm) - Mathf.Abs(left.rpm) < 0)
         {
             return 0;
         }
-    }
-
-    public float Differential(WheelCollider left, WheelCollider right, int front)
-    {
-        return (Mathf.Abs(left.rpm + right.rpm) * Mathf.Abs(front - FrontWheelDriveBias)) / 2;
+        else
+        {
+            return Mathf.Abs(right.rpm) - Mathf.Abs(left.rpm);
+        }
     }
 
     // Gearbox managed, called each frame
