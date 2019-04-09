@@ -96,7 +96,6 @@ public class CarBehaviour : NetworkBehaviour {
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
             engineRPM = 800;
-            Physics.gravity = new Vector3(0, -aero, 0);
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
             dirt = dirtMesh.GetComponent<Renderer>().material;
@@ -138,6 +137,7 @@ public class CarBehaviour : NetworkBehaviour {
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
             currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
+            Physics.gravity = new Vector3(0, -aero, 0);
         }
     }
 
@@ -201,10 +201,10 @@ public class CarBehaviour : NetworkBehaviour {
 
 
             //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL) - CenterDifferential()) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR) - CenterDifferential()) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL) - CenterDifferential()) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR) - CenterDifferential()) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -226,7 +226,7 @@ public class CarBehaviour : NetworkBehaviour {
 
         debug1 = Differential(wheelFR, wheelFL);
         debug2 = Differential(wheelFL, wheelFR);
-
+        debug3 = CenterDifferential();
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
@@ -259,13 +259,18 @@ public class CarBehaviour : NetworkBehaviour {
         EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
-    public void CenterDifferential ()
+    public float CenterDifferential ()
     {
-
-        //hmmmmmmmmmmmmmmmmmmmmmmmmm
-        //add alcohol
-        //maybe just an adjustable viscous lock
-        //possible traction control addon for babbies? very easy.
+        //if car is not awd, dont calculate center diff (DUH!)
+        if (FrontWheelDriveBias == 0 || FrontWheelDriveBias == 1)
+        {
+            return 0;
+        }
+        else
+        {
+            //calculate averages of front and rear rpms and just deduct
+            return Mathf.Abs(((wheelFL.rpm + wheelFR.rpm) / 2) - ((wheelRL.rpm + wheelRR.rpm) / 2));
+        }
     }
 
     public float Differential(WheelCollider left, WheelCollider right)
