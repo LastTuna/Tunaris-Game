@@ -411,7 +411,7 @@ public class CarBehaviour : NetworkBehaviour {
         float speedFactor = engineRPM / engineREDLINE;//dial rotation
         float rotationAngle = 0;
         if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(90, -160, speedFactor);
+            rotationAngle = Mathf.Lerp(90, -180, speedFactor);
             pointer.eulerAngles = new Vector3(0, 0, rotationAngle);
         }//end dial rot
 

@@ -3105,7 +3105,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: tunaris game 0.0.4
+  m_Text: tunaris game 0.0.5
 --- !u!222 &982899962
 CanvasRenderer:
   m_ObjectHideFlags: 0

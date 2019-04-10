@@ -3013,6 +3013,7 @@ MonoBehaviour:
   disc: {fileID: 23375021448588058}
   dirtMesh: {fileID: 23043653374615170}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -3043,6 +3044,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114124512726317384
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3057,13 +3059,13 @@ MonoBehaviour:
   CarEngine: {fileID: 82974659538866372}
   sounds:
   - lowRev: 0
-    highRev: 830
+    highRev: 850
     clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
     relativeVolume: 1
     isPitchModified: 0
-  - lowRev: 831
-    highRev: 10000
-    clip: {fileID: 8300000, guid: 852eafe9f9d228041bdddd91070ae3ef, type: 3}
+  - lowRev: 851
+    highRev: 7000
+    clip: {fileID: 8300000, guid: 804f95624929f1c459ff7c6cfb518213, type: 3}
     relativeVolume: 1
     isPitchModified: 1
   hasTurbo: 0
@@ -3132,11 +3134,12 @@ MonoBehaviour:
   springStiffness: 8000
   brakeStrength: 200
   aero: 15
-  ratio: 0
+  ratio: 2.9
   FrontWheelDriveBias: 0.5
   lsd: 1
+  airSpeed: 0
   engineRPM: 0
-  engineREDLINE: 9000
+  engineREDLINE: 6000
   engineTorque:
     serializedVersion: 2
     m_Curve:
@@ -3147,16 +3150,22 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
-      time: 4984.9497
-      value: 221.21771
-      inSlope: 0
-      outSlope: 0
+      time: 3871.2373
+      value: 209.72845
+      inSlope: 0.006067155
+      outSlope: 0.006067155
       tangentMode: 0
     - serializedVersion: 2
-      time: 9000
-      value: 200
-      inSlope: 0
-      outSlope: 0
+      time: 5358.4893
+      value: 201.53436
+      inSlope: -0.014070965
+      outSlope: -0.014070965
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 6471.572
+      value: 161.5284
+      inSlope: -0.03061898
+      outSlope: -0.03061898
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
@@ -3164,6 +3173,8 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
+  clutchPressure: 0
+  clutchRPM: 0
   gears:
   - -5
   - 0
@@ -3176,6 +3187,9 @@ MonoBehaviour:
   gear: 0
   shifting: 0
   carIndex: 0
+  debug1: 0
+  debug2: 0
+  debug3: 0
   CenterOfGravity: {x: 0, y: -0.4, z: 0.5}
 --- !u!114 &114174200790721762
 MonoBehaviour:
@@ -3238,6 +3252,7 @@ MonoBehaviour:
   disc: {fileID: 23358295662825316}
   dirtMesh: {fileID: 23753292187276528}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -3268,6 +3283,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114362628566897304
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3313,6 +3329,7 @@ MonoBehaviour:
   disc: {fileID: 23919556367703480}
   dirtMesh: {fileID: 23857433790329412}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -3343,6 +3360,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114524565912517370
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3412,6 +3430,7 @@ MonoBehaviour:
   disc: {fileID: 23778095964974056}
   dirtMesh: {fileID: 23856974370469834}
   dirtiness: 0
+  defaultSusp: 0
   brakeFadeCurve:
     serializedVersion: 2
     m_Curve:
@@ -3442,6 +3461,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  wheelrpm: 0
 --- !u!114 &114574882183578536
 MonoBehaviour:
   m_ObjectHideFlags: 1
