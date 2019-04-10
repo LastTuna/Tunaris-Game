@@ -201,10 +201,10 @@ public class CarBehaviour : NetworkBehaviour {
 
 
             //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL) - CenterDifferential()) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR) - CenterDifferential()) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL) - CenterDifferential()) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR) - CenterDifferential()) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -225,8 +225,8 @@ public class CarBehaviour : NetworkBehaviour {
         //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
 
         debug1 = Differential(wheelFR, wheelFL);
-        debug2 = Differential(wheelFL, wheelFR);
-        debug3 = CenterDifferential();
+        debug2 = CenterDifferential(1);
+        debug3 = CenterDifferential(-1);
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
@@ -259,17 +259,25 @@ public class CarBehaviour : NetworkBehaviour {
         EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
-    public float CenterDifferential ()
+    public float CenterDifferential (float front)
     {
         //if car is not awd, dont calculate center diff (DUH!)
         if (FrontWheelDriveBias == 0 || FrontWheelDriveBias == 1)
         {
-            return 0;
+            return 1;
         }
         else
         {
-            //calculate averages of front and rear rpms and just deduct
-            return Mathf.Abs(((wheelFL.rpm + wheelFR.rpm) / 2) - ((wheelRL.rpm + wheelRR.rpm) / 2));
+            //deduct 50% of power if wheels are faster than fronts
+            if (front * ((wheelFL.rpm + wheelFR.rpm) / 2) - ((wheelRL.rpm + wheelRR.rpm) / 2) > lsd)
+            {
+                return 0.5f;
+            }
+            else
+            {
+                return 1;
+            }
+
         }
     }
 
