@@ -35,7 +35,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float currentSpeed;
     public float wheelRPM;
 
-    public bool manual = false; //manual(true) auto(false)
+    public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float currentGrip; //value manipulated by road type
     //tuneable stats
     public float springStiffness = 8000;
@@ -64,7 +64,7 @@ public class CarBehaviour : NetworkBehaviour {
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //clutch
-    public float clutchPressure;
+    public float clutchPressure; //0-1 clamp
     public float clutchRPM;
     //gears
     public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
@@ -114,7 +114,6 @@ public class CarBehaviour : NetworkBehaviour {
             brakeStrength = dataController.BrakeStiffness;
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
-            manual = true;
             dirtiness = dataController.Dirtiness[carIndex];
 
             //spring stiffness set (dampers = spring / 10)
@@ -130,7 +129,9 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
+            clutchPressure = 1 - Input.GetAxis("Clutch");
             Engine();
+            StartCoroutine(Gearbox());//gearbox update
             wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
             wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
             //currentSpeed = 2 * 22/7 * wheelFL.radius * wheelFL.rpm * 60 / 1000; legacy
@@ -144,7 +145,6 @@ public class CarBehaviour : NetworkBehaviour {
     void Update() {
         if (isLocalPlayer) {
             HUDUpdate();
-            StartCoroutine(Gearbox());//gearbox update 
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -176,7 +176,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Engine()
     {//engine
-        if(gear == 1)
+        if(gear == 1 || clutchPressure < 0.5f)
         {//NEUTRAL
             if (engineRPM >= engineREDLINE)
             {
@@ -188,6 +188,7 @@ public class CarBehaviour : NetworkBehaviour {
                 if (engineRPM > 800 && Mathf.Clamp01(Input.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
                 if (engineRPM < 800) engineRPM += 20;
             }
+            clutchRPM = engineRPM;
             wheelFL.motorTorque = 0;
             wheelFR.motorTorque = 0;
             wheelRL.motorTorque = 0;
@@ -201,10 +202,10 @@ public class CarBehaviour : NetworkBehaviour {
 
 
             //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -215,12 +216,25 @@ public class CarBehaviour : NetworkBehaviour {
             }
             if (engineRPM < 800)
             {//idling
-                wheelFL.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-                wheelFR.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-                wheelRL.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
-                wheelRR.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2);
+                wheelFL.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelFR.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelRL.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelRR.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
             }
-            debug1 = Mathf.Clamp01(gears[gear]);
+            if (clutchRPM > engineRPM)
+            {//clutch kick
+                clutchRPM -= engineTorque.Evaluate(engineRPM);
+                engineRPM = clutchRPM;
+                wheelFL.motorTorque = 300 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelFR.motorTorque = 300 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelRL.motorTorque = 300 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelRR.motorTorque = 300 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+            }
+            else if (clutchRPM + 300 < engineRPM)
+            {
+                clutchRPM = 0;
+            }
+
         }
         //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
 
@@ -256,7 +270,6 @@ public class CarBehaviour : NetworkBehaviour {
             spooled = false;
         }
         //SOUND UPDATES
-        EngineAudio.ProcessSounds(engineRPM, spooled);
     }
 
     public float CenterDifferential (float front)
@@ -299,45 +312,43 @@ public class CarBehaviour : NetworkBehaviour {
     // Gearbox managed, called each frame
     IEnumerator Gearbox()
     {
-        if (manual)
+        switch (manual)
         {
-            if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
-            {
-                shifting = true;
-                gear = gear + 1;
-                yield return new WaitForSeconds(0.3f);
-                shifting = false;
-            }
-            if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
-            {
-                shifting = true;
-                gear = gear - 1;
-                yield return new WaitForSeconds(0.1f);
-                shifting = false;
-            }
-        }//END MANUAL
-        else
-        {
-            {//START OF AUTOMATIC TRANS
-                if (engineRPM > (engineREDLINE - 1000) && gear < 7 && shifting == false)//upshift
+            case 0:
+                //ADD AUTOMATIC CODE
+                break;
+            case 1:
+                if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
                 {
                     shifting = true;
                     gear = gear + 1;
                     yield return new WaitForSeconds(0.3f);
                     shifting = false;
-                }//end upshift
-                if (engineRPM < 5000 && gear > 0 && shifting == false && currentSpeed > 30)//downshift
+                }
+                if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
                 {
                     shifting = true;
                     gear = gear - 1;
                     yield return new WaitForSeconds(0.1f);
                     shifting = false;
+                }
+                break;
+            case 2:
+                if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && clutchPressure < 0.5f)
+                {
+                    shifting = true;
+                    gear = gear + 1;
+                    shifting = false;
+                }
+                if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && clutchPressure < 0.5f)
+                {
+                    shifting = true;
+                    gear = gear - 1;
+                    shifting = false;
+                }
+                break;
 
-
-                } //downshiftEND
-
-            }
-        }
+        }//END MANUAL
     }
     
 

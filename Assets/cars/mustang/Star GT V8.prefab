@@ -3129,7 +3129,7 @@ MonoBehaviour:
   wheelRRTrans: {fileID: 4249153872764336}
   currentSpeed: 0
   wheelRPM: 0
-  manual: 0
+  manual: 2
   currentGrip: 0
   springStiffness: 8000
   brakeStrength: 200
