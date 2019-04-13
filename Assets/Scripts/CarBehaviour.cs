@@ -129,9 +129,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
-            clutchPressure = 1 - Input.GetAxis("Clutch");
+            if (manual == 2) clutchPressure = 1 - Input.GetAxis("Clutch");
             Engine();
-            StartCoroutine(Gearbox());//gearbox update
             wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
             wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
             //currentSpeed = 2 * 22/7 * wheelFL.radius * wheelFL.rpm * 60 / 1000; legacy
@@ -145,6 +144,7 @@ public class CarBehaviour : NetworkBehaviour {
     void Update() {
         if (isLocalPlayer) {
             HUDUpdate();
+            StartCoroutine(Gearbox());//gearbox update
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);

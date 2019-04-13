@@ -24,7 +24,7 @@ public class STCSAWD : MonoBehaviour {
         //detect slip for rear wheels and steer accordingly
         if (wheelRL.GetGroundHit(out wheelhitL) && wheelRR.GetGroundHit(out wheelhitR))
         {
-            if (SlipAvg(wheelhitL, wheelhitR) > 0.05f)
+            if (Mathf.Abs(SlipAvg(wheelhitL, wheelhitR)) > 0.05f)
             {
                 wheelRL.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + (-wheelFL.steerAngle / 6);
                 wheelRR.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + (-wheelFR.steerAngle / 6);
