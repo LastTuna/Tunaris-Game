@@ -21,9 +21,7 @@ public class RaceStart : MonoBehaviour {
     public Text lap3;//third ticker on UI / active lap
     public Text countdownText;//countdown visual
     public Text currentLapText;//laps / current lap
-    public bool halfAlap = true;
-
-    public GameObject[] checkpoints = new GameObject[2];
+    
 
     public int i;
     public bool raceFinished = false;//flag for when races finished
@@ -31,11 +29,7 @@ public class RaceStart : MonoBehaviour {
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
-    public float countdown;//countdown begins at end race
-    public bool raceEnds;//flag to use with other users in multiplayer
-
-    public bool lapCompleted;//flag for when checkpoints array values are all true
-
+    public int countdown;//countdown begins at end race
     public TimeSpan duration = new TimeSpan(0, 0, 00, 00, 000);//creates new timespan,
     //used to tally time from beginning of race
 
@@ -52,12 +46,6 @@ public class RaceStart : MonoBehaviour {
     public void StartRace(int position)
     {
         StartCoroutine(CountDown());
-        i = 0;
-        foreach (GameObject e in checkpoints)
-        {
-            checkpoints[i].GetComponent<CheckpointFlag>().checkum = false;
-            i++;
-        }
 
         GameObject gridSpot = GameObject.Find("Pos_" + position);
         FindObjectOfType<CarBehaviour>().gameObject.transform.position = gridSpot.transform.position;
@@ -68,12 +56,9 @@ public class RaceStart : MonoBehaviour {
     void Update() {
         if (IsRaceStarted) {
             LaptimeTicker();
-            CheckpointUpdates();
-            //foreach call to check if any player has crossed the finish line
-            //if has, then raceEnds = true
             currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps));
 
-            if (laps <= currentLap || raceEnds)
+            if (laps <= currentLap || raceFinished)
             {
                 //change this, to check EVERY PLAYERS VALUE OF RACE COMPLETE. IF RACE IS COMPLETE FOR SOMEONE
                 //THEN TRIGGER END RACE
@@ -83,66 +68,46 @@ public class RaceStart : MonoBehaviour {
         }
     }
 
-    void CheckpointUpdates()
+    public void LapCompleted()
     {
-        i = 0;
-        foreach (GameObject e in checkpoints)
+        currentLap++;
+        laptimes.Add(CurrentLapTime);//tally current lap time to List
+        CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
+        
+        //tally on screen values
+        if (currentLap > 2)
         {
-            halfAlap = checkpoints[i].GetComponent<CheckpointFlag>().checkum;
-            if (!checkpoints[i].GetComponent<CheckpointFlag>().checkum)
-            {
-                break;
-            }
-            i++;
+            lastLapTime = laptimes[currentLap - 1];
+            fastestLapTime = laptimes.Min();
+            //lap 1 = best lap
+            //lap 2 = last completed lap time
+            //lap 3 = current lap
+            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", fastestLapTime.Minutes, fastestLapTime.Seconds, fastestLapTime.Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", lastLapTime.Minutes, lastLapTime.Seconds, lastLapTime.Milliseconds);
         }
-        if(halfAlap)
+        else if (currentLap > 1)
         {
-            lapCompleted = true;
+            //lap 1 = first lap
+            //lap 2 = second lap
+            //lap 3 = current lap
+            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 2].Minutes, laptimes[currentLap - 2].Seconds, laptimes[currentLap - 2].Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
         }
+        else if (currentLap > 0)
+        {
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
         }
+    }
 
     void LaptimeTicker() {
-        if (IsRaceStarted) {//counter; TOTAL TIME
-            currentTime.text = string.Format("{0:00}:{1:00}:{2:000}", duration.Minutes, duration.Seconds, duration.Milliseconds);
-            duration = duration.Add(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
-            //end TOTAL TIME
-            CurrentLapTime = CurrentLapTime.Add(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));//current lap time
-            lap3.text = string.Format("{0:00}:{1:00}:{2:000}", CurrentLapTime.Minutes, CurrentLapTime.Seconds, CurrentLapTime.Milliseconds);
-        }
+        //counter: TOTAL TIME
+        duration = duration.Add(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+        currentTime.text = string.Format("{0:00}:{1:00}:{2:000}", duration.Minutes, duration.Seconds, duration.Milliseconds);
 
-        if (lapCompleted)//lap completed; tally values & reset counters!
-        {
-            lapCompleted = false;
-            currentLap++;
-            laptimes.Add(CurrentLapTime);//tally current lap time to List
-            CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
-            i = 0;
-            foreach(GameObject e in checkpoints)
-            {
-                checkpoints[i].GetComponent<CheckpointFlag>().checkum = false;
-                i++;
-            }
-
-            //tally on screen values
-            if (currentLap > 2) {
-                lastLapTime = laptimes[currentLap - 1];
-                fastestLapTime = laptimes.Min();
-                //lap 1 = best lap
-                //lap 2 = last completed lap time
-                //lap 3 = current lap
-                lap1.text = string.Format("{0:00}:{1:00}:{2:000}", fastestLapTime.Minutes, fastestLapTime.Seconds, fastestLapTime.Milliseconds);
-                lap2.text = string.Format("{0:00}:{1:00}:{2:000}", lastLapTime.Minutes, lastLapTime.Seconds, lastLapTime.Milliseconds);
-            } else if (currentLap > 1) {
-                //lap 1 = first lap
-                //lap 2 = second lap
-                //lap 3 = current lap
-                lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 2].Minutes, laptimes[currentLap - 2].Seconds, laptimes[currentLap - 2].Milliseconds);
-                lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
-            } else if (currentLap > 0) {
-                lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
-
-            }
-        }
+        //end TOTAL TIME
+        //current lap time
+        CurrentLapTime = CurrentLapTime.Add(TimeSpan.FromMilliseconds(Time.deltaTime * 1000));
+        lap3.text = string.Format("{0:00}:{1:00}:{2:000}", CurrentLapTime.Minutes, CurrentLapTime.Seconds, CurrentLapTime.Milliseconds);
     }
 
     public IEnumerator EndRace() {

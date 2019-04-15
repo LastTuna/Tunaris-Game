@@ -17,24 +17,21 @@ public class NoteReader : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if (GameObject.Find("CourseController").GetComponent<RaceStart>().lapCompleted)
-        {
-            played = false;
-        }
+
 	}
     private void OnTriggerStay(Collider other)
     {
         if (!played)
         {
             displayNote.sprite = note;
-            StartCoroutine(Eee());
+            StartCoroutine(PrintNote());
             soundOutput.clip = sound;
             soundOutput.Play();
             played = true;
         }
 
     }
-    public IEnumerator Eee()
+    public IEnumerator PrintNote()
     {
 
         noteCanvas.alpha = 1;
