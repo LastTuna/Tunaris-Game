@@ -201,7 +201,7 @@ public class DataController : MonoBehaviour {
             Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
             Garage3D = false;
             MenuAudio = 0.4f;
-            BestestLapTimes = new string[]{"01:25:700","01:27.100"};
+            BestestLapTimes = new string[]{"01:25.700_0","01:27.100_1"};
             SaveGameData();
         }
     }

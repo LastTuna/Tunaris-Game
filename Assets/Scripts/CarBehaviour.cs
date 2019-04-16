@@ -12,8 +12,7 @@ public class CarBehaviour : NetworkBehaviour {
     public Text gearDisplay;
     public GameObject frontLights;
     public GameObject rearLights;
-    public Material dirt; //dirt MATERIAL.
-    public Renderer dirtMesh; //fetches and instantiates dirt material
+    //public Material dirt; //dirt MATERIAL.
     public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
@@ -98,7 +97,8 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-            dirt = dirtMesh.GetComponent<Renderer>().material;
+            
+            //dirt = gameObject.transform.Find("DIRT").GetComponent<Renderer>().material;
 
             wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
             wheelFL.ConfigureVehicleSubsteps(20, 30, 10);
@@ -171,7 +171,7 @@ public class CarBehaviour : NetworkBehaviour {
             }
 
         }
-        dirt.color = new Color(1,1,1, dirtiness);
+        //dirt.color = new Color(1,1,1, dirtiness);
     }
 
     void Engine()
