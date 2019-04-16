@@ -123,30 +123,13 @@ GameObject:
   - component: {fileID: 40287494}
   - component: {fileID: 40287493}
   - component: {fileID: 40287492}
-  - component: {fileID: 40287491}
   m_Layer: 0
-  m_Name: checkpoint1
-  m_TagString: Untagged
+  m_Name: 1
+  m_TagString: checkpoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &40287491
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 40287490}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c26ea5c06ba9bf41ae90254b928b088, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkum: 0
-  sound: {fileID: 8300000, guid: 362ebecc70701b843bbd3f7f8537daf5, type: 3}
-  soundOutput: {fileID: 256955484}
-  prevCheck: {fileID: 1846917077}
-  lastCheck: 1
 --- !u!65 &40287492
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -172,12 +155,12 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 40287490}
-  m_LocalRotation: {x: -0, y: -0.03750461, z: -0, w: 0.9992965}
-  m_LocalPosition: {x: 42.06574, y: 0.5899624, z: 29.225061}
-  m_LocalScale: {x: 0.04033692, y: 8.168192, z: 15.415937}
+  m_LocalRotation: {x: -0, y: 0.68008953, z: -0, w: 0.7331291}
+  m_LocalPosition: {x: 75.05946, y: -17.9, z: -282.5839}
+  m_LocalScale: {x: 0.10939532, y: 22.152445, z: 41.808636}
   m_Children: []
-  m_Father: {fileID: 346202666}
-  m_RootOrder: 4
+  m_Father: {fileID: 1203717476}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: -4.2990003, z: 0}
 --- !u!1 &62395813
 GameObject:
@@ -508,15 +491,9 @@ MonoBehaviour:
   lap3: {fileID: 547802747}
   countdownText: {fileID: 79472217}
   currentLapText: {fileID: 1080847199}
-  halfAlap: 1
-  checkpoints:
-  - {fileID: 1846917077}
-  - {fileID: 40287490}
   i: 0
   raceFinished: 0
   countdown: 0
-  raceEnds: 0
-  lapCompleted: 0
 --- !u!1 &151748715
 GameObject:
   m_ObjectHideFlags: 0
@@ -1870,7 +1847,7 @@ Transform:
   m_LocalScale: {x: 0.04033869, y: 8.168194, z: 8.676714}
   m_Children: []
   m_Father: {fileID: 346202666}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &426294816
 MonoBehaviour:
@@ -2070,7 +2047,7 @@ Transform:
   m_LocalScale: {x: 0.04033869, y: 8.168194, z: 10.130235}
   m_Children: []
   m_Father: {fileID: 346202666}
-  m_RootOrder: 6
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: -93.497, z: 0}
 --- !u!114 &470191186
 MonoBehaviour:
@@ -2358,7 +2335,7 @@ Transform:
   m_LocalScale: {x: 0.04033869, y: 8.168194, z: 11.21668}
   m_Children: []
   m_Father: {fileID: 346202666}
-  m_RootOrder: 7
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 64.049, z: 0}
 --- !u!114 &549917274
 MonoBehaviour:
@@ -3440,6 +3417,36 @@ Transform:
   m_Father: {fileID: 809844834}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 20.423, y: -14.549001, z: -7.7890005}
+--- !u!1 &1203717475
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1203717476}
+  m_Layer: 0
+  m_Name: CHECKPOINTS
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1203717476
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1203717475}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 1846917080}
+  - {fileID: 40287494}
+  m_Father: {fileID: 0}
+  m_RootOrder: 15
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1243845419
 GameObject:
   m_ObjectHideFlags: 0
@@ -4806,10 +4813,9 @@ GameObject:
   - component: {fileID: 1846917080}
   - component: {fileID: 1846917079}
   - component: {fileID: 1846917078}
-  - component: {fileID: 1846917081}
   m_Layer: 0
-  m_Name: checkpoint0
-  m_TagString: Untagged
+  m_Name: 0
+  m_TagString: checkpoint
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -4839,29 +4845,13 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1846917077}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.33, y: 0.5899624, z: -13.98}
-  m_LocalScale: {x: 0.040336896, y: 8.168192, z: 8.676708}
+  m_LocalRotation: {x: -0, y: 0.7071068, z: -0, w: 0.7071068}
+  m_LocalPosition: {x: -42.114296, y: -17.9, z: -196.51535}
+  m_LocalScale: {x: 0.10939529, y: 22.152445, z: 23.531576}
   m_Children: []
-  m_Father: {fileID: 346202666}
-  m_RootOrder: 3
+  m_Father: {fileID: 1203717476}
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1846917081
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1846917077}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c26ea5c06ba9bf41ae90254b928b088, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  checkum: 0
-  sound: {fileID: 8300000, guid: 362ebecc70701b843bbd3f7f8537daf5, type: 3}
-  soundOutput: {fileID: 256955484}
-  prevCheck: {fileID: 40287490}
-  lastCheck: 0
 --- !u!1 &1957109976
 GameObject:
   m_ObjectHideFlags: 0

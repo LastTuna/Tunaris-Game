@@ -8,6 +8,7 @@ TagManager:
   - tarmac
   - grass
   - puddle
+  - checkpoint
   layers:
   - Default
   - TransparentFX
