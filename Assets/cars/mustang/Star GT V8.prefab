@@ -529,6 +529,7 @@ GameObject:
   - component: {fileID: 95813879335261962}
   - component: {fileID: 54059254539753164}
   - component: {fileID: 114870856901549670}
+  - component: {fileID: 114769708881821258}
   - component: {fileID: 114170287431492624}
   - component: {fileID: 114524565912517370}
   - component: {fileID: 114124512726317384}
@@ -3110,8 +3111,6 @@ MonoBehaviour:
   gearDisplay: {fileID: 0}
   frontLights: {fileID: 1334987660404044}
   rearLights: {fileID: 1182264426634634}
-  dirt: {fileID: 0}
-  dirtMesh: {fileID: 23502014733520254}
   dirtiness: 0
   drivingWheel: {fileID: 4935146433571986}
   pointer: {fileID: 0}
@@ -3500,6 +3499,18 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114769708881821258
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1572315012842202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1504086a75da2d146bc80823f431c0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextCheck: 0
 --- !u!114 &114814558910237200
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3548,7 +3559,7 @@ MonoBehaviour:
     i14: 186
     i15: 212
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114892743213713256
 MonoBehaviour:
   m_ObjectHideFlags: 1

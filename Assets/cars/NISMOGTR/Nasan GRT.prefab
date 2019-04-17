@@ -51,6 +51,7 @@ GameObject:
   - component: {fileID: 4697845365785056}
   - component: {fileID: 95906130271378180}
   - component: {fileID: 54642047879784156}
+  - component: {fileID: 114063502619125572}
   - component: {fileID: 114178296133233330}
   - component: {fileID: 114545652239467050}
   - component: {fileID: 114674993457610030}
@@ -999,6 +1000,18 @@ MonoBehaviour:
   m_SnapThreshold: 5
   m_InterpolateRotation: 1
   m_InterpolateMovement: 1
+--- !u!114 &114063502619125572
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1275164165662146}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1504086a75da2d146bc80823f431c0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextCheck: 0
 --- !u!114 &114139481545131814
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -1034,8 +1047,6 @@ MonoBehaviour:
   gearDisplay: {fileID: 0}
   frontLights: {fileID: 0}
   rearLights: {fileID: 0}
-  dirt: {fileID: 0}
-  dirtMesh: {fileID: 0}
   dirtiness: 0
   drivingWheel: {fileID: 0}
   pointer: {fileID: 0}
@@ -1061,6 +1072,7 @@ MonoBehaviour:
   ratio: 0
   FrontWheelDriveBias: 0.3
   lsd: 0.5
+  airSpeed: 0
   engineRPM: 0
   engineREDLINE: 9000
   engineTorque:
@@ -1090,6 +1102,8 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 1
   unitOutput: 0
+  clutchPressure: 0
+  clutchRPM: 0
   gears:
   - -5
   - 0
@@ -1102,6 +1116,9 @@ MonoBehaviour:
   gear: 0
   shifting: 0
   carIndex: 1
+  debug1: 0
+  debug2: 0
+  debug3: 0
   CenterOfGravity: {x: 0, y: -0.3, z: 0.1}
 --- !u!114 &114224273390218380
 MonoBehaviour:
@@ -1189,7 +1206,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ff73f5ea878f84b8086feaf0db8bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SoundArray: []
+  CarEngine: {fileID: 0}
+  sounds: []
   hasTurbo: 1
   boostSource: {fileID: 82581044867460750}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
@@ -1226,7 +1244,7 @@ MonoBehaviour:
     i14: 119
     i15: 126
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114704454808910794
 MonoBehaviour:
   m_ObjectHideFlags: 1

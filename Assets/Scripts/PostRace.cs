@@ -100,13 +100,13 @@ public class PostRace : MonoBehaviour
                 if (e < personalBest)
                 {
                     despacito.GetComponent<Text>().text += " PB";
+                    dataController.BestestLapTimes[0] = string.Format("{0:00}:{1:00}.{2:000}_{3}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds, carIndex);
                 }
                 else
                 {
                     despacito.GetComponent<Text>().text += " BEST";
                 }
                 despacito.GetComponent<Text>().color = new Color(200,0,0);
-                dataController.BestestLapTimes[0] = string.Format("{0:00}:{1:00}.{2:000}_{3}", lapTally[count].Minutes, lapTally[count].Seconds, lapTally[count].Milliseconds, carIndex);
             }
             despacito.transform.position = new Vector3(spawnPos.x, spawnPos.y + raise, 0);
             textInstances.Add(despacito);//add all elements to list (will use later)
