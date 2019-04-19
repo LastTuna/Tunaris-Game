@@ -21,7 +21,7 @@ public class CheckpointReader : MonoBehaviour {
             if (int.Parse(checkpoint.name) == 0 && nextCheck > 0)
             {
                 nextCheck = 0;
-                raceManager.LapCompleted();
+                raceManager.LapCompleted("t");//add to detect username
             }
         }
     }

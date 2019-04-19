@@ -13,7 +13,7 @@ public class RaceStart : MonoBehaviour {
     public CanvasGroup gameplayUI;//canvas group for the active UI during race
     public CanvasGroup postRaceUI;//canvas group for the UI that activates post-race
     public bool IsRaceStarted;// Is the race started
-    public int currentLap;//current lap(player). 0 = 1st lap, 1 = 2nd lap!!!!!
+    public List<int> currentLap;//current lap.
     public int laps;//amount of laps; changeable in menu?
     public Text currentTime;//text value
     public Text lap1;//the top ticker on UI - alternatively displays best lap
@@ -50,15 +50,15 @@ public class RaceStart : MonoBehaviour {
         GameObject gridSpot = GameObject.Find("Pos_" + position);
         FindObjectOfType<CarBehaviour>().gameObject.transform.position = gridSpot.transform.position;
         FindObjectOfType<CarBehaviour>().gameObject.transform.rotation = gridSpot.transform.rotation;
-
+        //foreach
     }
 
     void Update() {
         if (IsRaceStarted) {
             LaptimeTicker();
-            currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps));
+            currentLapText.text = ("LAP: " + (currentLap[0] + 1) + "/" + (laps));
 
-            if (laps <= currentLap || raceFinished)
+            if (laps <= currentLap[0] || raceFinished)
             {
                 //change this, to check EVERY PLAYERS VALUE OF RACE COMPLETE. IF RACE IS COMPLETE FOR SOMEONE
                 //THEN TRIGGER END RACE
@@ -68,16 +68,16 @@ public class RaceStart : MonoBehaviour {
         }
     }
 
-    public void LapCompleted()
+    public void LapCompleted(string player)
     {
-        currentLap++;
+        currentLap[0]++;
         laptimes.Add(CurrentLapTime);//tally current lap time to List
         CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
         
         //tally on screen values
-        if (currentLap > 2)
+        if (currentLap[0] > 2)
         {
-            lastLapTime = laptimes[currentLap - 1];
+            lastLapTime = laptimes[currentLap[0] - 1];
             fastestLapTime = laptimes.Min();
             //lap 1 = best lap
             //lap 2 = last completed lap time
@@ -85,17 +85,17 @@ public class RaceStart : MonoBehaviour {
             lap1.text = string.Format("{0:00}:{1:00}:{2:000}", fastestLapTime.Minutes, fastestLapTime.Seconds, fastestLapTime.Milliseconds);
             lap2.text = string.Format("{0:00}:{1:00}:{2:000}", lastLapTime.Minutes, lastLapTime.Seconds, lastLapTime.Milliseconds);
         }
-        else if (currentLap > 1)
+        else if (currentLap[0] > 1)
         {
             //lap 1 = first lap
             //lap 2 = second lap
             //lap 3 = current lap
-            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 2].Minutes, laptimes[currentLap - 2].Seconds, laptimes[currentLap - 2].Milliseconds);
-            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
+            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 2].Minutes, laptimes[currentLap[0] - 2].Seconds, laptimes[currentLap[0] - 2].Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 1].Minutes, laptimes[currentLap[0] - 1].Seconds, laptimes[currentLap[0] - 1].Milliseconds);
         }
-        else if (currentLap > 0)
+        else if (currentLap[0] > 0)
         {
-            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap - 1].Minutes, laptimes[currentLap - 1].Seconds, laptimes[currentLap - 1].Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 1].Minutes, laptimes[currentLap[0] - 1].Seconds, laptimes[currentLap[0] - 1].Milliseconds);
         }
     }
 
