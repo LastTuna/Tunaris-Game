@@ -1,13 +1,12 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CheckpointReader : MonoBehaviour {
 
     public int nextCheck = 0;
-    RaceStart raceManager;
+    public string username;
     void Start()
     {
-        raceManager = FindObjectOfType<RaceStart>();
+
     }
 
     void OnTriggerEnter(Collider checkpoint)
@@ -21,7 +20,7 @@ public class CheckpointReader : MonoBehaviour {
             if (int.Parse(checkpoint.name) == 0 && nextCheck > 0)
             {
                 nextCheck = 0;
-                raceManager.LapCompleted("t");//add to detect username
+                FindObjectOfType<RaceStart>().LapCompleted(username);//add to detect username
             }
         }
     }

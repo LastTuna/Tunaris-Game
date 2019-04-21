@@ -112,6 +112,7 @@ GameObject:
   - component: {fileID: 114540224517390256}
   - component: {fileID: 114182985723725132}
   - component: {fileID: 114089068783284646}
+  - component: {fileID: 114696828157447796}
   m_Layer: 0
   m_Name: Nasan GRT
   m_TagString: Untagged
@@ -2171,8 +2172,6 @@ MonoBehaviour:
   gearDisplay: {fileID: 0}
   frontLights: {fileID: 1306844188486534}
   rearLights: {fileID: 1855782870192608}
-  dirt: {fileID: 0}
-  dirtMesh: {fileID: 23106547202211570}
   dirtiness: 0
   drivingWheel: {fileID: 4178962340362692}
   pointer: {fileID: 0}
@@ -2228,7 +2227,7 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
-  clutchPressure: 0
+  clutchPressure: 1
   clutchRPM: 0
   gears:
   - -5
@@ -2354,7 +2353,7 @@ MonoBehaviour:
     i14: 217
     i15: 40
   m_ServerOnly: 0
-  m_LocalPlayerAuthority: 0
+  m_LocalPlayerAuthority: 1
 --- !u!114 &114540224517390256
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2477,6 +2476,19 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   wheelrpm: 0
+--- !u!114 &114696828157447796
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1145062829267108}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1504086a75da2d146bc80823f431c0db, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  nextCheck: 0
+  username: 
 --- !u!114 &114699805383176952
 MonoBehaviour:
   m_ObjectHideFlags: 1

@@ -483,7 +483,6 @@ MonoBehaviour:
   gameplayUI: {fileID: 272638770}
   postRaceUI: {fileID: 908617379}
   IsRaceStarted: 0
-  currentLap: 0
   laps: 20
   currentTime: {fileID: 199590947}
   lap1: {fileID: 1179558362}
@@ -491,6 +490,8 @@ MonoBehaviour:
   lap3: {fileID: 547802747}
   countdownText: {fileID: 79472217}
   currentLapText: {fileID: 1080847199}
+  localUser: 
+  tgNetworkManager: {fileID: 0}
   i: 0
   raceFinished: 0
   countdown: 0
@@ -1176,7 +1177,7 @@ MonoBehaviour:
   interiorCam: {fileID: 0}
   distance: 6.4
   height: 1.4
-  rotationDamping: 0
+  rotationDamping: 9
   heightDamping: 8
   zoomRatio: 0.5
   DefaultFOV: 60
@@ -3464,7 +3465,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!23 &1243845420
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -3812,6 +3813,10 @@ Prefab:
         type: 2}
       propertyPath: m_WheelDampingRate
       value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1287109412382308, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}

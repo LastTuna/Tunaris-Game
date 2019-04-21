@@ -3128,7 +3128,7 @@ MonoBehaviour:
   wheelRRTrans: {fileID: 4249153872764336}
   currentSpeed: 0
   wheelRPM: 0
-  manual: 2
+  manual: 1
   currentGrip: 0
   springStiffness: 8000
   brakeStrength: 200
@@ -3172,7 +3172,7 @@ MonoBehaviour:
   turboSpool: 0.1
   spooled: 0
   unitOutput: 0
-  clutchPressure: 0
+  clutchPressure: 1
   clutchRPM: 0
   gears:
   - -5
@@ -3511,6 +3511,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nextCheck: 0
+  username: 
 --- !u!114 &114814558910237200
 MonoBehaviour:
   m_ObjectHideFlags: 1

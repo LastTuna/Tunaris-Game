@@ -77,6 +77,7 @@ public class TGNetworkManager : NetworkManager {
                 GameObject carInstance = Instantiate(prefab, currentPlayer.PlayerSpawn.transform.position, Quaternion.identity);
                 currentPlayer.PlayerGO = carInstance;
                 NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerID);
+                carInstance.GetComponent<CheckpointReader>().username = currentPlayer.PlayerName;
                 break;
             }
         }

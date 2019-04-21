@@ -219,8 +219,8 @@ public class Controller : MonoBehaviour {
         OnlineCanvas.gameObject.SetActive(true);
         //fetch values from save data
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
-        GameObject.Find("IP Address").GetComponent<Text>().text = data.IP;
-        GameObject.Find("Username").GetComponent<Text>().text = data.PlayerName;
+        GameObject.Find("IP Input").GetComponent<InputField>().text = data.IP;
+        GameObject.Find("Username Input").GetComponent<InputField>().text = data.PlayerName;
 
     }
 

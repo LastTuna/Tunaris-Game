@@ -13,7 +13,7 @@ public class RaceStart : MonoBehaviour {
     public CanvasGroup gameplayUI;//canvas group for the active UI during race
     public CanvasGroup postRaceUI;//canvas group for the UI that activates post-race
     public bool IsRaceStarted;// Is the race started
-    public List<int> currentLap;//current lap.
+    public Dictionary<string, int> currentLap = new Dictionary<string, int>();//current lap username,lap.
     public int laps;//amount of laps; changeable in menu?
     public Text currentTime;//text value
     public Text lap1;//the top ticker on UI - alternatively displays best lap
@@ -21,8 +21,8 @@ public class RaceStart : MonoBehaviour {
     public Text lap3;//third ticker on UI / active lap
     public Text countdownText;//countdown visual
     public Text currentLapText;//laps / current lap
-    
-
+    public string localUser;
+    public TGNetworkManager tgNetworkManager;
     public int i;
     public bool raceFinished = false;//flag for when races finished
     public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
@@ -46,38 +46,45 @@ public class RaceStart : MonoBehaviour {
     public void StartRace(int position)
     {
         StartCoroutine(CountDown());
-
         GameObject gridSpot = GameObject.Find("Pos_" + position);
         FindObjectOfType<CarBehaviour>().gameObject.transform.position = gridSpot.transform.position;
         FindObjectOfType<CarBehaviour>().gameObject.transform.rotation = gridSpot.transform.rotation;
-        //foreach
+        tgNetworkManager = FindObjectOfType<TGNetworkManager>();
+        foreach(TGNetworkManager.ConnectedPlayer knownPlayer in tgNetworkManager.Players.Values)
+        {
+            currentLap.Add(knownPlayer.PlayerName, 0);
+            //FOREACH DEFINE EVERY USER TO DICTIONARY
+        }
+        localUser = FindObjectOfType<DataController>().PlayerName;
     }
 
     void Update() {
         if (IsRaceStarted) {
             LaptimeTicker();
-            currentLapText.text = ("LAP: " + (currentLap[0] + 1) + "/" + (laps));
+            currentLapText.text = ("LAP: " + (currentLap[localUser] + 1) + "/" + (laps));
 
-            if (laps <= currentLap[0] || raceFinished)
+            //foreach get how many people are in lobby and check if anyones value is finished
+            foreach (string player in currentLap.Keys)
             {
-                //change this, to check EVERY PLAYERS VALUE OF RACE COMPLETE. IF RACE IS COMPLETE FOR SOMEONE
-                //THEN TRIGGER END RACE
-                IsRaceStarted = false;
-                StartCoroutine(EndRace());
+                if (laps <= currentLap[player] || raceFinished)
+                {
+                    IsRaceStarted = false;
+                    StartCoroutine(EndRace());
+                }
             }
         }
     }
 
     public void LapCompleted(string player)
     {
-        currentLap[0]++;
+        Debug.Log(player + " completed lap " + (currentLap[player] + 1));
         laptimes.Add(CurrentLapTime);//tally current lap time to List
         CurrentLapTime = CurrentLapTime.Subtract(CurrentLapTime - TimeSpan.FromMilliseconds(1));//reset current lap timer
-        
+        currentLap[player] = currentLap[player] + 1;
         //tally on screen values
-        if (currentLap[0] > 2)
+        if (currentLap[localUser] > 2)
         {
-            lastLapTime = laptimes[currentLap[0] - 1];
+            lastLapTime = laptimes[currentLap[localUser] - 1];
             fastestLapTime = laptimes.Min();
             //lap 1 = best lap
             //lap 2 = last completed lap time
@@ -85,17 +92,17 @@ public class RaceStart : MonoBehaviour {
             lap1.text = string.Format("{0:00}:{1:00}:{2:000}", fastestLapTime.Minutes, fastestLapTime.Seconds, fastestLapTime.Milliseconds);
             lap2.text = string.Format("{0:00}:{1:00}:{2:000}", lastLapTime.Minutes, lastLapTime.Seconds, lastLapTime.Milliseconds);
         }
-        else if (currentLap[0] > 1)
+        else if (currentLap[localUser] > 1)
         {
             //lap 1 = first lap
             //lap 2 = second lap
             //lap 3 = current lap
-            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 2].Minutes, laptimes[currentLap[0] - 2].Seconds, laptimes[currentLap[0] - 2].Milliseconds);
-            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 1].Minutes, laptimes[currentLap[0] - 1].Seconds, laptimes[currentLap[0] - 1].Milliseconds);
+            lap1.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[localUser] - 2].Minutes, laptimes[currentLap[localUser] - 2].Seconds, laptimes[currentLap[localUser] - 2].Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[localUser] - 1].Minutes, laptimes[currentLap[localUser] - 1].Seconds, laptimes[currentLap[localUser] - 1].Milliseconds);
         }
-        else if (currentLap[0] > 0)
+        else if (currentLap[localUser] > 0)
         {
-            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[0] - 1].Minutes, laptimes[currentLap[0] - 1].Seconds, laptimes[currentLap[0] - 1].Milliseconds);
+            lap2.text = string.Format("{0:00}:{1:00}:{2:000}", laptimes[currentLap[localUser] - 1].Minutes, laptimes[currentLap[localUser] - 1].Seconds, laptimes[currentLap[localUser] - 1].Milliseconds);
         }
     }
 
