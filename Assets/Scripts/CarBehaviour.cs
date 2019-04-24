@@ -1,9 +1,10 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 using UnityEngine.Networking;
 using UnityEngine.UI;
+using SharpDX.DirectInput;
+using System.Collections.Generic;
+using System;
 
 public class CarBehaviour : NetworkBehaviour {
     public EngineAudioBehaviour EngineAudio;
@@ -75,6 +76,14 @@ public class CarBehaviour : NetworkBehaviour {
     public float debug2;
     public float debug3;
 
+    // FFB shit
+    private DeviceInstance steeringWheel;
+    private Joystick steeringWheelJoy;
+    private Effect ffbeffect;
+    private EffectInfo constantForce;
+    private SharpDX.DirectInput.ConstantForce ffbForce;
+    private int[] axes, dirs;
+
     public JointSpring springs = new JointSpring {
         spring = 8000,
         damper = 800,
@@ -97,7 +106,7 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-            
+
             //dirt = gameObject.transform.Find("DIRT").GetComponent<Renderer>().material;
 
             wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
@@ -124,15 +133,106 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.suspensionSpring = springs;
             wheelRL.suspensionSpring = springs;
             wheelRR.suspensionSpring = springs;
+
+
+            // Find an FFB wheel and hook it
+            DirectInput directInput = new DirectInput();
+            var ret = directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.ForceFeedback);
+            if (ret.Count > 0) {
+                steeringWheel = ret[0];
+            }
+            steeringWheelJoy = new Joystick(directInput, steeringWheel.InstanceGuid);
+            steeringWheelJoy.SetCooperativeLevel(GetWindowHandle(), CooperativeLevel.Exclusive | CooperativeLevel.Background);
+            steeringWheelJoy.Properties.AutoCenter = true;
+
+
+            steeringWheelJoy.Acquire();
+
+
+            List<int> actuatorsObjectTypes = new List<int>();
+            //Get all available force feedback actuators
+            foreach (DeviceObjectInstance doi in steeringWheelJoy.GetObjects()) {
+                if ((doi.ObjectId.Flags & DeviceObjectTypeFlags.ForceFeedbackActuator) != 0)
+                    actuatorsObjectTypes.Add((int)doi.ObjectId.Flags);
+            }
+
+            axes = new Int32[actuatorsObjectTypes.Count];
+            int i = 0;
+            foreach (int objt in actuatorsObjectTypes) {
+                axes[i++] = objt;
+            }
+
+            //Set effect direction
+            dirs = new int[] { 1 };
+
+            ffbForce = new SharpDX.DirectInput.ConstantForce {
+                Magnitude = 0
+            };
+            var ep = new EffectParameters {
+                Duration = -1,
+                Flags = EffectFlags.Cartesian | EffectFlags.ObjectIds,
+                Gain = 10000,
+                StartDelay = 0,
+                SamplePeriod = 0,
+                TriggerButton = -1,
+                TriggerRepeatInterval = 0
+            };
+            ep.SetAxes(axes, dirs);
+            ep.Parameters = ffbForce;
+
+            var allEffects = steeringWheelJoy.GetEffects();
+            foreach (var effectInfo in allEffects) {
+                if (effectInfo.Name.Contains("Constant")) {
+                    constantForce = effectInfo;
+                }
+            }
+
+            ffbeffect = new Effect(steeringWheelJoy, constantForce.Guid, ep);
+            ffbeffect.Start();
         }
     }
+
+    /*** yolo 
+     */
+    [System.Runtime.InteropServices.DllImport("user32.dll")]
+    private static extern System.IntPtr GetActiveWindow();
+
+    public static System.IntPtr GetWindowHandle() {
+        return GetActiveWindow();
+    }
+
+    /* */
 
     void FixedUpdate() {
         if (isLocalPlayer) {
             if (manual == 2) clutchPressure = 1 - Input.GetAxis("Clutch");
             Engine();
-            wheelFR.steerAngle = 20 * Input.GetAxis("Steering");//steering
-            wheelFL.steerAngle = 20 * Input.GetAxis("Steering");
+
+            // FFB calculations
+            float targetSteering = 20 * Input.GetAxis("Steering");
+                
+            WheelHit wheelHitR, wheelHitL;
+            wheelFR.GetGroundHit(out wheelHitR);
+            wheelFL.GetGroundHit(out wheelHitL);
+            float slipR = wheelHitR.sidewaysSlip,
+                slipL = wheelHitL.sidewaysSlip;
+            
+            if (Input.GetButton("logiquake")) {
+                // meme
+                ffbForce.Magnitude = ffbForce.Magnitude < 0 ? 150000 : -150000;
+            } else {
+                // non meme
+                ffbForce.Magnitude = -(int)((slipR +slipL) * 15000);
+            }
+            var ffbParams = new EffectParameters();
+            ffbParams.Parameters = ffbForce;
+            ffbeffect.SetParameters(ffbParams, EffectParameterFlags.TypeSpecificParameters);
+
+            //steering
+            wheelFR.steerAngle = targetSteering;
+            wheelFL.steerAngle = targetSteering;
+
+
             //currentSpeed = 2 * 22/7 * wheelFL.radius * wheelFL.rpm * 60 / 1000; legacy
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
             currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
