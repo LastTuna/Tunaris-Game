@@ -215,15 +215,17 @@ public class CarBehaviour : NetworkBehaviour {
                 WheelHit wheelHitR, wheelHitL;
                 wheelFR.GetGroundHit(out wheelHitR);
                 wheelFL.GetGroundHit(out wheelHitL);
-                float slipR = wheelHitR.sidewaysSlip,
-                    slipL = wheelHitL.sidewaysSlip;
 
                 if (Input.GetButton("logiquake")) {
                     // meme
                     ffbForce.Magnitude = ffbForce.Magnitude < 0 ? 150000 : -150000;
                 } else {
                     // non meme
-                    ffbForce.Magnitude = -(int)((slipR + slipL) * 15000);
+                    // wheel weight calc
+                    float wheelWeight = 1 - ((((wheelHitR.forwardSlip + wheelHitL.forwardSlip) / 2) + ((wheelHitR.sidewaysSlip + wheelHitL.sidewaysSlip) / 2))/2);
+                    float centering = Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up);
+                    float baseForce = (wheelHitR.force + wheelHitL.force) * 5;
+                    ffbForce.Magnitude = (int) (baseForce * wheelWeight * centering * -0.5);
                 }
                 var ffbParams = new EffectParameters();
                 ffbParams.Parameters = ffbForce;
