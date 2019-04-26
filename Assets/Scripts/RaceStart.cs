@@ -31,7 +31,9 @@ public class RaceStart : MonoBehaviour {
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
     public int countdown;//countdown begins at end race
     public TimeSpan duration = new TimeSpan(0, 0, 00, 00, 000);//creates new timespan,
-    //used to tally time from beginning of race
+                                                               //used to tally time from beginning of race
+
+    private CarBehaviour localCar;
 
     public IEnumerator CountDown() {
         FindObjectOfType<CourseController>().OnRaceStart();
@@ -40,6 +42,7 @@ public class RaceStart : MonoBehaviour {
             yield return new WaitForSeconds(1);
         }
         AudioSource.PlayOneShot(RaceStartSounds[RaceStartSounds.Count - 1]);
+        localCar.RaceStart();
         IsRaceStarted = true;
     }
 
@@ -47,8 +50,17 @@ public class RaceStart : MonoBehaviour {
     {
         StartCoroutine(CountDown());
         GameObject gridSpot = GameObject.Find("Pos_" + position);
-        FindObjectOfType<CarBehaviour>().gameObject.transform.position = gridSpot.transform.position;
-        FindObjectOfType<CarBehaviour>().gameObject.transform.rotation = gridSpot.transform.rotation;
+        localCar = null;
+        foreach(var carb in FindObjectsOfType<CarBehaviour>()) {
+            if (carb.isLocalPlayer) {
+                localCar = carb;
+                break;
+            }
+        }
+        localCar.gameObject.transform.position = gridSpot.transform.position;
+        localCar.gameObject.transform.rotation = gridSpot.transform.rotation;
+        localCar.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+        localCar.PreRaceStart();
         tgNetworkManager = FindObjectOfType<TGNetworkManager>();
         foreach(TGNetworkManager.ConnectedPlayer knownPlayer in tgNetworkManager.Players.Values)
         {

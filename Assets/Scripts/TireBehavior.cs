@@ -10,6 +10,7 @@ public class TireBehavior : MonoBehaviour
     public float TreadHealth = 100;
     public float brakeStrength = 300;
     public bool handbrake = false;
+    public bool raceStartHandbrake = false;
     public float brakeHeat = 26;//celsius
     public float diameter;
     public float groundDampness;//get this value from to-be-implemented weather controller.
@@ -143,7 +144,7 @@ public class TireBehavior : MonoBehaviour
         {
             tyre.brakeTorque = 0;
         }
-        if (Input.GetAxis("Handbrake") > 0f && handbrake)//HANDBRAKE
+        if (raceStartHandbrake || (Input.GetAxis("Handbrake") > 0f && handbrake))//HANDBRAKE
         {
             tyre.brakeTorque = 700;
         }

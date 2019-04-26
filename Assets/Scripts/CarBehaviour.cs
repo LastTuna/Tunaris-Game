@@ -500,6 +500,22 @@ public class CarBehaviour : NetworkBehaviour {
         
     }
 
+    // start procedure
+    public void PreRaceStart() {
+        gear = 1;
+        wheelFL.GetComponent<TireBehavior>().raceStartHandbrake = true;
+        wheelFR.GetComponent<TireBehavior>().raceStartHandbrake = true;
+        wheelRL.GetComponent<TireBehavior>().raceStartHandbrake = true;
+        wheelRR.GetComponent<TireBehavior>().raceStartHandbrake = true;
+    }
+
+    public void RaceStart() {
+        wheelFL.GetComponent<TireBehavior>().raceStartHandbrake = false;
+        wheelFR.GetComponent<TireBehavior>().raceStartHandbrake = false;
+        wheelRL.GetComponent<TireBehavior>().raceStartHandbrake = false;
+        wheelRR.GetComponent<TireBehavior>().raceStartHandbrake = false;
+    }
+
     void LightsOn()
     {
         if (Input.GetButtonDown("Lights") && !frontLights.activeSelf)
