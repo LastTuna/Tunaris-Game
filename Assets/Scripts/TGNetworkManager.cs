@@ -18,8 +18,10 @@ public class TGNetworkManager : NetworkManager {
     // Race Start script
     public RaceStart RaceStart;
 
-    // Players connected
+    // Players connected on the SERVER
     public Dictionary<NetworkConnection, ConnectedPlayer> Players = new Dictionary<NetworkConnection, ConnectedPlayer>();
+    // Player list for the client
+    public Dictionary<int, string> ClientPlayers = new Dictionary<int, string>();
 
     // Called on the HOST after OSC, when the client is connected and ready to be added
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId) {
@@ -43,6 +45,7 @@ public class TGNetworkManager : NetworkManager {
     public override void OnStartServer() {
         base.OnStartServer();
         NetworkServer.RegisterHandler(TGMessageTypes.PlayerConnection, HandlePlayerConnection);
+        NetworkServer.RegisterHandler(TGMessageTypes.PlayerFinished, HandlePlayerFinished);
     }
 
     // Called on the HOST when a player leaves
@@ -90,11 +93,29 @@ public class TGNetworkManager : NetworkManager {
         GameObject.Find("PlayerList").GetComponent<Text>().text = newText;
     }
 
+    // Called on the HOST to handle a player finishing the race, starting end of race procedure
+    public void HandlePlayerFinished(NetworkMessage netMsg) {
+        foreach(var conn in Players.Keys) {
+            conn.Send(TGMessageTypes.RaceEnd, new RaceEndMessage());
+        }
+    }
+
     // Called on the CLIENT to handle sending the PlayerConnection message
     public override void OnClientConnect(NetworkConnection conn) {
         base.OnClientConnect(conn);
         client.RegisterHandler(TGMessageTypes.CountdownStart, HandleClientCountdownStart);
+        client.RegisterHandler(TGMessageTypes.PlayerList, HandlePlayerList);
+        client.RegisterHandler(TGMessageTypes.RaceEnd, HandleRaceEnd);
+
+        // Register the event to be used by RaceStart to send the player done message
+        RaceStart.PlayerFinished += RaceStart_PlayerFinished;
+
         client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = UserSettings.SelectedCar, PlayerName = UserSettings.PlayerName });
+    }
+
+    // Called on the CLIENT by RaceStart (NOT NET) to send race done message
+    private void RaceStart_PlayerFinished() {
+        client.Send(TGMessageTypes.PlayerFinished, new PlayerFinishedMessage());
     }
 
     // Called on the CLIENT to handle the start of the countdown
@@ -102,6 +123,19 @@ public class TGNetworkManager : NetworkManager {
         CountdownStartMessage message = netMsg.ReadMessage<CountdownStartMessage>();
         RaceStart.enabled = true;
         RaceStart.StartRace(message.GridSpot);
+    }
+
+    // Called on the CLIENT to handle receiving player list from server
+    private void HandlePlayerList(NetworkMessage netMsg) {
+        PlayerListMessage message = netMsg.ReadMessage<PlayerListMessage>();
+        for(int i = 0; i < message.PlayerNames.Length; i++) {
+            ClientPlayers.Add(message.NetworkID[i], message.PlayerNames[i]);
+        }
+    }
+
+    // Called on the CLIENT to handle race end
+    private void HandleRaceEnd(NetworkMessage netMsg) {
+        RaceStart.EndRaceWrapper();
     }
 
     // Called on the SERVER when the host starts the game
@@ -122,6 +156,9 @@ public class TGNetworkManager : NetworkManager {
     public class TGMessageTypes {
         public static short PlayerConnection = MsgType.Highest + 1;
         public static short CountdownStart = MsgType.Highest + 2;
+        public static short PlayerList = MsgType.Highest + 3;
+        public static short RaceEnd = MsgType.Highest + 4;
+        public static short PlayerFinished = MsgType.Highest + 4;
     };
 
     public class PlayerConnectionMessage : MessageBase {
@@ -133,7 +170,20 @@ public class TGNetworkManager : NetworkManager {
         public int PlayersConnected;
         public int GridSpot;
     }
-    
+
+    public class PlayerListMessage : MessageBase {
+        public string[] PlayerNames;
+        public int[] NetworkID;
+    }
+
+    public class RaceEndMessage : MessageBase {
+
+    }
+
+    public class PlayerFinishedMessage : MessageBase {
+
+    }
+
     // Player state class
     public class ConnectedPlayer {
         public string CarName;

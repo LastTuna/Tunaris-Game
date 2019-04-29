@@ -14,6 +14,6 @@ EditorBuildSettings:
   - enabled: 0
     path: Assets/Scenes/Courses/Course 2.unity
     guid: fa309ea05474eb748893920df24be294
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/post_race.unity
     guid: 90993177939f47e4894635559b405100

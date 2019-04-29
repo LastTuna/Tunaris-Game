@@ -483,7 +483,8 @@ MonoBehaviour:
   gameplayUI: {fileID: 272638770}
   postRaceUI: {fileID: 908617379}
   IsRaceStarted: 0
-  laps: 20
+  currentLap: 0
+  laps: 1
   currentTime: {fileID: 199590947}
   lap1: {fileID: 1179558362}
   lap2: {fileID: 842745099}
@@ -491,7 +492,6 @@ MonoBehaviour:
   countdownText: {fileID: 79472217}
   currentLapText: {fileID: 1080847199}
   localUser: 
-  tgNetworkManager: {fileID: 0}
   i: 0
   raceFinished: 0
   countdown: 0
