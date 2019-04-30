@@ -495,6 +495,7 @@ MonoBehaviour:
   i: 0
   raceFinished: 0
   countdown: 0
+  PostRaceCountdownLength: 5
 --- !u!1 &151748715
 GameObject:
   m_ObjectHideFlags: 0
@@ -4265,7 +4266,7 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4493458942688046, guid: 3ba45f4ed1118d94586f9d062e41712e, type: 2}
       propertyPath: m_LocalPosition.x
-      value: -0.09
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4493458942688046, guid: 3ba45f4ed1118d94586f9d062e41712e, type: 2}
       propertyPath: m_LocalPosition.y
@@ -4273,7 +4274,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4493458942688046, guid: 3ba45f4ed1118d94586f9d062e41712e, type: 2}
       propertyPath: m_LocalPosition.z
-      value: 0.94
+      value: 0.33
       objectReference: {fileID: 0}
     - target: {fileID: 4493458942688046, guid: 3ba45f4ed1118d94586f9d062e41712e, type: 2}
       propertyPath: m_LocalRotation.x

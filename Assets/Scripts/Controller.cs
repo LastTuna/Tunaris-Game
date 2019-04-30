@@ -322,12 +322,7 @@ public class Controller : MonoBehaviour {
         GoWashCanvas.gameObject.SetActive(true);
         GoRaceCanvas.gameObject.SetActive(false);
         DataController dataController = FindObjectOfType<DataController>();
-        int carIndex = GetIndex();
-        string selectedCarName = dataController.SelectedCar;
-        GameObject selectedCar = null;
-
-        selectedCar = carsPrefabs[carIndex];
-        selectedCar = Instantiate(carsPrefabs[carIndex], GoWashCanvas.transform);
+        GameObject selectedCar = Instantiate(carsPrefabs.Find(carpre => carpre.name == dataController.SelectedCar), GoWashCanvas.transform);
         CarScriptKill(selectedCar);
         selectedCar.transform.localScale = new Vector3(100, 100, 100);
         selectedCar.transform.localPosition = new Vector3(0, -50, -200);
@@ -339,7 +334,7 @@ public class Controller : MonoBehaviour {
     public void WashMe()
     {
         DataController dataController = FindObjectOfType<DataController>();
-        if (dataController.Cash >= 5 && dataController.Dirtiness[GetIndex()] > 0.03f && !washing)
+        if (dataController.Cash >= 5 && dataController.GetDirtiness() > 0.03f && !washing)
         {
             washing = true;
             StartCoroutine(Washer());
@@ -349,34 +344,19 @@ public class Controller : MonoBehaviour {
     {
         DataController dataController = FindObjectOfType<DataController>();
 
-        int carIndex = GetIndex();
         dataController.Cash += -5;
         FindObjectOfType<Spinner>().rotSpeed = 9f;
-        while (dataController.Dirtiness[carIndex] > 0)
+        while (dataController.GetDirtiness() > 0)
         {
-        dataController.Dirtiness[carIndex] += -0.02f;
+        dataController.AddDirtiness(-0.02f);
         yield return new WaitForSeconds(0.1f);
         }
-        if (dataController.Dirtiness[carIndex] < 0)
+        if (dataController.GetDirtiness() < 0)
         {
-        dataController.Dirtiness[carIndex] = 0;
+        dataController.SetDirtiness(0);
         }
         FindObjectOfType<Spinner>().rotSpeed = 1f;
         washing = false;
-    }
-    public int GetIndex()
-    {
-        int carIndex = 0;
-        DataController dataController = FindObjectOfType<DataController>();
-        foreach (GameObject e in carsPrefabs)
-        {//get cars index
-            if (dataController.SelectedCar.Equals(e.name))
-            {
-                break;
-            }
-            carIndex++;
-        }
-        return carIndex;
     }
 
     public void CarScriptKill (GameObject spinner)
@@ -422,10 +402,14 @@ public class Controller : MonoBehaviour {
         {
             if (Input.GetKeyDown("t") && !bestest.activeSelf)
             {
-                carro = Instantiate(carsPrefabs[Convert.ToInt32(data.BestestLapTimes[0].Substring(10, 1))], new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
+                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
+                foreach(var carpair in data.BestestLapTimes) {
+                    fastestLap = carpair;
+                }
+                carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
                 CarScriptKill(carro);
                 bestest.SetActive(true);
-                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", data.BestestLapTimes[0].Substring(0, 2), data.BestestLapTimes[0].Substring(3, 2), data.BestestLapTimes[0].Substring(6, 3));
+                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
             }
             else if (Input.GetKeyDown("t") && bestest.activeSelf)
             {

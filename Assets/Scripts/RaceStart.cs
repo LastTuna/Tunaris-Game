@@ -24,11 +24,12 @@ public class RaceStart : MonoBehaviour {
     public string localUser;
     public int i;
     public bool raceFinished = false;//flag for when races finished
-    public List<TimeSpan> laptimes = new List<TimeSpan>();//list for laptimes
+    public List<Laptime> laptimes = new List<Laptime>();//list for laptimes
     public TimeSpan CurrentLapTime = new TimeSpan(0, 0, 00, 00, 000);
     public TimeSpan lastLapTime = new TimeSpan(0, 0, 00, 00, 000);//previously completed lap
     public TimeSpan fastestLapTime = new TimeSpan(0, 0, 00, 00, 000);//fastest lap time - updated per lap from the List
     public int countdown;//countdown begins at end race
+    public int PostRaceCountdownLength;
     public TimeSpan duration = new TimeSpan(0, 0, 00, 00, 000);//creates new timespan,
                                                                //used to tally time from beginning of race
     // pointer to local car
@@ -64,12 +65,7 @@ public class RaceStart : MonoBehaviour {
         localCar.gameObject.transform.rotation = gridSpot.transform.rotation;
         localCar.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
         localCar.PreRaceStart();
-        /*tgNetworkManager = FindObjectOfType<TGNetworkManager>();
-        foreach(TGNetworkManager.ConnectedPlayer knownPlayer in tgNetworkManager.Players.Values)
-        {
-            currentLap.Add(knownPlayer.PlayerName, 0);
-            //FOREACH DEFINE EVERY USER TO DICTIONARY
-        }*/
+
         localUser = FindObjectOfType<DataController>().PlayerName;
     }
 
@@ -78,15 +74,6 @@ public class RaceStart : MonoBehaviour {
             LaptimeTicker();
             currentLapText.text = ("LAP: " + (currentLap + 1) + "/" + (laps));
 
-            //foreach get how many people are in lobby and check if anyones value is finished
-            /*foreach (string player in currentLap.Keys)
-            {
-                if (laps <= currentLap[player] || raceFinished)
-                {
-                    IsRaceStarted = false;
-                    StartCoroutine(EndRace());
-                }
-            }*/
             if(currentLap >= laps) {
                 Debug.Log("Player completed");
                 IsRaceStarted = false;
@@ -138,14 +125,16 @@ public class RaceStart : MonoBehaviour {
     }
 
     public void EndRaceWrapper() {
-        StartCoroutine(EndRace());
+        if (!raceFinished) {
+            raceFinished = true;
+            StartCoroutine(EndRace());
+        }
     }
 
     public IEnumerator EndRace() {
-        raceFinished = true;
         gameplayUI.alpha = 0f;
         postRaceUI.alpha = 1f;
-        i = 30;
+        i = PostRaceCountdownLength;
         while (i > 0)
         {
             //countdown down 30sec, after first placer crosses line. after that trigger post race
@@ -155,26 +144,28 @@ public class RaceStart : MonoBehaviour {
         }
 
         yield return new WaitForSecondsRealtime(4);
-        Time.timeScale = 0.0F;
-
 
         //add trigger to camera script - quit following the car with a moderate damping effect, and move upwards
         //ill make a refrence or something of how it should go
 
         //add trigger to car brake, so when you cross finish line it would brake (carBehaviour.cs)
+        // hey that i can do
+        localCar.PreRaceStart();
+
         //make the post-race UI and expose it on screen,
         //make the button to restart/exit
         //comes in english
-        FindObjectOfType<PostRace>().enabled = true;
+        
         DataController dataController = FindObjectOfType<DataController>();
-        dataController.Dirtiness[FindObjectOfType<CarBehaviour>().carIndex] = FindObjectOfType<CarBehaviour>().dirtiness;
+        dataController.SetDirtiness(localCar.dirtiness);
+        dataController.RaceResults = new RaceResults() {
+            Laptimes = laptimes
+        };
 
         yield return new WaitForSecondsRealtime(4);
-        Time.timeScale = 1.0F;
 
         FindObjectOfType<CourseController>().Cleanup();
         SceneManager.LoadScene("post_race", LoadSceneMode.Single);
-        GameObject.Find("DataController").GetComponent<PostRace>().checkum = true;
 
     }
 }

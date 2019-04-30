@@ -70,7 +70,6 @@ public class CarBehaviour : NetworkBehaviour {
     public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
     public bool shifting = false;//shifter delay
-    public int carIndex;
 
     public float debug1;
     public float debug2;
@@ -123,7 +122,7 @@ public class CarBehaviour : NetworkBehaviour {
             brakeStrength = dataController.BrakeStiffness;
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
-            dirtiness = dataController.Dirtiness[carIndex];
+            dirtiness = dataController.GetDirtiness();
 
             //spring stiffness set (dampers = spring / 10)
             springs.spring = springStiffness;

@@ -413,7 +413,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 201.31189, y: 186}
+  m_AnchoredPosition: {x: 201, y: 186}
   m_SizeDelta: {x: 160, y: 35.5}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1235116313
@@ -537,6 +537,59 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 228.719, z: 0}
+--- !u!1 &1337724486
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 1337724488}
+  - component: {fileID: 1337724487}
+  m_Layer: 0
+  m_Name: PostRaceCtrlr
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1337724487
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1337724486}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 922b46d35c1712d4a8bf346f291863ab, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  laps: 0
+  count: 0
+  textInstance: {fileID: 1399873898183598, guid: 5717770005a67b14bb099023bfbbcb06,
+    type: 2}
+  textInstances: []
+  spawnPos: {x: 201, y: 186}
+  mainCanvas: {fileID: 0}
+  dataController: {fileID: 0}
+  carPrefabs:
+  - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
+  - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
+  DataControllerPrefab: {fileID: 1648861468993458, guid: cd4294fb47b04c541a33a524469ef434,
+    type: 2}
+--- !u!4 &1337724488
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1337724486}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 81.214836, y: -29.31438, z: -262.37805}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1542668819
 GameObject:
   m_ObjectHideFlags: 0

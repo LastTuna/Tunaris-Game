@@ -13,7 +13,11 @@ public class DataController : MonoBehaviour {
     public float BrakeStiffness;
     public float Gearbox;
     */
+    // Save data
     public GameData LoadedData;
+
+    // Game state
+    public RaceResults RaceResults;
 
     #region shortcuts for loaded data
     public string SelectedCar {
@@ -32,7 +36,7 @@ public class DataController : MonoBehaviour {
             LoadedData.SelectedCourse = value;
         }
     }
-    public string[] BestestLapTimes
+    public LapTimeDictionary BestestLapTimes
     {
         get
         {
@@ -111,7 +115,7 @@ public class DataController : MonoBehaviour {
             LoadedData.IP = value;
         }
     }
-    public float[] Dirtiness
+    public DirtinessDictionary Dirtiness
     {
         get
         {
@@ -159,6 +163,22 @@ public class DataController : MonoBehaviour {
     }
     #endregion
 
+    public float GetDirtiness() {
+        float ret;
+        if(Dirtiness.TryGetValue(SelectedCar, out ret)) {
+            ret = 0f;
+            Dirtiness[SelectedCar] = 0f;
+        }
+        return ret;
+    }
+
+    public void AddDirtiness(float newDirt) {
+        Dirtiness[SelectedCar] += newDirt;
+    }
+
+    public void SetDirtiness(float newDirt) {
+        Dirtiness[SelectedCar] = newDirt;
+    }
 
     void Start () {
         // Check existence of a previous DataController
@@ -175,12 +195,16 @@ public class DataController : MonoBehaviour {
         }
     }
 
+
     public void LoadGameData() {
         string filePath = Path.Combine(Application.dataPath, gameDataFileName);
 
         if (File.Exists(filePath)) {
             string dataAsJson = File.ReadAllText(filePath);
             LoadedData = JsonUtility.FromJson<GameData>(dataAsJson);
+
+            BestestLapTimes = new LapTimeDictionary() { { "Star GT V8", TimeSpan.FromSeconds(69) }, { "Nasan GRT", TimeSpan.FromSeconds(420) } };
+            SaveGameData();
 
             SelectedCar = LoadedData.SelectedCar;
             SelectedCourse = LoadedData.SelectedCourse;
@@ -198,10 +222,10 @@ public class DataController : MonoBehaviour {
             Gearbox = 0;
             PlayerName = "Player";
             Cash = 100;
-            Dirtiness = new float[]{0,0,0,0,0,0,0};//change this accordingly to amount of cars ingame
+            Dirtiness = new DirtinessDictionary();
             Garage3D = false;
             MenuAudio = 0.4f;
-            BestestLapTimes = new string[]{"01:25.700_0","01:27.100_1"};
+            BestestLapTimes = new LapTimeDictionary() { { "Star GT V8", TimeSpan.FromSeconds(69) }, { "Nasan GRT", TimeSpan.FromSeconds(420) } };
             SaveGameData();
         }
     }
@@ -219,7 +243,7 @@ public class DataController : MonoBehaviour {
 public class GameData {
     public string SelectedCar;
     public string SelectedCourse;
-    public string[] BestestLapTimes;
+    public LapTimeDictionary BestestLapTimes;
 
     public bool Garage3D;
     public float MenuAudio;
@@ -231,10 +255,47 @@ public class GameData {
     public float SpringStiffness;
     public float BrakeStiffness;
     public float Gearbox;
-    public float[] Dirtiness;
+    public DirtinessDictionary Dirtiness;
     public int Cash;
 
     public bool IsMultiplayer;
     public string IP;
     public string PlayerName;
 }
+
+public class RaceResults {
+    public List<Laptime> Laptimes;
+}
+
+public struct Laptime : IComparable<Laptime> {
+    public double ms;
+    private TimeSpan its;
+
+    public int Seconds { get { return its.Seconds; } }
+    public int Minutes { get { return its.Minutes; } }
+    public int Milliseconds { get { return its.Milliseconds; } }
+
+    public int Compare(Laptime x, Laptime y) {
+        return ((TimeSpan)x).CompareTo(y);
+    }
+
+    public int CompareTo(Laptime other) {
+        return Compare(this, other);
+    }
+
+    public static implicit operator TimeSpan(Laptime lp) {
+        return TimeSpan.FromMilliseconds(lp.ms);
+    }
+    public static implicit operator Laptime(TimeSpan ts) {
+        return new Laptime {
+            ms = ts.TotalMilliseconds,
+            its = ts
+        };
+    }
+}
+
+[Serializable]
+public class LapTimeDictionary : Dictionary<string, Laptime> { };
+
+[Serializable]
+public class DirtinessDictionary : Dictionary<string, float> { };

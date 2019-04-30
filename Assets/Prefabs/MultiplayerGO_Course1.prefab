@@ -663,7 +663,6 @@ MonoBehaviour:
   UserSettings:
     SelectedCar: 
     SelectedCourse: 
-    BestestLapTimes: []
     Garage3D: 0
     MenuAudio: 0
     CuntUI: 0
@@ -673,7 +672,6 @@ MonoBehaviour:
     SpringStiffness: 0
     BrakeStiffness: 0
     Gearbox: 0
-    Dirtiness: []
     Cash: 0
     IsMultiplayer: 0
     IP: 
