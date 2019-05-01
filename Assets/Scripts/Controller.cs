@@ -21,6 +21,7 @@ public class Controller : MonoBehaviour {
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
     public Canvas CreditsCanvas;
+    public Canvas RecordsCanvas;
 
     public static bool washing;
     public Canvas LoadingScreenCanvas;
@@ -257,6 +258,32 @@ public class Controller : MonoBehaviour {
         GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
+    public GameObject carro;
+    public GameObject bestest;
+    public void Records() {
+        StartCoroutine(RecordsCoroutine());
+    }
+    IEnumerator RecordsCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame();
+        MainMenuCanvas.gameObject.SetActive(false);
+        RecordsCanvas.gameObject.SetActive(true);
+
+        //fetch values from save data
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
+        foreach (var carpair in data.BestestLapTimes) {
+            fastestLap = carpair;
+            break;
+        }
+        if (carro != null) Destroy(carro);
+        carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), Vector3.zero, Quaternion.Euler(0, -90, 15), RecordsCanvas.transform);
+        carro.transform.localScale = new Vector3(3, 3, 3);
+        carro.transform.localPosition = new Vector3(-0.76f, -0.6f, -922.1f);
+        CarScriptKill(carro);
+        bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
+    }
+
     public void ExitGame() {
         Application.Quit();
     }
@@ -386,43 +413,7 @@ public class Controller : MonoBehaviour {
         }
         // Disable main rigidbody
         Destroy(spinner.GetComponent<Rigidbody>());
-    }
-    void Update()
-    {
-        TGControlTest();
-    }
-
-    public GameObject carro;
-    public GameObject bestest;
-
-    public void TGControlTest()
-    {
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
-        if (MainMenuCanvas.gameObject.activeSelf)
-        {
-            if (Input.GetKeyDown("t") && !bestest.activeSelf)
-            {
-                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
-                foreach(var carpair in data.BestestLapTimes) {
-                    fastestLap = carpair;
-                }
-                carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
-                CarScriptKill(carro);
-                bestest.SetActive(true);
-                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
-            }
-            else if (Input.GetKeyDown("t") && bestest.activeSelf)
-            {
-                Destroy(carro);
-                bestest.SetActive(false);
-            }
-        }
-        if (!MainMenuCanvas.gameObject.activeSelf && bestest.activeSelf)
-        {
-            bestest.SetActive(false);
-            Destroy(carro);
-        }
-    }
+    }    
 
     // Save options
     public void SaveOptions() {
@@ -526,6 +517,12 @@ public class Controller : MonoBehaviour {
             GoRaceCanvas.gameObject.SetActive(true);
             menuMusic.clip = TGmusic[0];
             menuMusic.Play();
+        }
+
+        // Records -> Main
+        if (RecordsCanvas.gameObject.activeSelf) {
+            RecordsCanvas.gameObject.SetActive(false);
+            MainMenuCanvas.gameObject.SetActive(true);
         }
         yield return null;
     }

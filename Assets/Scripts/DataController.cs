@@ -203,11 +203,10 @@ public class DataController : MonoBehaviour {
             string dataAsJson = File.ReadAllText(filePath);
             LoadedData = JsonUtility.FromJson<GameData>(dataAsJson);
 
-            BestestLapTimes = new LapTimeDictionary() { { "Star GT V8", TimeSpan.FromSeconds(69) }, { "Nasan GRT", TimeSpan.FromSeconds(420) } };
-            SaveGameData();
-
             SelectedCar = LoadedData.SelectedCar;
             SelectedCourse = LoadedData.SelectedCourse;
+
+            SaveGameData();
         } else {
             Debug.LogError("Cannot load game data! Creating new gamedata file.");
             LoadedData = new GameData();
@@ -267,9 +266,18 @@ public class RaceResults {
     public List<Laptime> Laptimes;
 }
 
+[Serializable]
 public struct Laptime : IComparable<Laptime> {
     public double ms;
-    private TimeSpan its;
+    private TimeSpan _its;
+    private TimeSpan its {
+        get { if (_its.TotalMilliseconds == 0) {
+                _its = TimeSpan.FromMilliseconds(ms);
+            }
+            return _its;
+        }
+        set { _its = its; }
+    }
 
     public int Seconds { get { return its.Seconds; } }
     public int Minutes { get { return its.Minutes; } }
@@ -286,6 +294,7 @@ public struct Laptime : IComparable<Laptime> {
     public static implicit operator TimeSpan(Laptime lp) {
         return TimeSpan.FromMilliseconds(lp.ms);
     }
+
     public static implicit operator Laptime(TimeSpan ts) {
         return new Laptime {
             ms = ts.TotalMilliseconds,
@@ -295,7 +304,37 @@ public struct Laptime : IComparable<Laptime> {
 }
 
 [Serializable]
-public class LapTimeDictionary : Dictionary<string, Laptime> { };
+public class LapTimeDictionary : SerializableDictionary<string, Laptime> { };
 
 [Serializable]
-public class DirtinessDictionary : Dictionary<string, float> { };
+public class DirtinessDictionary : SerializableDictionary<string, float> { };
+
+[Serializable]
+public class SerializableDictionary<TKey, TValue> : Dictionary<TKey, TValue>, ISerializationCallbackReceiver {
+    [SerializeField]
+    private List<TKey> keys = new List<TKey>();
+
+    [SerializeField]
+    private List<TValue> values = new List<TValue>();
+
+    // save the dictionary to lists
+    public void OnBeforeSerialize() {
+        keys.Clear();
+        values.Clear();
+        foreach (KeyValuePair<TKey, TValue> pair in this) {
+            keys.Add(pair.Key);
+            values.Add(pair.Value);
+        }
+    }
+
+    // load dictionary from lists
+    public void OnAfterDeserialize() {
+        this.Clear();
+
+        if (keys.Count != values.Count)
+            throw new System.Exception(string.Format("there are {0} keys and {1} values after deserialization. Make sure that both key and value types are serializable.", keys.Count, values.Count));
+
+        for (int i = 0; i < keys.Count; i++)
+            this.Add(keys[i], values[i]);
+    }
+}

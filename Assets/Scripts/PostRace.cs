@@ -72,6 +72,7 @@ public class PostRace : MonoBehaviour {
     }
 
     IEnumerator TallyLaps() {
+        yield return new WaitForSeconds(1f);
         personalBest = dataController.BestestLapTimes[dataController.SelectedCar];
 
         //PARSE FROM SUBSTRING TO INT AND TURN TO TIMESPAN
@@ -95,7 +96,7 @@ public class PostRace : MonoBehaviour {
             textInstances.Add(despacito);//add all elements to list (will use later)
             raise += 30;//raise by x amount
             count++;//tally/loop
-            yield return new WaitForSeconds(0.1f);
+            yield return new WaitForSeconds(0.5f);
         }
 
         //laptime[count] = GameObject.Find(Convert.ToString(count)).GetComponent<Text>();
