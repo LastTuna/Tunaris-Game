@@ -4,6 +4,7 @@ public class CheckpointReader : MonoBehaviour {
 
     public int nextCheck = 0;
     public string username;
+    public bool isLocal = false;
 
     void OnTriggerEnter(Collider checkpoint)
     {
@@ -16,7 +17,9 @@ public class CheckpointReader : MonoBehaviour {
             if (int.Parse(checkpoint.name) == 0 && nextCheck > 0)
             {
                 nextCheck = 0;
-                FindObjectOfType<RaceStart>().LapCompleted(username);//add to detect username
+                if (isLocal) {
+                    FindObjectOfType<RaceStart>().LapCompleted(username);//add to detect username
+                }
             }
         }
     }

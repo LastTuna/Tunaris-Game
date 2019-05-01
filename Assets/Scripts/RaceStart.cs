@@ -64,6 +64,9 @@ public class RaceStart : MonoBehaviour {
         localCar.gameObject.transform.position = gridSpot.transform.position;
         localCar.gameObject.transform.rotation = gridSpot.transform.rotation;
         localCar.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
+
+        localCar.GetComponentInChildren<CheckpointReader>().isLocal = true;
+
         localCar.PreRaceStart();
 
         localUser = FindObjectOfType<DataController>().PlayerName;

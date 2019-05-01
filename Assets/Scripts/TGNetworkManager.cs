@@ -111,6 +111,7 @@ public class TGNetworkManager : NetworkManager {
 
     // Called on the HOST to handle a player finishing the race, starting end of race procedure
     public void HandlePlayerFinished(NetworkMessage netMsg) {
+        Debug.Log("HandlePlayerFinished HOST");
         foreach(var conn in Players.Keys) {
             conn.Send(TGMessageTypes.RaceEnd, new RaceEndMessage());
         }
