@@ -18,8 +18,8 @@ public class TGNetworkManager : NetworkManager {
     // Race Start script
     public RaceStart RaceStart;
 
-    // Players connected on the SERVER
-    public Dictionary<NetworkConnection, ConnectedPlayer> Players = new Dictionary<NetworkConnection, ConnectedPlayer>();
+    // Players connected on the SERVER, and that stays private
+    private Dictionary<NetworkConnection, ConnectedPlayer> Players = new Dictionary<NetworkConnection, ConnectedPlayer>();
     // Player list for the client
     public Dictionary<int, string> ClientPlayers = new Dictionary<int, string>();
 
@@ -38,7 +38,7 @@ public class TGNetworkManager : NetworkManager {
         //NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
 
         // Store player
-        Players[conn] = new ConnectedPlayer() { PlayerGO = player, PlayerID = playerControllerId, PlayerSpawn = SpawnPositions[Players.Count] };
+        Players[conn] = new ConnectedPlayer() { PlayerGO = player, PlayerID = conn.connectionId, PlayerControllerID = playerControllerId, PlayerSpawn = SpawnPositions[Players.Count] };
     }
 
     // Called on the HOST when the underlying NetworkServer is rady
@@ -79,7 +79,7 @@ public class TGNetworkManager : NetworkManager {
             if (prefab.name == currentPlayer.CarName) {
                 GameObject carInstance = Instantiate(prefab, currentPlayer.PlayerSpawn.transform.position, Quaternion.identity);
                 currentPlayer.PlayerGO = carInstance;
-                NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerID);
+                NetworkServer.AddPlayerForConnection(rawMessage.conn, carInstance, currentPlayer.PlayerControllerID);
                 carInstance.GetComponent<CheckpointReader>().username = currentPlayer.PlayerName;
                 break;
             }
@@ -91,6 +91,22 @@ public class TGNetworkManager : NetworkManager {
             newText += knownPlayer.PlayerName + "\n";
         }
         GameObject.Find("PlayerList").GetComponent<Text>().text = newText;
+
+        // Send player list
+        List<int> ids = new List<int>();
+        List<string> names = new List<string>();
+        foreach (var kvp in Players.Values) {
+            ids.Add(kvp.PlayerID);
+            names.Add(kvp.PlayerName);
+        }
+        PlayerListMessage playerListMessage = new PlayerListMessage() {
+            NetworkID = ids.ToArray(),
+            PlayerNames = names.ToArray()
+        };
+
+        foreach (var connectedPlayer in Players.Keys) {
+            connectedPlayer.Send(TGMessageTypes.PlayerList, playerListMessage);
+        }
     }
 
     // Called on the HOST to handle a player finishing the race, starting end of race procedure
@@ -125,12 +141,19 @@ public class TGNetworkManager : NetworkManager {
         RaceStart.StartRace(message.GridSpot);
     }
 
+
+    // event to trigger player list refresh
+    public delegate void PlayerListRefresh(Dictionary<int, string> Players);
+    public static event PlayerListRefresh PlayerListRefreshEvent;
+
     // Called on the CLIENT to handle receiving player list from server
     private void HandlePlayerList(NetworkMessage netMsg) {
         PlayerListMessage message = netMsg.ReadMessage<PlayerListMessage>();
+        ClientPlayers.Clear();
         for(int i = 0; i < message.PlayerNames.Length; i++) {
             ClientPlayers.Add(message.NetworkID[i], message.PlayerNames[i]);
         }
+        PlayerListRefreshEvent.Invoke(ClientPlayers);
     }
 
     // Called on the CLIENT to handle race end
@@ -189,7 +212,8 @@ public class TGNetworkManager : NetworkManager {
         public string CarName;
         public string PlayerName;
         public GameObject PlayerGO;
-        public short PlayerID;
+        public int PlayerID;
+        public short PlayerControllerID;
         internal GameObject PlayerSpawn;
     }
 }

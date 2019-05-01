@@ -16,7 +16,7 @@ public class PostRace : MonoBehaviour {
     public List<Laptime> lapTally;
     public Canvas mainCanvas;
     public DataController dataController;
-    public TimeSpan personalBest;
+    public Laptime personalBest;
     public GameObject[] carPrefabs;
     public GameObject DataControllerPrefab;
 
@@ -73,7 +73,7 @@ public class PostRace : MonoBehaviour {
 
     IEnumerator TallyLaps() {
         yield return new WaitForSeconds(1f);
-        personalBest = dataController.BestestLapTimes[dataController.SelectedCar];
+        dataController.BestestLapTimes.TryGetValue(dataController.SelectedCar, out personalBest);
 
         //PARSE FROM SUBSTRING TO INT AND TURN TO TIMESPAN
         float raise = 0;//raise next element by x amount

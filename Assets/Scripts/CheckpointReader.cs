@@ -4,10 +4,6 @@ public class CheckpointReader : MonoBehaviour {
 
     public int nextCheck = 0;
     public string username;
-    void Start()
-    {
-
-    }
 
     void OnTriggerEnter(Collider checkpoint)
     {

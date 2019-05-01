@@ -188,6 +188,9 @@ public class CarBehaviour : NetworkBehaviour {
                 ffbeffect = new Effect(steeringWheelJoy, constantForceEffect.Guid, ep);
                 ffbeffect.Start();
             }
+        } else {
+            // Not a local player, nuke the checkpoint reader script because it's a bother
+            Destroy(FindObjectOfType<CheckpointReader>());
         }
     }
 
