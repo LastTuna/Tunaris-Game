@@ -3004,6 +3004,7 @@ MonoBehaviour:
   TreadHealth: 100
   brakeStrength: 130
   handbrake: 0
+  raceStartHandbrake: 0
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
@@ -3185,7 +3186,6 @@ MonoBehaviour:
   - 1.6
   gear: 0
   shifting: 0
-  carIndex: 0
   debug1: 0
   debug2: 0
   debug3: 0
@@ -3241,6 +3241,7 @@ MonoBehaviour:
   TreadHealth: 100
   brakeStrength: 130
   handbrake: 1
+  raceStartHandbrake: 0
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
@@ -3318,6 +3319,7 @@ MonoBehaviour:
   TreadHealth: 100
   brakeStrength: 130
   handbrake: 1
+  raceStartHandbrake: 0
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
@@ -3419,6 +3421,7 @@ MonoBehaviour:
   TreadHealth: 100
   brakeStrength: 130
   handbrake: 0
+  raceStartHandbrake: 0
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
@@ -3490,14 +3493,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_TransformSyncMode: 3
-  m_SendInterval: 0.1
+  m_SendInterval: 0.09090909
   m_SyncRotationAxis: 7
   m_RotationSyncCompression: 0
-  m_SyncSpin: 0
+  m_SyncSpin: 1
   m_MovementTheshold: 0.001
   m_VelocityThreshold: 0.0001
   m_SnapThreshold: 5
-  m_InterpolateRotation: 1
+  m_InterpolateRotation: 0
   m_InterpolateMovement: 1
 --- !u!114 &114769708881821258
 MonoBehaviour:
