@@ -184,43 +184,7 @@ public class Madness : MonoBehaviour
     public void StuntsCounter()
     {
         //count the flips during airborne, and apply with a delay after processed
-
-
-
-    }
-
-    public void CarDamage(Collision collision)
-    {
-        damage += (Mathf.Abs(car.GetComponent<Rigidbody>().velocity.x)
-            + Mathf.Abs(car.GetComponent<Rigidbody>().velocity.y)
-            + Mathf.Abs(car.GetComponent<Rigidbody>().velocity.z)) / 3 / (maxMag / 10);
-    }
-
-    public void CarDeform(Vector3 impactPoint, float radius)
-    {
-        i = 0;
-        foreach (Vector3 e in modMesh)
-        {
-            //i dont even know how this works, but it does. project raycast torwards point of impact,
-            //if raycast collides, apply a deform value
-            if (Physics.Raycast(modMesh[i] + car.position, impactPoint, radius))
-            {
-                if (ogMesh[i].x - modMesh[i].x < maxMag / 100
-                    && ogMesh[i].y - modMesh[i].y < maxMag / 100
-                    && ogMesh[i].z - modMesh[i].z < maxMag / 100)
-                {
-                    
-                    modMesh[i] = new Vector3(modMesh[i].x - (modMesh[i].x - ogMesh[i].x) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.x / 100,
-                        modMesh[i].y - (modMesh[i].y - ogMesh[i].y) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.y / 100,
-                        modMesh[i].z - (modMesh[i].z - ogMesh[i].z) * Random.Range(0, maxMag / 500) + car.GetComponent<Rigidbody>().velocity.z / 100);
-                    //Random.Range(0, maxMag / 100) 
-                    //apply deform
-                }
-            }
-            i++;
-        }
-        carMesh.vertices = modMesh;
-        originalMesh.mesh.RecalculateNormals();
+        
 
     }
 
@@ -238,23 +202,5 @@ public class Madness : MonoBehaviour
         damage = 0;
         print("ok");
     }
-
-    public void OnCollisionEnter(Collision collision)
-    {
-        crash = true;
-        if (collision.collider.name != "ramp")
-        {
-            CarDamage(collision);
-        }
-        //
-        foreach (var contact in collision.contacts)
-        {
-            CarDeform(contact.point, maxMag / 100);
-        }
-
-    }
-    public void OnCollisionExit(Collision collision)
-    {
-        crash = false;
-    }
+    
 }
