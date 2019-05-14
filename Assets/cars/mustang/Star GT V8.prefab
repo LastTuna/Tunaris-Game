@@ -540,6 +540,7 @@ GameObject:
   - component: {fileID: 114906100075375134}
   - component: {fileID: 114174200790721762}
   - component: {fileID: 114892743213713256}
+  - component: {fileID: 114155135267266302}
   m_Layer: 0
   m_Name: Star GT V8
   m_TagString: Untagged
@@ -3075,6 +3076,24 @@ MonoBehaviour:
   woosh: {fileID: 0}
   pssh: {fileID: 0}
   isSpooled: 0
+--- !u!114 &114155135267266302
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1572315012842202}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 811a94dc6ed5738459dc4efed2370def, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  car: {fileID: 4580882162347096}
+  maxMag: 0.4
+  i: 0
+  crash: 0
+  damage: 0
+  originalMesh: {fileID: 33388557602579026}
+  carfixed: 0
 --- !u!114 &114162037091696076
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3515,6 +3534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextCheck: 0
   username: 
+  isLocal: 0
 --- !u!114 &114814558910237200
 MonoBehaviour:
   m_ObjectHideFlags: 1

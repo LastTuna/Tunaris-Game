@@ -23,12 +23,12 @@ public class CarCrasher : MonoBehaviour
         modMesh = carMesh.vertices;
     }
 
-    public void CarDeform(Vector3 impactPoint, float radius)
+    public void CarDeform(Vector3 impactPoint)
     {
         i = 0;
         foreach (Vector3 e in modMesh)
         {
-            if (Physics.Raycast(transform.TransformPoint(modMesh[i]), transform.TransformPoint(modMesh[i]) - impactPoint, radius))
+            if (Mathf.Abs((e.x - transform.InverseTransformPoint(impactPoint).x) + (e.y - transform.InverseTransformPoint(impactPoint).y) + (e.z - transform.InverseTransformPoint(impactPoint).z)) < maxMag)
             {
                 modMesh[i] = new Vector3(
                     e.x + (-0.5f + Mathf.Clamp01(-car.GetComponent<Rigidbody>().velocity.x)) / 20,
@@ -47,7 +47,7 @@ public class CarCrasher : MonoBehaviour
         crash = true;
         foreach (var contact in collision.contacts)
         {
-            CarDeform(contact.point, maxMag / 10);
+            CarDeform(contact.point);
         }
 
     }
