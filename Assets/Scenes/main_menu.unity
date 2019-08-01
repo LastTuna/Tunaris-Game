@@ -13307,6 +13307,8 @@ MonoBehaviour:
   lapTally: []
   mainCanvas: {fileID: 0}
   dataController: {fileID: 1271179947}
+  personalBest:
+    ms: 0
   carPrefabs:
   - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}

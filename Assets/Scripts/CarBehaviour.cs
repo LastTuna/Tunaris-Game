@@ -18,20 +18,9 @@ public class CarBehaviour : NetworkBehaviour {
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
     public RectTransform pointer;
-    public WheelCollider wheelFL;
-    public WheelCollider wheelFR;
-    public WheelCollider wheelRL;
-    public WheelCollider wheelRR;
-
-    public Transform wheelFLCalp;
-    public Transform wheelFRCalp;
-    public Transform wheelRLCalp;
-    public Transform wheelRRCalp;
-
-    public Transform wheelFLTrans;
-    public Transform wheelFRTrans;
-    public Transform wheelRLTrans;
-    public Transform wheelRRTrans;
+    public WheelCollider wheelFL, wheelFR, wheelRL, wheelRR;
+    public Transform wheelFLCalp, wheelFRCalp, wheelRLCalp, wheelRRCalp;
+    public Transform wheelFLTrans, wheelFRTrans, wheelRLTrans, wheelRRTrans;
     public float currentSpeed;
     public float wheelRPM;
 
