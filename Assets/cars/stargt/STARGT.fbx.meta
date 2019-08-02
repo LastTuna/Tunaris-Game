@@ -1,68 +1,96 @@
 fileFormatVersion: 2
-guid: b347608314799e444b7241b39819043a
-timeCreated: 1539349293
+guid: 77867ea508c39f84fa9caa22e9d21ad1
+timeCreated: 1564771328
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: DIRT
-    100002: FL
-    100004: FLcalp
-    100006: FLdirt
-    100008: FR
-    100010: FRcalp
-    100012: FRdirt
-    100014: Interior
-    100016: Interior_001
-    100018: //RootNode
-    100020: RL
-    100022: RLcalp
-    100024: RLdirt
-    100026: RR
-    100028: RRcalp
-    100030: RRdirt
-    100032: StarGTV8
-    100034: Wheel
-    100036: WiperF0
-    100038: WiperF1
-    100040: WiperR
-    400000: DIRT
-    400002: FL
-    400004: FLcalp
-    400006: FLdirt
-    400008: FR
-    400010: FRcalp
-    400012: FRdirt
-    400014: Interior
-    400016: Interior_001
-    400018: //RootNode
-    400020: RL
-    400022: RLcalp
-    400024: RLdirt
-    400026: RR
-    400028: RRcalp
-    400030: RRdirt
-    400032: StarGTV8
-    400034: Wheel
-    400036: WiperF0
-    400038: WiperF1
-    400040: WiperR
-    2100000: MAIN
-    2100002: WINDOWS
-    2100004: WHEELS
-    2100006: DISC
-    2100008: INTERIOR
-    2100010: dirt
-    2100012: dirtW
-    2300000: DIRT
-    2300002: FL
-    2300004: FLcalp
-    2300006: FLdirt
-    2300008: FR
-    2300010: FRcalp
-    2300012: FRdirt
-    2300014: Interior
-    2300016: Interior_001
+    100000: Armature
+    100002: Codriver
+    100004: Cube
+    100006: DIRT
+    100008: FL
+    100010: FLcalp
+    100012: FLdirt
+    100014: FLshaft
+    100016: FLshaft_end
+    100018: FR
+    100020: FRcalp
+    100022: FRdirt
+    100024: FRshaft
+    100026: FRshaft_end
+    100028: Interior
+    100030: Rdiff
+    100032: Rdiff_end
+    100034: RL
+    100036: RLcalp
+    100038: RLdirt
+    100040: RLshaft
+    100042: RLshaft_end
+    100044: RR
+    100046: RRcalp
+    100048: RRdirt
+    100050: RRshaft
+    100052: RRshaft_end
+    100054: //RootNode
+    100056: StarGTV8
+    100058: STATIC
+    100060: STATIC_end
+    100062: Wheel
+    100064: WiperF0
+    100066: WiperF1
+    100068: WiperR
+    400000: Armature
+    400002: Codriver
+    400004: Cube
+    400006: DIRT
+    400008: FL
+    400010: FLcalp
+    400012: FLdirt
+    400014: FLshaft
+    400016: FLshaft_end
+    400018: FR
+    400020: FRcalp
+    400022: FRdirt
+    400024: FRshaft
+    400026: FRshaft_end
+    400028: Interior
+    400030: Rdiff
+    400032: Rdiff_end
+    400034: RL
+    400036: RLcalp
+    400038: RLdirt
+    400040: RLshaft
+    400042: RLshaft_end
+    400044: RR
+    400046: RRcalp
+    400048: RRdirt
+    400050: RRshaft
+    400052: RRshaft_end
+    400054: //RootNode
+    400056: StarGTV8
+    400058: STATIC
+    400060: STATIC_end
+    400062: Wheel
+    400064: WiperF0
+    400066: WiperF1
+    400068: WiperR
+    2100000: WHEELS
+    2100002: DISC
+    2100004: dirtW
+    2100006: MAIN
+    2100008: dirt
+    2100010: INTERIOR
+    2100012: WINDOWS
+    2300000: Codriver
+    2300002: DIRT
+    2300004: FL
+    2300006: FLcalp
+    2300008: FLdirt
+    2300010: FR
+    2300012: FRcalp
+    2300014: FRdirt
+    2300016: Interior
     2300018: RL
     2300020: RLcalp
     2300022: RLdirt
@@ -74,15 +102,15 @@ ModelImporter:
     2300034: WiperF0
     2300036: WiperF1
     2300038: WiperR
-    3300000: DIRT
-    3300002: FL
-    3300004: FLcalp
-    3300006: FLdirt
-    3300008: FR
-    3300010: FRcalp
-    3300012: FRdirt
-    3300014: Interior
-    3300016: Interior_001
+    3300000: Codriver
+    3300002: DIRT
+    3300004: FL
+    3300006: FLcalp
+    3300008: FLdirt
+    3300010: FR
+    3300012: FRcalp
+    3300014: FRdirt
+    3300016: Interior
     3300018: RL
     3300020: RLcalp
     3300022: RLdirt
@@ -94,63 +122,65 @@ ModelImporter:
     3300034: WiperF0
     3300036: WiperF1
     3300038: WiperR
-    4300000: StarGTV8
-    4300002: FL
-    4300004: Interior
-    4300006: Wheel
-    4300008: WiperF1
+    4300000: FR
+    4300002: RR
+    4300004: RLdirt
+    4300006: RL
+    4300008: Cube
     4300010: DIRT
-    4300012: FLcalp
-    4300014: RL
-    4300016: RLcalp
-    4300018: FLdirt
-    4300020: RLdirt
-    4300022: WiperF0
+    4300012: RRdirt
+    4300014: FRdirt
+    4300016: FL
+    4300018: Codriver
+    4300020: FRcalp
+    4300022: RRcalp
     4300024: WiperR
-    4300026: RRdirt
-    4300028: RRcalp
-    4300030: RR
-    4300032: FR
-    4300034: FRcalp
-    4300036: FRdirt
-    4300038: Interior_001
+    4300026: WiperF0
+    4300028: FLdirt
+    4300030: RLcalp
+    4300032: FLcalp
+    4300034: WiperF1
+    4300036: Wheel
+    4300038: Interior
+    4300040: StarGTV8
     9500000: //RootNode
+    13700000: Cube
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: DISC
-    second: {fileID: 2100000, guid: 606ce7fee7877074cb4946032e59504c, type: 2}
+    second: {fileID: 2100000, guid: c6fa3f9f2c98caa419ed7524168b77c2, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: INTERIOR
-    second: {fileID: 2100000, guid: 70f35b6d302a4564db65f04bde8ed42d, type: 2}
+    second: {fileID: 2100000, guid: e670d1da1cbf6024191b8d2623ab1be6, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: MAIN
-    second: {fileID: 2100000, guid: 47582f721a954c54c8c36275abcc4cde, type: 2}
+    second: {fileID: 2100000, guid: 5d09210998da7bc43ad829e73b18a9dd, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WHEELS
-    second: {fileID: 2100000, guid: 1e2690cc6a602134289eb30a9c84ed42, type: 2}
+    second: {fileID: 2100000, guid: e72c3ef1ad3ff384bba90b44fc351af0, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: WINDOWS
-    second: {fileID: 2100000, guid: dc044fde374e97c44a3713704f704f52, type: 2}
+    second: {fileID: 2100000, guid: 8d9bad6610cf44a4e8e164879ba8a7ed, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: dirt
-    second: {fileID: 2100000, guid: 7118175af512d934495a61b73a16ea81, type: 2}
+    second: {fileID: 2100000, guid: 9f6e14f7cc4f43344972e963f457f7fb, type: 2}
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
       name: dirtW
-    second: {fileID: 2100000, guid: 3fd780857ad745d4da4249ac3d812117, type: 2}
+    second: {fileID: 2100000, guid: d5fb3a8b7739fb347bb889bf357deea2, type: 2}
   materials:
     importMaterials: 1
     materialName: 0
@@ -199,7 +229,7 @@ ModelImporter:
     secondaryUVAreaDistortion: 15.000001
     secondaryUVHardAngle: 88
     secondaryUVPackMargin: 4
-    useFileScale: 1
+    useFileScale: 0
   tangentSpace:
     normalSmoothAngle: 60
     normalImportMode: 0
