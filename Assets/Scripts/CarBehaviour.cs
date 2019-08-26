@@ -14,22 +14,26 @@ public class CarBehaviour : NetworkBehaviour {
     public GameObject frontLights;
     public GameObject rearLights;
     //public Material dirt; //dirt MATERIAL.
-    public float dirtiness;//private int, start, call from savedata the dirtiness of the car, then apply
+    public float dirtiness;//start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
     public RectTransform pointer;
     public WheelCollider wheelFL, wheelFR, wheelRL, wheelRR;
     public Transform wheelFLCalp, wheelFRCalp, wheelRLCalp, wheelRRCalp;
     public Transform wheelFLTrans, wheelFRTrans, wheelRLTrans, wheelRRTrans;
+    public Transform differentialTrans;
+    public bool visualDiff = false;
     public float currentSpeed;
     public float wheelRPM;
+    public Material dirt; //dirt MATERIAL.
+    public Renderer dirtMesh; //fetches and instantiates dirt material
 
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float currentGrip; //value manipulated by road type
     //tuneable stats
     public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
-    public float aero = 15.0f; //aero - higher value = higher grip, but less accel/topspeed
+    public float aero = 5f; 
     public float ratio; //final drive
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
@@ -64,6 +68,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float debug2;
     public float debug3;
 
+
     // FFB shit
     private DeviceInstance steeringWheel;
     private Joystick steeringWheelJoy;
@@ -73,6 +78,7 @@ public class CarBehaviour : NetworkBehaviour {
     private int[] axes, dirs;
 
     public JointSpring springs = new JointSpring {
+        //should load data from data controller when setup
         spring = 8000,
         damper = 800,
         targetPosition = 0.1f,
@@ -94,8 +100,8 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-
-            //dirt = gameObject.transform.Find("DIRT").GetComponent<Renderer>().material;
+            
+            dirt = dirtMesh.GetComponent<Renderer>().material;
 
             wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
             wheelFL.ConfigureVehicleSubsteps(20, 30, 10);
@@ -193,6 +199,7 @@ public class CarBehaviour : NetworkBehaviour {
 
     void FixedUpdate() {
         if (isLocalPlayer) {
+            AeroDrag();
             if (manual == 2) clutchPressure = 1 - Input.GetAxis("Clutch");
             Engine();
             float targetSteering = 20 * Input.GetAxis("Steering");
@@ -252,8 +259,12 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
             EngineAudio.ProcessSounds(engineRPM, spooled);
-            LightsOn();
-            WheelPosition(); //graphical update - wheel positions 
+            CmdLightsOn();
+            WheelPosition(wheelFL, wheelFLCalp, wheelFLTrans); //graphical update - wheel positions
+            WheelPosition(wheelFR, wheelFRCalp, wheelFRTrans);
+            WheelPosition(wheelRL, wheelRLCalp, wheelRLTrans);
+            WheelPosition(wheelRR, wheelRRCalp, wheelRRTrans);
+            if (visualDiff) DiffPosition(wheelRRTrans, wheelRLTrans);
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
             {
@@ -261,9 +272,8 @@ public class CarBehaviour : NetworkBehaviour {
                 transform.rotation = Quaternion.identity;
                 transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
             }
-
+            dirt.color = new Color(1, 1, 1, dirtiness);
         }
-        //dirt.color = new Color(1,1,1, dirtiness);
     }
 
     void Engine()
@@ -443,50 +453,36 @@ public class CarBehaviour : NetworkBehaviour {
         }//END MANUAL
     }
     
+    void AeroDrag ()
+    {
+        Debug.Log(transform.forward.y);
+        gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0,0,0));
+
+    }
 
     // Graphical update - wheel positions 
-    void WheelPosition() {
+    void WheelPosition(WheelCollider wheel, Transform caliper, Transform visualWheel) {
         RaycastHit hit;
         Vector3 wheelPos;
-        //FL
-        if (Physics.Raycast(wheelFL.transform.position, -wheelFL.transform.up, out hit, wheelFL.radius + wheelFL.suspensionDistance)) {
-            wheelPos = hit.point + wheelFL.transform.up * wheelFL.radius;
+        if (Physics.Raycast(wheel.transform.position, -wheel.transform.up, out hit, wheel.radius + wheel.suspensionDistance)) {
+            wheelPos = hit.point + wheel.transform.up * wheel.radius;
             //UPDATE DIRTINESS
             if (hit.collider.gameObject.CompareTag("sand") && dirtiness < 1)
             {
                 dirtiness += Mathf.Abs(wheelFL.rpm) / 500000;
             }
         } else {
-            wheelPos = wheelFL.transform.position - wheelFL.transform.up * wheelFL.suspensionDistance;
+            wheelPos = wheel.transform.position - wheel.transform.up * wheel.suspensionDistance;
         }
-        wheelFLCalp.position = wheelPos;
-        wheelFLTrans.position = wheelPos;
-        //FR
-        if (Physics.Raycast(wheelFR.transform.position, -wheelFR.transform.up, out hit, wheelFR.radius + wheelFR.suspensionDistance)) {
-            wheelPos = hit.point + wheelFR.transform.up * wheelFR.radius;
-        } else {
-            wheelPos = wheelFR.transform.position - wheelFR.transform.up * wheelFR.suspensionDistance;
-        }
-        wheelFRCalp.position = wheelPos;
-        wheelFRTrans.position = wheelPos;
-        //RL
-        if (Physics.Raycast(wheelRL.transform.position, -wheelRL.transform.up, out hit, wheelRL.radius + wheelRL.suspensionDistance)) {
-            wheelPos = hit.point + wheelRL.transform.up * wheelRL.radius;
-        } else {
-            wheelPos = wheelRL.transform.position - wheelRL.transform.up * wheelRL.suspensionDistance;
-        }
-        wheelRLCalp.position = wheelPos;
-        wheelRLTrans.position = wheelPos;
-        //RR
-        if (Physics.Raycast(wheelRR.transform.position, -wheelRR.transform.up, out hit, wheelRR.radius + wheelRR.suspensionDistance)) {
-            wheelPos = hit.point + wheelRR.transform.up * wheelRR.radius;
-        } else {
-            wheelPos = wheelRR.transform.position - wheelRR.transform.up * wheelRR.suspensionDistance;
-        }
-        wheelRRCalp.position = wheelPos;
-        wheelRRTrans.position = wheelPos;
-        
+        caliper.position = wheelPos;
+        visualWheel.position = wheelPos;
     }
+    void DiffPosition(Transform rWheel, Transform lWheel)
+    {
+        Vector3 pos = new Vector3(0, (rWheel.localPosition.y + lWheel.localPosition.y) / 2 + 0.2f, rWheel.localPosition.z);
+        differentialTrans.localPosition = pos;//apply transform
+    }
+
 
     // start procedure
     public void PreRaceStart() {
@@ -504,7 +500,8 @@ public class CarBehaviour : NetworkBehaviour {
         wheelRR.GetComponent<TireBehavior>().raceStartHandbrake = false;
     }
 
-    void LightsOn()
+    [Command]
+    void CmdLightsOn()
     {
         if (Input.GetButtonDown("Lights") && !frontLights.activeSelf)
         {

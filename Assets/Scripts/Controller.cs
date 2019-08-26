@@ -28,8 +28,46 @@ public class Controller : MonoBehaviour {
     public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
     public AudioClip[] TGmusic;
     public static List<GameObject> currentCars = new List<GameObject>();
+    public GameObject carro;
+    public GameObject bestest;
+    
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
+    }
+
+    void Update()
+    {
+        TGControlTest();
+    }
+
+    public void TGControlTest()
+    {
+        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        if (MainMenuCanvas.gameObject.activeSelf)
+        {
+            if (Input.GetKeyDown("t") && !bestest.activeSelf)
+            {
+                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
+                foreach (var carpair in data.BestestLapTimes)
+                {
+                    fastestLap = carpair;
+                }
+                carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
+                CarScriptKill(carro);
+                bestest.SetActive(true);
+                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
+            }
+            else if (Input.GetKeyDown("t") && bestest.activeSelf)
+            {
+                Destroy(carro);
+                bestest.SetActive(false);
+            }
+        }
+        if (!MainMenuCanvas.gameObject.activeSelf && bestest.activeSelf)
+        {
+            bestest.SetActive(false);
+            Destroy(carro);
+        }
     }
 
     // Go race callbacks
@@ -258,8 +296,6 @@ public class Controller : MonoBehaviour {
         GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
-    public GameObject carro;
-    public GameObject bestest;
     public void Records() {
         StartCoroutine(RecordsCoroutine());
     }

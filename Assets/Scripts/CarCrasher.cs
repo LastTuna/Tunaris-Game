@@ -26,9 +26,10 @@ public class CarCrasher : MonoBehaviour
     public void CarDeform(Vector3 impactPoint)
     {
         i = 0;
+        Vector3 dolor = transform.InverseTransformPoint(impactPoint);
         foreach (Vector3 e in modMesh)
         {
-            if (Mathf.Abs((e.x - transform.InverseTransformPoint(impactPoint).x) + (e.y - transform.InverseTransformPoint(impactPoint).y) + (e.z - transform.InverseTransformPoint(impactPoint).z)) < maxMag)
+            if (Mathf.Abs((e.x - dolor.x) + (e.y - dolor.y) + (e.z - dolor.z)) < maxMag)
             {
                 modMesh[i] = new Vector3(
                     e.x + (-0.5f + Mathf.Clamp01(-car.GetComponent<Rigidbody>().velocity.x)) / 20,

@@ -29,6 +29,9 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(600, 1f),
         new Keyframe(800, 0.3f)
         );
+    public float[] beerf = new float[] { 0.4f, 1, 0.8f, 0.5f };
+    public float[] beers = new float[] { 0.2f, 1, 0.3f, 0.7f };
+
     public float wheelrpm;
     // Use this for initialization
     void Start()
@@ -114,9 +117,8 @@ public class TireBehavior : MonoBehaviour
         {
             currentGrip = 0.1f;
         }
-        tyre.forwardFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
-        // Rear wheels
-        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
+        tyre.forwardFriction = SetStiffness(beerf, currentGrip);
+        tyre.sidewaysFriction = SetStiffness(beers, currentGrip);
     }
 
     public float Dampness()
@@ -154,16 +156,15 @@ public class TireBehavior : MonoBehaviour
             brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
     }
 
-    WheelFrictionCurve SetStiffness(WheelFrictionCurve current, float newStiffness)
+    WheelFrictionCurve SetStiffness(float[] beer, float newStiffness)
     {
         //sets tire grip
         return new WheelFrictionCurve()
         {
-            
-            asymptoteSlip = tyre.sidewaysFriction.asymptoteSlip,
-            asymptoteValue = tyre.sidewaysFriction.asymptoteValue,
-            extremumSlip = tyre.sidewaysFriction.extremumSlip,
-            extremumValue = tyre.sidewaysFriction.extremumValue,
+            extremumSlip = beer[0],
+            extremumValue = beer[1],
+            asymptoteSlip = beer[2],
+            asymptoteValue = beer[3],
             stiffness = newStiffness
         };
     }
