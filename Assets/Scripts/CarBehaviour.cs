@@ -272,7 +272,9 @@ public class CarBehaviour : NetworkBehaviour {
                 transform.rotation = Quaternion.identity;
                 transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
             }
-            dirt.color = new Color(1, 1, 1, dirtiness);
+            if (dirt) {
+                dirt.color = new Color(1, 1, 1, dirtiness);
+            }
         }
     }
 
