@@ -15,36 +15,50 @@ public class CarCamera : MonoBehaviour {
 
     // Variable to store the selected camera
     public int chosenCamera = 0;
-    
+
+    // cameras supported
+    // basically this should be the max chosenCamera so 1 for chase + interior cam
+    public int supportedCameras = 3;
 
     void LateUpdate() {
         if (car != null) {
             switch (chosenCamera) {
                 // 0, default, 3rd person cam
-                case 0: {
-                        float wantedAngel = rotationVector.y;
-                        float wantedHeight = car.position.y + height;
-                        float myAngel = transform.eulerAngles.y;
-                        float myHeight = transform.position.y;
-                        myAngel = Mathf.LerpAngle(myAngel, wantedAngel, rotationDamping * Time.deltaTime);
-                        myHeight = Mathf.Lerp(myHeight, wantedHeight, heightDamping * Time.deltaTime);
-                        Quaternion currentRotation = Quaternion.Euler(0, myAngel, 0);
-                        transform.position = car.position;
-                        transform.position -= currentRotation * Vector3.forward * distance;
-                        transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
-                        transform.LookAt(car.position + car.forward*10*reversingFactor);
+                case 0:
+                    float wantedAngel = rotationVector.y;
+                    float wantedHeight = car.position.y + height;
+                    float myAngel = transform.eulerAngles.y;
+                    float myHeight = transform.position.y;
+                    myAngel = Mathf.LerpAngle(myAngel, wantedAngel, rotationDamping * Time.deltaTime);
+                    myHeight = Mathf.Lerp(myHeight, wantedHeight, heightDamping * Time.deltaTime);
+                    Quaternion currentRotation = Quaternion.Euler(0, myAngel, 0);
+                    transform.position = car.position;
+                    transform.position -= currentRotation * Vector3.forward * distance;
+                    transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
+                    transform.LookAt(car.position + car.forward * 10 * reversingFactor);
 
-                        //car.Find("Cockpit").gameObject.SetActive(false);
-                    }
+                    //car.Find("Cockpit").gameObject.SetActive(false);
+
                     break;
                 // 1: cockpit cam
-                case 1: {
-                        interiorCam = car.Find("Interior Cam");
-                        transform.position = interiorCam.position;
-                        transform.rotation = car.rotation;
-                        
-                        //car.Find("Cockpit").gameObject.SetActive(true);
-                    }
+                case 1:
+                    interiorCam = car.Find("Interior Cam");
+                    transform.position = interiorCam.position;
+                    transform.rotation = car.rotation;
+
+                    //car.Find("Cockpit").gameObject.SetActive(true);
+                    break;
+                // 2: wheel debug camera right side
+                case 2:
+                    transform.position = car.position;
+                    transform.position += car.right * 5;
+                    transform.LookAt(car);
+                    break;
+                // 3: wheel debug camera left side
+                case 3:
+                    transform.position = car.position;
+                    transform.position -= car.right * 5;
+                    transform.LookAt(car);
                     break;
                 default: break;
             }
@@ -53,7 +67,7 @@ public class CarCamera : MonoBehaviour {
 
     void Update() {
         if (Input.GetButtonDown("Camera")) {
-            chosenCamera = (chosenCamera < 1) ? chosenCamera + 1 : 0;
+            chosenCamera = (chosenCamera < supportedCameras) ? chosenCamera + 1 : 0;
         }
     }
 
