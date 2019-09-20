@@ -18,10 +18,11 @@ public class CourseController : MonoBehaviour {
     public GameObject HostUI;
     public GameObject HostUIInstance;
 
-    // References to this course's HUD
-    public Text SpeedDisplayHUD;
-    public Text GearDisplayHUD;
-    public RectTransform PointerHUD;
+    // Default HUD
+    public GameObject DefaultHUD;
+    // Canvas to instantiate HUD into
+    public GameObject HUDCanvas;
+
     // Reference to the scene's AudioSource
     public AudioSource AudioSource;
     // Reference to the scene's Camera

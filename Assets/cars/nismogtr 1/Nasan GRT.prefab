@@ -2168,13 +2168,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   EngineAudio: {fileID: 114607395802557002}
-  speedDisplay: {fileID: 0}
-  gearDisplay: {fileID: 0}
   frontLights: {fileID: 1306844188486534}
   rearLights: {fileID: 1855782870192608}
   dirtiness: 0
   drivingWheel: {fileID: 4178962340362692}
-  pointer: {fileID: 0}
   wheelFL: {fileID: 146412717581785408}
   wheelFR: {fileID: 146447844682267618}
   wheelRL: {fileID: 146584039996536962}
@@ -2187,8 +2184,13 @@ MonoBehaviour:
   wheelFRTrans: {fileID: 4481407390318564}
   wheelRLTrans: {fileID: 4989288665457074}
   wheelRRTrans: {fileID: 4747767896983546}
+  differentialTrans: {fileID: 0}
+  visualDiff: 0
   currentSpeed: 0
   wheelRPM: 0
+  dirt: {fileID: 0}
+  dirtMesh: {fileID: 0}
+  HUDPrefab: {fileID: 1909271996293978, guid: 2e3ddafc61ac33248923b6e396bbfda4, type: 2}
   manual: 1
   currentGrip: 0
   springStiffness: 8000
@@ -2302,6 +2304,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114182985723725132
 MonoBehaviour:
@@ -2476,6 +2488,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114696828157447796
 MonoBehaviour:
@@ -2490,6 +2512,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   nextCheck: 0
   username: 
+  isLocal: 0
 --- !u!114 &114699805383176952
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2581,6 +2604,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114853348854667358
 MonoBehaviour:
@@ -2659,6 +2692,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114935655724475540
 MonoBehaviour:

@@ -8,16 +8,12 @@ using System;
 
 public class CarBehaviour : NetworkBehaviour {
     public EngineAudioBehaviour EngineAudio;
-
-    public Text speedDisplay;//output of speed to meter - by default MPH
-    public Text gearDisplay;
     public GameObject frontLights;
     public GameObject rearLights;
     //public Material dirt; //dirt MATERIAL.
     public float dirtiness;//start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
-    public RectTransform pointer;
     public WheelCollider wheelFL, wheelFR, wheelRL, wheelRR;
     public Transform wheelFLCalp, wheelFRCalp, wheelRLCalp, wheelRRCalp;
     public Transform wheelFLTrans, wheelFRTrans, wheelRLTrans, wheelRRTrans;
@@ -27,6 +23,8 @@ public class CarBehaviour : NetworkBehaviour {
     public float wheelRPM;
     public Material dirt; //dirt MATERIAL.
     public Renderer dirtMesh; //fetches and instantiates dirt material
+    public GameObject HUDPrefab;
+    private HUD HUD;
 
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float currentGrip; //value manipulated by road type
@@ -89,13 +87,15 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Start() {
         if (isLocalPlayer) {
-            // Set the HUD objects
-            CourseController ctrl = FindObjectOfType<CourseController>();
-            speedDisplay = ctrl.SpeedDisplayHUD;
-            gearDisplay = ctrl.GearDisplayHUD;
-            pointer = ctrl.PointerHUD;
             // Set game camera target
+            CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
+
+            // load the default HUD if no car HUD
+            if (!HUDPrefab) {
+                HUDPrefab = ctrl.DefaultHUD;
+            }
+            HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
 
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
@@ -107,10 +107,6 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFL.ConfigureVehicleSubsteps(20, 1, 1);
             wheelRL.ConfigureVehicleSubsteps(20, 1, 1);
             wheelRR.ConfigureVehicleSubsteps(20, 1, 1);
-
-
-            HUDUpdate();
-            //stats update
 
             DataController dataController = FindObjectOfType<DataController>();
             springStiffness = dataController.SpringStiffness;
@@ -242,7 +238,8 @@ public class CarBehaviour : NetworkBehaviour {
 
     void Update() {
         if (isLocalPlayer) {
-            HUDUpdate();
+            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear);
+
             StartCoroutine(Gearbox());//gearbox update
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -514,42 +511,13 @@ public class CarBehaviour : NetworkBehaviour {
             frontLights.SetActive(false);
         }
 
-        if (Input.GetAxis("Brake") > 0f && frontLights.activeSelf)
+        if (Input.GetAxis("Brake") > 0f/* && frontLights.activeSelf*/)
         {//brakes
             rearLights.SetActive(true);
         }
         else
         {
             rearLights.SetActive(false);
-        }
-    }
-
-    // Updates the HUD
-    void HUDUpdate() {
-        float speedFactor = engineRPM / engineREDLINE;//dial rotation
-        float rotationAngle = 0;
-        if (engineRPM >= 0) {
-            rotationAngle = Mathf.Lerp(90, -180, speedFactor);
-            pointer.eulerAngles = new Vector3(0, 0, rotationAngle);
-        }//end dial rot
-
-        if (currentSpeed < 0)//cancelling negative integers, speed
-        {
-            speedDisplay.text = (currentSpeed * -1).ToString();
-        } else {
-            speedDisplay.text = currentSpeed.ToString();
-        }
-        if (shifting) {
-            gearDisplay.text = "-";
-        } else {         
-            //gears
-            if (gear == 0) {
-                gearDisplay.text = "R".ToString();//reverse gear
-            } else if (gear == 1) {
-                gearDisplay.text = "N".ToString();//neutral
-            } else {
-                gearDisplay.text = (gear - 1).ToString();//array value, minus 1
-            }
         }
     }
 }
