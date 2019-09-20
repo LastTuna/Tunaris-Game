@@ -245,6 +245,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1301976647188656
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4009079762897734}
+  m_Layer: 0
+  m_Name: Interior Cam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1310110292745246
 GameObject:
   m_ObjectHideFlags: 1
@@ -1141,6 +1156,19 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4486998567056964}
   m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4009079762897734
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1301976647188656}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.534, y: 1.187, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4997374041984738}
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4013175823678712
 Transform:
@@ -2091,6 +2119,7 @@ Transform:
   - {fileID: 4396599870815342}
   - {fileID: 4419392654851668}
   - {fileID: 4278558749562064}
+  - {fileID: 4009079762897734}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3454,6 +3483,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114302513310802042
 MonoBehaviour:
@@ -3588,6 +3627,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114488034328683012
 MonoBehaviour:
@@ -3647,6 +3696,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!114 &114701300459968828
 MonoBehaviour:
@@ -3731,7 +3790,7 @@ MonoBehaviour:
   wheelRPM: 0
   dirt: {fileID: 0}
   dirtMesh: {fileID: 23478649994251308}
-  manual: 2
+  manual: 1
   currentGrip: 0
   springStiffness: 8000
   brakeStrength: 200
@@ -3850,6 +3909,16 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
+  beerf:
+  - 0.4
+  - 1
+  - 0.8
+  - 0.5
+  beers:
+  - 0.2
+  - 1
+  - 0.3
+  - 0.7
   wheelrpm: 0
 --- !u!137 &137111387099102446
 SkinnedMeshRenderer:
