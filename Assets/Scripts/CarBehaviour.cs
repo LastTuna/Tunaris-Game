@@ -101,12 +101,12 @@ public class CarBehaviour : NetworkBehaviour {
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
             
-            dirt = dirtMesh.GetComponent<Renderer>().material;
+            dirt = dirtMesh?dirtMesh.GetComponent<Renderer>().material:null;
 
-            wheelFR.ConfigureVehicleSubsteps(20, 30, 10);
-            wheelFL.ConfigureVehicleSubsteps(20, 30, 10);
-            wheelRL.ConfigureVehicleSubsteps(20, 30, 10);
-            wheelRR.ConfigureVehicleSubsteps(20, 30, 10);
+            wheelFR.ConfigureVehicleSubsteps(20, 1, 1);
+            wheelFL.ConfigureVehicleSubsteps(20, 1, 1);
+            wheelRL.ConfigureVehicleSubsteps(20, 1, 1);
+            wheelRR.ConfigureVehicleSubsteps(20, 1, 1);
 
 
             HUDUpdate();
