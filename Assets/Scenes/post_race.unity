@@ -570,11 +570,14 @@ MonoBehaviour:
     type: 2}
   textInstances: []
   spawnPos: {x: 201, y: 186}
+  lapTally: []
   mainCanvas: {fileID: 0}
   dataController: {fileID: 0}
+  personalBest:
+    ms: 0
   carPrefabs:
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
-  - {fileID: 1572315012842202, guid: 12c808923cfb94b4ebded3be80b4bad4, type: 2}
+  - {fileID: 1134330902297122, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   DataControllerPrefab: {fileID: 1648861468993458, guid: cd4294fb47b04c541a33a524469ef434,
     type: 2}
 --- !u!4 &1337724488
