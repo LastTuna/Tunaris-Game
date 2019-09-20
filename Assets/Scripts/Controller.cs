@@ -42,7 +42,7 @@ public class Controller : MonoBehaviour {
 
     public void TGControlTest()
     {
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         if (MainMenuCanvas.gameObject.activeSelf)
         {
             if (Input.GetKeyDown("t") && !bestest.activeSelf)
@@ -243,7 +243,7 @@ public class Controller : MonoBehaviour {
         TuneScreenCanvas.gameObject.SetActive(true);
 
         // Restore tuning values from save data
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         GameObject.Find("Tire Bias").GetComponent<Slider>().value = data.TireBias;
         GameObject.Find("Final Drive").GetComponent<Slider>().value = data.FinalDrive;
         GameObject.Find("Aero").GetComponent<Slider>().value = data.Aero;
@@ -257,7 +257,7 @@ public class Controller : MonoBehaviour {
         GoRaceCanvas.gameObject.SetActive(false);
         OnlineCanvas.gameObject.SetActive(true);
         //fetch values from save data
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         GameObject.Find("IP Input").GetComponent<InputField>().text = data.IP;
         GameObject.Find("Username Input").GetComponent<InputField>().text = data.PlayerName;
 
@@ -273,7 +273,7 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
         MainMenuCanvas.gameObject.SetActive(false);
-        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController dataController = FindObjectOfType<DataController>();
         if (dataController.CuntUI) {
             CuntUI.gameObject.SetActive(true);
         } else {
@@ -291,7 +291,7 @@ public class Controller : MonoBehaviour {
         OptionsCanvas.gameObject.SetActive(true);
 
         //fetch values from save data
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = data.Garage3D;
         GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
@@ -306,7 +306,7 @@ public class Controller : MonoBehaviour {
         RecordsCanvas.gameObject.SetActive(true);
 
         //fetch values from save data
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
         foreach (var carpair in data.BestestLapTimes) {
             fastestLap = carpair;
@@ -334,7 +334,7 @@ public class Controller : MonoBehaviour {
         yield return new WaitForEndOfFrame();
 
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-        GameObject.Find("DataController").GetComponent<DataController>().SelectedCourse = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+        FindObjectOfType<DataController>().SelectedCourse = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
 
@@ -347,7 +347,7 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
         Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-        GameObject.Find("DataController").GetComponent<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+        FindObjectOfType<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
 
@@ -374,7 +374,7 @@ public class Controller : MonoBehaviour {
     //online IP validation. this is called from Cancel().
     public void ValidateOnline()
     {
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         data.IP = GameObject.Find("IP Address").GetComponent<Text>().text;
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
         data.SaveGameData();
@@ -453,7 +453,7 @@ public class Controller : MonoBehaviour {
 
     // Save options
     public void SaveOptions() {
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController data = FindObjectOfType<DataController>();
         data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
         data.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
         data.CuntUI = GameObject.Find("ImAFuckingCunt").GetComponent<Toggle>().isOn;
@@ -474,7 +474,7 @@ public class Controller : MonoBehaviour {
         if (MainMenuCanvas.gameObject.activeSelf) yield return null;
 
         // Always save settings
-        DataController dataController = GameObject.Find("DataController").GetComponent<DataController>();
+        DataController dataController = FindObjectOfType<DataController>();
        dataController.SaveGameData();
 
         // Play cancel sound
