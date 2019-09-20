@@ -38,7 +38,7 @@ public class EngineAudioBehaviour : MonoBehaviour
         if (sounds[currentIndex].lowRev > revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].lowRev > revs && lastIndex >= 0)
+            while (sounds[currentIndex].lowRev > revs && lastIndex >= 0 && currentIndex >= 0)
             {
                 currentIndex--;
             }
@@ -46,7 +46,7 @@ public class EngineAudioBehaviour : MonoBehaviour
         else if (sounds[currentIndex].highRev < revs)
         {
             // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].highRev < revs && lastIndex < sounds.Length - 1)
+            while (sounds[currentIndex].highRev < revs && lastIndex < sounds.Length - 1 && currentIndex < sounds.Length -1)
             {
                 currentIndex++;
             }

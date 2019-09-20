@@ -455,7 +455,7 @@ public class CarBehaviour : NetworkBehaviour {
     
     void AeroDrag ()
     {
-        Debug.Log(transform.forward.y);
+        //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0,0,0));
 
     }
