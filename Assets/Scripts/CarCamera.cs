@@ -11,6 +11,7 @@ public class CarCamera : MonoBehaviour {
     public float zoomRatio = 0.5f;
     public float DefaultFOV = 60;
     private Vector3 rotationVector;
+    private float reversingFactor = 1f;
 
     // Variable to store the selected camera
     public int chosenCamera = 0;
@@ -31,7 +32,7 @@ public class CarCamera : MonoBehaviour {
                         transform.position = car.position;
                         transform.position -= currentRotation * Vector3.forward * distance;
                         transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
-                        transform.LookAt(car.position + car.forward*10);
+                        transform.LookAt(car.position + car.forward*10*reversingFactor);
 
                         //car.Find("Cockpit").gameObject.SetActive(false);
                     }
@@ -60,8 +61,10 @@ public class CarCamera : MonoBehaviour {
         if (car != null) {
             Vector3 localVilocity = car.InverseTransformDirection(car.GetComponent<Rigidbody>().velocity);
             if (localVilocity.z < -0.5f) {
+                reversingFactor = -1f;
                 rotationVector.y = car.eulerAngles.y + 180;
             } else {
+                reversingFactor = 1f;
                 rotationVector.y = car.eulerAngles.y;
             }
             float acc = car.GetComponent<Rigidbody>().velocity.magnitude;
