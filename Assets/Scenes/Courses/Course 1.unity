@@ -1181,8 +1181,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   car: {fileID: 0}
   interiorCam: {fileID: 0}
-  distance: 6.4
-  height: 1.4
+  distance: 7
+  height: 3.5
   rotationDamping: 9
   heightDamping: 8
   zoomRatio: 0.5

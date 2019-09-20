@@ -3,9 +3,9 @@ using System.Collections;
 
 public class CarCamera : MonoBehaviour {
     public Transform car;
-    public GameObject interiorCam;
-    public float distance = 6.4f;
-    public float height = 1.4f;
+    public Transform interiorCam;
+    public float distance = 7f;
+    public float height = 3.5f;
     public float rotationDamping = 3.0f;
     public float heightDamping = 2.0f;
     public float zoomRatio = 0.5f;
@@ -31,15 +31,15 @@ public class CarCamera : MonoBehaviour {
                         transform.position = car.position;
                         transform.position -= currentRotation * Vector3.forward * distance;
                         transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
-                        transform.LookAt(car);
+                        transform.LookAt(car.position + car.forward*10);
 
                         //car.Find("Cockpit").gameObject.SetActive(false);
                     }
                     break;
                 // 1: cockpit cam
                 case 1: {
-                        interiorCam = GameObject.Find("Interior Cam");
-                        transform.position = interiorCam.transform.position;
+                        interiorCam = car.Find("Interior Cam");
+                        transform.position = interiorCam.position;
                         transform.rotation = car.rotation;
                         
                         //car.Find("Cockpit").gameObject.SetActive(true);
