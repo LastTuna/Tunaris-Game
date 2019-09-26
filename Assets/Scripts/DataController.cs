@@ -165,7 +165,7 @@ public class DataController : MonoBehaviour {
 
     public float GetDirtiness() {
         float ret;
-        if(Dirtiness.TryGetValue(SelectedCar, out ret)) {
+        if(!Dirtiness.TryGetValue(SelectedCar, out ret)) {
             ret = 0f;
             Dirtiness[SelectedCar] = 0f;
         }

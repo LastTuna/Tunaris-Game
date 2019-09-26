@@ -30,8 +30,8 @@ public class CarWash : MonoBehaviour {
 	void Update ()
     {
 
-        mainbody.SetFloat("_Glossiness", 1f);//placeholder
         dirtiness = dataController.GetDirtiness();
+        mainbody.SetFloat("_Glossiness", Mathf.Clamp01(1 - (dirtiness * 2)));//placeholder
         dirt.color = new Color(1, 1, 1, dirtiness);
         foreach(Material e in wheelDirt)
         {
