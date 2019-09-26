@@ -23,10 +23,10 @@ RenderSettings:
   m_AmbientSkyColor: {r: 0.212, g: 0.227, b: 0.259, a: 1}
   m_AmbientEquatorColor: {r: 0.114, g: 0.125, b: 0.133, a: 1}
   m_AmbientGroundColor: {r: 0.047, g: 0.043, b: 0.035, a: 1}
-  m_AmbientIntensity: 0
+  m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5a50b727821dd1447aa9d630015d4acf, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -35,10 +35,10 @@ RenderSettings:
   m_DefaultReflectionMode: 0
   m_DefaultReflectionResolution: 128
   m_ReflectionBounces: 1
-  m_ReflectionIntensity: 0
+  m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0, g: 0, b: 0, a: 0}
+  m_IndirectSpecularColor: {r: 0.165993, g: 0.165993, b: 0.165993, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -11183,12 +11183,13 @@ MonoBehaviour:
   TGmusic:
   - {fileID: 8300000, guid: 77e5216b33b8ad54089641f1a9b6e717, type: 3}
   - {fileID: 8300000, guid: 549fac79e67773c43ad11d4a5a4778b4, type: 3}
+  - {fileID: 8300000, guid: 7d2ab5e735305144797ab76b0017869e, type: 3}
   carro: {fileID: 0}
   bestest: {fileID: 1352033581}
   buttonPrefab: {fileID: 1862533101197166, guid: b8da0bec79c6103418d1c0012b62f7d7,
     type: 2}
   carsPrefabs:
-  - {fileID: 1134330902297122, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
+  - {fileID: 1109528858845200, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   carLogos:
   - {fileID: 2100000, guid: a3b15e0db0c9f9146bf9374b53168543, type: 2}
@@ -13310,7 +13311,7 @@ MonoBehaviour:
   personalBest:
     ms: 0
   carPrefabs:
-  - {fileID: 1134330902297122, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
+  - {fileID: 1109528858845200, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   DataControllerPrefab: {fileID: 0}
 --- !u!1 &1280593057

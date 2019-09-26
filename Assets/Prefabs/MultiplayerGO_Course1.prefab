@@ -585,7 +585,7 @@ MonoBehaviour:
   m_OnlineScene: 
   m_SpawnPrefabs:
   - {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a, type: 2}
-  - {fileID: 1134330902297122, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
+  - {fileID: 1109528858845200, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
@@ -643,7 +643,7 @@ MonoBehaviour:
   isNetworkActive: 0
   matchMaker: {fileID: 0}
   Cars:
-  - {fileID: 1134330902297122, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
+  - {fileID: 1109528858845200, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
   SpawnPositions:
   - {fileID: 1328735816986672, guid: f54c530610d41e744b9245757042e4e5, type: 2}

@@ -384,6 +384,8 @@ public class Controller : MonoBehaviour {
     {
         GoWashCanvas.gameObject.SetActive(true);
         GoRaceCanvas.gameObject.SetActive(false);
+        menuMusic.clip = TGmusic[2];
+        menuMusic.Play();
         DataController dataController = FindObjectOfType<DataController>();
         GameObject selectedCar = Instantiate(carsPrefabs.Find(carpre => carpre.name == dataController.SelectedCar), GoWashCanvas.transform);
         CarScriptKill(selectedCar);
@@ -546,6 +548,8 @@ public class Controller : MonoBehaviour {
             }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
+            menuMusic.clip = TGmusic[0];
+            menuMusic.Play();
         }
         //Credits -> Go Race
         if(CreditsCanvas.gameObject.activeSelf)
