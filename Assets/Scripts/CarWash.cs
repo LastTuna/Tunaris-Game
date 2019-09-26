@@ -17,7 +17,7 @@ public class CarWash : MonoBehaviour {
         washerButton = GameObject.Find("WasherButton").GetComponent<Button>();
         //issue here
         mainbody = GameObject.Find("mainbody").GetComponent<Renderer>().material;
-        //mainbody.EnableKeyword("_GLOSSYREFLECTIONS_ON");
+        mainbody.DisableKeyword("_GLOSSYREFLECTIONS_OFF");
         mainbody.SetInt("_GlossyReflections", 1);
         dirt = GameObject.Find("DIRT").GetComponent<Renderer>().material;
         wheelDirt[0] = GameObject.Find("FLdirt").GetComponent<Renderer>().material;
