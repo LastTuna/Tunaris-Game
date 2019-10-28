@@ -49,9 +49,13 @@ public class CarBehaviour : NetworkBehaviour {
     //end tuneable stats
     public float airSpeed;
     public float engineRPM;
+    public float engineIdle = 800;
     public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
     public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
-    public float turboSpool = 0.1f;//turbo boost value
+    public bool aspirated = false;
+    public AnimationCurve turboWaste = new AnimationCurve(new Keyframe(0, 0), new Keyframe(5000, 1), new Keyframe(9000, 0)); //adjust turbo engagement curve, turbo pressure
+    public float turboSpool = 0.1f;//turbo b00st
+    public float turboSize = 10;//mm - adjusts turbo lag
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //clutch
@@ -65,6 +69,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float debug1;
     public float debug2;
     public float debug3;
+    public float debug4;
 
 
     // FFB shit
@@ -96,6 +101,8 @@ public class CarBehaviour : NetworkBehaviour {
                 HUDPrefab = ctrl.DefaultHUD;
             }
             HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
+
+            if (!aspirated) turboSpool = 1;
 
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
@@ -227,6 +234,7 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.steerAngle = targetSteering;
             wheelFL.steerAngle = targetSteering;
 
+            if(aspirated) Turbo();
 
             //currentSpeed = 2 * 22/7 * wheelFL.radius * wheelFL.rpm * 60 / 1000; legacy
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
@@ -285,9 +293,9 @@ public class CarBehaviour : NetworkBehaviour {
             }
             else
             {
-                engineRPM += engineTorque.Evaluate(engineRPM) * Mathf.Clamp01(Input.GetAxis("Throttle"));
-                if (engineRPM > 800 && Mathf.Clamp01(Input.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
-                if (engineRPM < 800) engineRPM += 20;
+                engineRPM += engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(Input.GetAxis("Throttle"));
+                if (engineRPM > engineIdle && Mathf.Clamp01(Input.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
+                if (engineRPM < engineIdle) engineRPM += 20;
             }
             clutchRPM = engineRPM;
             wheelFL.motorTorque = 0;
@@ -303,10 +311,10 @@ public class CarBehaviour : NetworkBehaviour {
 
 
             //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -351,26 +359,23 @@ public class CarBehaviour : NetworkBehaviour {
 
 
     void Turbo()
-    { 
-
-        if (engineRPM > 830 && Input.GetAxis("Throttle") > 0)
-        {//when you step on the gas
-
-            if (turboSpool < 1.8f)//contol to keep boost level tops at 1.8
+    {
+        if (Input.GetAxis("Throttle") > 0 && engineRPM > engineIdle + 50)
+        {
+            turboSpool += turboWaste.Evaluate(engineRPM) / (turboSize * 3);
+            if (turboSpool > turboWaste.Evaluate(engineRPM))
             {
-                turboSpool = turboSpool + 0.1f * (turboSpool / 2);
-            }
-            if (turboSpool > 1.3f)//after boost exceeds 1.3, play wastegate
-            {
-                spooled = true;
+                turboSpool = turboWaste.Evaluate(engineRPM);
             }
         }
         else
         {
-            turboSpool = 0.1f;
-            spooled = false;
+            if (turboSpool > 0.2f)
+            {
+                turboSpool -= turboSpool / (turboSize * 4);
+            }
         }
-        //SOUND UPDATES
+        debug4 = turboSpool;
     }
 
     public float CenterDifferential (float front)
@@ -417,6 +422,24 @@ public class CarBehaviour : NetworkBehaviour {
         {
             case 0:
                 //ADD AUTOMATIC CODE
+                if(gear == 1)
+                {
+                    //neutral
+                    if(engineRPM > engineIdle + 900) gear++;
+                }
+                if(engineRPM > engineREDLINE - 500 && gear != gears.Length - 1)
+                {
+                    gear++;
+                }
+                if (engineRPM < engineREDLINE - engineREDLINE / 2 && gear != 2 && gear != 1)
+                {
+                    gear--;
+                }
+                if (engineRPM < engineIdle + 200 && gear == 2)
+                {
+                    gear--;
+                }
+
                 break;
             case 1:
                 if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
@@ -454,8 +477,10 @@ public class CarBehaviour : NetworkBehaviour {
     
     void AeroDrag ()
     {
+        Vector3 drag = new Vector3(0, gameObject.transform.up.y * -2 * Mathf.Clamp(currentSpeed, 0, 150), 0);
+        Debug.Log(drag);
         //Debug.Log(transform.forward.y);
-        gameObject.GetComponent<Rigidbody>().AddRelativeForce(new Vector3(0,0,0));
+        gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 
     }
 

@@ -31,6 +31,7 @@ public class TireBehavior : MonoBehaviour
         );
     public float[] beerf = new float[] { 0.4f, 1, 0.8f, 0.5f };
     public float[] beers = new float[] { 0.2f, 1, 0.3f, 0.7f };
+    public string lastSurface;
 
     public float wheelrpm;
     // Use this for initialization
@@ -49,6 +50,7 @@ public class TireBehavior : MonoBehaviour
         TyreWear();
         GripManager();
         Brakes();
+        wheelrpm = tyre.rpm;
     }
     void Update()
     {
@@ -79,9 +81,9 @@ public class TireBehavior : MonoBehaviour
         // Ground surface detection
         if (tyre.GetGroundHit(out wheelhit) && !burst)
         {
-            string despacito = wheelhit.collider.gameObject.tag;
-            wheelrpm = tyre.rpm;
-            switch (despacito)
+            if(lastSurface != wheelhit.collider.gameObject.tag) { 
+                lastSurface = wheelhit.collider.gameObject.tag;
+            switch (lastSurface)
             {
                 case "sand":
                     //gravel/offroad
@@ -112,11 +114,14 @@ public class TireBehavior : MonoBehaviour
             {//grip preload, to apply some extra grip. do not apply extra grip if in puddle
                 currentGrip += 0.2f;
             }
+            //move SetStiffness here when done
+        }
         }
         if (burst)
         {
             currentGrip = 0.1f;
         }
+        //DEBUGGING PURPOSES APPLY GRIP EVERY TICK FOR NOW UNTIL I COMPLETE
         tyre.forwardFriction = SetStiffness(beerf, currentGrip);
         tyre.sidewaysFriction = SetStiffness(beers, currentGrip);
     }
@@ -131,6 +136,7 @@ public class TireBehavior : MonoBehaviour
         }
             return groundDampness * 0.001f;
     }
+    
 
     void Brakes()
     {
@@ -138,7 +144,7 @@ public class TireBehavior : MonoBehaviour
         {//brakes
             if (brakeHeat < 800)
             {
-                brakeHeat += Mathf.Abs(tyre.rpm) / 50;
+                brakeHeat += Mathf.Abs(tyre.rpm) / 100;
             }
             tyre.brakeTorque = brakeStrength * brakeFadeCurve.Evaluate(brakeHeat);
         }
@@ -150,6 +156,7 @@ public class TireBehavior : MonoBehaviour
         {
             tyre.brakeTorque = 700;
         }
+
         if (brakeHeat > 50)
             brakeHeat = brakeHeat - brakeHeat / 500;
         if (brakeHeat > 400)
