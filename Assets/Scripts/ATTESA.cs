@@ -14,11 +14,17 @@ public class ATTESA : MonoBehaviour {
         WheelHit wheelhitL;
         WheelHit wheelhitR;
         //detect slip for rear wheels and steer accordingly
-        if (wheelRL.GetGroundHit(out wheelhitL) && wheelRR.GetGroundHit(out wheelhitR)) {
-            if (Mathf.Abs(SlipAvg(wheelhitL, wheelhitR)) > 0.05f) {
+        if (wheelRL.isGrounded || wheelRR.isGrounded)
+        {
+            wheelRL.GetGroundHit(out wheelhitL);
+            wheelRR.GetGroundHit(out wheelhitR);
+            if (Mathf.Abs(SlipAvg(wheelhitL, wheelhitR)) > 0.05f && wheelRL.rpm + wheelRR.rpm > 300)
+            {
                 wheelRL.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + (-wheelFL.steerAngle / 6);
                 wheelRR.steerAngle = SlipAvg(wheelhitL, wheelhitR) * 30 + (-wheelFR.steerAngle / 6);
-            } else {
+            }
+            else
+            {
                 wheelRL.steerAngle = -wheelFL.steerAngle / 6;
                 wheelRR.steerAngle = -wheelFR.steerAngle / 6;
             }

@@ -3151,7 +3151,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 1
+  Loop: 0
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -3364,10 +3364,10 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 804f95624929f1c459ff7c6cfb518213, type: 3}
     relativeVolume: 1
     isPitchModified: 1
-  hasTurbo: 0
+  hasTurbo: 1
   boostSource: {fileID: 82922613400974654}
-  woosh: {fileID: 0}
-  pssh: {fileID: 0}
+  woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
+  pssh: {fileID: 8300000, guid: 03835c3bc44cb6545808a3d741dffd8e, type: 3}
   isSpooled: 0
 --- !u!114 &114201076722057636
 MonoBehaviour:
@@ -3546,7 +3546,7 @@ MonoBehaviour:
   springStiffness: 8000
   brakeStrength: 200
   aero: 15
-  ratio: 2.9
+  ratio: 3.01
   FrontWheelDriveBias: 0.5
   lsd: 1
   airSpeed: 0
@@ -3583,6 +3583,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
+  aspirated: 1
   turboWaste:
     serializedVersion: 2
     m_Curve:
@@ -3608,6 +3609,7 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 0
   turboSpool: 0.1
+  turboSize: 10
   spooled: 0
   unitOutput: 0
   clutchPressure: 1
@@ -3626,6 +3628,7 @@ MonoBehaviour:
   debug1: 0
   debug2: 0
   debug3: 0
+  debug4: 0
   CenterOfGravity: {x: 0, y: 0.2, z: 0}
 --- !u!114 &114524558669726170
 MonoBehaviour:

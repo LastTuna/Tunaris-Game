@@ -29,7 +29,7 @@ public class EngineAudioBehaviour : MonoBehaviour
     }
 
     // Called from CarBehaviour, processes sounds
-    public void ProcessSounds(float revs, bool spooled)
+    public void ProcessSounds(float revs, bool spooled, float boostPressure)
     {
         if (sounds.Length == 0) return;
         int currentIndex = lastIndex;
@@ -84,6 +84,7 @@ public class EngineAudioBehaviour : MonoBehaviour
             // turbo stopped spooling
             if (isSpooled && !spooled)
             {
+                boostSource.pitch = 1;
                 boostSource.clip = pssh;
                 boostSource.loop = false;
                 boostSource.Play();

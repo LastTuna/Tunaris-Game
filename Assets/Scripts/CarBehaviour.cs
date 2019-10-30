@@ -263,7 +263,7 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRLCalp.localEulerAngles = new Vector3(wheelRLCalp.localEulerAngles.x, wheelRL.steerAngle - wheelRLCalp.localEulerAngles.z, wheelRLCalp.localEulerAngles.z);
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
-            EngineAudio.ProcessSounds(engineRPM, spooled);
+            EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             CmdLightsOn();
             WheelPosition(wheelFL, wheelFLCalp, wheelFLTrans); //graphical update - wheel positions
             WheelPosition(wheelFR, wheelFRCalp, wheelFRTrans);
@@ -366,12 +366,14 @@ public class CarBehaviour : NetworkBehaviour {
             if (turboSpool > turboWaste.Evaluate(engineRPM))
             {
                 turboSpool = turboWaste.Evaluate(engineRPM);
+                spooled = true;
             }
         }
         else
         {
             if (turboSpool > 0.2f)
             {
+                spooled = false;
                 turboSpool -= turboSpool / (turboSize * 4);
             }
         }
