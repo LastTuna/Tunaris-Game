@@ -428,20 +428,23 @@ public class CarBehaviour : NetworkBehaviour {
                 {
                     //neutral
                     if(engineRPM > engineIdle + 900) gear++;
+                    break;
                 }
                 if(engineRPM > engineREDLINE - 500 && gear != gears.Length - 1)
                 {
                     gear++;
+                    break;
                 }
                 if (engineRPM < engineREDLINE - engineREDLINE / 2 && gear != 2 && gear != 1)
                 {
                     gear--;
+                    break;
                 }
                 if (engineRPM < engineIdle + 200 && gear == 2)
                 {
                     gear--;
+                    break;
                 }
-
                 break;
             case 1:
                 if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
