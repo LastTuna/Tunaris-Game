@@ -19,14 +19,13 @@ public class CarBehaviour : NetworkBehaviour {
     public Transform wheelFLTrans, wheelFRTrans, wheelRLTrans, wheelRRTrans;
     public Transform differentialTrans;
     public bool visualDiff = false;
-    public float currentSpeed;
-    public float wheelRPM;
+    public float currentSpeed, wheelRPM;
     public Material dirt; //dirt MATERIAL.
     public Renderer dirtMesh; //fetches and instantiates dirt material
     public GameObject HUDPrefab;
     private HUD HUD;
-
     public int manual = 1; //0auto - 1manual - 2manualwclutch
+    public float shifterDelay = 0.3f;
     public float currentGrip; //value manipulated by road type
     //tuneable stats
     public float springStiffness = 8000;
@@ -248,7 +247,7 @@ public class CarBehaviour : NetworkBehaviour {
         if (isLocalPlayer) {
             HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear);
 
-            StartCoroutine(Gearbox());//gearbox update
+            Gearbox();//gearbox update
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
             wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
             wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
@@ -307,14 +306,13 @@ public class CarBehaviour : NetworkBehaviour {
         {//DRIVE
             engineRPM = (Mathf.Abs(wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * ratio * Mathf.Abs(gears[gear]);
             engineRPM += (Mathf.Abs(wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * ratio * Mathf.Abs(gears[gear]);
+            //make motor torks calc shorter with temporary variable
+            float precalc = Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
 
-
-
-            //currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
+            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
+            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * precalc;
+            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * precalc;
 
             if (engineRPM >= engineREDLINE)
             {//rev limiter
@@ -345,19 +343,14 @@ public class CarBehaviour : NetworkBehaviour {
             }
 
         }
-        //if((wheelFL.rpm * ratio) * gears[gear] < engineRPM)
-
-        debug1 = Differential(wheelFR, wheelFL);
-        debug2 = CenterDifferential(1);
-        debug3 = CenterDifferential(-1);
+        
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
         
     }
-
-
+    
     void Turbo()
     {
         if (Input.GetAxis("Throttle") > 0 && engineRPM > engineIdle + 50)
@@ -377,7 +370,6 @@ public class CarBehaviour : NetworkBehaviour {
                 turboSpool -= turboSpool / (turboSize * 4);
             }
         }
-        debug4 = turboSpool;
     }
 
     public float CenterDifferential (float front)
@@ -418,7 +410,7 @@ public class CarBehaviour : NetworkBehaviour {
     }
 
     // Gearbox managed, called each frame
-    IEnumerator Gearbox()
+    public void Gearbox()
     {
         switch (manual)
         {
@@ -449,17 +441,13 @@ public class CarBehaviour : NetworkBehaviour {
             case 1:
                 if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
                 {
-                    shifting = true;
                     gear = gear + 1;
-                    yield return new WaitForSeconds(0.3f);
-                    shifting = false;
+                    StartCoroutine(ClutchDelay(shifterDelay));
                 }
                 if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
                 {
-                    shifting = true;
                     gear = gear - 1;
-                    yield return new WaitForSeconds(0.1f);
-                    shifting = false;
+                    StartCoroutine(ClutchDelay(shifterDelay / 3));
                 }
                 break;
             case 2:
@@ -478,6 +466,12 @@ public class CarBehaviour : NetworkBehaviour {
                 break;
 
         }//END MANUAL
+    }
+    public IEnumerator ClutchDelay(float time)
+    {
+        shifting = true;
+        yield return new WaitForSeconds(time);
+        shifting = false;
     }
     
     void AeroDrag ()
