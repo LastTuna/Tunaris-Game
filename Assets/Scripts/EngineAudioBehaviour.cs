@@ -6,10 +6,18 @@ using UnityEngine;
 public class EngineAudioBehaviour : MonoBehaviour
 {
     // Car attached source
-    public AudioSource CarEngine;
+    public AudioSource[] CarEngine;
+    public AudioSource horn;
+    //can essentially have as many sound layers as you want
+
 
     // Engine sounds
-    public EngineSample[] sounds;
+    public EngineSampleArray[] sounds;
+    //MULTIDIMENSIONAL ARRAY
+    //FIRST COMES INDEX
+    //SECOND COMES LAYER
+    public int[] rpmIndex;
+    //index the sounds by rpm range for quickly finding the relevant sound samples
 
     // Turbo related stuff
     public bool hasTurbo;
@@ -24,51 +32,38 @@ public class EngineAudioBehaviour : MonoBehaviour
     // Initialize audio
     void Start()
     {
-        CarEngine.clip = sounds[lastIndex].clip;
-        CarEngine.Play();
+        CarEngine[0].clip = sounds[lastIndex].index[0].clip;
+        CarEngine[0].Play();
     }
 
     // Called from CarBehaviour, processes sounds
     public void ProcessSounds(float revs, bool spooled, float boostPressure)
     {
-        if (sounds.Length == 0) return;
-        int currentIndex = lastIndex;
+        if (sounds.Length == 0) return;//null check
 
-        // Which direction to go in the sound range
-        if (sounds[currentIndex].lowRev > revs)
-        {
-            // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].lowRev > revs && lastIndex >= 0 && currentIndex >= 0)
-            {
-                currentIndex--;
-            }
-        }
-        else if (sounds[currentIndex].highRev < revs)
-        {
-            // Go down the sound range until revs fit (decelerating)
-            while (sounds[currentIndex].highRev < revs && lastIndex < sounds.Length - 1 && currentIndex < sounds.Length -1)
-            {
-                currentIndex++;
-            }
-        }
-
+        //find index
+        int currentIndex = SoundIndex(revs);
         // At this point currentIndex points to the correct rev range
+
         // If it's a new sound, play it
         if (lastIndex != currentIndex)
         {
-            CarEngine.clip = sounds[currentIndex].clip;
-            CarEngine.pitch = 1f;
-            CarEngine.Play();
+            //go through all samples in the current index and apply
+            for (int i = 0; i < sounds[currentIndex].index.Length; i++)
+            {
+                CarEngine[i].clip = sounds[currentIndex].index[i].clip;
+                CarEngine[i].pitch = 1f;
+                CarEngine[i].Play();
+            }
             lastIndex = currentIndex;
         }
-
         // Apply the modifiers
-        CarEngine.volume = sounds[currentIndex].relativeVolume;
-        if (sounds[currentIndex].isPitchModified)
+        for (int i = 0; i < sounds[currentIndex].index.Length; i++)
         {
-            CarEngine.pitch = (revs / 1000) / 4;
+            float factor = Mathf.InverseLerp(sounds[currentIndex].index[i].lowRev, sounds[currentIndex].index[i].highRev, revs);
+            CarEngine[i].pitch = sounds[currentIndex].index[i].audioPitch.Evaluate(factor);
+            CarEngine[i].volume = sounds[currentIndex].index[i].audioVolume.Evaluate(factor);
         }
-
         // Process turbo sound
         if (hasTurbo)
         {
@@ -92,15 +87,37 @@ public class EngineAudioBehaviour : MonoBehaviour
             }
         }
     }
+
+    public int SoundIndex(float revs)
+    {
+        int rpm = (int)revs;
+        for (int i = 0; i < rpmIndex.Length; i++)
+        {
+            if (rpm > rpmIndex[i] && rpm < rpmIndex[i + 1])
+            {
+                return i;
+            }
+        }
+        return 0;
+    }
+
+    [System.Serializable]
+    public struct EngineSample
+    {
+        public int lowRev;
+        public int highRev;
+        public AudioClip clip;
+        public AnimationCurve audioVolume;
+        public AnimationCurve audioPitch;
+        // Maybe find a way to replace that with a way to parametrize the formula
+    }
+    //because cant view a struct in a multidim. array on the editor you gotta make it into a class first
+    [System.Serializable]
+    public class EngineSampleArray
+    {
+        public EngineSample[] index;
+    }
+
 }
 
-[System.Serializable]
-public struct EngineSample
-{
-    public int lowRev;
-    public int highRev;
-    public AudioClip clip;
-    public float relativeVolume;
-    // Maybe find a way to replace that with a way to parametrize the formula
-    public bool isPitchModified;
-}
+

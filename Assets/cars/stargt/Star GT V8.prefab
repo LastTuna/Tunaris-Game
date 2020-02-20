@@ -109,6 +109,7 @@ GameObject:
   - component: {fileID: 114169491845449694}
   - component: {fileID: 82996341752816158}
   - component: {fileID: 82922613400974654}
+  - component: {fileID: 82916173841981012}
   - component: {fileID: 114746463163581882}
   - component: {fileID: 114524558669726170}
   - component: {fileID: 114310450002016840}
@@ -3058,6 +3059,86 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1.9596214, y: 1.045702, z: 4.526764}
   m_Center: {x: 0, y: 0.63, z: 0.034591675}
+--- !u!82 &82916173841981012
+AudioSource:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1109528858845200}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 1
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    - serializedVersion: 2
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 2
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 0
 --- !u!82 &82922613400974654
 AudioSource:
   m_ObjectHideFlags: 1
@@ -3071,7 +3152,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
@@ -3352,19 +3433,176 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 72ff73f5ea878f84b8086feaf0db8bc3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CarEngine: {fileID: 82996341752816158}
+  CarEngine:
+  - {fileID: 82996341752816158}
+  - {fileID: 82922613400974654}
+  - {fileID: 82916173841981012}
+  horn: {fileID: 0}
   sounds:
-  - lowRev: 0
-    highRev: 850
-    clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
-    relativeVolume: 1
-    isPitchModified: 0
-  - lowRev: 851
-    highRev: 7000
-    clip: {fileID: 8300000, guid: 804f95624929f1c459ff7c6cfb518213, type: 3}
-    relativeVolume: 1
-    isPitchModified: 1
-  hasTurbo: 1
+  - index:
+    - lowRev: 0
+      highRev: 830
+      clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - index:
+    - lowRev: 830
+      highRev: 6000
+      clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.0702341
+          value: 0.00000029802322
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.26385498
+          value: 1.207798
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - lowRev: 831
+      highRev: 6000
+      clip: {fileID: 8300000, guid: 804f95624929f1c459ff7c6cfb518213, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 0
+          inSlope: 2.6248085
+          outSlope: 2.6248085
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.06391905
+          value: 0.99904245
+          inSlope: 0.029156383
+          outSlope: 0.029156383
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.9297659
+          value: 1.0001267
+          inSlope: -0.02704715
+          outSlope: -0.02704715
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1.0006895
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 136
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 5
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  - index:
+    - lowRev: 6000
+      highRev: 9000
+      clip: {fileID: 0}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+    - lowRev: 6000
+      highRev: 9000
+      clip: {fileID: 0}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 0
+        m_PostInfinity: 0
+        m_RotationOrder: 0
+  rpmIndex: 000000003e0300007017000028230000
+  hasTurbo: 0
   boostSource: {fileID: 82922613400974654}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
   pssh: {fileID: 8300000, guid: 03835c3bc44cb6545808a3d741dffd8e, type: 3}
@@ -3542,6 +3780,7 @@ MonoBehaviour:
   dirtMesh: {fileID: 23867065013498200}
   HUDPrefab: {fileID: 0}
   manual: 1
+  shifterDelay: 0.3
   currentGrip: 0
   springStiffness: 8000
   brakeStrength: 200
@@ -3583,7 +3822,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  aspirated: 1
+  aspirated: 0
   turboWaste:
     serializedVersion: 2
     m_Curve:
@@ -3608,7 +3847,7 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 0
-  turboSpool: 0.1
+  turboSpool: 1
   turboSize: 10
   spooled: 0
   unitOutput: 0

@@ -12,6 +12,7 @@ public class BikeBehaviour : MonoBehaviour {
     public Transform wheelRTrans;
     public Transform fork;
     public float power;
+    public float maxTransfer = 0.3f;
 
     // Use this for initialization
     void Start () {

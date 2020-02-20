@@ -414,8 +414,7 @@ public class CarBehaviour : NetworkBehaviour {
     {
         switch (manual)
         {
-            case 0:
-                //ADD AUTOMATIC CODE
+            case 0: //AUTOMATIC
                 if(gear == 1)
                 {
                     //neutral
@@ -424,21 +423,24 @@ public class CarBehaviour : NetworkBehaviour {
                 }
                 if(engineRPM > engineREDLINE - 500 && gear != gears.Length - 1)
                 {
+                    //upshift
                     gear++;
                     break;
                 }
                 if (engineRPM < engineREDLINE - engineREDLINE / 2 && gear != 2 && gear != 1)
                 {
+                    //downshift
                     gear--;
                     break;
                 }
                 if (engineRPM < engineIdle + 200 && gear == 2)
                 {
+                    //downshift to neutral
                     gear--;
                     break;
                 }
                 break;
-            case 1:
+            case 1: //MANUAL
                 if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
                 {
                     gear = gear + 1;
@@ -450,7 +452,7 @@ public class CarBehaviour : NetworkBehaviour {
                     StartCoroutine(ClutchDelay(shifterDelay / 3));
                 }
                 break;
-            case 2:
+            case 2: //MANUAL CLUTCH
                 if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && clutchPressure < 0.5f)
                 {
                     shifting = true;
@@ -464,8 +466,7 @@ public class CarBehaviour : NetworkBehaviour {
                     shifting = false;
                 }
                 break;
-
-        }//END MANUAL
+        }
     }
     public IEnumerator ClutchDelay(float time)
     {
@@ -477,7 +478,7 @@ public class CarBehaviour : NetworkBehaviour {
     void AeroDrag ()
     {
         Vector3 drag = new Vector3(0, gameObject.transform.up.y * -2 * Mathf.Clamp(currentSpeed, 0, 150), 0);
-        Debug.Log(drag);
+        //Debug.Log(drag);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 
@@ -535,7 +536,7 @@ public class CarBehaviour : NetworkBehaviour {
             frontLights.SetActive(false);
         }
 
-        if (Input.GetAxis("Brake") > 0f/* && frontLights.activeSelf*/)
+        if (Input.GetAxis("Brake") > 0f)
         {//brakes
             rearLights.SetActive(true);
         }
