@@ -3441,8 +3441,8 @@ MonoBehaviour:
   sounds:
   - index:
     - lowRev: 0
-      highRev: 830
-      clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
+      highRev: 2000
+      clip: {fileID: 8300000, guid: 507b22900f39609408f9bd0df5da3020, type: 3}
       audioVolume:
         serializedVersion: 2
         m_Curve:
@@ -3466,13 +3466,13 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 1
+          value: 0.8
           inSlope: 0
           outSlope: 0
           tangentMode: 0
         - serializedVersion: 2
           time: 1
-          value: 1
+          value: 0.8
           inSlope: 0
           outSlope: 0
           tangentMode: 0
@@ -3480,9 +3480,9 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 0
   - index:
-    - lowRev: 830
+    - lowRev: 2000
       highRev: 6000
-      clip: {fileID: 8300000, guid: 3bee9620a199dbb45aa68d7e3ace951a, type: 3}
+      clip: {fileID: 8300000, guid: 507b22900f39609408f9bd0df5da3020, type: 3}
       audioVolume:
         serializedVersion: 2
         m_Curve:
@@ -3493,10 +3493,10 @@ MonoBehaviour:
           outSlope: 0
           tangentMode: 0
         - serializedVersion: 2
-          time: 0.0702341
-          value: 0.00000029802322
-          inSlope: 0
-          outSlope: 0
+          time: 0.4
+          value: 0.002319336
+          inSlope: -8.307702
+          outSlope: -8.307702
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -3506,22 +3506,22 @@ MonoBehaviour:
         m_Curve:
         - serializedVersion: 2
           time: 0
-          value: 1
+          value: 0.8
           inSlope: 0
           outSlope: 0
           tangentMode: 0
         - serializedVersion: 2
-          time: 0.26385498
-          value: 1.207798
+          time: 0.49965823
+          value: 1.0011444
           inSlope: 0
           outSlope: 0
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 0
-    - lowRev: 831
+    - lowRev: 2000
       highRev: 6000
-      clip: {fileID: 8300000, guid: 804f95624929f1c459ff7c6cfb518213, type: 3}
+      clip: {fileID: 8300000, guid: 507b22900f39609408f9bd0df5da3020, type: 3}
       audioVolume:
         serializedVersion: 2
         m_Curve:
@@ -3532,20 +3532,71 @@ MonoBehaviour:
           outSlope: 2.6248085
           tangentMode: 0
         - serializedVersion: 2
-          time: 0.06391905
-          value: 0.99904245
+          time: 0.23125844
+          value: 0.9664154
           inSlope: 0.029156383
           outSlope: 0.029156383
           tangentMode: 0
         - serializedVersion: 2
-          time: 0.9297659
-          value: 1.0001267
-          inSlope: -0.02704715
-          outSlope: -0.02704715
+          time: 0.6268816
+          value: 0.9733605
+          inSlope: -0.043941792
+          outSlope: -0.043941792
           tangentMode: 0
         - serializedVersion: 2
           time: 1.0006895
+          value: 0.0018920898
+          inSlope: -6.2513633
+          outSlope: -6.2513633
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 0.8
+          inSlope: 0.50288844
+          outSlope: 0.50288844
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.49936715
+          value: 1.0051843
+          inSlope: 0.5889357
+          outSlope: 0.5889357
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1.0044556
+          value: 1.8
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - lowRev: 2000
+      highRev: 6000
+      clip: {fileID: 8300000, guid: b3c7cdd16ced82546b538134aaa71ee3, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.79319
           value: 0
+          inSlope: 2.6248085
+          outSlope: 2.6248085
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.88220537
+          value: 0.8094657
+          inSlope: 3.1714342
+          outSlope: 3.1714342
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
           inSlope: 0
           outSlope: 0
           tangentMode: 136
@@ -3556,16 +3607,16 @@ MonoBehaviour:
         serializedVersion: 2
         m_Curve:
         - serializedVersion: 2
-          time: 0
+          time: 0.8
           value: 1
-          inSlope: 1
-          outSlope: 1
+          inSlope: 0.1063256
+          outSlope: 0.1063256
           tangentMode: 0
         - serializedVersion: 2
           time: 1
-          value: 5
-          inSlope: 1
-          outSlope: 1
+          value: 1.2
+          inSlope: 0.042093687
+          outSlope: 0.042093687
           tangentMode: 0
         m_PreInfinity: 2
         m_PostInfinity: 2
@@ -3573,35 +3624,219 @@ MonoBehaviour:
   - index:
     - lowRev: 6000
       highRev: 9000
-      clip: {fileID: 0}
+      clip: {fileID: 8300000, guid: b3c7cdd16ced82546b538134aaa71ee3, type: 3}
       audioVolume:
         serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.7395709
+          value: 0
+          inSlope: -0.7321984
+          outSlope: -0.7321984
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
         m_RotationOrder: 0
       audioPitch:
         serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1.2
+          inSlope: 1
+          outSlope: 1
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1.9
+          inSlope: 0.33932173
+          outSlope: 0.33932173
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
         m_RotationOrder: 0
     - lowRev: 6000
       highRev: 9000
-      clip: {fileID: 0}
+      clip: {fileID: 8300000, guid: 246ccf19f24265c468af6d0e6ec767e6, type: 3}
       audioVolume:
         serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.25269225
+          value: 0
+          inSlope: 3.1512089
+          outSlope: 3.1512089
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.7360202
+          value: 0.9946036
+          inSlope: 0.08062701
+          outSlope: 0.08062701
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
         m_RotationOrder: 0
       audioPitch:
         serializedVersion: 2
-        m_Curve: []
-        m_PreInfinity: 0
-        m_PostInfinity: 0
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.35349134
+          value: 1
+          inSlope: 0.9910868
+          outSlope: 0.9910868
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.958313
+          value: 1.5
+          inSlope: 0.41761842
+          outSlope: 0.41761842
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
         m_RotationOrder: 0
-  rpmIndex: 000000003e0300007017000028230000
+  - index:
+    - lowRev: 9000
+      highRev: 13000
+      clip: {fileID: 8300000, guid: 246ccf19f24265c468af6d0e6ec767e6, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.49506837
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 1.9
+          inSlope: 0.33932173
+          outSlope: 0.33932173
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 2.4934163
+          inSlope: 0.64150566
+          outSlope: 0.64150566
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - lowRev: 9000
+      highRev: 13000
+      clip: {fileID: 8300000, guid: eafbdfec011119c46b1a0091b68beee5, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.5773374
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 0
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.7
+          value: 1
+          inSlope: 1.3194311
+          outSlope: 1.3194311
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.958313
+          value: 1.5
+          inSlope: 1.6377956
+          outSlope: 1.6377956
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+    - lowRev: 9000
+      highRev: 13000
+      clip: {fileID: 8300000, guid: 7a0edaeefab828c49a84bbe4e27b082e, type: 3}
+      audioVolume:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.51356256
+          value: 0
+          inSlope: 3.2346404
+          outSlope: 3.2346404
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.89070517
+          value: 0.9827688
+          inSlope: 0.08062701
+          outSlope: 0.08062701
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 1
+          value: 1
+          inSlope: 0
+          outSlope: 0
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+      audioPitch:
+        serializedVersion: 2
+        m_Curve:
+        - serializedVersion: 2
+          time: 0.35349134
+          value: 1
+          inSlope: 0.9910868
+          outSlope: 0.9910868
+          tangentMode: 0
+        - serializedVersion: 2
+          time: 0.958313
+          value: 1.5
+          inSlope: 0.41761842
+          outSlope: 0.41761842
+          tangentMode: 0
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 0
+  rpmIndex: 00000000d00700007017000028230000c8320000
   hasTurbo: 0
   boostSource: {fileID: 82922613400974654}
   woosh: {fileID: 8300000, guid: 7bc7cfdd52437134380bb8511872cee7, type: 3}
@@ -3790,8 +4025,8 @@ MonoBehaviour:
   lsd: 1
   airSpeed: 0
   engineRPM: 0
-  engineIdle: 800
-  engineREDLINE: 6000
+  engineIdle: 1900
+  engineREDLINE: 12000
   engineTorque:
     serializedVersion: 2
     m_Curve:
@@ -3802,22 +4037,22 @@ MonoBehaviour:
       outSlope: 0
       tangentMode: 0
     - serializedVersion: 2
-      time: 3871.2373
-      value: 209.72845
-      inSlope: 0.006067155
-      outSlope: 0.006067155
+      time: 5370.287
+      value: 183.42407
+      inSlope: 0.011133327
+      outSlope: 0.011133327
       tangentMode: 0
     - serializedVersion: 2
-      time: 5358.4893
-      value: 201.53436
-      inSlope: -0.014070965
-      outSlope: -0.014070965
+      time: 8520.868
+      value: 208.2566
+      inSlope: 0.00876992
+      outSlope: 0.00876992
       tangentMode: 0
     - serializedVersion: 2
-      time: 6471.572
-      value: 161.5284
-      inSlope: -0.03061898
-      outSlope: -0.03061898
+      time: 11605.303
+      value: 188.12505
+      inSlope: -0.019612415
+      outSlope: -0.019612415
       tangentMode: 0
     m_PreInfinity: 2
     m_PostInfinity: 2

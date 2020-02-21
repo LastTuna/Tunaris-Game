@@ -48,12 +48,18 @@ public class EngineAudioBehaviour : MonoBehaviour
         // If it's a new sound, play it
         if (lastIndex != currentIndex)
         {
-            //go through all samples in the current index and apply
-            for (int i = 0; i < sounds[currentIndex].index.Length; i++)
+            //go through all layers in current index and apply samples. mute unused layers
+            int i = 0;
+            for (i = 0; i < sounds[currentIndex].index.Length; i++)
             {
                 CarEngine[i].clip = sounds[currentIndex].index[i].clip;
                 CarEngine[i].pitch = 1f;
                 CarEngine[i].Play();
+            }
+            while (i < CarEngine.Length)
+            {
+                CarEngine[i].clip = null;
+                i++;
             }
             lastIndex = currentIndex;
         }
