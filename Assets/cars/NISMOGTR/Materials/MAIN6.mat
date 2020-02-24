@@ -7,14 +7,13 @@ Material:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_Name: MAIN6
-  m_Shader: {fileID: 46, guid: 0000000000000000f000000000000000, type: 0}
+  m_Shader: {fileID: 4800000, guid: 04b866736d3846841a450a1df501dc8e, type: 3}
   m_ShaderKeywords: _ALPHATEST_ON _EMISSION
   m_LightmapFlags: 1
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
-  m_CustomRenderQueue: 2450
-  stringTagMap:
-    RenderType: TransparentCutout
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
   disabledShaderPasses: []
   m_SavedProperties:
     serializedVersion: 3
@@ -39,6 +38,10 @@ Material:
         m_Texture: {fileID: 2800000, guid: 060b66dd33c6ec9458d518d9a1586c21, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Fortnite:
+        m_Texture: {fileID: 2800000, guid: e2f698a23a7eacd42b4f1273bcf8c5e7, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
         m_Texture: {fileID: 2800000, guid: 06af1669dcb219845af520b532ff99b2, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -60,6 +63,7 @@ Material:
     - _Cutoff: 0.5
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
+    - _FortniteRange: 0
     - _GlossMapScale: 1
     - _Glossiness: 0
     - _GlossyReflections: 1
