@@ -344,5 +344,5 @@ Shader "TGStandard"
 
 
     FallBack "VertexLit"
-    //CustomEditor "TGStandardShaderGUI"
+		CustomEditor "TGShaderGUI"
 }
