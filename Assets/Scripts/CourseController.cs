@@ -20,6 +20,8 @@ public class CourseController : MonoBehaviour {
 
     // Default HUD
     public GameObject DefaultHUD;
+    // Busrider mode HUD
+    public GameObject BusriderHUD;
     // Canvas to instantiate HUD into
     public GameObject HUDCanvas;
 
@@ -33,6 +35,9 @@ public class CourseController : MonoBehaviour {
 
     // Instantiated multiplayer object
     private GameObject MpPrefab;
+
+    // AI Waypoints
+    public GameObject[] AIWaypoints;
 
     void Start () {
         DataController dataController = FindObjectOfType<DataController>();

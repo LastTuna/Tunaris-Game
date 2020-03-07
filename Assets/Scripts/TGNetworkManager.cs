@@ -73,6 +73,8 @@ public class TGNetworkManager : NetworkManager {
         ConnectedPlayer currentPlayer = Players[rawMessage.conn];
         currentPlayer.PlayerName = currentPlayerMessage.PlayerName;
         currentPlayer.CarName = currentPlayerMessage.CarName;
+        currentPlayer.IsBusrider = currentPlayerMessage.IsBusrider;
+        if (currentPlayer.IsBusrider) currentPlayer.CarName = "the bus";
 
         // Instantiate the actual car
         foreach(GameObject prefab in Cars) {
@@ -127,7 +129,7 @@ public class TGNetworkManager : NetworkManager {
         // Register the event to be used by RaceStart to send the player done message
         RaceStart.PlayerFinished += RaceStart_PlayerFinished;
 
-        client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = UserSettings.SelectedCar, PlayerName = UserSettings.PlayerName });
+        client.Send(TGMessageTypes.PlayerConnection, new PlayerConnectionMessage() { CarName = UserSettings.SelectedCar, PlayerName = UserSettings.PlayerName, IsBusrider = UserSettings.IsBusrider });
     }
 
     // Called on the CLIENT by RaceStart (NOT NET) to send race done message
@@ -188,6 +190,7 @@ public class TGNetworkManager : NetworkManager {
     public class PlayerConnectionMessage : MessageBase {
         public string CarName;
         public string PlayerName;
+        public bool IsBusrider;
     }
 
     public class CountdownStartMessage : MessageBase {
@@ -216,5 +219,6 @@ public class TGNetworkManager : NetworkManager {
         public int PlayerID;
         public short PlayerControllerID;
         internal GameObject PlayerSpawn;
+        public bool IsBusrider;
     }
 }

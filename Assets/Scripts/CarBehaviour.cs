@@ -89,8 +89,11 @@ public class CarBehaviour : NetworkBehaviour {
     // CoG
     public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
 
+    // busrider mode
+    private bool isBusrider;
+
     void Start() {
-        if (isLocalPlayer) {
+        if (isLocalPlayer && !isBusrider) {
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
@@ -106,8 +109,8 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-            
-            dirt = dirtMesh?dirtMesh.GetComponent<Renderer>().material:null;
+
+            dirt = dirtMesh ? dirtMesh.GetComponent<Renderer>().material : null;
 
             wheelFR.ConfigureVehicleSubsteps(20, 1, 1);
             wheelFL.ConfigureVehicleSubsteps(20, 1, 1);
@@ -120,6 +123,7 @@ public class CarBehaviour : NetworkBehaviour {
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
             dirtiness = dataController.GetDirtiness();
+            isBusrider = dataController.IsBusrider;
 
             //spring stiffness set (dampers = spring / 10)
             springs.spring = springStiffness;
@@ -186,6 +190,19 @@ public class CarBehaviour : NetworkBehaviour {
                 ffbeffect.Start();
             }
         }
+
+        if (isLocalPlayer && isBusrider) {
+            CourseController ctrl = FindObjectOfType<CourseController>();
+            HUDPrefab = ctrl.BusriderHUD;
+            HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
+
+            ctrl.Camera.GetComponent<CarCameraBusrider>().car = this.gameObject.transform;
+            ctrl.Camera.GetComponent<CarCamera>().enabled = false;
+
+            AIBehaviour AI = gameObject.AddComponent<AIBehaviour>();
+            AI.car = this;
+            AI.courseController = ctrl;
+        }
     }
 
     /*** yolo 
@@ -202,9 +219,9 @@ public class CarBehaviour : NetworkBehaviour {
     void FixedUpdate() {
         if (isLocalPlayer) {
             AeroDrag();
-            if (manual == 2) clutchPressure = 1 - Input.GetAxis("Clutch");
+            if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
-            float targetSteering = 20 * Input.GetAxis("Steering");
+            float targetSteering = 20 * CustomInput.GetAxis("Steering");
 
             // FFB calculations
             if (ffbeffect != null) {
@@ -269,7 +286,7 @@ public class CarBehaviour : NetworkBehaviour {
             WheelPosition(wheelRL, wheelRLCalp, wheelRLTrans);
             WheelPosition(wheelRR, wheelRRCalp, wheelRRTrans);
             if (visualDiff) DiffPosition(wheelRRTrans, wheelRLTrans);
-            drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * Input.GetAxis("Steering"));
+            drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
             {
                 Debug.Log("Reset was pressed");
@@ -292,8 +309,8 @@ public class CarBehaviour : NetworkBehaviour {
             }
             else
             {
-                engineRPM += engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(Input.GetAxis("Throttle"));
-                if (engineRPM > engineIdle && Mathf.Clamp01(Input.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
+                engineRPM += engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(CustomInput.GetAxis("Throttle"));
+                if (engineRPM > engineIdle && Mathf.Clamp01(CustomInput.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
                 if (engineRPM < engineIdle) engineRPM += 20;
             }
             clutchRPM = engineRPM;
@@ -307,7 +324,7 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = (Mathf.Abs(wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * ratio * Mathf.Abs(gears[gear]);
             engineRPM += (Mathf.Abs(wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * ratio * Mathf.Abs(gears[gear]);
             //make motor torks calc shorter with temporary variable
-            float precalc = Mathf.Clamp01(Input.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            float precalc = Mathf.Clamp01(CustomInput.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
 
             wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
             wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
@@ -353,7 +370,7 @@ public class CarBehaviour : NetworkBehaviour {
     
     void Turbo()
     {
-        if (Input.GetAxis("Throttle") > 0 && engineRPM > engineIdle + 50)
+        if (CustomInput.GetAxis("Throttle") > 0 && engineRPM > engineIdle + 50)
         {
             turboSpool += turboWaste.Evaluate(engineRPM) / (turboSize * 3);
             if (turboSpool > turboWaste.Evaluate(engineRPM))
@@ -536,7 +553,7 @@ public class CarBehaviour : NetworkBehaviour {
             frontLights.SetActive(false);
         }
 
-        if (Input.GetAxis("Brake") > 0f)
+        if (CustomInput.GetAxis("Brake") > 0f)
         {//brakes
             rearLights.SetActive(true);
         }

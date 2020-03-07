@@ -161,6 +161,14 @@ public class DataController : MonoBehaviour {
             LoadedData.CuntUI = value;
         }
     }
+    public bool IsBusrider {
+        get {
+            return LoadedData.IsBusrider;
+        }
+        set {
+            LoadedData.IsBusrider = value;
+        }
+    }
     #endregion
 
     public float GetDirtiness() {
@@ -225,6 +233,7 @@ public class DataController : MonoBehaviour {
             Garage3D = false;
             MenuAudio = 0.4f;
             BestestLapTimes = new LapTimeDictionary() { { "Star GT V8", TimeSpan.FromSeconds(69) }, { "Nasan GRT", TimeSpan.FromSeconds(420) } };
+            IsBusrider = true;
             SaveGameData();
         }
     }
@@ -247,6 +256,7 @@ public class GameData {
     public bool Garage3D;
     public float MenuAudio;
     public bool CuntUI;
+    public bool IsBusrider;
 
     public float TireBias;
     public float FinalDrive;

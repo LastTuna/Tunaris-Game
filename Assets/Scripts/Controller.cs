@@ -22,6 +22,7 @@ public class Controller : MonoBehaviour {
     public Canvas GoWashCanvas;
     public Canvas CreditsCanvas;
     public Canvas RecordsCanvas;
+    public Canvas LicensesCanvas;
 
     public static bool washing;
     public Canvas LoadingScreenCanvas;
@@ -296,6 +297,22 @@ public class Controller : MonoBehaviour {
         GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
+    public void Licenses() {
+        StartCoroutine(LicensesCoroutine());
+    }
+
+    IEnumerator LicensesCoroutine() {
+        // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
+        yield return new WaitForEndOfFrame(); 
+        
+        GoRaceCanvas.gameObject.SetActive(false);
+        LicensesCanvas.gameObject.SetActive(true);
+
+        //fetch values from save data
+        DataController data = FindObjectOfType<DataController>();
+        GameObject.Find("busrider").GetComponent<Toggle>().isOn = data.IsBusrider;
+    }
+
     public void Records() {
         StartCoroutine(RecordsCoroutine());
     }
@@ -477,7 +494,6 @@ public class Controller : MonoBehaviour {
 
         // Always save settings
         DataController dataController = FindObjectOfType<DataController>();
-       dataController.SaveGameData();
 
         // Play cancel sound
         AudioSource audioSource = GameObject.Find("Main Camera").GetComponent<AudioSource>();
@@ -560,11 +576,24 @@ public class Controller : MonoBehaviour {
             menuMusic.Play();
         }
 
+        // Licenses -> Go Race
+        if (LicensesCanvas.gameObject.activeSelf) {
+            dataController.LoadedData.IsBusrider = GameObject.Find("busrider").GetComponent<Toggle>().isOn;
+
+            LicensesCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+
+            menuMusic.clip = TGmusic[0];
+            menuMusic.Play();
+        }
+
         // Records -> Main
         if (RecordsCanvas.gameObject.activeSelf) {
             RecordsCanvas.gameObject.SetActive(false);
             MainMenuCanvas.gameObject.SetActive(true);
         }
+
+        dataController.SaveGameData();
         yield return null;
     }
 }
