@@ -202,6 +202,8 @@ public class CarBehaviour : NetworkBehaviour {
             AIBehaviour AI = gameObject.AddComponent<AIBehaviour>();
             AI.car = this;
             AI.courseController = ctrl;
+
+            CustomInput.IsAI = true;
         }
     }
 
