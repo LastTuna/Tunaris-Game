@@ -26,7 +26,7 @@ RenderSettings:
   m_AmbientIntensity: 1
   m_AmbientMode: 0
   m_SubtractiveShadowColor: {r: 0.42, g: 0.478, b: 0.627, a: 1}
-  m_SkyboxMaterial: {fileID: 10304, guid: 0000000000000000f000000000000000, type: 0}
+  m_SkyboxMaterial: {fileID: 2100000, guid: 5a50b727821dd1447aa9d630015d4acf, type: 2}
   m_HaloStrength: 0.5
   m_FlareStrength: 1
   m_FlareFadeSpeed: 3
@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44543082, g: 0.49509215, b: 0.57403845, a: 1}
+  m_IndirectSpecularColor: {r: 0.165993, g: 0.165993, b: 0.165993, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -1494,6 +1494,7 @@ MonoBehaviour:
   zoomRatio: 0.5
   DefaultFOV: 60
   chosenCamera: 0
+  supportedCameras: 3
 --- !u!81 &934010318
 AudioListener:
   m_ObjectHideFlags: 0
@@ -1555,7 +1556,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &968859828 stripped
 GameObject:
@@ -2923,6 +2924,48 @@ MonoBehaviour:
       m_Calls: []
     m_TypeName: UnityEngine.UI.Slider+SliderEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
+--- !u!1001 &1846051900
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -40.785187
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -25.492159
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -204.54718
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4336388393728644, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+      propertyPath: m_RootOrder
+      value: 14
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 2968476cdbbd25747affb23c1fca660d, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1853070504
 GameObject:
   m_ObjectHideFlags: 0
@@ -3157,9 +3200,8 @@ MonoBehaviour:
     type: 2}
   HostUI: {fileID: 1267096992082948, guid: 36ac95ee80f840d4d81bb8365829d596, type: 2}
   HostUIInstance: {fileID: 0}
-  SpeedDisplayHUD: {fileID: 1443920476}
-  GearDisplayHUD: {fileID: 333635683}
-  PointerHUD: {fileID: 1283168973}
+  DefaultHUD: {fileID: 0}
+  HUDCanvas: {fileID: 0}
   AudioSource: {fileID: 934010316}
   Camera: {fileID: 934010315}
   manager: {fileID: 0}

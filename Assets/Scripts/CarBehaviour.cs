@@ -293,8 +293,9 @@ public class CarBehaviour : NetworkBehaviour {
                 transform.rotation = Quaternion.identity;
                 transform.position = new Vector3(transform.position.x, transform.position.y + 5, transform.position.z);
             }
-            if (dirt) {
-                dirt.color = new Color(1, 1, 1, dirtiness);
+            if (dirt)
+            {
+                dirt.SetFloat("_FortniteRange", dirtiness);
             }
         }
     }
@@ -338,7 +339,7 @@ public class CarBehaviour : NetworkBehaviour {
                 wheelRL.motorTorque = 0;
                 wheelRR.motorTorque = 0;
             }
-            if (engineRPM < 800)
+            if (engineRPM < engineIdle)
             {//idling
                 wheelFL.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
                 wheelFR.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;

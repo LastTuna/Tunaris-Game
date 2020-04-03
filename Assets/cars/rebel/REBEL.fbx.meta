@@ -1,0 +1,226 @@
+fileFormatVersion: 2
+guid: e5a155ad69193824e9f1cb0b10d02b6f
+timeCreated: 1583443993
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: Armature
+    100002: FL
+    100004: FLcalp
+    100006: FLshaft
+    100008: FLshaft_end
+    100010: FR
+    100012: FRcalp
+    100014: FRshaft
+    100016: FRshaft_end
+    100018: HARDTOP
+    100020: Interior
+    100022: Rdiff
+    100024: Rdiff_end
+    100026: //RootNode
+    100028: Rebel
+    100030: RL
+    100032: RLclap
+    100034: RLshaft
+    100036: RLshaft_end
+    100038: RR
+    100040: RRcalp
+    100042: RRshaft
+    100044: RRshaft_end
+    100046: STATIC
+    100048: STATIC_end
+    100050: SUSPENSION
+    100052: Wheel
+    100054: WiperF0
+    100056: WiperF1
+    400000: Armature
+    400002: FL
+    400004: FLcalp
+    400006: FLshaft
+    400008: FLshaft_end
+    400010: FR
+    400012: FRcalp
+    400014: FRshaft
+    400016: FRshaft_end
+    400018: HARDTOP
+    400020: Interior
+    400022: Rdiff
+    400024: Rdiff_end
+    400026: //RootNode
+    400028: Rebel
+    400030: RL
+    400032: RLclap
+    400034: RLshaft
+    400036: RLshaft_end
+    400038: RR
+    400040: RRcalp
+    400042: RRshaft
+    400044: RRshaft_end
+    400046: STATIC
+    400048: STATIC_end
+    400050: SUSPENSION
+    400052: Wheel
+    400054: WiperF0
+    400056: WiperF1
+    2100000: INTERIOR
+    2100002: WHEELS
+    2100004: DISC
+    2100006: MAIN
+    2100008: WINDOWS
+    2100010: INTERIOR_WINDOWS
+    2300000: FL
+    2300002: FLcalp
+    2300004: FR
+    2300006: FRcalp
+    2300008: HARDTOP
+    2300010: Interior
+    2300012: Rebel
+    2300014: RL
+    2300016: RLclap
+    2300018: RR
+    2300020: RRcalp
+    2300022: Wheel
+    2300024: WiperF0
+    2300026: WiperF1
+    3300000: FL
+    3300002: FLcalp
+    3300004: FR
+    3300006: FRcalp
+    3300008: HARDTOP
+    3300010: Interior
+    3300012: Rebel
+    3300014: RL
+    3300016: RLclap
+    3300018: RR
+    3300020: RRcalp
+    3300022: Wheel
+    3300024: WiperF0
+    3300026: WiperF1
+    4300000: WiperF1
+    4300002: RL
+    4300004: RRcalp
+    4300006: FRcalp
+    4300008: FR
+    4300010: RLclap
+    4300012: RR
+    4300014: HARDTOP
+    4300016: Rebel
+    4300018: SUSPENSION
+    4300020: FL
+    4300022: FLcalp
+    4300024: Interior
+    4300026: Wheel
+    4300028: WiperF0
+    9500000: //RootNode
+    13700000: SUSPENSION
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: DISC
+    second: {fileID: 2100000, guid: 507489c67e0e6da4a9e538d9601fb4f7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: INTERIOR
+    second: {fileID: 2100000, guid: 056013ae65ebe7f41b1bc1253b2ceab2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: INTERIOR_WINDOWS
+    second: {fileID: 2100000, guid: 81f3ca96343718b44bd79d9190de49c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAIN
+    second: {fileID: 2100000, guid: c2d704bcb645c9a4f9542192f5e72ee9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WHEELS
+    second: {fileID: 2100000, guid: 40256ef2f6505334ab3625d786ff6612, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WINDOWS
+    second: {fileID: 2100000, guid: 5b0b3ad41dd9d9449a14c9adc0a2da7d, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
