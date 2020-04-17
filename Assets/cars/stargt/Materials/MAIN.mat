@@ -40,7 +40,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Fortnite:
-        m_Texture: {fileID: 2800000, guid: 8f78b4ea496d3f74a98952332850d882, type: 3}
+        m_Texture: {fileID: 2800000, guid: 2eae9eb6f652e0b4f9f9057ba80dae72, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:

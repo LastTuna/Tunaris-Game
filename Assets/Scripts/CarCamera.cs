@@ -20,6 +20,16 @@ public class CarCamera : MonoBehaviour {
     // basically this should be the max chosenCamera so 1 for chase + interior cam
     public int supportedCameras = 3;
 
+    private void Start()
+    {
+        Camera camera = GetComponent<Camera>();
+        float[] distances = new float[32];
+        distances[8] = 60;
+        camera.layerCullDistances = distances;
+    }
+
+
+
     void LateUpdate() {
         if (car != null) {
             switch (chosenCamera) {

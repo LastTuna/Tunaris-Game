@@ -406,8 +406,8 @@ public class Controller : MonoBehaviour {
         DataController dataController = FindObjectOfType<DataController>();
         GameObject selectedCar = Instantiate(carsPrefabs.Find(carpre => carpre.name == dataController.SelectedCar), GoWashCanvas.transform);
         CarScriptKill(selectedCar);
-        selectedCar.transform.localScale = new Vector3(100, 100, 100);
-        selectedCar.transform.localPosition = new Vector3(0, -150, -200);
+        selectedCar.transform.localScale = new Vector3(90, 90, 90);
+        selectedCar.transform.localPosition = new Vector3(0, -150, -326);
         // Add rotation script
         selectedCar.AddComponent<Spinner>();
         selectedCar.AddComponent<CarWash>();
