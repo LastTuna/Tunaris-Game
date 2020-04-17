@@ -14,7 +14,7 @@ public class TextureAnimator : MonoBehaviour {
             counter = 0;
             currentFrame++;
             if (currentFrame > framecount - 1) currentFrame = 0;//reset to origin position to prevent possible overflow
-            GetComponent<Renderer>().material.mainTextureOffset = new Vector2(currentFrame * (1 / framecount), 0);
+            GetComponent<Renderer>().material.mainTextureOffset = new Vector2(currentFrame * (1 / (float)framecount), 0);
         }
         counter++;
     }

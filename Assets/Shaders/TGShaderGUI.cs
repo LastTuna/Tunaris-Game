@@ -3,6 +3,7 @@
 using System;
 using UnityEngine;
 
+#if UNITY_EDITOR
 namespace UnityEditor
 {
     internal class TGShaderGUI : ShaderGUI
@@ -290,4 +291,5 @@ namespace UnityEditor
                 m.DisableKeyword(keyword);
         }
     }
-} // namespace UnityEditor
+}
+# endif
