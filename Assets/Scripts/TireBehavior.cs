@@ -6,6 +6,7 @@ public class TireBehavior : MonoBehaviour
 {
 
     public WheelCollider tyre;
+    public GameObject wheel;
     public float treadType;
     public float TreadHealth = 100;
     public float brakeStrength = 300;
@@ -17,10 +18,8 @@ public class TireBehavior : MonoBehaviour
     public float currentGrip;
     //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
-    public Material brakeMat;
-    public Material dirt; //dirt MATERIAL.
-    public Renderer disc;
-    public Renderer dirtMesh; //fetches and instantiates dirt material
+    Material brakeMat;
+    Material dirt; //dirt MATERIAL.
     public float dirtiness;
     public float defaultSusp;
     public AnimationCurve brakeFadeCurve = new AnimationCurve(
@@ -29,16 +28,14 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(600, 1f),
         new Keyframe(800, 0.3f)
         );
-    public float[] beerf = new float[] { 0.4f, 1, 0.8f, 0.5f };
-    public float[] beers = new float[] { 0.2f, 1, 0.3f, 0.7f };
     public string lastSurface;
 
     public float wheelrpm;
     // Use this for initialization
     void Start()
     {
-        brakeMat = disc.GetComponent<Renderer>().materials[1];
-        dirt = dirtMesh.GetComponent<Renderer>().material;
+        dirt = wheel.GetComponent<Renderer>().materials[0];
+        brakeMat = wheel.GetComponent<Renderer>().materials[1];
         treadType = FindObjectOfType<DataController>().TireBias;
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
@@ -54,7 +51,7 @@ public class TireBehavior : MonoBehaviour
     }
     void Update()
     {
-        dirt.color = new Color(1, 1, 1, dirtiness);
+        dirt.SetFloat("_FortniteRange", dirtiness);
     }
 
     public void TyreWear()
@@ -122,8 +119,8 @@ public class TireBehavior : MonoBehaviour
             currentGrip = 0.1f;
         }
         //DEBUGGING PURPOSES APPLY GRIP EVERY TICK FOR NOW UNTIL I COMPLETE
-        tyre.forwardFriction = SetStiffness(beerf, currentGrip);
-        tyre.sidewaysFriction = SetStiffness(beers, currentGrip);
+        tyre.forwardFriction = SetStiffness(tyre.forwardFriction, currentGrip);
+        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
     }
 
     public float Dampness()
@@ -163,15 +160,15 @@ public class TireBehavior : MonoBehaviour
             brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
     }
 
-    WheelFrictionCurve SetStiffness(float[] beer, float newStiffness)
+    WheelFrictionCurve SetStiffness(WheelFrictionCurve wheel, float newStiffness)
     {
         //sets tire grip
         return new WheelFrictionCurve()
         {
-            extremumSlip = beer[0],
-            extremumValue = beer[1],
-            asymptoteSlip = beer[2],
-            asymptoteValue = beer[3],
+            extremumSlip = wheel.extremumSlip,
+            extremumValue = wheel.extremumValue,
+            asymptoteSlip = wheel.asymptoteSlip,
+            asymptoteValue = wheel.asymptoteValue,
             stiffness = newStiffness
         };
     }

@@ -21,7 +21,6 @@ public class CarBehaviour : NetworkBehaviour {
     public bool visualDiff = false;
     public float currentSpeed, wheelRPM;
     public Material dirt; //dirt MATERIAL.
-    public Renderer dirtMesh; //fetches and instantiates dirt material
     public GameObject HUDPrefab;
     private HUD HUD;
     public int manual = 1; //0auto - 1manual - 2manualwclutch
@@ -30,7 +29,8 @@ public class CarBehaviour : NetworkBehaviour {
     //tuneable stats
     public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
-    public float aero = 5f; 
+    public float aero = 5f;
+    public float drag = 10f;
     public float ratio; //final drive
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
@@ -109,8 +109,6 @@ public class CarBehaviour : NetworkBehaviour {
             engineRPM = 800;
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
-
-            dirt = dirtMesh ? dirtMesh.GetComponent<Renderer>().material : null;
 
             wheelFR.ConfigureVehicleSubsteps(20, 1, 1);
             wheelFL.ConfigureVehicleSubsteps(20, 1, 1);
@@ -497,8 +495,8 @@ public class CarBehaviour : NetworkBehaviour {
     
     void AeroDrag ()
     {
-        Vector3 drag = new Vector3(0, gameObject.transform.up.y * -2 * Mathf.Clamp(currentSpeed, 0, 150), 0);
-        //Debug.Log(drag);
+        Vector3 drag = gameObject.transform.forward * -1 * (airSpeed * 0.1f);
+        Debug.Log(drag);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 

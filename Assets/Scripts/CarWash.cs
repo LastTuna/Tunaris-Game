@@ -10,14 +10,13 @@ public class CarWash : MonoBehaviour {
     public Material[] wheelDirt = new Material[4];
     public Button washerButton;
 
-	void Start () {
+    void Start() {
         dataController = FindObjectOfType<DataController>();
         controller = FindObjectOfType<Controller>();
         washerButton = GameObject.Find("WasherButton").GetComponent<Button>();
         mainbody = GameObject.Find("mainbody").GetComponent<Renderer>().material;
         mainbody.DisableKeyword("_GLOSSYREFLECTIONS_OFF");
         mainbody.SetInt("_GlossyReflections", 1);
-        //add the shader support for dirt
         wheelDirt[0] = GameObject.Find("FLw").GetComponent<Renderer>().material;
         wheelDirt[1] = GameObject.Find("FRw").GetComponent<Renderer>().material;
         wheelDirt[2] = GameObject.Find("RLw").GetComponent<Renderer>().material;
