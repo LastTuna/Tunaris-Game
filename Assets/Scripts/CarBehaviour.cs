@@ -25,13 +25,13 @@ public class CarBehaviour : NetworkBehaviour {
     private HUD HUD;
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float shifterDelay = 0.3f;
-    public float currentGrip; //value manipulated by road type
     //tuneable stats
     public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
     public float aero = 5f;
     public float drag = 10f;
     public float ratio; //final drive
+    public float maxSteerAngle = 20;
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
     /// 0: no power to front, 100% power to rear
@@ -43,7 +43,7 @@ public class CarBehaviour : NetworkBehaviour {
     // FrontPower = engineOutput * FrontWheelDriveBias
     // RearPower = engineOutput * (1-FrontWheelDriveBias)
     // Chaning this while the car is driving is an effective way of having a center diff
-    public float lsd = 0.5f;
+    public float lsd = 1f;
 
     //end tuneable stats
     public float airSpeed;
@@ -58,7 +58,7 @@ public class CarBehaviour : NetworkBehaviour {
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;
     //clutch
-    public float clutchPressure; //0-1 clamp
+    public float clutchPressure = 1; //0-1 clamp
     public float clutchRPM;
     //gears
     public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
@@ -83,7 +83,7 @@ public class CarBehaviour : NetworkBehaviour {
         //should load data from data controller when setup
         spring = 8000,
         damper = 800,
-        targetPosition = 0.1f,
+        targetPosition = 0.5f,
     };
 
     // CoG
@@ -221,7 +221,7 @@ public class CarBehaviour : NetworkBehaviour {
             AeroDrag();
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
-            float targetSteering = 20 * CustomInput.GetAxis("Steering");
+            float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
 
             // FFB calculations
             if (ffbeffect != null) {
@@ -496,7 +496,7 @@ public class CarBehaviour : NetworkBehaviour {
     void AeroDrag ()
     {
         Vector3 drag = gameObject.transform.forward * -1 * (airSpeed * 0.1f);
-        Debug.Log(drag);
+        //Debug.Log(drag);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 

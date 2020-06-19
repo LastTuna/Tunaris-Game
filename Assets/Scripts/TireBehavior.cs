@@ -16,6 +16,7 @@ public class TireBehavior : MonoBehaviour
     public float diameter;
     public float groundDampness;//get this value from to-be-implemented weather controller.
     public float currentGrip;
+    float stiffnessF, stiffnessS;//container for grip stiffness
     //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
     Material brakeMat;
@@ -29,6 +30,11 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(800, 0.3f)
         );
     public string lastSurface;
+    public GameObject smokeEmitter;//debugging thing
+    public float slipTreshold = 0.2f;
+    public float fwdSlip;
+    public float sidewaySlip;
+
 
     public float wheelrpm;
     // Use this for initialization
@@ -39,6 +45,10 @@ public class TireBehavior : MonoBehaviour
         treadType = FindObjectOfType<DataController>().TireBias;
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
+        stiffnessF = tyre.forwardFriction.stiffness;
+        stiffnessS = tyre.forwardFriction.stiffness;
+        smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+
     }
 
     // Update is called once per frame
@@ -48,6 +58,7 @@ public class TireBehavior : MonoBehaviour
         GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
+        SmonkEmitter();
     }
     void Update()
     {
@@ -70,6 +81,25 @@ public class TireBehavior : MonoBehaviour
         }
     }
 
+    public void SmonkEmitter()
+    {
+        WheelHit wheelhit;
+        tyre.GetGroundHit(out wheelhit);
+        float slip = Mathf.Abs(wheelhit.forwardSlip) + Mathf.Abs(wheelhit.sidewaysSlip);
+        
+        if (slip > slipTreshold)
+        {
+            if (!smokeEmitter.GetComponent<ParticleSystem>().isPlaying)
+            {
+                smokeEmitter.GetComponent<ParticleSystem>().Play();
+            }
+        }
+        else
+        {
+            smokeEmitter.GetComponent<ParticleSystem>().Stop();
+        }
+    }
+
     public void GripManager()
     {
          WheelHit wheelhit;
@@ -78,7 +108,7 @@ public class TireBehavior : MonoBehaviour
         // Ground surface detection
         if (tyre.GetGroundHit(out wheelhit) && !burst)
         {
-            if(lastSurface != wheelhit.collider.gameObject.tag) { 
+            if (lastSurface != wheelhit.collider.gameObject.tag) { 
                 lastSurface = wheelhit.collider.gameObject.tag;
             switch (lastSurface)
             {
@@ -119,8 +149,8 @@ public class TireBehavior : MonoBehaviour
             currentGrip = 0.1f;
         }
         //DEBUGGING PURPOSES APPLY GRIP EVERY TICK FOR NOW UNTIL I COMPLETE
-        tyre.forwardFriction = SetStiffness(tyre.forwardFriction, currentGrip);
-        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, currentGrip);
+        tyre.forwardFriction = SetStiffness(tyre.forwardFriction, stiffnessF);
+        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, stiffnessS);
     }
 
     public float Dampness()

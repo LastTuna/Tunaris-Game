@@ -48,7 +48,7 @@ public class Controller : MonoBehaviour {
         {
             if (Input.GetKeyDown("t") && !bestest.activeSelf)
             {
-                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Nasan GRT", TimeSpan.FromSeconds(10));
+                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Star GT V8", TimeSpan.FromSeconds(1488));
                 foreach (var carpair in data.BestestLapTimes)
                 {
                     fastestLap = carpair;

@@ -12,7 +12,7 @@ public class CarCamera : MonoBehaviour {
     public float DefaultFOV = 60;
     private Vector3 rotationVector;
     private float reversingFactor = 1f;
-
+    public bool debug = true;
     // Variable to store the selected camera
     public int chosenCamera = 0;
 
@@ -45,7 +45,16 @@ public class CarCamera : MonoBehaviour {
                     transform.position = car.position;
                     transform.position -= currentRotation * Vector3.forward * distance;
                     transform.position = new Vector3(transform.position.x, myHeight, transform.position.z);
-                    transform.LookAt(car.position + car.forward * 10 * reversingFactor);
+
+                    //boilerplate shit i just want old camera ok
+                    if (!debug)
+                    {
+                        transform.LookAt(car.position + car.forward * 10 * reversingFactor);
+                    }
+                    else
+                    {
+                        transform.LookAt(car);
+                    }
 
                     //car.Find("Cockpit").gameObject.SetActive(false);
 

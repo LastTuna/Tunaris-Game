@@ -73,7 +73,13 @@ public class PostRace : MonoBehaviour {
 
     IEnumerator TallyLaps() {
         yield return new WaitForSeconds(1f);
+        //fetch previous personal best for this car
         dataController.BestestLapTimes.TryGetValue(dataController.SelectedCar, out personalBest);
+        //if there is no prev personal best,crank dat shit up so it will make a record later in code
+        if(personalBest.ms == 0)
+        {
+            personalBest.ms = 90000;
+        }
 
         //PARSE FROM SUBSTRING TO INT AND TURN TO TIMESPAN
         float raise = 0;//raise next element by x amount
