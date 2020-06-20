@@ -69,7 +69,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float debug2;
     public float debug3;
     public float debug4;
-
+    private float[] tirewearlist;
 
     // FFB shit
     private DeviceInstance steeringWheel;
@@ -131,6 +131,9 @@ public class CarBehaviour : NetworkBehaviour {
             wheelFR.suspensionSpring = springs;
             wheelRL.suspensionSpring = springs;
             wheelRR.suspensionSpring = springs;
+
+
+            tirewearlist = new float[4];
 
 
             // Find an FFB wheel and hook it
@@ -219,6 +222,7 @@ public class CarBehaviour : NetworkBehaviour {
     void FixedUpdate() {
         if (isLocalPlayer) {
             AeroDrag();
+            TireWearMonitor();//remove this sometime just reminder
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
             float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
@@ -256,13 +260,25 @@ public class CarBehaviour : NetworkBehaviour {
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
             currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
-            Physics.gravity = new Vector3(0, -aero, 0);
         }
     }
 
+    public void TireWearMonitor()
+    {
+        //ghetto code here for now
+        tirewearlist[0] = wheelFL.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[1] = wheelFR.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[2] = wheelRL.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[3] = wheelRR.GetComponent<TireBehavior>().TreadHealth;
+    }
+
+
+
     void Update() {
         if (isLocalPlayer) {
-            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear);
+
+            float[] shariq = new float[] { wheelFL.rpm, wheelFR.rpm, wheelRL.rpm, wheelRR.rpm };
+            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
 
             Gearbox();//gearbox update
             wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
@@ -279,7 +295,7 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRLCalp.localEulerAngles = new Vector3(wheelRLCalp.localEulerAngles.x, wheelRL.steerAngle - wheelRLCalp.localEulerAngles.z, wheelRLCalp.localEulerAngles.z);
             wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
 
-            EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
+            //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             CmdLightsOn();
             WheelPosition(wheelFL, wheelFLCalp, wheelFLTrans); //graphical update - wheel positions
             WheelPosition(wheelFR, wheelFRCalp, wheelFRTrans);
@@ -311,7 +327,7 @@ public class CarBehaviour : NetworkBehaviour {
             else
             {
                 engineRPM += engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(CustomInput.GetAxis("Throttle"));
-                if (engineRPM > engineIdle && Mathf.Clamp01(CustomInput.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) - 100;
+                if (engineRPM > engineIdle && Mathf.Clamp01(CustomInput.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) / 3;
                 if (engineRPM < engineIdle) engineRPM += 20;
             }
             clutchRPM = engineRPM;
@@ -363,9 +379,6 @@ public class CarBehaviour : NetworkBehaviour {
         }
         
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
-        airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
-            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
-            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
         
     }
     
@@ -495,8 +508,14 @@ public class CarBehaviour : NetworkBehaviour {
     
     void AeroDrag ()
     {
-        Vector3 drag = gameObject.transform.forward * -1 * (airSpeed * 0.1f);
+        airSpeed = Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.x) +
+            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.y) +
+            Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
+
+        Vector3 drag = gameObject.transform.forward.normalized * -1;
+        drag.y += -aero * airSpeed;
         //Debug.Log(drag);
+        gameObject.GetComponent<Rigidbody>().angularDrag = Mathf.Lerp(0, 0.8f, airSpeed / 100);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 
@@ -545,22 +564,26 @@ public class CarBehaviour : NetworkBehaviour {
     [Command]
     void CmdLightsOn()
     {
-        if (Input.GetButtonDown("Lights") && !frontLights.activeSelf)
+        if (gear == 595)
         {
-            frontLights.SetActive(true);
-        }
-        else if (Input.GetButtonDown("Lights") && frontLights.activeSelf)
-        {
-            frontLights.SetActive(false);
-        }
 
-        if (CustomInput.GetAxis("Brake") > 0f)
-        {//brakes
-            rearLights.SetActive(true);
-        }
-        else
-        {
-            rearLights.SetActive(false);
+            if (Input.GetButtonDown("Lights") && !frontLights.activeSelf)
+            {
+                frontLights.SetActive(true);
+            }
+            else if (Input.GetButtonDown("Lights") && frontLights.activeSelf)
+            {
+                frontLights.SetActive(false);
+            }
+
+            if (CustomInput.GetAxis("Brake") > 0f)
+            {//brakes
+                rearLights.SetActive(true);
+            }
+            else
+            {
+                rearLights.SetActive(false);
+            }
         }
     }
 }

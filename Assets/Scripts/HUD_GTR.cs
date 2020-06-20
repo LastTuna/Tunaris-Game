@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class HUD_GTR : HUD {
-    public override void UpdateHUD(float engineRPM, float engineREDLINE, float currentSpeed, bool shifting, int gear) {
+    public override void UpdateHUD(float engineRPM, float engineREDLINE, float currentSpeed, bool shifting, int gear, float[] treadWear, float[] wheelrpm) {
         float speedFactor = engineRPM / engineREDLINE; //dial rotation
         float rotationAngle = 0;
         if (engineRPM >= 0) {
