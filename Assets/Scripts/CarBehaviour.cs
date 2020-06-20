@@ -29,7 +29,7 @@ public class CarBehaviour : NetworkBehaviour {
     public float springStiffness = 8000;
     public float brakeStrength = 200; //brake strength
     public float aero = 5f;
-    public float drag = 10f;
+    public float dragCoef = 0.06f;//max rigidbody.drag value.
     public float ratio; //final drive
     public float maxSteerAngle = 20;
     /// <summary>
@@ -513,9 +513,11 @@ public class CarBehaviour : NetworkBehaviour {
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
 
         Vector3 drag = gameObject.transform.forward.normalized * -1;
-        drag.y += -aero * airSpeed;
+        drag.y = -aero * airSpeed;//downforce
+        
         //Debug.Log(drag);
         gameObject.GetComponent<Rigidbody>().angularDrag = Mathf.Lerp(0, 0.8f, airSpeed / 100);
+        gameObject.GetComponent<Rigidbody>().drag = Mathf.Lerp(0, dragCoef + aero / 200, airSpeed / 100);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 
