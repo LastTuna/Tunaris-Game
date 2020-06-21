@@ -1290,7 +1290,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1416409464890236}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -24.826942, y: -0.8942838, z: -331.3407}
+  m_LocalPosition: {x: -160.05855, y: 63.43304, z: -32.86382}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4997453150311476}
@@ -3134,7 +3134,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146513431789345836}
-  wheel: {fileID: 1332699222492726}
+  visualWheel: {fileID: 1332699222492726}
+  wheelTransform: {fileID: 4056467795962500}
+  caliper: {fileID: 4200587367828772}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -3734,7 +3736,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146603841762087320}
-  wheel: {fileID: 1963095968679468}
+  visualWheel: {fileID: 1963095968679468}
+  wheelTransform: {fileID: 4037420085330774}
+  caliper: {fileID: 4563417748392502}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -3797,20 +3801,14 @@ MonoBehaviour:
   EngineAudio: {fileID: 114136000269933252}
   frontLights: {fileID: 1063300443131956}
   rearLights: {fileID: 1488221035147476}
+  wheelRRTrans: {fileID: 4056467795962500}
+  wheelRLTrans: {fileID: 4037420085330774}
   dirtiness: 0
   drivingWheel: {fileID: 4006984208098850}
   wheelFL: {fileID: 146636830308147070}
   wheelFR: {fileID: 146727335538387960}
   wheelRL: {fileID: 146603841762087320}
   wheelRR: {fileID: 146513431789345836}
-  wheelFLCalp: {fileID: 4684966329596910}
-  wheelFRCalp: {fileID: 4838669817742250}
-  wheelRLCalp: {fileID: 4563417748392502}
-  wheelRRCalp: {fileID: 4200587367828772}
-  wheelFLTrans: {fileID: 4711234574364540}
-  wheelFRTrans: {fileID: 4691741047888304}
-  wheelRLTrans: {fileID: 4037420085330774}
-  wheelRRTrans: {fileID: 4056467795962500}
   differentialTrans: {fileID: 4025070755337368}
   visualDiff: 1
   currentSpeed: 0
@@ -3819,10 +3817,8 @@ MonoBehaviour:
   HUDPrefab: {fileID: 0}
   manual: 1
   shifterDelay: 0.3
-  springStiffness: 8000
-  brakeStrength: 200
   aero: 15
-  drag: 10
+  dragCoef: 0.06
   ratio: 3.01
   maxSteerAngle: 20
   FrontWheelDriveBias: 0.5
@@ -3914,7 +3910,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146727335538387960}
-  wheel: {fileID: 1931237387305402}
+  visualWheel: {fileID: 1931237387305402}
+  wheelTransform: {fileID: 4691741047888304}
+  caliper: {fileID: 4838669817742250}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -3975,7 +3973,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146636830308147070}
-  wheel: {fileID: 1399651884094266}
+  visualWheel: {fileID: 1399651884094266}
+  wheelTransform: {fileID: 4711234574364540}
+  caliper: {fileID: 4684966329596910}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130

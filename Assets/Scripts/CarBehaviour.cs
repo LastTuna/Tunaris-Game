@@ -10,13 +10,11 @@ public class CarBehaviour : NetworkBehaviour {
     public EngineAudioBehaviour EngineAudio;
     public GameObject frontLights;
     public GameObject rearLights;
-    //public Material dirt; //dirt MATERIAL.
+    public Transform wheelRRTrans, wheelRLTrans;//needed for moving rear diff
     public float dirtiness;//start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
     public WheelCollider wheelFL, wheelFR, wheelRL, wheelRR;
-    public Transform wheelFLCalp, wheelFRCalp, wheelRLCalp, wheelRRCalp;
-    public Transform wheelFLTrans, wheelFRTrans, wheelRLTrans, wheelRRTrans;
     public Transform differentialTrans;
     public bool visualDiff = false;
     public float currentSpeed, wheelRPM;
@@ -26,8 +24,6 @@ public class CarBehaviour : NetworkBehaviour {
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float shifterDelay = 0.3f;
     //tuneable stats
-    public float springStiffness = 8000;
-    public float brakeStrength = 200; //brake strength
     public float aero = 5f;
     public float dragCoef = 0.06f;//max rigidbody.drag value.
     public float ratio; //final drive
@@ -79,12 +75,6 @@ public class CarBehaviour : NetworkBehaviour {
     private SharpDX.DirectInput.ConstantForce ffbForce;
     private int[] axes, dirs;
 
-    public JointSpring springs = new JointSpring {
-        //should load data from data controller when setup
-        spring = 8000,
-        damper = 800,
-        targetPosition = 0.5f,
-    };
 
     // CoG
     public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
@@ -116,23 +106,11 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRR.ConfigureVehicleSubsteps(20, 1, 1);
 
             DataController dataController = FindObjectOfType<DataController>();
-            springStiffness = dataController.SpringStiffness;
-            brakeStrength = dataController.BrakeStiffness;
             aero = dataController.Aero;
             ratio = dataController.FinalDrive;
             dirtiness = dataController.GetDirtiness();
             isBusrider = dataController.IsBusrider;
-
-            //spring stiffness set (dampers = spring / 10)
-            springs.spring = springStiffness;
-            springs.damper = springStiffness / 10;
-
-            wheelFL.suspensionSpring = springs;
-            wheelFR.suspensionSpring = springs;
-            wheelRL.suspensionSpring = springs;
-            wheelRR.suspensionSpring = springs;
-
-
+            
             tirewearlist = new float[4];
 
 
@@ -281,26 +259,8 @@ public class CarBehaviour : NetworkBehaviour {
             HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
 
             Gearbox();//gearbox update
-            wheelFRTrans.Rotate(wheelFR.rpm / 60 * 360 * Time.deltaTime, 0, 0); //graphical updates
-            wheelFLTrans.Rotate(wheelFL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            wheelRRTrans.Rotate(wheelRR.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            wheelRLTrans.Rotate(wheelRL.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            wheelFRTrans.localEulerAngles = new Vector3(wheelFRTrans.localEulerAngles.x, wheelFR.steerAngle - wheelFRTrans.localEulerAngles.z, wheelFRTrans.localEulerAngles.z);
-            wheelFLTrans.localEulerAngles = new Vector3(wheelFLTrans.localEulerAngles.x, wheelFL.steerAngle - wheelFLTrans.localEulerAngles.z, wheelFLTrans.localEulerAngles.z);
-            wheelRRTrans.localEulerAngles = new Vector3(wheelRRTrans.localEulerAngles.x, wheelRR.steerAngle - wheelRRTrans.localEulerAngles.z, wheelRRTrans.localEulerAngles.z);
-            wheelRLTrans.localEulerAngles = new Vector3(wheelRLTrans.localEulerAngles.x, wheelRL.steerAngle - wheelRLTrans.localEulerAngles.z, wheelRLTrans.localEulerAngles.z);
-
-            wheelFLCalp.localEulerAngles = new Vector3(wheelFLCalp.localEulerAngles.x, wheelFL.steerAngle - wheelFLCalp.localEulerAngles.z, wheelFLCalp.localEulerAngles.z);
-            wheelFRCalp.localEulerAngles = new Vector3(wheelFRCalp.localEulerAngles.x, wheelFR.steerAngle - wheelFRCalp.localEulerAngles.z, wheelFRCalp.localEulerAngles.z);
-            wheelRLCalp.localEulerAngles = new Vector3(wheelRLCalp.localEulerAngles.x, wheelRL.steerAngle - wheelRLCalp.localEulerAngles.z, wheelRLCalp.localEulerAngles.z);
-            wheelRRCalp.localEulerAngles = new Vector3(wheelRRCalp.localEulerAngles.x, wheelRR.steerAngle - wheelRRCalp.localEulerAngles.z, wheelRRCalp.localEulerAngles.z);
-
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             CmdLightsOn();
-            WheelPosition(wheelFL, wheelFLCalp, wheelFLTrans); //graphical update - wheel positions
-            WheelPosition(wheelFR, wheelFRCalp, wheelFRTrans);
-            WheelPosition(wheelRL, wheelRLCalp, wheelRLTrans);
-            WheelPosition(wheelRR, wheelRRCalp, wheelRRTrans);
             if (visualDiff) DiffPosition(wheelRRTrans, wheelRLTrans);
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
@@ -522,24 +482,7 @@ public class CarBehaviour : NetworkBehaviour {
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 
     }
-
-    // Graphical update - wheel positions 
-    void WheelPosition(WheelCollider wheel, Transform caliper, Transform visualWheel) {
-        RaycastHit hit;
-        Vector3 wheelPos;
-        if (Physics.Raycast(wheel.transform.position, -wheel.transform.up, out hit, wheel.radius + wheel.suspensionDistance)) {
-            wheelPos = hit.point + wheel.transform.up * wheel.radius;
-            //UPDATE DIRTINESS
-            if (hit.collider.gameObject.CompareTag("sand") && dirtiness < 1)
-            {
-                dirtiness += Mathf.Abs(wheelFL.rpm) / 500000;
-            }
-        } else {
-            wheelPos = wheel.transform.position - wheel.transform.up * wheel.suspensionDistance;
-        }
-        caliper.position = wheelPos;
-        visualWheel.position = wheelPos;
-    }
+    
     void DiffPosition(Transform rWheel, Transform lWheel)
     {
         Vector3 pos = new Vector3(0, (rWheel.localPosition.y + lWheel.localPosition.y) / 2 + 0.2f, rWheel.localPosition.z);

@@ -27,11 +27,11 @@ public class TireModelDebugger : MonoBehaviour {
             treadGripforward = new AnimationCurve();
             treadGripsideways = new AnimationCurve();
             
-            treadGripforward.AddKey(beer.forwardFriction.extremumValue, beer.forwardFriction.extremumSlip);
-            treadGripforward.AddKey(beer.forwardFriction.asymptoteValue, beer.forwardFriction.asymptoteSlip);
+            treadGripforward.AddKey(beer.forwardFriction.extremumSlip, beer.forwardFriction.extremumValue);
+            treadGripforward.AddKey(beer.forwardFriction.asymptoteSlip, beer.forwardFriction.asymptoteValue);
 
-            treadGripsideways.AddKey(beer.sidewaysFriction.extremumValue, beer.sidewaysFriction.extremumSlip);
-            treadGripsideways.AddKey(beer.sidewaysFriction.asymptoteValue, beer.sidewaysFriction.asymptoteSlip);
+            treadGripsideways.AddKey(beer.sidewaysFriction.extremumSlip, beer.sidewaysFriction.extremumValue);
+            treadGripsideways.AddKey(beer.sidewaysFriction.asymptoteSlip, beer.sidewaysFriction.asymptoteValue);
             Debug.Log("tread curve import ok");
         }
 
@@ -54,10 +54,10 @@ public class TireModelDebugger : MonoBehaviour {
     {
         return new WheelFrictionCurve()
         {
-            extremumSlip = Mathf.Round(jamal.keys[0].value * 10) / 10,
-            extremumValue = Mathf.Round(jamal.keys[0].time * 10) / 10,
-            asymptoteSlip = Mathf.Round(jamal.keys[1].value * 10) / 10,
-            asymptoteValue = Mathf.Round(jamal.keys[1].time * 10) / 10,
+            extremumSlip = Mathf.Round(jamal.keys[0].time * 100) / 100,
+            extremumValue = Mathf.Round(jamal.keys[0].value * 100) / 100,
+            asymptoteSlip = Mathf.Round(jamal.keys[1].time * 100) / 100,
+            asymptoteValue = Mathf.Round(jamal.keys[1].value * 100) / 100,
             stiffness = 1
         };
     }

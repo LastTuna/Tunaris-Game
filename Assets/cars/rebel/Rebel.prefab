@@ -906,7 +906,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1729435621923674}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 189.1249, y: 367.3922, z: -649.23004}
+  m_LocalPosition: {x: -158.3576, y: 62.232147, z: -34.5899}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4873239040319844}
@@ -2037,7 +2037,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146615530476247038}
-  wheel: {fileID: 1193949218625006}
+  visualWheel: {fileID: 1193949218625006}
+  wheelTransform: {fileID: 4814320468629688}
+  caliper: {fileID: 4366542318443372}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -2293,7 +2295,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146067259638343606}
-  wheel: {fileID: 1033832113020410}
+  visualWheel: {fileID: 1033832113020410}
+  wheelTransform: {fileID: 4457221651870754}
+  caliper: {fileID: 4560511376021734}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -2354,7 +2358,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146312051355598060}
-  wheel: {fileID: 1949764020263132}
+  visualWheel: {fileID: 1949764020263132}
+  wheelTransform: {fileID: 4254215022320056}
+  caliper: {fileID: 4226734562943208}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -2442,7 +2448,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   tyre: {fileID: 146655317006402844}
-  wheel: {fileID: 1786132949601910}
+  visualWheel: {fileID: 1786132949601910}
+  wheelTransform: {fileID: 4378150017975272}
+  caliper: {fileID: 4664572860129244}
   treadType: 1
   TreadHealth: 100
   brakeStrength: 130
@@ -2502,23 +2510,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 14ecc6565f0e12f4e8caa169f8d65dc1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  EngineAudio: {fileID: 0}
+  EngineAudio: {fileID: 114131938196538660}
   frontLights: {fileID: 0}
   rearLights: {fileID: 0}
+  wheelRRTrans: {fileID: 4814320468629688}
+  wheelRLTrans: {fileID: 4254215022320056}
   dirtiness: 0
   drivingWheel: {fileID: 4278603703254924}
   wheelFL: {fileID: 146655317006402844}
   wheelFR: {fileID: 146067259638343606}
   wheelRL: {fileID: 146312051355598060}
   wheelRR: {fileID: 146615530476247038}
-  wheelFLCalp: {fileID: 4664572860129244}
-  wheelFRCalp: {fileID: 4560511376021734}
-  wheelRLCalp: {fileID: 4226734562943208}
-  wheelRRCalp: {fileID: 4366542318443372}
-  wheelFLTrans: {fileID: 4378150017975272}
-  wheelFRTrans: {fileID: 4457221651870754}
-  wheelRLTrans: {fileID: 4254215022320056}
-  wheelRRTrans: {fileID: 4814320468629688}
   differentialTrans: {fileID: 4365088540872772}
   visualDiff: 1
   currentSpeed: 0
@@ -2527,10 +2529,8 @@ MonoBehaviour:
   HUDPrefab: {fileID: 0}
   manual: 1
   shifterDelay: 0.3
-  springStiffness: 8000
-  brakeStrength: 200
   aero: 5
-  drag: 10
+  dragCoef: 0.06
   ratio: 0
   maxSteerAngle: 20
   FrontWheelDriveBias: 0
@@ -2829,16 +2829,16 @@ WheelCollider:
   m_Mass: 10
   m_WheelDampingRate: 0.1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.25
-    m_ExtremumValue: 0.8
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1.1
     m_AsymptoteSlip: 0.3
-    m_AsymptoteValue: 1.3
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.1
-    m_ExtremumValue: 0.8
-    m_AsymptoteSlip: 0.2
-    m_AsymptoteValue: 1
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!146 &146312051355598060
@@ -2858,16 +2858,16 @@ WheelCollider:
   m_Mass: 10
   m_WheelDampingRate: 0.1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 1.6
-    m_AsymptoteSlip: 0.2
-    m_AsymptoteValue: 1.8
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1.3
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
-    m_ExtremumValue: 0.9
-    m_AsymptoteSlip: 0.1
-    m_AsymptoteValue: 1.1
+    m_ExtremumSlip: 0.1
+    m_ExtremumValue: 1.1
+    m_AsymptoteSlip: 0.2
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!146 &146615530476247038
@@ -2887,16 +2887,16 @@ WheelCollider:
   m_Mass: 10
   m_WheelDampingRate: 0.1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.5
-    m_ExtremumValue: 1.6
-    m_AsymptoteSlip: 0.2
-    m_AsymptoteValue: 1.8
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1.3
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 1
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.2
-    m_ExtremumValue: 0.9
-    m_AsymptoteSlip: 0.1
-    m_AsymptoteValue: 1.1
+    m_ExtremumSlip: 0.1
+    m_ExtremumValue: 1.1
+    m_AsymptoteSlip: 0.2
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!146 &146655317006402844
@@ -2916,16 +2916,16 @@ WheelCollider:
   m_Mass: 10
   m_WheelDampingRate: 0.1
   m_ForwardFriction:
-    m_ExtremumSlip: 0.25
-    m_ExtremumValue: 0.8
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1.1
     m_AsymptoteSlip: 0.3
-    m_AsymptoteValue: 1.3
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_SidewaysFriction:
-    m_ExtremumSlip: 0.1
-    m_ExtremumValue: 0.8
-    m_AsymptoteSlip: 0.2
-    m_AsymptoteValue: 1
+    m_ExtremumSlip: 0.2
+    m_ExtremumValue: 1
+    m_AsymptoteSlip: 0.5
+    m_AsymptoteValue: 0.9
     m_Stiffness: 1
   m_Enabled: 1
 --- !u!198 &198838093269182130

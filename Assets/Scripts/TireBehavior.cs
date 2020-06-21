@@ -6,7 +6,10 @@ public class TireBehavior : MonoBehaviour
 {
 
     public WheelCollider tyre;
-    public GameObject wheel;
+    public GameObject visualWheel;
+    public Transform wheelTransform, caliper;
+
+
     public float treadType;
     public float TreadHealth = 100;
     public float brakeStrength = 300;
@@ -40,15 +43,21 @@ public class TireBehavior : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        dirt = wheel.GetComponent<Renderer>().materials[0];
-        brakeMat = wheel.GetComponent<Renderer>().materials[1];
+        dirt = visualWheel.GetComponent<Renderer>().materials[0];
+        brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
         treadType = FindObjectOfType<DataController>().TireBias;
+        brakeStrength = FindObjectOfType<DataController>().BrakeStiffness;
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
         stiffnessF = tyre.forwardFriction.stiffness;
         stiffnessS = tyre.forwardFriction.stiffness;
         smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
 
+        float springStiffness = FindObjectOfType<DataController>().SpringStiffness;
+        springs.spring = springStiffness;
+        springs.damper = springStiffness / 10;
+
+        tyre.suspensionSpring = springs;
     }
 
     // Update is called once per frame
@@ -62,7 +71,7 @@ public class TireBehavior : MonoBehaviour
     }
     void Update()
     {
-        dirt.SetFloat("_FortniteRange", dirtiness);
+        WheelPosition();
     }
 
     public void TyreWear()
@@ -171,9 +180,9 @@ public class TireBehavior : MonoBehaviour
         {//brakes
             if (brakeHeat < 800)
             {
-                brakeHeat += Mathf.Abs(tyre.rpm) / 100;
+                brakeHeat += Mathf.Abs(tyre.rpm) / 100 * Input.GetAxis("Brake");
             }
-            tyre.brakeTorque = brakeStrength * brakeFadeCurve.Evaluate(brakeHeat);
+            tyre.brakeTorque = brakeStrength * brakeFadeCurve.Evaluate(brakeHeat) * Input.GetAxis("Brake");
         }
         else
         {
@@ -203,6 +212,36 @@ public class TireBehavior : MonoBehaviour
         };
     }
 
+    public JointSpring springs = new JointSpring
+    {
+        //should load data from data controller when setup
+        spring = 8000,
+        damper = 800,
+        targetPosition = 0.5f,
+    };
 
+    void WheelPosition()
+    {
+        RaycastHit hit;
+        Vector3 wheelPos;
+        if (Physics.Raycast(tyre.transform.position, -tyre.transform.up, out hit, tyre.radius + tyre.suspensionDistance))
+        {
+            wheelPos = hit.point + tyre.transform.up * tyre.radius;
+            //UPDATE DIRTINESS
+            dirt.SetFloat("_FortniteRange", dirtiness);
+        }
+        else
+        {
+            wheelPos = tyre.transform.position - tyre.transform.up * tyre.suspensionDistance;
+        }
+        caliper.position = wheelPos;
+        wheelTransform.position = wheelPos;
+
+        //also do the spinny things
+        wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+        wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
+        caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+
+    }
 
 }
