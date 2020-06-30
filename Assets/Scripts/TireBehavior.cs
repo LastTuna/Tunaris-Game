@@ -18,8 +18,6 @@ public class TireBehavior : MonoBehaviour
     public float brakeHeat = 26;//celsius
     public float diameter;
     public float groundDampness;//get this value from to-be-implemented weather controller.
-    public float currentGrip;
-    float stiffnessF, stiffnessS;//container for grip stiffness
     //when it rains, this controls how damp the ground is/effects grip.
     public bool burst = false;//feature to be added? tire wear causes more prone to bursting
     Material brakeMat;
@@ -35,9 +33,13 @@ public class TireBehavior : MonoBehaviour
     public string lastSurface;
     public GameObject smokeEmitter;//debugging thing
     public float slipTreshold = 0.2f;
-    public float fwdSlip;
-    public float sidewaySlip;
-
+    public TreadBehavior[] tyreTread;
+    //multidim array
+    //first index: tarmac
+    //second index: gravel
+    //third index: grass
+    //fourth: snow (future support)
+    private float tireTicker = 0;//call wheel tread update every x ticks
 
     public float wheelrpm;
     // Use this for initialization
@@ -49,8 +51,6 @@ public class TireBehavior : MonoBehaviour
         brakeStrength = FindObjectOfType<DataController>().BrakeStiffness;
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
-        stiffnessF = tyre.forwardFriction.stiffness;
-        stiffnessS = tyre.forwardFriction.stiffness;
         smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
 
         float springStiffness = FindObjectOfType<DataController>().SpringStiffness;
@@ -111,61 +111,58 @@ public class TireBehavior : MonoBehaviour
 
     public void GripManager()
     {
-         WheelHit wheelhit;
 
-        //manage surfaces, and grip.
-        // Ground surface detection
-        if (tyre.GetGroundHit(out wheelhit) && !burst)
+        int surface = 0;//0road,1gravel,2grass,3snow
+        float stiffness = 0.1f;
+        switch (lastSurface)
         {
-            if (lastSurface != wheelhit.collider.gameObject.tag) { 
-                lastSurface = wheelhit.collider.gameObject.tag;
-            switch (lastSurface)
+            case "tarmac":
+                //TARMAC
+                surface = 0;
+                tyre.suspensionDistance = defaultSusp;
+                break;
+
+            case "sand":
+                //gravel/offroad
+                surface = 1;
+                if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
+                if (tyre.rpm > 600) tyre.suspensionDistance = Random.value / 10;
+                break;
+
+            case "grass":
+                //grass
+                surface = 2;
+                break;
+
+            case "snow":
+                surface = 3;
+                break;
+
+            case "puddle":
+                stiffness = 0.1f;
+                break;
+        }
+
+        //call tire physics update every 4 or so physics ticks
+        //make sure car touches ground ok
+        WheelHit wheelhit;
+        if (tyre.GetGroundHit(out wheelhit) && tireTicker >= 4)
+        {
+            stiffness = 1 - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
+            lastSurface = wheelhit.collider.gameObject.tag;
+            if (burst)
             {
-                case "sand":
-                    //gravel/offroad
-                    currentGrip = (1 - treadType) - Dampness() - ((100 - TreadHealth) / 5000);
-                    if (dirtiness < 1) dirtiness += Mathf.Abs(tyre.rpm) / 500000;
-                    
-                    if(tyre.rpm > 600) tyre.suspensionDistance = Random.value / 10;
-
-                    break;
-                case "tarmac":
-                    //TARMAC/puddle
-                    currentGrip = treadType - Dampness() - ((100 - TreadHealth) / 5000);
-                    tyre.suspensionDistance = defaultSusp;
-                    break;
-                case "grass":
-                    //grass
-                    currentGrip = (treadType / 2) - Dampness() - ((100 - TreadHealth) / 5000);
-                    break;
-                case "puddle":
-                    currentGrip = 0.1f;
-                    break;
+                stiffness = 0.1f;
             }
-            if (currentGrip <= 0f)
-            {//if grip goes below 0, give wheels minimum 0.13 grip.
-                currentGrip = 0.2f;
-            }
-            else if(Dampness() != 1)
-            {//grip preload, to apply some extra grip. do not apply extra grip if in puddle
-                currentGrip += 0.2f;
-            }
-            //move SetStiffness here when done
+            tyre.forwardFriction = SetStiffness(tyreTread[surface].forwardCurve, stiffness);
+            tyre.sidewaysFriction = SetStiffness(tyreTread[surface].sidewaysCurve, stiffness);
+            tireTicker = 0;
         }
-        }
-        if (burst)
-        {
-            currentGrip = 0.1f;
-        }
-        //DEBUGGING PURPOSES APPLY GRIP EVERY TICK FOR NOW UNTIL I COMPLETE
-        tyre.forwardFriction = SetStiffness(tyre.forwardFriction, stiffnessF);
-        tyre.sidewaysFriction = SetStiffness(tyre.sidewaysFriction, stiffnessS);
+        tireTicker++;
     }
 
-    public float Dampness()
+    public float Dampness(WheelHit wheelhit)
     {//returns ground dampness value. if in a puddle, return 1.
-        WheelHit wheelhit;
-        tyre.GetGroundHit(out wheelhit);
         if (wheelhit.collider.gameObject.CompareTag("puddle"))
         {
             return 1f;
@@ -199,15 +196,15 @@ public class TireBehavior : MonoBehaviour
             brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
     }
 
-    WheelFrictionCurve SetStiffness(WheelFrictionCurve wheel, float newStiffness)
+    WheelFrictionCurve SetStiffness(float[] wheel, float newStiffness)
     {
         //sets tire grip
         return new WheelFrictionCurve()
         {
-            extremumSlip = wheel.extremumSlip,
-            extremumValue = wheel.extremumValue,
-            asymptoteSlip = wheel.asymptoteSlip,
-            asymptoteValue = wheel.asymptoteValue,
+            extremumSlip = wheel[0],
+            extremumValue = wheel[1],
+            asymptoteSlip = wheel[2],
+            asymptoteValue = wheel[3],
             stiffness = newStiffness
         };
     }
@@ -244,4 +241,11 @@ public class TireBehavior : MonoBehaviour
 
     }
 
+}
+
+[System.Serializable]
+public class TreadBehavior
+{
+    public float[] forwardCurve;
+    public float[] sidewaysCurve;
 }
