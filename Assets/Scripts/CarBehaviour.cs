@@ -16,7 +16,6 @@ public class CarBehaviour : NetworkBehaviour {
     public Transform drivingWheel;
     public WheelCollider wheelFL, wheelFR, wheelRL, wheelRR;
     public Transform differentialTrans;
-    public bool visualDiff = false;
     public float currentSpeed, wheelRPM;
     public Material dirt; //dirt MATERIAL.
     public GameObject HUDPrefab;
@@ -261,7 +260,7 @@ public class CarBehaviour : NetworkBehaviour {
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             CmdLightsOn();
-            if (visualDiff) DiffPosition(wheelRRTrans, wheelRLTrans);
+            if (differentialTrans != null) DiffPosition(wheelRRTrans, wheelRLTrans);
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
             {
@@ -485,7 +484,7 @@ public class CarBehaviour : NetworkBehaviour {
     
     void DiffPosition(Transform rWheel, Transform lWheel)
     {
-        Vector3 pos = new Vector3(0, (rWheel.localPosition.y + lWheel.localPosition.y) / 2 + 0.2f, rWheel.localPosition.z);
+        Vector3 pos = new Vector3(0, (rWheel.localPosition.y + lWheel.localPosition.y) / 2 - 0.05f, rWheel.localPosition.z);
         differentialTrans.localPosition = pos;//apply transform
     }
 
