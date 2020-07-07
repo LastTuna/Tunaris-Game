@@ -8,6 +8,7 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class Controller : MonoBehaviour {
+    public SetupManager TuneManager;
     public Canvas MainMenuCanvas;
     public Canvas GoRaceCanvas;
     public Canvas OptionsCanvas;
@@ -18,6 +19,8 @@ public class Controller : MonoBehaviour {
     public Canvas GarageCanvas;
     public GameObject Garage3DCanvas;
     public Canvas TuneScreenCanvas;
+    public Canvas LoadTuneScreenCanvas;
+    public Canvas SaveTuneScreenCanvas;
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
     public Canvas CreditsCanvas;
@@ -31,6 +34,7 @@ public class Controller : MonoBehaviour {
     public static List<GameObject> currentCars = new List<GameObject>();
     public GameObject carro;
     public GameObject bestest;
+    
     
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
@@ -242,17 +246,28 @@ public class Controller : MonoBehaviour {
     public void OpenTuneScreen() {
         GoRaceCanvas.gameObject.SetActive(false);
         TuneScreenCanvas.gameObject.SetActive(true);
-
         // Restore tuning values from save data
         DataController data = FindObjectOfType<DataController>();
-        GameObject.Find("Tire Bias").GetComponent<Slider>().value = data.TireBias;
-        GameObject.Find("Final Drive").GetComponent<Slider>().value = data.FinalDrive;
-        GameObject.Find("Aero").GetComponent<Slider>().value = data.Aero;
-        GameObject.Find("Spring Stiffness").GetComponent<Slider>().value = data.SpringStiffness;
-        GameObject.Find("Brake Stiffness").GetComponent<Slider>().value = data.BrakeStiffness;
-        GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value = (int)data.Gearbox;
+        TuneManager.LoadSetupUI(data.SelectedCar);//load car specific setup ui
+        
     }
 
+    public void OpenLoadTuneScreen()
+    {
+        TuneManager.UnLoadSetupUI();
+        TuneScreenCanvas.gameObject.SetActive(false);
+        LoadTuneScreenCanvas.gameObject.SetActive(true);
+        //here add a method call from setup manager to print all available setups.
+    }
+
+    public void OpenSaveTuneScreen()
+    {
+        TuneManager.UnLoadSetupUI();
+        TuneScreenCanvas.gameObject.SetActive(false);
+        SaveTuneScreenCanvas.gameObject.SetActive(true);
+        //here add a method call from setup manager to print all available setups.
+    }
+    
     public void OpenOnlineScreen()
     {
         GoRaceCanvas.gameObject.SetActive(false);
@@ -371,12 +386,8 @@ public class Controller : MonoBehaviour {
     // Tuning validation
     public void ValidateTuning() {
         DataController data = GameObject.Find("DataController").GetComponent<DataController>();
-        data.TireBias = GameObject.Find("Tire Bias").GetComponent<Slider>().value;
-        data.FinalDrive = GameObject.Find("Final Drive").GetComponent<Slider>().value;
-        data.Aero = GameObject.Find("Aero").GetComponent<Slider>().value;
-        data.SpringStiffness = GameObject.Find("Spring Stiffness").GetComponent<Slider>().value;
-        data.BrakeStiffness = GameObject.Find("Brake Stiffness").GetComponent<Slider>().value;
-        data.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
+        //take the slider values and do the business
+        //data.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
         
         Cancel();
     }
@@ -543,6 +554,7 @@ public class Controller : MonoBehaviour {
 
         // Tuning -> Go Race
         if (TuneScreenCanvas.gameObject.activeSelf) {
+            TuneManager.UnLoadSetupUI();
             TuneScreenCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
         }
@@ -592,6 +604,21 @@ public class Controller : MonoBehaviour {
             RecordsCanvas.gameObject.SetActive(false);
             MainMenuCanvas.gameObject.SetActive(true);
         }
+
+        // Load Setup -> Setup
+        if (LoadTuneScreenCanvas.gameObject.activeSelf)
+        {
+            LoadTuneScreenCanvas.gameObject.SetActive(false);
+            OpenTuneScreen();
+        }
+
+        // Save Setup -> Setup
+        if (SaveTuneScreenCanvas.gameObject.activeSelf)
+        {
+            SaveTuneScreenCanvas.gameObject.SetActive(false);
+            OpenTuneScreen();
+        }
+
 
         dataController.SaveGameData();
         yield return null;
