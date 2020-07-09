@@ -21,12 +21,14 @@ public class Controller : MonoBehaviour {
     public Canvas TuneScreenCanvas;
     public Canvas LoadTuneScreenCanvas;
     public Canvas SaveTuneScreenCanvas;
+    public Canvas OverwriteTuneScreenCanvas;
+
     public Canvas OnlineCanvas;
     public Canvas GoWashCanvas;
     public Canvas CreditsCanvas;
     public Canvas RecordsCanvas;
     public Canvas LicensesCanvas;
-
+    public GameObject setupExceptionText;
     public static bool washing;
     public Canvas LoadingScreenCanvas;
     public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
@@ -222,7 +224,6 @@ public class Controller : MonoBehaviour {
         CarScriptKill(spinner);
 
         // Set transform
-        //spinner.transform.localScale = new Vector3(120, 120, 120);
         StartCoroutine(SetPosition(spinner));
 
         // Return to initial position and open door
@@ -266,6 +267,52 @@ public class Controller : MonoBehaviour {
         TuneScreenCanvas.gameObject.SetActive(false);
         SaveTuneScreenCanvas.gameObject.SetActive(true);
         //here add a method call from setup manager to print all available setups.
+    }
+
+    public void SaveTune(bool overwrite)
+    {
+        //when tune save screens save button is pressed - false
+        //when tune overwrite button is pressed - true
+        string setupNameField = GameObject.Find("varSetupName").GetComponent<Text>().text;
+        string setupDesc = GameObject.Find("varSetupDesc").GetComponent<Text>().text;
+        //make sure there is a setup name
+        if (setupNameField != "")
+        {
+            //check if setup with that name exists, if not proceed to save setup
+            if (!TuneManager.SetupDuplicateChecker(setupNameField) || overwrite)
+            {
+                TuneManager.SaveSetup(setupNameField, setupDesc);
+                //"setup saved successfully"
+                StartCoroutine(TuneException("Setup " + setupNameField + " saved successfully."));
+                OverwriteTuneScreenCanvas.gameObject.SetActive(false);
+                Cancel();
+            }
+            else
+            {
+                //open "do you want to overwrite this tune"
+                OverwriteTuneScreenCanvas.gameObject.SetActive(!overwrite);
+            }
+        }
+        else
+        {
+        StartCoroutine(TuneException("Setup needs a name."));
+            //"setup needs a name"
+        }
+    }
+
+    public void CancelSetupOverwrite()
+    {
+        SaveTuneScreenCanvas.gameObject.SetActive(true);
+        OverwriteTuneScreenCanvas.gameObject.SetActive(false);
+    }
+
+    //setup needs a name text
+    public IEnumerator TuneException(string text)
+    {
+        GameObject dolor = Instantiate(setupExceptionText);
+        dolor.GetComponentInChildren<Text>().text = text;
+        yield return new WaitForSeconds(2);
+        Destroy(dolor);
     }
     
     public void OpenOnlineScreen()
@@ -382,15 +429,7 @@ public class Controller : MonoBehaviour {
         FindObjectOfType<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         Cancel();
     }
-
-    // Tuning validation
-    public void ValidateTuning() {
-        DataController data = GameObject.Find("DataController").GetComponent<DataController>();
-        //take the slider values and do the business
-        //data.Gearbox = GameObject.Find("Gearbox Selector").GetComponent<Dropdown>().value;
-        
-        Cancel();
-    }
+    
     public void OpenCredits()
     {
         GoRaceCanvas.gameObject.SetActive(false);
@@ -605,6 +644,13 @@ public class Controller : MonoBehaviour {
             MainMenuCanvas.gameObject.SetActive(true);
         }
 
+        // Setup -> Go Race
+        if (TuneScreenCanvas.gameObject.activeSelf)
+        {
+            TuneScreenCanvas.gameObject.SetActive(false);
+            GoRaceCanvas.gameObject.SetActive(true);
+        }
+
         // Load Setup -> Setup
         if (LoadTuneScreenCanvas.gameObject.activeSelf)
         {
@@ -614,6 +660,13 @@ public class Controller : MonoBehaviour {
 
         // Save Setup -> Setup
         if (SaveTuneScreenCanvas.gameObject.activeSelf)
+        {
+            SaveTuneScreenCanvas.gameObject.SetActive(false);
+            OpenTuneScreen();
+        }
+
+        // Overwrite Setup -> Setup
+        if (OverwriteTuneScreenCanvas.gameObject.activeSelf)
         {
             SaveTuneScreenCanvas.gameObject.SetActive(false);
             OpenTuneScreen();

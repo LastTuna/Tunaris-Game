@@ -105,8 +105,6 @@ public class CarBehaviour : NetworkBehaviour {
             wheelRR.ConfigureVehicleSubsteps(20, 1, 1);
 
             DataController dataController = FindObjectOfType<DataController>();
-            aero = dataController.Aero;
-            ratio = dataController.FinalDrive;
             dirtiness = dataController.GetDirtiness();
             isBusrider = dataController.IsBusrider;
             

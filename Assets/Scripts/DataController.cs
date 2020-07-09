@@ -6,13 +6,7 @@ using UnityEngine;
 
 public class DataController : MonoBehaviour {
     private string gameDataFileName = "savedata.json";
-    /*  public float TireBias;
-    public float FinalDrive;
-    public float Aero;
-    public float SpringStiffness;
-    public float BrakeStiffness;
-    public float Gearbox;
-    */
+
     // Save data
     public GameData LoadedData;
 
@@ -45,54 +39,6 @@ public class DataController : MonoBehaviour {
         set
         {
             LoadedData.BestestLapTimes = value;
-        }
-    }
-    public float TireBias {
-        get {
-            return LoadedData.TireBias;
-        }
-        set {
-            LoadedData.TireBias = value;
-        }
-    }
-    public float FinalDrive {
-        get {
-            return LoadedData.FinalDrive;
-        }
-        set {
-            LoadedData.FinalDrive = value;
-        }
-    }
-    public float Aero {
-        get {
-            return LoadedData.Aero;
-        }
-        set {
-            LoadedData.Aero = value;
-        }
-    }
-    public float SpringStiffness {
-        get {
-            return LoadedData.SpringStiffness;
-        }
-        set {
-            LoadedData.SpringStiffness = value;
-        }
-    }
-    public float BrakeStiffness {
-        get {
-            return LoadedData.BrakeStiffness;
-        }
-        set {
-            LoadedData.BrakeStiffness = value;
-        }
-    }
-    public float Gearbox {
-        get {
-            return LoadedData.Gearbox;
-        }
-        set {
-            LoadedData.Gearbox = value;
         }
     }
     public string PlayerName {
@@ -220,13 +166,7 @@ public class DataController : MonoBehaviour {
             LoadedData = new GameData();
             SelectedCar = "Star GT V8";
             SelectedCourse = "Course 1";
-
-            TireBias = 1;
-            FinalDrive = 4.3f;
-            Aero = 15;
-            SpringStiffness = 100;
-            BrakeStiffness = 200;
-            Gearbox = 0;
+            
             PlayerName = "Player";
             Cash = 100;
             Dirtiness = new DirtinessDictionary();
@@ -257,13 +197,7 @@ public class GameData {
     public float MenuAudio;
     public bool CuntUI;
     public bool IsBusrider;
-
-    public float TireBias;
-    public float FinalDrive;
-    public float Aero;
-    public float SpringStiffness;
-    public float BrakeStiffness;
-    public float Gearbox;
+    
     public DirtinessDictionary Dirtiness;
     public int Cash;
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using UnityEngine.UI;
 
 //this script is linked with eventSystem Controller script.
 
@@ -81,7 +82,7 @@ public class SetupManager : MonoBehaviour {
     //use this to load a picked setup
     public void LoadSetup(string setupName)
     {
-        string filePath = Application.dataPath + "/setups/" + setupName + ".json";
+        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + setupName + ".json";
         Debug.Log(filePath);
         //add default handler here
         if(setupName == "default")
@@ -148,15 +149,34 @@ public class SetupManager : MonoBehaviour {
 
     }
 
-    public void SaveSetup(string setupName)
+    public void SaveSetup(string nameValue, string descValue)
     {
-        //collect all data/values from sliders
-        
-        
+        //collect relevant data
+        SetupData SetupToSave = currentSetup;
+
+        SetupToSave.SetupName = nameValue;
+        SetupToSave.SetupDescription = descValue;
+
         //parse json
-        string dataAsJson = JsonUtility.ToJson(currentSetup);
 
+        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + nameValue + ".json";
+        string dataAsJson = JsonUtility.ToJson(SetupToSave);
+        File.WriteAllText(filePath, dataAsJson);
+        Debug.Log("Saved setup " + nameValue + ".json");
+    }
+    
 
+    //returns true if a file with that name exists
+    public bool SetupDuplicateChecker(string search)
+    {
+        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/";
+        DirectoryInfo carSetupDir = new DirectoryInfo(filePath);
+        FileInfo[] fileInfo = carSetupDir.GetFiles();
+        foreach(FileInfo culo in fileInfo)
+        {
+            if (culo.Name == search + ".json") return true;
+        }
+        return false;
     }
 
 

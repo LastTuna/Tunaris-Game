@@ -47,15 +47,10 @@ public class TireBehavior : MonoBehaviour
     {
         dirt = visualWheel.GetComponent<Renderer>().materials[0];
         brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
-        treadType = FindObjectOfType<DataController>().TireBias;
-        brakeStrength = FindObjectOfType<DataController>().BrakeStiffness;
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
         smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
-
-        float springStiffness = FindObjectOfType<DataController>().SpringStiffness;
-        springs.spring = springStiffness;
-        springs.damper = springStiffness / 10;
+        
 
         tyre.suspensionSpring = springs;
     }
