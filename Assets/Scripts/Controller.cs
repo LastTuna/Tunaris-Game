@@ -256,6 +256,7 @@ public class Controller : MonoBehaviour {
     public void OpenLoadTuneScreen()
     {
         TuneManager.UnLoadSetupUI();
+        TuneManager.LoadSetupsList();
         TuneScreenCanvas.gameObject.SetActive(false);
         LoadTuneScreenCanvas.gameObject.SetActive(true);
         //here add a method call from setup manager to print all available setups.

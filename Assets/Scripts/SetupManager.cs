@@ -62,7 +62,6 @@ public class SetupManager : MonoBehaviour {
         currentSetup.BrakeBalance = Restrictions.GetDefaultValue("BrakeBalance");
         currentSetup.GearRatios = Restrictions.gearbox.defaultRatios;
         currentSetup.FinalDrive = Restrictions.gearbox.defaultFinalDrive;
-
     }
 
     public void UnLoadSetupUI()
@@ -71,21 +70,47 @@ public class SetupManager : MonoBehaviour {
         Destroy(loadedCanvas.gameObject);
     }
 
-
+    //load the data related to all the setups in the folder.
     public void LoadSetupsList()
     {
+        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/";
+        Debug.Log(filePath);
+
+        //get all the files in the folder
+        string[] penus = Directory.GetFiles(filePath);
+        foreach(string dolor in penus)
+        {
+            //chcek that its a json from filename then it should be displayed via PrintSetups()
+            if (dolor.EndsWith(".json"))
+            {
+                string beer = dolor.Substring(dolor.LastIndexOf("/") + 1, dolor.Length - dolor.LastIndexOf("/") - 6);
+                Debug.Log(beer);
+                PrintSetups(beer);
+
+            }
+            
+            //Debug.Log(dolor);
+        }
 
         //load data to list on the already saved setups ui
     }
 
+    //the coroutine to print all the data, called from LoadSetupsList()
+    public void PrintSetups(string setupName)
+    {
+        //prob need ot make an instance of some UI element. have the UI element have a button with the button having a param for the setup name
+        //get setup description on clicking on the element. and display it in a window somewhere on the screen.
+        
+        //this is called for every setup individually ig
+    }
 
     //use this to load a picked setup
     public void LoadSetup(string setupName)
     {
-        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + setupName + ".json";
-        Debug.Log(filePath);
-        //add default handler here
-        if(setupName == "default")
+        //string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + setupName + ".json";
+
+        //default handler here
+        if (setupName == "default")
         {
             LoadDefaultSetup();
             SetSliderValues(currentSetup);
@@ -94,9 +119,13 @@ public class SetupManager : MonoBehaviour {
         {
             SetSliderValues(currentSetup);
         }
-        //then add here an else if for loading a setup from json
-
-        //copy paste pastor json load code here or something
+        else
+        {
+            //loadeing from json
+            currentSetup = JsonUtility.FromJson<SetupData>(setupName);
+            SetSliderValues(currentSetup);
+        }
+        
     }
 
     public void SetSliderValues(SetupData newSetup)
@@ -114,14 +143,8 @@ public class SetupManager : MonoBehaviour {
         Restrictions.SetSlider("RearDamperStiffness", newSetup.RearDamperStiffness);
         Restrictions.SetSlider("BrakeStrength", newSetup.BrakeStrength);
         Restrictions.SetSlider("BrakeBalance", newSetup.BrakeBalance);
-
-        //check existence of final drive slider & apply value if exist
-        if(Restrictions.gearbox.finalDriveSlider != null)
-        {
-            Restrictions.gearbox.finalDriveSlider.value = newSetup.FinalDrive;
-        }
+        Restrictions.SetSlider("FinalDrive", newSetup.FinalDrive);
         Restrictions.SetGearboxSliders(newSetup.GearRatios);
-        
     }
 
     public void GetSliderValues()
@@ -139,14 +162,9 @@ public class SetupManager : MonoBehaviour {
         currentSetup.RearDamperStiffness = Restrictions.GetSlider("RearDamperStiffness");
         currentSetup.BrakeStrength = Restrictions.GetSlider("BrakeStrength");
         currentSetup.BrakeBalance = Restrictions.GetSlider("BrakeBalance");
-
-        //check existence of final drive slider & apply value if exist
-        if (Restrictions.gearbox.finalDriveSlider != null)
-        {
-            currentSetup.FinalDrive = Restrictions.gearbox.finalDriveSlider.value;
-        }
+        currentSetup.FinalDrive = Restrictions.GetSlider("FinalDrive");
+        
         currentSetup.GearRatios = Restrictions.GetGearboxSliders(currentSetup.GearRatios);
-
     }
 
     public void SaveSetup(string nameValue, string descValue)
