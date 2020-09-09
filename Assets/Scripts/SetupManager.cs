@@ -13,6 +13,19 @@ public class SetupManager : MonoBehaviour {
     private Canvas loadedCanvas;//loaded canvas goes here so it can be destroyed
                                 //just move the ui list values to this dict ig...
 
+    public GameObject sliderBox;//this is the gameobject of the slider box,which controls
+    //the size of the setups scroll box
+    GameObject sliderChild;
+    //instantiate a child that will act as a parent to all the instantiated buttons.
+    public GameObject loadButtonPrefab;
+    //name this something intelligent when i figure out the prefab
+    //will be instantiated to the slider child
+    Button[] loadButtons;
+    //container for all loaded buttons.
+    public string selectedSetup = "default";
+    //container for the selected setup in load setup screen. when buttons pressed the setup name gets assigned here
+    public Text descriptionBox;
+    //this is the description box in load setup screen.
     public SetupData currentSetup;
     public SetupRestrictions Restrictions;//load the car specific regs/defaults
 
@@ -73,19 +86,25 @@ public class SetupManager : MonoBehaviour {
     //load the data related to all the setups in the folder.
     public void LoadSetupsList()
     {
+        sliderChild = new GameObject("ButtonParent");
+        Instantiate(sliderChild, sliderBox.transform);
+        //instantiate a slider child for easy button destroying
+        loadButtons = new Button[100];
+        //also instantiate an array for buttons. i just set max size to like 100 because realistically
+        //none will have fuckin 100 setups...right?
         string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/";
         Debug.Log(filePath);
 
         //get all the files in the folder
         string[] penus = Directory.GetFiles(filePath);
-        foreach(string dolor in penus)
+        for(int i = 0; i < penus.Length;i++)
         {
-            //chcek that its a json from filename then it should be displayed via PrintSetups()
-            if (dolor.EndsWith(".json"))
+            //check that its a json from filename then it should be displayed via PrintSetups()
+            if (penus[i].EndsWith(".json"))
             {
-                string beer = dolor.Substring(dolor.LastIndexOf("/") + 1, dolor.Length - dolor.LastIndexOf("/") - 6);
+                string beer = penus[i].Substring(penus[i].LastIndexOf("/") + 1, penus[i].Length - penus[i].LastIndexOf("/") - 6);
                 Debug.Log(beer);
-                PrintSetups(beer);
+                PrintSetups(beer, i);
 
             }
             
@@ -96,12 +115,34 @@ public class SetupManager : MonoBehaviour {
     }
 
     //the coroutine to print all the data, called from LoadSetupsList()
-    public void PrintSetups(string setupName)
+    public void PrintSetups(string setupName, int i)
     {
+        GameObject newButton = Instantiate(loadButtonPrefab, sliderChild.transform);
+        loadButtons[i] = newButton.GetComponent<Button>();
+        loadButtons[i].onClick.AddListener( () => aaaaaasssssssssss(setupName));
         //prob need ot make an instance of some UI element. have the UI element have a button with the button having a param for the setup name
         //get setup description on clicking on the element. and display it in a window somewhere on the screen.
         
         //this is called for every setup individually ig
+    }
+
+    public void aaaaaasssssssssss(string choice)
+    {
+        //called when setup buttons selected. print the description to the funny box
+        //and assign the setup name to container
+        selectedSetup = choice;
+        descriptionBox.text = LoadDescription(choice);
+
+    }
+
+    //insert the text from selected setup to the desc box.
+    public string LoadDescription(string choice)
+    {
+        string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + choice + ".json";
+
+        string dataAsJson = File.ReadAllText(filePath);
+        SetupData descData = JsonUtility.FromJson<SetupData>(dataAsJson);
+        return descData.SetupDescription;
     }
 
     //use this to load a picked setup
@@ -143,7 +184,14 @@ public class SetupManager : MonoBehaviour {
         Restrictions.SetSlider("RearDamperStiffness", newSetup.RearDamperStiffness);
         Restrictions.SetSlider("BrakeStrength", newSetup.BrakeStrength);
         Restrictions.SetSlider("BrakeBalance", newSetup.BrakeBalance);
-        Restrictions.SetSlider("FinalDrive", newSetup.FinalDrive);
+
+        //check existence of final drive slider & apply value if exist
+        //this was called separately because final drive ratios are contained in the gearbox object
+        if (Restrictions.gearbox.finalDriveSlider != null)
+        {
+            Restrictions.gearbox.finalDriveSlider.value = newSetup.FinalDrive;
+        }
+
         Restrictions.SetGearboxSliders(newSetup.GearRatios);
     }
 
@@ -162,8 +210,14 @@ public class SetupManager : MonoBehaviour {
         currentSetup.RearDamperStiffness = Restrictions.GetSlider("RearDamperStiffness");
         currentSetup.BrakeStrength = Restrictions.GetSlider("BrakeStrength");
         currentSetup.BrakeBalance = Restrictions.GetSlider("BrakeBalance");
-        currentSetup.FinalDrive = Restrictions.GetSlider("FinalDrive");
-        
+
+        //check existence of final drive slider & apply value if exist
+        //this was called separately because final drive ratios are contained in the gearbox object
+        if (Restrictions.gearbox.finalDriveSlider != null)
+        {
+            currentSetup.FinalDrive = Restrictions.gearbox.finalDriveSlider.value;
+        }
+
         currentSetup.GearRatios = Restrictions.GetGearboxSliders(currentSetup.GearRatios);
     }
 
