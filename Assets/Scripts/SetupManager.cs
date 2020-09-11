@@ -86,8 +86,7 @@ public class SetupManager : MonoBehaviour {
     //load the data related to all the setups in the folder.
     public void LoadSetupsList()
     {
-        sliderChild = new GameObject("ButtonParent");
-        Instantiate(sliderChild, sliderBox.transform);
+        sliderChild = Instantiate(new GameObject("ButtonParent"), sliderBox.transform ,false);
         //instantiate a slider child for easy button destroying
         loadButtons = new Button[100];
         //also instantiate an array for buttons. i just set max size to like 100 because realistically
@@ -117,7 +116,9 @@ public class SetupManager : MonoBehaviour {
     //the coroutine to print all the data, called from LoadSetupsList()
     public void PrintSetups(string setupName, int i)
     {
-        GameObject newButton = Instantiate(loadButtonPrefab, sliderChild.transform);
+        Vector3 buttonSpawnPos = sliderChild.transform.position;
+        buttonSpawnPos.y += i * 20;
+        GameObject newButton = Instantiate(loadButtonPrefab, buttonSpawnPos, sliderChild.transform.rotation, sliderChild.transform);
         loadButtons[i] = newButton.GetComponent<Button>();
         loadButtons[i].onClick.AddListener( () => aaaaaasssssssssss(setupName));
         //prob need ot make an instance of some UI element. have the UI element have a button with the button having a param for the setup name
