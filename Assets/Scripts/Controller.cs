@@ -274,8 +274,11 @@ public class Controller : MonoBehaviour {
     {
         //when tune save screens save button is pressed - false
         //when tune overwrite button is pressed - true
-        string setupNameField = GameObject.Find("varSetupName").GetComponent<Text>().text;
-        string setupDesc = GameObject.Find("varSetupDesc").GetComponent<Text>().text;
+
+        //set a listener to the text fields to get all the text. cannot getComponent() text because that shit is 
+        string setupNameField = GameObject.Find("SetupNameField").GetComponent<InputField>().text;
+        string setupDesc = GameObject.Find("SetupDescField").GetComponent<InputField>().text;
+
         //make sure there is a setup name
         if (setupNameField != "")
         {
@@ -656,6 +659,7 @@ public class Controller : MonoBehaviour {
         if (LoadTuneScreenCanvas.gameObject.activeSelf)
         {
             LoadTuneScreenCanvas.gameObject.SetActive(false);
+            TuneManager.UnloadButtons();
             OpenTuneScreen();
         }
 

@@ -77,6 +77,12 @@ public class SetupManager : MonoBehaviour {
         currentSetup.FinalDrive = Restrictions.gearbox.defaultFinalDrive;
     }
 
+    public void UnloadButtons()
+    {
+        Destroy(sliderChild);
+    }
+
+    //unload save setup ui
     public void UnLoadSetupUI()
     {
         GetSliderValues();
@@ -86,7 +92,7 @@ public class SetupManager : MonoBehaviour {
     //load the data related to all the setups in the folder.
     public void LoadSetupsList()
     {
-        sliderChild = Instantiate(new GameObject("ButtonParent"), sliderBox.transform ,false);
+        sliderChild = Instantiate(new GameObject("ButtonParent"), sliderBox.transform);
         //instantiate a slider child for easy button destroying
         loadButtons = new Button[100];
         //also instantiate an array for buttons. i just set max size to like 100 because realistically
@@ -96,15 +102,15 @@ public class SetupManager : MonoBehaviour {
 
         //get all the files in the folder
         string[] penus = Directory.GetFiles(filePath);
+        int jsonsInFolder = 0;
         for(int i = 0; i < penus.Length;i++)
         {
             //check that its a json from filename then it should be displayed via PrintSetups()
             if (penus[i].EndsWith(".json"))
             {
                 string beer = penus[i].Substring(penus[i].LastIndexOf("/") + 1, penus[i].Length - penus[i].LastIndexOf("/") - 6);
-                Debug.Log(beer);
-                PrintSetups(beer, i);
-
+                StartCoroutine(PrintSetups(beer, jsonsInFolder));
+                jsonsInFolder++;
             }
             
             //Debug.Log(dolor);
@@ -114,20 +120,20 @@ public class SetupManager : MonoBehaviour {
     }
 
     //the coroutine to print all the data, called from LoadSetupsList()
-    public void PrintSetups(string setupName, int i)
+    public IEnumerator PrintSetups(string setupName, int i)
     {
-        Vector3 buttonSpawnPos = sliderChild.transform.position;
-        buttonSpawnPos.y += i * 20;
-        GameObject newButton = Instantiate(loadButtonPrefab, buttonSpawnPos, sliderChild.transform.rotation, sliderChild.transform);
+        yield return new WaitForEndOfFrame();
+        GameObject newButton = Instantiate(loadButtonPrefab, sliderChild.transform);
+        newButton.transform.position += new Vector3(0, i * -20, 0);
         loadButtons[i] = newButton.GetComponent<Button>();
-        loadButtons[i].onClick.AddListener( () => aaaaaasssssssssss(setupName));
-        //prob need ot make an instance of some UI element. have the UI element have a button with the button having a param for the setup name
+        loadButtons[i].GetComponentInChildren<Text>().text = setupName;
+        loadButtons[i].onClick.AddListener( () => ButtonOnClick(setupName));
+        yield return 0;
+        //create buton. add listener to buton. chan buton text to setup name
         //get setup description on clicking on the element. and display it in a window somewhere on the screen.
-        
-        //this is called for every setup individually ig
     }
 
-    public void aaaaaasssssssssss(string choice)
+    public void ButtonOnClick(string choice)
     {
         //called when setup buttons selected. print the description to the funny box
         //and assign the setup name to container
