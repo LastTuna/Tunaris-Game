@@ -28,6 +28,8 @@ public class SetupManager : MonoBehaviour {
     //this is the description box in load setup screen.
     public SetupData currentSetup;
     public SetupRestrictions Restrictions;//load the car specific regs/defaults
+    string loadScreenSelectedSetup;
+    //this is a container for the selected setup in the load screen
 
     //this is called when you open setup menu
     //load cars relevant UI
@@ -137,7 +139,7 @@ public class SetupManager : MonoBehaviour {
     {
         //called when setup buttons selected. print the description to the funny box
         //and assign the setup name to container
-        selectedSetup = choice;
+        loadScreenSelectedSetup = choice;
         descriptionBox.text = LoadDescription(choice);
 
     }
@@ -155,7 +157,6 @@ public class SetupManager : MonoBehaviour {
     //use this to load a picked setup
     public void LoadSetup(string setupName)
     {
-        //string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + setupName + ".json";
 
         //default handler here
         if (setupName == "default")
@@ -167,11 +168,16 @@ public class SetupManager : MonoBehaviour {
         {
             SetSliderValues(currentSetup);
         }
-        else
+        else if(loadScreenSelectedSetup != null && setupName == "loadButton")
         {
+            //this is called when load button in load setup screen is pressed. and of course a setup to load has been chosen.
             //loadeing from json
-            currentSetup = JsonUtility.FromJson<SetupData>(setupName);
-            SetSliderValues(currentSetup);
+            string filePath = Application.dataPath + "/setups/" + currentSetup.CarName + "/" + loadScreenSelectedSetup + ".json";
+
+            currentSetup = JsonUtility.FromJson<SetupData>(File.ReadAllText(filePath));
+
+            selectedSetup = loadScreenSelectedSetup;
+            
         }
         
     }

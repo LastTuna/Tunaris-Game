@@ -270,6 +270,12 @@ public class Controller : MonoBehaviour {
         //here add a method call from setup manager to print all available setups.
     }
 
+    public void LoadTuneButton(string buttonArg)
+    {
+        TuneManager.LoadSetup(buttonArg);
+        Cancel();
+    }
+
     public void SaveTune(bool overwrite)
     {
         //when tune save screens save button is pressed - false
