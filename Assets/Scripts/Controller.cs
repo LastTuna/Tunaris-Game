@@ -42,8 +42,7 @@ public class Controller : MonoBehaviour {
         Debug.Log("you forgot to set a click callback you retard");
     }
 
-    void Update()
-    {
+    void Update() {
         TGControlTest();
     }
 
@@ -103,6 +102,10 @@ public class Controller : MonoBehaviour {
     public List<Material> carLogos;
 
     public void OpenGarage() {
+        StartCoroutine(OpenGarageImpl());
+    }
+    public IEnumerator OpenGarageImpl() {
+        yield return new WaitForEndOfFrame();
         if (FindObjectOfType<DataController>().CuntUI) {
             CuntUI.gameObject.SetActive(false);
         } else {
@@ -457,9 +460,10 @@ public class Controller : MonoBehaviour {
         data.SaveGameData();
     }
     //car wash save
-    public void OpenWash()
+    public IEnumerator OpenWash()
     {
         GoWashCanvas.gameObject.SetActive(true);
+        yield return new WaitForEndOfFrame();
         GoRaceCanvas.gameObject.SetActive(false);
         menuMusic.clip = TGmusic[2];
         menuMusic.Play();

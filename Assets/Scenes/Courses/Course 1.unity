@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.65948623, g: 0.78916097, b: 0.7120032, a: 1}
+  m_IndirectSpecularColor: {r: 0.6592061, g: 0.78901833, b: 0.7121776, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -672,12 +672,6 @@ MonoBehaviour:
     MenuAudio: 0
     CuntUI: 0
     IsBusrider: 0
-    TireBias: 0
-    FinalDrive: 0
-    Aero: 0
-    SpringStiffness: 0
-    BrakeStiffness: 0
-    Gearbox: 0
     Dirtiness:
       keys: []
       values: []
@@ -1513,7 +1507,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.01
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -1539,14 +1533,14 @@ Transform:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 256955479}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 80.39, y: 5.95, z: -106.65}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 707582366}
-  m_Father: {fileID: 0}
-  m_RootOrder: 2
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Father: {fileID: 999269124}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 106.176, z: 0}
 --- !u!82 &256955484
 AudioSource:
   m_ObjectHideFlags: 0
@@ -1646,8 +1640,10 @@ MonoBehaviour:
   heightDamping: 8
   zoomRatio: 0.5
   DefaultFOV: 60
+  debug: 1
   chosenCamera: 0
   supportedCameras: 3
+  isVR: 0
 --- !u!114 &256955486
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1992,7 +1988,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -48.44, y: 480.6}
+  m_AnchoredPosition: {x: -48.440002, y: 480.6}
   m_SizeDelta: {x: 454.26, y: 70.65}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &286787674
@@ -3989,6 +3985,35 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 982899959}
+--- !u!1 &999269123
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 999269124}
+  m_Layer: 0
+  m_Name: MainCameraHolderForVR
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &999269124
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 999269123}
+  m_LocalRotation: {x: -0, y: 0.799557, z: -0, w: 0.6005903}
+  m_LocalPosition: {x: -110.91695, y: 16.4, z: -161.47801}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 256955483}
+  m_Father: {fileID: 0}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1005230491
 GameObject:
   m_ObjectHideFlags: 0
@@ -4768,7 +4793,7 @@ Transform:
   m_LocalScale: {x: 1325.5481, y: 1325.5475, z: 1325.5475}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1244692925
 GameObject:
@@ -4833,9 +4858,9 @@ Canvas:
   m_GameObject: {fileID: 1244692925}
   m_Enabled: 1
   serializedVersion: 3
-  m_RenderMode: 0
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
+  m_RenderMode: 1
+  m_Camera: {fileID: 256955482}
+  m_PlaneDistance: 0.4
   m_PixelPerfect: 0
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
@@ -5169,7 +5194,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 4623404459184234, guid: 1a1fa0b9dd75a3748a8e329018a04828, type: 2}
       propertyPath: m_RootOrder
-      value: 14
+      value: 13
       objectReference: {fileID: 0}
     - target: {fileID: 114091055762642860, guid: 1a1fa0b9dd75a3748a8e329018a04828,
         type: 2}

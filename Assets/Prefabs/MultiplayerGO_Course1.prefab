@@ -587,7 +587,7 @@ MonoBehaviour:
   - {fileID: 1629683670095968, guid: ea294faf60ff5a640955eed48aed0c6a, type: 2}
   - {fileID: 1416409464890236, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
-  - {fileID: 1109528858845200, guid: 9ce2dc16edc6d1e45a5524d56594e67d, type: 2}
+  - {fileID: 0}
   - {fileID: 1729435621923674, guid: 65a984b67f0191a49ae4c017e254e428, type: 2}
   m_CustomConfig: 0
   m_MaxConnections: 4
@@ -647,7 +647,7 @@ MonoBehaviour:
   Cars:
   - {fileID: 1416409464890236, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
   - {fileID: 1145062829267108, guid: 53e2acc4cdb037046a1280ef4079d928, type: 2}
-  - {fileID: 1109528858845200, guid: 9ce2dc16edc6d1e45a5524d56594e67d, type: 2}
+  - {fileID: 1129600041119176, guid: 8ec78001fb5bfd4429584c1b07ff5606, type: 2}
   - {fileID: 1729435621923674, guid: 65a984b67f0191a49ae4c017e254e428, type: 2}
   SpawnPositions:
   - {fileID: 1328735816986672, guid: f54c530610d41e744b9245757042e4e5, type: 2}
@@ -674,12 +674,6 @@ MonoBehaviour:
     MenuAudio: 0
     CuntUI: 0
     IsBusrider: 0
-    TireBias: 0
-    FinalDrive: 0
-    Aero: 0
-    SpringStiffness: 0
-    BrakeStiffness: 0
-    Gearbox: 0
     Dirtiness:
       keys: []
       values: []

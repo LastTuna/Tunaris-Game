@@ -200,6 +200,21 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
+--- !u!1 &1252518704248102
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 4204540005280692}
+  m_Layer: 0
+  m_Name: Interior Cam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
 --- !u!1 &1263576498636764
 GameObject:
   m_ObjectHideFlags: 0
@@ -805,6 +820,19 @@ Transform:
   m_Father: {fileID: 4048243245491896}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &4204540005280692
+Transform:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1252518704248102}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.389, y: 1, z: -0.542}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 4321311396418864}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &4226734562943208
 Transform:
   m_ObjectHideFlags: 1
@@ -906,7 +934,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1729435621923674}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -225.89201, y: 91.58621, z: -109.41516}
+  m_LocalPosition: {x: -44.58897, y: -21.017088, z: -174.73048}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4873239040319844}
@@ -920,6 +948,7 @@ Transform:
   - {fileID: 4310985813806482}
   - {fileID: 4410588025326656}
   - {fileID: 4860987305149412}
+  - {fileID: 4204540005280692}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2674,7 +2703,6 @@ MonoBehaviour:
   wheelRL: {fileID: 146312051355598060}
   wheelRR: {fileID: 146615530476247038}
   differentialTrans: {fileID: 4365088540872772}
-  visualDiff: 1
   currentSpeed: 0
   wheelRPM: 0
   dirt: {fileID: 0}
