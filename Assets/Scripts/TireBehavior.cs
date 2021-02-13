@@ -45,11 +45,19 @@ public class TireBehavior : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        dirt = visualWheel.GetComponent<Renderer>().materials[0];
-        brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
+        if (!visualWheel) {
+            Debug.LogError("TireBehavior::Start no visualWheel");
+        } else {
+            dirt = visualWheel.GetComponent<Renderer>().materials[0];
+            brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
+        }
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
-        smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+        if (!smokeEmitter) {
+            Debug.LogError("TireBehavior::Start no smokeEmitter");
+        } else {
+            smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+        }
         
 
         tyre.suspensionSpring = springs;
@@ -62,7 +70,9 @@ public class TireBehavior : MonoBehaviour
         GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
-        SmonkEmitter();
+        if (smokeEmitter) {
+            SmonkEmitter();
+        }
     }
     void Update()
     {
@@ -212,6 +222,7 @@ public class TireBehavior : MonoBehaviour
         targetPosition = 0.5f,
     };
 
+    private bool whineAboutCaliper = true;
     void WheelPosition()
     {
         RaycastHit hit;
@@ -220,19 +231,30 @@ public class TireBehavior : MonoBehaviour
         {
             wheelPos = hit.point + tyre.transform.up * tyre.radius;
             //UPDATE DIRTINESS
-            dirt.SetFloat("_FortniteRange", dirtiness);
+            if (dirt) { dirt.SetFloat("_FortniteRange", dirtiness); }
         }
         else
         {
             wheelPos = tyre.transform.position - tyre.transform.up * tyre.suspensionDistance;
         }
-        caliper.position = wheelPos;
-        wheelTransform.position = wheelPos;
+        if (!caliper){
+            if (whineAboutCaliper) {
+                whineAboutCaliper = false;
+                Debug.LogError("TireBehavior::WheelPosition no calipers");
+            }
+        } else {
+            caliper.position = wheelPos;
+        }
+        if (wheelTransform) {
+            wheelTransform.position = wheelPos;
 
-        //also do the spinny things
-        wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
-        caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+            //also do the spinny things
+            wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
+        }
+        if (caliper) {
+            caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+        }
 
     }
 
