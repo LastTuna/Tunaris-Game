@@ -32,6 +32,11 @@ public class EngineAudioBehaviour : MonoBehaviour
     // Initialize audio
     void Start()
     {
+        if(sounds.Length == 0 || sounds[0].index.Length == 0) {
+            Debug.LogError("EngineAudioBehaviour::Start no sound samples. Suiciding.");
+            Destroy(this);
+            return;
+        }
         CarEngine[0].clip = sounds[lastIndex].index[0].clip;
         CarEngine[0].Play();
     }

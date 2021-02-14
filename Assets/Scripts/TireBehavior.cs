@@ -31,8 +31,13 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(800, 0.3f)
         );
     public string lastSurface;
+
     public GameObject smokeEmitter;//debugging thing
-    public float slipTreshold = 0.2f;
+    public float forwardSlipTreshold;
+    public float sidewaysSlipThreshold;
+    public float forwardSlipDebug;
+    public float sidewaysSlipDebug;
+
     public TreadBehavior[] tyreTread;
     //multidim array
     //first index: tarmac
@@ -45,11 +50,20 @@ public class TireBehavior : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        dirt = visualWheel.GetComponent<Renderer>().materials[0];
-        brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
+        if (!visualWheel) {
+            Debug.LogError("TireBehavior::Start no visualWheel");
+        } else {
+            dirt = visualWheel.GetComponent<Renderer>().materials[0];
+            brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
+        }
         diameter = tyre.radius;
         defaultSusp = tyre.suspensionDistance;
-        smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+        if (!smokeEmitter) {
+            Debug.LogError("TireBehavior::Start no smokeEmitter");
+        } else {
+            smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+            smokeEmitter.GetComponent<ParticleSystem>().Play();
+        }
         
 
         tyre.suspensionSpring = springs;
@@ -62,7 +76,9 @@ public class TireBehavior : MonoBehaviour
         GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
-        SmonkEmitter();
+        if (smokeEmitter) {
+            SmonkEmitter();
+        }
     }
     void Update()
     {
@@ -85,22 +101,26 @@ public class TireBehavior : MonoBehaviour
         }
     }
 
-    public void SmonkEmitter()
-    {
+    public bool fss = false;
+    public bool sss = false;
+    public bool smokeState = false;
+    public void SmonkEmitter() {
         WheelHit wheelhit;
         tyre.GetGroundHit(out wheelhit);
-        float slip = Mathf.Abs(wheelhit.forwardSlip) + Mathf.Abs(wheelhit.sidewaysSlip);
-        
-        if (slip > slipTreshold)
-        {
-            if (!smokeEmitter.GetComponent<ParticleSystem>().isPlaying)
-            {
-                smokeEmitter.GetComponent<ParticleSystem>().Play();
-            }
-        }
-        else
-        {
-            smokeEmitter.GetComponent<ParticleSystem>().Stop();
+
+        forwardSlipDebug = Mathf.Abs(wheelhit.forwardSlip);
+        sidewaysSlipDebug = Mathf.Abs(wheelhit.sidewaysSlip);
+        fss = Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold;
+        sss = Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold;
+
+        if (Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold || Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold) {
+            ParticleSystem.EmissionModule em = smokeEmitter.GetComponent<ParticleSystem>().emission;
+            em.enabled = true;
+            smokeState = true;
+        } else {
+            ParticleSystem.EmissionModule em = smokeEmitter.GetComponent<ParticleSystem>().emission;
+            em.enabled = false;
+            smokeState = false;
         }
     }
 
@@ -152,6 +172,11 @@ public class TireBehavior : MonoBehaviour
             tyre.forwardFriction = SetStiffness(tyreTread[surface].forwardCurve, stiffness);
             tyre.sidewaysFriction = SetStiffness(tyreTread[surface].sidewaysCurve, stiffness);
             tireTicker = 0;
+
+            // update smoke emitter thresholds based on new tire parameters
+            // idk i feel like adding 2% after max grip before it skids sounds cool
+            forwardSlipTreshold = tyre.forwardFriction.asymptoteSlip * 1.02f;
+            sidewaysSlipThreshold = tyre.sidewaysFriction.asymptoteSlip * 1.02f;
         }
         tireTicker++;
     }
@@ -212,6 +237,7 @@ public class TireBehavior : MonoBehaviour
         targetPosition = 0.5f,
     };
 
+    private bool whineAboutCaliper = true;
     void WheelPosition()
     {
         RaycastHit hit;
@@ -220,19 +246,30 @@ public class TireBehavior : MonoBehaviour
         {
             wheelPos = hit.point + tyre.transform.up * tyre.radius;
             //UPDATE DIRTINESS
-            dirt.SetFloat("_FortniteRange", dirtiness);
+            if (dirt) { dirt.SetFloat("_FortniteRange", dirtiness); }
         }
         else
         {
             wheelPos = tyre.transform.position - tyre.transform.up * tyre.suspensionDistance;
         }
-        caliper.position = wheelPos;
-        wheelTransform.position = wheelPos;
+        if (!caliper){
+            if (whineAboutCaliper) {
+                whineAboutCaliper = false;
+                Debug.LogError("TireBehavior::WheelPosition no calipers");
+            }
+        } else {
+            caliper.position = wheelPos;
+        }
+        if (wheelTransform) {
+            wheelTransform.position = wheelPos;
 
-        //also do the spinny things
-        wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-        wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
-        caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+            //also do the spinny things
+            wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
+        }
+        if (caliper) {
+            caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+        }
 
     }
 

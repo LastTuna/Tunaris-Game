@@ -99,10 +99,10 @@ public class CarBehaviour : NetworkBehaviour {
             GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
             gear = 1;
 
-            wheelFR.ConfigureVehicleSubsteps(20, 1, 1);
-            wheelFL.ConfigureVehicleSubsteps(20, 1, 1);
-            wheelRL.ConfigureVehicleSubsteps(20, 1, 1);
-            wheelRR.ConfigureVehicleSubsteps(20, 1, 1);
+            wheelFR.ConfigureVehicleSubsteps(5, 12, 15);
+            wheelFL.ConfigureVehicleSubsteps(5, 12, 15);
+            wheelRL.ConfigureVehicleSubsteps(5, 12, 15);
+            wheelRR.ConfigureVehicleSubsteps(5, 12, 15);
 
             DataController dataController = FindObjectOfType<DataController>();
             dirtiness = dataController.GetDirtiness();

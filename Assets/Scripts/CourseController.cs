@@ -67,6 +67,7 @@ public class CourseController : MonoBehaviour {
                 HostUIInstance = Instantiate(HostUI);
                 HostUIInstance.name = "HostUI";
                 HostUIInstance.GetComponentInChildren<Button>().onClick.AddListener(StartRaceProcess);
+                HostUIInstance.GetComponent<Canvas>().worldCamera = Camera.GetComponent<Camera>();
             } else {
                 // Connect
                 manager.networkAddress = IP;

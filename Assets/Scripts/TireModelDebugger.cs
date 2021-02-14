@@ -21,6 +21,7 @@ public class TireModelDebugger : MonoBehaviour {
 
     void FixedUpdate()
     {
+        if (!beer) return;
         if (import)
         {
             import = false;
