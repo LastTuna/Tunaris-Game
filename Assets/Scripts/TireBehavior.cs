@@ -31,8 +31,13 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(800, 0.3f)
         );
     public string lastSurface;
+
     public GameObject smokeEmitter;//debugging thing
-    public float slipTreshold = 0.2f;
+    public float forwardSlipTreshold;
+    public float sidewaysSlipThreshold;
+    public float forwardSlipDebug;
+    public float sidewaysSlipDebug;
+
     public TreadBehavior[] tyreTread;
     //multidim array
     //first index: tarmac
@@ -57,6 +62,7 @@ public class TireBehavior : MonoBehaviour
             Debug.LogError("TireBehavior::Start no smokeEmitter");
         } else {
             smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
+            smokeEmitter.GetComponent<ParticleSystem>().Play();
         }
         
 
@@ -95,22 +101,26 @@ public class TireBehavior : MonoBehaviour
         }
     }
 
-    public void SmonkEmitter()
-    {
+    public bool fss = false;
+    public bool sss = false;
+    public bool smokeState = false;
+    public void SmonkEmitter() {
         WheelHit wheelhit;
         tyre.GetGroundHit(out wheelhit);
-        float slip = Mathf.Abs(wheelhit.forwardSlip) + Mathf.Abs(wheelhit.sidewaysSlip);
-        
-        if (slip > slipTreshold)
-        {
-            if (!smokeEmitter.GetComponent<ParticleSystem>().isPlaying)
-            {
-                smokeEmitter.GetComponent<ParticleSystem>().Play();
-            }
-        }
-        else
-        {
-            smokeEmitter.GetComponent<ParticleSystem>().Stop();
+
+        forwardSlipDebug = Mathf.Abs(wheelhit.forwardSlip);
+        sidewaysSlipDebug = Mathf.Abs(wheelhit.sidewaysSlip);
+        fss = Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold;
+        sss = Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold;
+
+        if (Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold || Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold) {
+            ParticleSystem.EmissionModule em = smokeEmitter.GetComponent<ParticleSystem>().emission;
+            em.enabled = true;
+            smokeState = true;
+        } else {
+            ParticleSystem.EmissionModule em = smokeEmitter.GetComponent<ParticleSystem>().emission;
+            em.enabled = false;
+            smokeState = false;
         }
     }
 
@@ -162,6 +172,11 @@ public class TireBehavior : MonoBehaviour
             tyre.forwardFriction = SetStiffness(tyreTread[surface].forwardCurve, stiffness);
             tyre.sidewaysFriction = SetStiffness(tyreTread[surface].sidewaysCurve, stiffness);
             tireTicker = 0;
+
+            // update smoke emitter thresholds based on new tire parameters
+            // idk i feel like adding 2% after max grip before it skids sounds cool
+            forwardSlipTreshold = tyre.forwardFriction.asymptoteSlip * 1.02f;
+            sidewaysSlipThreshold = tyre.sidewaysFriction.asymptoteSlip * 1.02f;
         }
         tireTicker++;
     }
