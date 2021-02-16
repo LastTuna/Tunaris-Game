@@ -175,8 +175,8 @@ public class TireBehavior : MonoBehaviour
 
             // update smoke emitter thresholds based on new tire parameters
             // idk i feel like adding 2% after max grip before it skids sounds cool
-            forwardSlipTreshold = tyre.forwardFriction.asymptoteSlip * 1.02f;
-            sidewaysSlipThreshold = tyre.sidewaysFriction.asymptoteSlip * 1.02f;
+            forwardSlipTreshold = tyre.forwardFriction.extremumSlip * 1.02f;
+            sidewaysSlipThreshold = tyre.sidewaysFriction.extremumSlip * 1.02f;
         }
         tireTicker++;
     }

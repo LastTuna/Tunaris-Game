@@ -2112,7 +2112,10 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1387933050215444}
-  slipTreshold: 0.2
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
   tyreTread:
   - forwardCurve:
     - 0.2
@@ -2155,6 +2158,9 @@ MonoBehaviour:
     - 0.15
     - 0.9
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114131938196538660
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2408,7 +2414,10 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1387933050215444}
-  slipTreshold: 0.2
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
   tyreTread:
   - forwardCurve:
     - 0.2
@@ -2451,6 +2460,9 @@ MonoBehaviour:
     - 0.5
     - 0.9
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114398125467704082
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2509,7 +2521,10 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1387933050215444}
-  slipTreshold: 0.2
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
   tyreTread:
   - forwardCurve:
     - 0.2
@@ -2552,6 +2567,9 @@ MonoBehaviour:
     - 0.15
     - 0.9
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114433744742541450
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2637,7 +2655,10 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1387933050215444}
-  slipTreshold: 0.2
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
   tyreTread:
   - forwardCurve:
     - 0.2
@@ -2680,6 +2701,9 @@ MonoBehaviour:
     - 0.5
     - 0.9
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114470364870498390
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -2711,7 +2735,7 @@ MonoBehaviour:
   shifterDelay: 0.3
   aero: 2
   dragCoef: 0.06
-  ratio: 0
+  ratio: 1
   maxSteerAngle: 20
   FrontWheelDriveBias: 0
   lsd: 1
@@ -2788,7 +2812,16 @@ MonoBehaviour:
   debug2: 0
   debug3: 0
   debug4: 0
+  FFBMultiplier: 1
   CenterOfGravity: {x: 0, y: 0.05, z: 0.25}
+  forceLdebug: 0
+  forceRdebug: 0
+  forceLCase: 0
+  forceRCase: 0
+  centeringDebug: 0
+  ffbMagnitude: 0
+  computedFFBDebug: 0
+  computedFFBDebugRear: 0
 --- !u!114 &114578114361561334
 MonoBehaviour:
   m_ObjectHideFlags: 1
