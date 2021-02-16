@@ -25,7 +25,7 @@ public class CarBehaviour : NetworkBehaviour {
     //tuneable stats
     public float aero = 5f;
     public float dragCoef = 0.06f;//max rigidbody.drag value.
-    public float ratio; //final drive
+    public float ratio = 1; //final drive
     public float maxSteerAngle = 20;
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
@@ -73,6 +73,7 @@ public class CarBehaviour : NetworkBehaviour {
     private EffectInfo constantForceEffect;
     private SharpDX.DirectInput.ConstantForce ffbForce;
     private int[] axes, dirs;
+    public float FFBMultiplier = 1.0f;
 
 
     // CoG
@@ -191,9 +192,58 @@ public class CarBehaviour : NetworkBehaviour {
     public static System.IntPtr GetWindowHandle() {
         return GetActiveWindow();
     }
-
     /* */
 
+    public float forceLdebug = 0;
+    public float forceRdebug = 0;
+    public int forceLCase = 0;
+    public int forceRCase = 0;
+    private float forceL, forceR;
+    private float FFBApproximation(WheelCollider wheelFL, WheelHit wheelHitL, WheelCollider wheelFR, WheelHit wheelHitR) {
+        // left side
+        if(Mathf.Abs(wheelHitL.sidewaysSlip) < wheelFL.sidewaysFriction.extremumSlip) {
+            // from 0 to extremum
+            forceL = Mathf.Lerp(0.0f, wheelFL.sidewaysFriction.extremumValue, Mathf.Abs(wheelHitL.sidewaysSlip) / wheelFL.sidewaysFriction.extremumSlip);
+            forceLCase = 1;
+        } else if(Mathf.Abs(wheelHitL.sidewaysSlip) < wheelFL.sidewaysFriction.asymptoteSlip) {
+            // from extremum to asymptote
+            forceL = Mathf.Lerp(wheelFL.sidewaysFriction.extremumValue, wheelFL.sidewaysFriction.asymptoteSlip, Mathf.Abs(wheelHitL.sidewaysSlip / wheelFL.sidewaysFriction.extremumSlip));
+            forceLCase = 2;
+        } else {
+            // post asymptote
+            forceL = wheelFL.sidewaysFriction.asymptoteValue;
+            forceLCase = 3;
+        }
+        // right side
+        if (Mathf.Abs(wheelHitR.sidewaysSlip) < wheelFR.sidewaysFriction.extremumSlip) {
+            // from 0 to extremum
+            forceR = Mathf.Lerp(0.0f, wheelFR.sidewaysFriction.extremumValue, Mathf.Abs(wheelHitR.sidewaysSlip / wheelFR.sidewaysFriction.extremumSlip));
+            forceRCase = 1;
+        } else if (Mathf.Abs(wheelHitR.sidewaysSlip) < wheelFR.sidewaysFriction.asymptoteSlip) {
+            // from extremum to asymptote
+            forceR = Mathf.Lerp(wheelFR.sidewaysFriction.extremumValue, wheelFR.sidewaysFriction.asymptoteSlip, Mathf.Abs(wheelHitR.sidewaysSlip / wheelFR.sidewaysFriction.extremumSlip));
+            forceRCase = 2;
+        } else {
+            // post asymptote
+            forceR = wheelFR.sidewaysFriction.asymptoteValue;
+            forceRCase = 3;
+        }
+
+        // base force
+
+        /*if (forceL > 0 && forceL < 0.1) forceL = 0.1f;
+        if (forceL < 0 && forceL > -0.1) forceL = -0.1f;
+        if (forceR > 0 && forceR < 0.1) forceR = 0.1f;
+        if (forceR < 0 && forceR > -0.1) forceR = -0.1f;*/
+
+        forceLdebug = forceL;
+        forceRdebug = forceR;
+        return forceL + forceR;
+    }
+
+    public int centeringDebug;
+    public int ffbMagnitude;
+    public float computedFFBDebug, computedFFBDebugRear;
     void FixedUpdate() {
         if (isLocalPlayer) {
             AeroDrag();
@@ -202,12 +252,20 @@ public class CarBehaviour : NetworkBehaviour {
             Engine();
             float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
 
+            WheelHit wheelHitR2, wheelHitL2;
+            wheelFR.GetGroundHit(out wheelHitR2);
+            wheelFL.GetGroundHit(out wheelHitL2);
+
+            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, new float[] { wheelHitL2.forwardSlip * 100, wheelHitR2.forwardSlip * 100, wheelHitL2.sidewaysSlip * 100, wheelHitR2.sidewaysSlip * 100 });
+
             // FFB calculations
             if (ffbeffect != null) {
 
-                WheelHit wheelHitR, wheelHitL;
+                WheelHit wheelHitR, wheelHitL, wheelHitRR, wheelHitRL;
                 wheelFR.GetGroundHit(out wheelHitR);
                 wheelFL.GetGroundHit(out wheelHitL);
+                wheelRR.GetGroundHit(out wheelHitRR);
+                wheelRL.GetGroundHit(out wheelHitRL);
 
                 if (Input.GetButton("logiquake")) {
                     // meme
@@ -215,12 +273,22 @@ public class CarBehaviour : NetworkBehaviour {
                 } else {
                     // non meme
                     // wheel weight calc
-                    float wheelWeight = 1 - ((((wheelHitR.forwardSlip + wheelHitL.forwardSlip) / 2) + ((wheelHitR.sidewaysSlip + wheelHitL.sidewaysSlip) / 2))/2);
+                    /*float wheelWeight = 1 - ((((wheelHitR.forwardSlip + wheelHitL.forwardSlip) / 2) + ((wheelHitR.sidewaysSlip + wheelHitL.sidewaysSlip) / 2))/2);
                     float centering = Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up);
                     float baseForce = (wheelHitR.force + wheelHitL.force) * 5;
-                    ffbForce.Magnitude = (int) (baseForce * wheelWeight * centering * -0.5);
+                    ffbForce.Magnitude = (int) (baseForce * wheelWeight * centering * -0.5);*/
+                    int centering = Mathf.RoundToInt((Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up) / maxSteerAngle) * -10000); ;
+                    centeringDebug = centering;
+
+                    float computedFFBFront = FFBApproximation(wheelFL, wheelHitL, wheelFR, wheelHitR) / FFBMultiplier;
+                    float computedFFBRear = FFBApproximation(wheelRL, wheelHitRL, wheelRR, wheelHitRR) / FFBMultiplier;
+                    computedFFBDebug = computedFFBFront;
+                    computedFFBDebugRear = computedFFBRear;
+
+                    ffbForce.Magnitude = Mathf.RoundToInt(centering * (computedFFBFront));
+                    ffbMagnitude = ffbForce.Magnitude;
                 }
-                var ffbParams = new EffectParameters();
+                EffectParameters ffbParams = new EffectParameters();
                 ffbParams.Parameters = ffbForce;
                 ffbeffect.SetParameters(ffbParams, EffectParameterFlags.TypeSpecificParameters);
             }
@@ -253,7 +321,7 @@ public class CarBehaviour : NetworkBehaviour {
         if (isLocalPlayer) {
 
             float[] shariq = new float[] { wheelFL.rpm, wheelFR.rpm, wheelRL.rpm, wheelRR.rpm };
-            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
+            //HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
 
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
@@ -334,6 +402,11 @@ public class CarBehaviour : NetworkBehaviour {
             }
 
         }
+
+        debug1 = wheelFL.motorTorque;
+        debug2 = wheelFR.motorTorque;
+        debug3 = wheelRL.motorTorque;
+        debug4 = wheelRR.motorTorque;
         
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         
