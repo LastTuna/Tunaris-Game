@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using UnityEngine.Networking;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -517,14 +516,6 @@ public class Controller : MonoBehaviour {
         {
             Destroy(c);
         }
-        // Disable network scripts
-        foreach (Behaviour c in spinner.GetComponents<NetworkTransformChild>())
-        {
-            Destroy(c);
-        }
-        Destroy(spinner.GetComponent<NetworkTransform>());
-        Destroy(spinner.GetComponent<NetworkIdentity>());
-        Debug.Log("ignore error, only occurs due to script kill method removing network behavior in wrong order");
         //disable tyre behavior
         foreach (Behaviour c in spinner.GetComponentsInChildren<TireBehavior>())
         {

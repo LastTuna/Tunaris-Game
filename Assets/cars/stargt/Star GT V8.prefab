@@ -437,7 +437,6 @@ GameObject:
   - component: {fileID: 4269596316221804}
   - component: {fileID: 95498538640137050}
   - component: {fileID: 54734846419250138}
-  - component: {fileID: 114134311906289894}
   - component: {fileID: 114258185758066590}
   - component: {fileID: 114653757177655876}
   - component: {fileID: 114537996564432596}
@@ -446,11 +445,6 @@ GameObject:
   - component: {fileID: 82427162583855348}
   - component: {fileID: 82148240826300486}
   - component: {fileID: 114309203761828596}
-  - component: {fileID: 114956806598033460}
-  - component: {fileID: 114879864232048668}
-  - component: {fileID: 114603478634465250}
-  - component: {fileID: 114884137950716466}
-  - component: {fileID: 114430566068305842}
   m_Layer: 0
   m_Name: Star GT V8
   m_TagString: Untagged
@@ -3145,7 +3139,6 @@ MonoBehaviour:
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
-  currentGrip: 0
   burst: 0
   dirtiness: 0
   defaultSusp: 0
@@ -3181,42 +3174,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1793586712084590}
-  slipTreshold: 0.2
-  fwdSlip: 0
-  sidewaySlip: 0
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
+  tyreTread: []
   wheelrpm: 0
---- !u!114 &114134311906289894
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 372142912, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SceneId:
-    m_Value: 0
-  m_AssetId:
-    i0: 208
-    i1: 239
-    i2: 19
-    i3: 190
-    i4: 0
-    i5: 214
-    i6: 54
-    i7: 100
-    i8: 27
-    i9: 20
-    i10: 159
-    i11: 14
-    i12: 244
-    i13: 189
-    i14: 107
-    i15: 244
-  m_ServerOnly: 0
-  m_LocalPlayerAuthority: 1
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114136000269933252
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3670,25 +3636,6 @@ MonoBehaviour:
   madness: 0
   originalMesh: {fileID: 33266857891449982}
   carfixed: 0
---- !u!114 &114430566068305842
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Target: {fileID: 4056467795962500}
-  m_ChildIndex: 3
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_MovementThreshold: 0.001
-  m_InterpolateRotation: 0.5
-  m_InterpolateMovement: 0.5
 --- !u!114 &114537996564432596
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3705,25 +3652,6 @@ MonoBehaviour:
   wheelRL: {fileID: 146603841762087320}
   wheelRR: {fileID: 146513431789345836}
   carBehaviour: {fileID: 114653757177655876}
---- !u!114 &114603478634465250
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Target: {fileID: 4691741047888304}
-  m_ChildIndex: 1
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_MovementThreshold: 0.001
-  m_InterpolateRotation: 0.5
-  m_InterpolateMovement: 0.5
 --- !u!114 &114636688215540108
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3747,7 +3675,6 @@ MonoBehaviour:
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
-  currentGrip: 0
   burst: 0
   dirtiness: 0
   defaultSusp: 0
@@ -3783,10 +3710,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1793586712084590}
-  slipTreshold: 0.2
-  fwdSlip: 0
-  sidewaySlip: 0
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
+  tyreTread: []
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114653757177655876
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3810,7 +3742,6 @@ MonoBehaviour:
   wheelRL: {fileID: 146603841762087320}
   wheelRR: {fileID: 146513431789345836}
   differentialTrans: {fileID: 4025070755337368}
-  visualDiff: 1
   currentSpeed: 0
   wheelRPM: 0
   dirt: {fileID: 0}
@@ -3897,7 +3828,16 @@ MonoBehaviour:
   debug2: 0
   debug3: 0
   debug4: 0
+  FFBMultiplier: 1
   CenterOfGravity: {x: 0, y: 0.2, z: 0}
+  forceLdebug: 0
+  forceRdebug: 0
+  forceLCase: 0
+  forceRCase: 0
+  centeringDebug: 0
+  ffbMagnitude: 0
+  computedFFBDebug: 0
+  computedFFBDebugRear: 0
 --- !u!114 &114758080254444438
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3921,7 +3861,6 @@ MonoBehaviour:
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
-  currentGrip: 0
   burst: 0
   dirtiness: 0
   defaultSusp: 0
@@ -3957,10 +3896,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1793586712084590}
-  slipTreshold: 0.2
-  fwdSlip: 0
-  sidewaySlip: 0
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
+  tyreTread: []
   wheelrpm: 0
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!114 &114839742505845460
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -3984,7 +3928,6 @@ MonoBehaviour:
   brakeHeat: 26
   diameter: 0.31
   groundDampness: 0
-  currentGrip: 0
   burst: 0
   dirtiness: 0
   defaultSusp: 0
@@ -4020,69 +3963,15 @@ MonoBehaviour:
     m_RotationOrder: 4
   lastSurface: 
   smokeEmitter: {fileID: 1793586712084590}
-  slipTreshold: 0.2
-  fwdSlip: 0
-  sidewaySlip: 0
+  forwardSlipTreshold: 0
+  sidewaysSlipThreshold: 0
+  forwardSlipDebug: 0
+  sidewaysSlipDebug: 0
+  tyreTread: []
   wheelrpm: 0
---- !u!114 &114879864232048668
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Target: {fileID: 4711234574364540}
-  m_ChildIndex: 0
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_MovementThreshold: 0.001
-  m_InterpolateRotation: 0.5
-  m_InterpolateMovement: 0.5
---- !u!114 &114884137950716466
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1267208747, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Target: {fileID: 4037420085330774}
-  m_ChildIndex: 2
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_MovementThreshold: 0.001
-  m_InterpolateRotation: 0.5
-  m_InterpolateMovement: 0.5
---- !u!114 &114956806598033460
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1416409464890236}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: -1768714887, guid: dc443db3e92b4983b9738c1131f555cb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_TransformSyncMode: 3
-  m_SendInterval: 0.1
-  m_SyncRotationAxis: 7
-  m_RotationSyncCompression: 0
-  m_SyncSpin: 0
-  m_MovementTheshold: 0.001
-  m_VelocityThreshold: 0.0001
-  m_SnapThreshold: 5
-  m_InterpolateRotation: 1
-  m_InterpolateMovement: 1
+  fss: 0
+  sss: 0
+  smokeState: 0
 --- !u!137 &137086403359922210
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 1

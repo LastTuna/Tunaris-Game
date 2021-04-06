@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6592061, g: 0.78901833, b: 0.7121776, a: 1}
+  m_IndirectSpecularColor: {r: 0.6595605, g: 0.78910524, b: 0.7121809, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -480,7 +480,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: -249.49998, y: -258}
+  m_AnchoredPosition: {x: -249.5, y: -258}
   m_SizeDelta: {x: 110.9, y: 64.09}
   m_Pivot: {x: 1, y: 0}
 --- !u!114 &79472217
@@ -681,17 +681,15 @@ MonoBehaviour:
     PlayerName: 
   IsMultiplayer: 0
   IP: 
-  MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,
-    type: 2}
-  HostUI: {fileID: 1267096992082948, guid: 36ac95ee80f840d4d81bb8365829d596, type: 2}
-  HostUIInstance: {fileID: 0}
   DefaultHUD: {fileID: 1386815377202846, guid: 63084902d49bc9245af5248ddbbb8174, type: 2}
   BusriderHUD: {fileID: 1077224830904214, guid: 89750fb40f6fe1247b92db76ee0ddacb,
     type: 2}
   HUDCanvas: {fileID: 272638768}
   AudioSource: {fileID: 256955484}
   Camera: {fileID: 256955479}
-  manager: {fileID: 0}
+  cars:
+  - {fileID: 1416409464890236, guid: d0ef13be00d636641b149f0ef4bd6bf4, type: 2}
+  - {fileID: 1729435621923674, guid: 65a984b67f0191a49ae4c017e254e428, type: 2}
   AIWaypoints:
   - {fileID: 1301831805}
   - {fileID: 753323623}

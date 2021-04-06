@@ -1,12 +1,11 @@
 ﻿using System.Collections;
 using UnityEngine;
-using UnityEngine.Networking;
 using UnityEngine.UI;
 using SharpDX.DirectInput;
 using System.Collections.Generic;
 using System;
 
-public class CarBehaviour : NetworkBehaviour {
+public class CarBehaviour : MonoBehaviour {
     public EngineAudioBehaviour EngineAudio;
     public GameObject frontLights;
     public GameObject rearLights;
@@ -23,6 +22,9 @@ public class CarBehaviour : NetworkBehaviour {
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float shifterDelay = 0.3f;
     //tuneable stats
+    public CarData specs;
+
+
     public float aero = 5f;
     public float dragCoef = 0.06f;//max rigidbody.drag value.
     public float ratio = 1; //final drive
@@ -48,10 +50,10 @@ public class CarBehaviour : NetworkBehaviour {
     public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
     public bool aspirated = false;
     public AnimationCurve turboWaste = new AnimationCurve(new Keyframe(0, 0), new Keyframe(5000, 1), new Keyframe(9000, 0)); //adjust turbo engagement curve, turbo pressure
-    public float turboSpool = 0.1f;//turbo b00st
+    public float turboSpool = 0.1f;//current turbo pressure
     public float turboSize = 10;//mm - adjusts turbo lag
     public bool spooled = false;//determine whether to play wastegate sound or not
-    public float unitOutput;
+    public float unitOutput;//current power output to wheels
     //clutch
     public float clutchPressure = 1; //0-1 clamp
     public float clutchRPM;
@@ -83,17 +85,23 @@ public class CarBehaviour : NetworkBehaviour {
     private bool isBusrider;
 
     void Start() {
-        if (isLocalPlayer && !isBusrider) {
+        if (!isBusrider)
+        {
+            ContentManager cm = FindObjectOfType<ContentManager>();
+            //CALL SOMEWHERE TO LOAD CAR SPECS
+
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
             // load the default HUD if no car HUD
-            if (!HUDPrefab) {
+            if (!HUDPrefab)
+            {
                 HUDPrefab = ctrl.DefaultHUD;
             }
             HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
 
+            //if no turbo then make sure boost is 1
             if (!aspirated) turboSpool = 1;
 
             engineRPM = 800;
@@ -108,67 +116,13 @@ public class CarBehaviour : NetworkBehaviour {
             DataController dataController = FindObjectOfType<DataController>();
             dirtiness = dataController.GetDirtiness();
             isBusrider = dataController.IsBusrider;
-            
+
             tirewearlist = new float[4];
+            //call the FFB start routine
+            FFBStart();
 
-
-            // Find an FFB wheel and hook it
-            DirectInput directInput = new DirectInput();
-            var ret = directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.ForceFeedback);
-            if (ret.Count > 0) {
-                steeringWheel = ret[0];
-                steeringWheelJoy = new Joystick(directInput, steeringWheel.InstanceGuid);
-                steeringWheelJoy.SetCooperativeLevel(GetWindowHandle(), CooperativeLevel.Exclusive | CooperativeLevel.Background);
-                steeringWheelJoy.Properties.AutoCenter = true;
-
-
-                steeringWheelJoy.Acquire();
-
-
-                List<int> actuatorsObjectTypes = new List<int>();
-                //Get all available force feedback actuators
-                foreach (DeviceObjectInstance doi in steeringWheelJoy.GetObjects()) {
-                    if ((doi.ObjectId.Flags & DeviceObjectTypeFlags.ForceFeedbackActuator) != 0)
-                        actuatorsObjectTypes.Add((int)doi.ObjectId.Flags);
-                }
-
-                axes = new Int32[actuatorsObjectTypes.Count];
-                int i = 0;
-                foreach (int objt in actuatorsObjectTypes) {
-                    axes[i++] = objt;
-                }
-
-                //Set effect direction
-                dirs = new int[] { 1 };
-
-                ffbForce = new SharpDX.DirectInput.ConstantForce {
-                    Magnitude = 0
-                };
-                var ep = new EffectParameters {
-                    Duration = -1,
-                    Flags = EffectFlags.Cartesian | EffectFlags.ObjectIds,
-                    Gain = 10000,
-                    StartDelay = 0,
-                    SamplePeriod = 0,
-                    TriggerButton = -1,
-                    TriggerRepeatInterval = 0
-                };
-                ep.SetAxes(axes, dirs);
-                ep.Parameters = ffbForce;
-
-                var allEffects = steeringWheelJoy.GetEffects();
-                foreach (var effectInfo in allEffects) {
-                    if (effectInfo.Name.Contains("Constant")) {
-                        constantForceEffect = effectInfo;
-                    }
-                }
-
-                ffbeffect = new Effect(steeringWheelJoy, constantForceEffect.Guid, ep);
-                ffbeffect.Start();
-            }
         }
-
-        if (isLocalPlayer && isBusrider) {
+        if (isBusrider) {
             CourseController ctrl = FindObjectOfType<CourseController>();
             HUDPrefab = ctrl.BusriderHUD;
             HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
@@ -183,6 +137,75 @@ public class CarBehaviour : NetworkBehaviour {
             CustomInput.IsAI = true;
         }
     }
+
+    //move all the FFB gibberish into a method so i can actually see whats going on in Start()
+    public void FFBStart()
+    {
+        // Find an FFB wheel and hook it
+        DirectInput directInput = new DirectInput();
+        var ret = directInput.GetDevices(DeviceClass.GameControl, DeviceEnumerationFlags.ForceFeedback);
+        if (ret.Count > 0)
+        {
+            steeringWheel = ret[0];
+            steeringWheelJoy = new Joystick(directInput, steeringWheel.InstanceGuid);
+            steeringWheelJoy.SetCooperativeLevel(GetWindowHandle(), CooperativeLevel.Exclusive | CooperativeLevel.Background);
+            steeringWheelJoy.Properties.AutoCenter = true;
+
+
+            steeringWheelJoy.Acquire();
+
+
+            List<int> actuatorsObjectTypes = new List<int>();
+            //Get all available force feedback actuators
+            foreach (DeviceObjectInstance doi in steeringWheelJoy.GetObjects())
+            {
+                if ((doi.ObjectId.Flags & DeviceObjectTypeFlags.ForceFeedbackActuator) != 0)
+                    actuatorsObjectTypes.Add((int)doi.ObjectId.Flags);
+            }
+
+            axes = new Int32[actuatorsObjectTypes.Count];
+            int i = 0;
+            foreach (int objt in actuatorsObjectTypes)
+            {
+                axes[i++] = objt;
+            }
+
+            //Set effect direction
+            dirs = new int[] { 1 };
+
+            ffbForce = new SharpDX.DirectInput.ConstantForce
+            {
+                Magnitude = 0
+            };
+            var ep = new EffectParameters
+            {
+                Duration = -1,
+                Flags = EffectFlags.Cartesian | EffectFlags.ObjectIds,
+                Gain = 10000,
+                StartDelay = 0,
+                SamplePeriod = 0,
+                TriggerButton = -1,
+                TriggerRepeatInterval = 0
+            };
+            ep.SetAxes(axes, dirs);
+            ep.Parameters = ffbForce;
+
+            var allEffects = steeringWheelJoy.GetEffects();
+            foreach (var effectInfo in allEffects)
+            {
+                if (effectInfo.Name.Contains("Constant"))
+                {
+                    constantForceEffect = effectInfo;
+                }
+            }
+
+            ffbeffect = new Effect(steeringWheelJoy, constantForceEffect.Guid, ep);
+            ffbeffect.Start();
+        }
+    }
+
+
+
 
     /*** yolo 
      */
@@ -244,8 +267,8 @@ public class CarBehaviour : NetworkBehaviour {
     public int centeringDebug;
     public int ffbMagnitude;
     public float computedFFBDebug, computedFFBDebugRear;
+
     void FixedUpdate() {
-        if (isLocalPlayer) {
             AeroDrag();
             TireWearMonitor();//remove this sometime just reminder
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
@@ -303,7 +326,6 @@ public class CarBehaviour : NetworkBehaviour {
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
             currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
-        }
     }
 
     public void TireWearMonitor()
@@ -318,14 +340,13 @@ public class CarBehaviour : NetworkBehaviour {
 
 
     void Update() {
-        if (isLocalPlayer) {
 
             float[] shariq = new float[] { wheelFL.rpm, wheelFR.rpm, wheelRL.rpm, wheelRR.rpm };
             //HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
 
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
-            CmdLightsOn();
+            LightsOn();
             if (differentialTrans != null) DiffPosition(wheelRRTrans, wheelRLTrans);
             drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
@@ -338,7 +359,6 @@ public class CarBehaviour : NetworkBehaviour {
             {
                 dirt.SetFloat("_FortniteRange", dirtiness);
             }
-        }
     }
 
     void Engine()
@@ -545,6 +565,7 @@ public class CarBehaviour : NetworkBehaviour {
         Vector3 drag = gameObject.transform.forward.normalized * -1;
         drag.y = -aero * airSpeed;//downforce
         
+        
         //Debug.Log(drag);
         gameObject.GetComponent<Rigidbody>().angularDrag = Mathf.Lerp(0, 0.8f, airSpeed / 100);
         gameObject.GetComponent<Rigidbody>().drag = Mathf.Lerp(0, dragCoef + aero / 200, airSpeed / 100);
@@ -575,9 +596,8 @@ public class CarBehaviour : NetworkBehaviour {
         wheelRL.GetComponent<TireBehavior>().raceStartHandbrake = false;
         wheelRR.GetComponent<TireBehavior>().raceStartHandbrake = false;
     }
-
-    [Command]
-    void CmdLightsOn()
+    
+    void LightsOn()
     {
         if (gear == 595)
         {

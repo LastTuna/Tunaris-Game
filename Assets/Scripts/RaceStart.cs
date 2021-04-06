@@ -55,12 +55,6 @@ public class RaceStart : MonoBehaviour {
         StartCoroutine(CountDown());
         GameObject gridSpot = GameObject.Find("Pos_" + position);
         localCar = null;
-        foreach(var carb in FindObjectsOfType<CarBehaviour>()) {
-            if (carb.isLocalPlayer) {
-                localCar = carb;
-                break;
-            }
-        }
         localCar.gameObject.transform.position = gridSpot.transform.position;
         localCar.gameObject.transform.rotation = gridSpot.transform.rotation;
         localCar.gameObject.GetComponent<Rigidbody>().velocity = Vector3.zero;
@@ -166,8 +160,7 @@ public class RaceStart : MonoBehaviour {
         };
 
         yield return new WaitForSecondsRealtime(4);
-
-        FindObjectOfType<CourseController>().Cleanup();
+        
         SceneManager.LoadScene("post_race", LoadSceneMode.Single);
 
     }

@@ -1,0 +1,168 @@
+fileFormatVersion: 2
+guid: 23fed76db56a2dd4abe52b6a4b8f87b0
+timeCreated: 1617652145
+licenseType: Free
+ModelImporter:
+  serializedVersion: 22
+  fileIDToRecycleName:
+    100000: FLcalp
+    100002: FLcollider
+    100004: FLhub
+    100006: FLsusp
+    100008: FLwheel
+    100010: FRcalp
+    100012: FRcollider
+    100014: FRhub
+    100016: FRsusp
+    100018: FRwheel
+    100020: mainbody
+    100022: RLclap
+    100024: RLcollider
+    100026: RLhub
+    100028: RLsusp
+    100030: RLwheel
+    100032: RRcalp
+    100034: RRcollider
+    100036: RRhub
+    100038: RRsusp
+    100040: RRwheel
+    100042: //RootNode
+    100044: wheelcolldiers
+    100046: wheeltransforms
+    400000: FLcalp
+    400002: FLcollider
+    400004: FLhub
+    400006: FLsusp
+    400008: FLwheel
+    400010: FRcalp
+    400012: FRcollider
+    400014: FRhub
+    400016: FRsusp
+    400018: FRwheel
+    400020: mainbody
+    400022: RLclap
+    400024: RLcollider
+    400026: RLhub
+    400028: RLsusp
+    400030: RLwheel
+    400032: RRcalp
+    400034: RRcollider
+    400036: RRhub
+    400038: RRsusp
+    400040: RRwheel
+    400042: //RootNode
+    400044: wheelcolldiers
+    400046: wheeltransforms
+    2100000: MAIN
+    2300000: FLcalp
+    2300002: FLwheel
+    2300004: FRcalp
+    2300006: FRwheel
+    2300008: mainbody
+    2300010: RLclap
+    2300012: RLwheel
+    2300014: RRcalp
+    2300016: RRwheel
+    3300000: FLcalp
+    3300002: FLwheel
+    3300004: FRcalp
+    3300006: FRwheel
+    3300008: mainbody
+    3300010: RLclap
+    3300012: RLwheel
+    3300014: RRcalp
+    3300016: RRwheel
+    4300000: RRwheel
+    4300002: RRcalp
+    4300004: FRwheel
+    4300006: FLcalp
+    4300008: FLwheel
+    4300010: FRcalp
+    4300012: RLwheel
+    4300014: RLclap
+    4300016: mainbody
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MAIN
+    second: {fileID: 2100000, guid: 1fe0ca6192d2d0a4081598b65e67ae7c, type: 2}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 0
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 2
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    rootMotionBoneName: 
+    rootMotionBoneRotation: {x: 0, y: 0, z: 0, w: 1}
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 0
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
