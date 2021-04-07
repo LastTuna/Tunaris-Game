@@ -10,7 +10,7 @@ public class TireBehavior : MonoBehaviour
     public Transform wheelTransform, caliper;
 
 
-    public float treadType;
+    public float treadType = 1;
     public float TreadHealth = 100;
     public float brakeStrength = 300;
     public bool handbrake = false;
@@ -50,6 +50,12 @@ public class TireBehavior : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        //do this then do whatever else
+        InitializeTire();
+
+        //also add here the part where you fetch the tire data from
+        //the tire json in the assetbundle. use content manager.
+
         if (!visualWheel) {
             Debug.LogError("TireBehavior::Start no visualWheel");
         } else {
@@ -69,11 +75,20 @@ public class TireBehavior : MonoBehaviour
         tyre.suspensionSpring = springs;
     }
 
+    //here basically Find() all the relevant items. like wheel, wheel colldier
+    private void InitializeTire()
+    {
+        tyre = gameObject.GetComponent<WheelCollider>();
+        //still add to find the visual wheel transform. and suspension dummy.
+
+    }
+
     // Update is called once per frame
     void FixedUpdate()
     {
         TyreWear();
-        GripManager();
+        //temporary failsafe it will just use defaults.
+        if(tyreTread.Length != 0) GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
         if (smokeEmitter) {

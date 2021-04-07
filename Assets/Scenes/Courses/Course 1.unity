@@ -587,6 +587,34 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &129667687
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 5
+  m_Component:
+  - component: {fileID: 129667688}
+  m_Layer: 0
+  m_Name: PIT0
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &129667688
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 129667687}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -36.85, y: -15.432438, z: -248.20967}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &142395489
 GameObject:
   m_ObjectHideFlags: 0
@@ -680,7 +708,6 @@ MonoBehaviour:
     IP: 
     PlayerName: 
   IsMultiplayer: 0
-  IP: 
   DefaultHUD: {fileID: 1386815377202846, guid: 63084902d49bc9245af5248ddbbb8174, type: 2}
   BusriderHUD: {fileID: 1077224830904214, guid: 89750fb40f6fe1247b92db76ee0ddacb,
     type: 2}

@@ -55,6 +55,7 @@ public class CarData {
     public CarData ImportData(string dataAsJson)
     {
         CarData dolor;
+        Debug.Log("AAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSS" + dataAsJson);
         dolor = JsonUtility.FromJson<CarData>(dataAsJson);
         return dolor;
     }

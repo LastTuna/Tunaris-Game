@@ -9,7 +9,7 @@ public class CarBehaviour : MonoBehaviour {
     public EngineAudioBehaviour EngineAudio;
     public GameObject frontLights;
     public GameObject rearLights;
-    public Transform wheelRRTrans, wheelRLTrans;//needed for moving rear diff
+    public Transform wheelFRTrans, wheelFLTrans, wheelRRTrans, wheelRLTrans;//needed for moving rear diff
     public float dirtiness;//start, call from savedata the dirtiness of the car, then apply
     //end of race will store and call to savedata to store dirtiness level
     public Transform drivingWheel;
@@ -88,7 +88,12 @@ public class CarBehaviour : MonoBehaviour {
         if (!isBusrider)
         {
             ContentManager cm = FindObjectOfType<ContentManager>();
-            //CALL SOMEWHERE TO LOAD CAR SPECS
+            //initialize car data object.
+            specs = new CarData();
+            //LOAD CAR SPECS
+            TextAsset ass = cm.Cars[0].LoadAsset("specs.json") as TextAsset;
+            specs =  specs.ImportData(ass.text);
+            InitializeCar();
 
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
@@ -136,6 +141,35 @@ public class CarBehaviour : MonoBehaviour {
 
             CustomInput.IsAI = true;
         }
+    }
+
+    //here basically Find() all the relevant items. like wheels, wheel colldiers,
+    //instantiate wheel scripts
+    private void InitializeCar()
+    {
+        drivingWheel = gameObject.transform.Find("Steeringwheel");
+
+        //find is not recursive so do this
+        Transform samir = gameObject.transform.Find("wheeltransforms");
+        wheelFLTrans = samir.transform.Find("FLhub");
+        wheelFRTrans = samir.transform.Find("FRhub");
+        wheelRLTrans = samir.transform.Find("RLhub");
+        wheelRRTrans = samir.transform.Find("RRhub");
+
+        //and again, but with colliders.
+        samir = gameObject.transform.Find("wheelcolliders");
+        
+        wheelFL = samir.transform.Find("FLcollider").GetComponent<WheelCollider>();
+        wheelFR = samir.transform.Find("FRcollider").GetComponent<WheelCollider>();
+        wheelRL = samir.transform.Find("RLcollider").GetComponent<WheelCollider>();
+        wheelRR = samir.transform.Find("RRcollider").GetComponent<WheelCollider>();
+        //and also add the tire behavior script
+        wheelFL.gameObject.AddComponent<TireBehavior>();
+        wheelFR.gameObject.AddComponent<TireBehavior>();
+        wheelRL.gameObject.AddComponent<TireBehavior>();
+        wheelRR.gameObject.AddComponent<TireBehavior>();
+
+
     }
 
     //move all the FFB gibberish into a method so i can actually see whats going on in Start()
@@ -270,7 +304,8 @@ public class CarBehaviour : MonoBehaviour {
 
     void FixedUpdate() {
             AeroDrag();
-            TireWearMonitor();//remove this sometime just reminder
+
+            //TireWearMonitor();//remove this sometime just reminder
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
             float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
@@ -348,7 +383,7 @@ public class CarBehaviour : MonoBehaviour {
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             LightsOn();
             if (differentialTrans != null) DiffPosition(wheelRRTrans, wheelRLTrans);
-            drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
+            if(drivingWheel != null) drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));
             if (Input.GetButtonDown("Reset"))
             {
                 Debug.Log("Reset was pressed");

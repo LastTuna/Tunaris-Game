@@ -10,8 +10,6 @@ public class CourseController : MonoBehaviour {
 
     // Are we loading into multiplayer
     public bool IsMultiplayer = false;
-    // Server IP, null if hosting
-    public string IP = null;
     
     // Default HUD
     public GameObject DefaultHUD;
@@ -39,9 +37,13 @@ public class CourseController : MonoBehaviour {
         }
         settings = dataController.GetComponent<DataController>().LoadedData;
 
-        GameObject corr = Instantiate(cars[0]);
+        ContentManager cm = FindObjectOfType<ContentManager>();
+
+
+        Transform pitpos0 = GameObject.Find("PIT0").gameObject.transform;
+        GameObject corr = Instantiate(cm.Cars[0].LoadAsset("tempcar") as GameObject, pitpos0.position, pitpos0.rotation);
         Camera.GetComponent<CarCamera>().car = corr.transform;
-        
+        corr.AddComponent<CarBehaviour>();
 
 
     }

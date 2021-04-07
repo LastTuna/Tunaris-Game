@@ -17,18 +17,15 @@ class ContentManager : MonoBehaviour {
 
     private void Start()
     {
+        DontDestroyOnLoad(gameObject);
         //content manager by default exists in main menu scene
         //so making sure when returning to main menu there wont
         //be a second instance.
-        if (GameObject.FindObjectOfType<ContentManager>())
-        {
-            Destroy(gameObject);
-        }
+        //sort something out here becasuse i fuckin cant BRUUUUUH
 
-        DontDestroyOnLoad(gameObject);
+
         //id think refreshing the manifest on startup would be a pretty smart idea.
         //so add generatemanifest() here.
-
 
 
         //im just doing some hardcoded thing to make basic functionality again.
@@ -39,6 +36,7 @@ class ContentManager : MonoBehaviour {
         AssetBundle corr = AssetBundle.LoadFromFile(filePath);
         //not sure if i need to unload corr inbetween. leaving as cliffnote
         Cars.Add(corr);
+
     }
 
     //this writes the manifest
