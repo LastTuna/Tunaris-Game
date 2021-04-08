@@ -58,6 +58,36 @@ class ContentManager : MonoBehaviour {
     //compile to json to make a manifest.
 
 
+    public GameObject GetCar(string carName)
+    {
+        foreach(AssetBundle e in Cars)
+        {
+            if(e.name == carName)
+            {
+                return e.LoadAsset(carName) as GameObject;
+            }
+
+        }
+        //failsafe in case car is not found, find tempcar and send it back.
+        //tbh maybe make tempcar first car on list? ill have to see about it.
+        //hardcoding it in isnt the most retarded idea either.
+        foreach (AssetBundle e in Cars)
+        {
+            if (e.name == "tempcar")
+            {
+                return e.LoadAsset("tempcar") as GameObject;
+            }
+
+        }
+        //if you end up here, user deleted tempcar and deserves to have
+        //their shit freeze, fuckin wanker
+        return null;
+
+    }
+
+    
+
+
 
     //just a debug func
     public void ExportData()

@@ -24,6 +24,8 @@ public class CourseController : MonoBehaviour {
     public GameObject Camera;
 
     public GameObject[] cars;
+    public List<Transform> pits;
+    public List<Transform> grid;
 
 
     // AI Waypoints
@@ -37,11 +39,30 @@ public class CourseController : MonoBehaviour {
         }
         settings = dataController.GetComponent<DataController>().LoadedData;
 
+        //get all pits.
+        for(int i = 0; true; i++) {
+            GameObject pitsearch = GameObject.Find("PIT" + i);
+            if(pitsearch == null)
+            {
+                break;
+            }
+            pits.Add(pitsearch.transform);
+        }
+        //get all grid
+        for (int i = 0; true; i++)
+        {
+            GameObject gridsearch = GameObject.Find("GRID" + i);
+            if (gridsearch == null)
+            {
+                break;
+            }
+            grid.Add(gridsearch.transform);
+        }
+
         ContentManager cm = FindObjectOfType<ContentManager>();
-
-
-        Transform pitpos0 = GameObject.Find("PIT0").gameObject.transform;
-        GameObject corr = Instantiate(cm.Cars[0].LoadAsset("tempcar") as GameObject, pitpos0.position, pitpos0.rotation);
+        //replace tempcar with datacontroller car name
+        GameObject corr = Instantiate(cm.GetCar("tempcar"), pits[0].position, pits[0].rotation);
+        
         Camera.GetComponent<CarCamera>().car = corr.transform;
         corr.AddComponent<CarBehaviour>();
 

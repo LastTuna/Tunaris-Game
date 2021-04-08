@@ -7,7 +7,7 @@ public class TireBehavior : MonoBehaviour
 
     public WheelCollider tyre;
     public GameObject visualWheel;
-    public Transform wheelTransform, caliper;
+    public Transform wheelHub, suspension;
 
 
     public float treadType = 1;
@@ -79,7 +79,12 @@ public class TireBehavior : MonoBehaviour
     private void InitializeTire()
     {
         tyre = gameObject.GetComponent<WheelCollider>();
-        //still add to find the visual wheel transform. and suspension dummy.
+        GameObject basecar = gameObject.transform.parent.parent.gameObject;
+        basecar = basecar.transform.Find("wheeltransforms").gameObject;
+        //get the current wheel identity (FR,FL,RR,RL you get it)
+        string wheelIdentity = gameObject.name.Substring(0, 2);
+        wheelHub = basecar.transform.Find(wheelIdentity + "hub");
+        suspension = basecar.transform.Find(wheelIdentity + "susp");
 
     }
 
@@ -88,7 +93,7 @@ public class TireBehavior : MonoBehaviour
     {
         TyreWear();
         //temporary failsafe it will just use defaults.
-        if(tyreTread.Length != 0) GripManager();
+        if(tyreTread != null) GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
         if (smokeEmitter) {
@@ -267,23 +272,23 @@ public class TireBehavior : MonoBehaviour
         {
             wheelPos = tyre.transform.position - tyre.transform.up * tyre.suspensionDistance;
         }
-        if (!caliper){
+        if (!suspension){
             if (whineAboutCaliper) {
                 whineAboutCaliper = false;
                 Debug.LogError("TireBehavior::WheelPosition no calipers");
             }
         } else {
-            caliper.position = wheelPos;
+            suspension.position = wheelPos;
         }
-        if (wheelTransform) {
-            wheelTransform.position = wheelPos;
+        if (wheelHub) {
+            wheelHub.position = wheelPos;
 
             //also do the spinny things
-            wheelTransform.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
-            wheelTransform.localEulerAngles = new Vector3(wheelTransform.localEulerAngles.x, tyre.steerAngle - wheelTransform.localEulerAngles.z, wheelTransform.localEulerAngles.z);
+            wheelHub.Rotate(tyre.rpm / 60 * 360 * Time.deltaTime, 0, 0);
+            wheelHub.localEulerAngles = new Vector3(wheelHub.localEulerAngles.x, tyre.steerAngle - wheelHub.localEulerAngles.z, wheelHub.localEulerAngles.z);
         }
-        if (caliper) {
-            caliper.localEulerAngles = new Vector3(caliper.localEulerAngles.x, tyre.steerAngle - caliper.localEulerAngles.z, caliper.localEulerAngles.z);
+        if (suspension) {
+            suspension.localEulerAngles = new Vector3(suspension.localEulerAngles.x, tyre.steerAngle - suspension.localEulerAngles.z, suspension.localEulerAngles.z);
         }
 
     }
