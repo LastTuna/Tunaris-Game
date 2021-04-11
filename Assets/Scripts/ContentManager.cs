@@ -24,8 +24,7 @@ class ContentManager : MonoBehaviour {
         //sort something out here becasuse i fuckin cant BRUUUUUH
 
 
-        //id think refreshing the manifest on startup would be a pretty smart idea.
-        //so add generatemanifest() here.
+        GenerateManifest();
 
 
         //im just doing some hardcoded thing to make basic functionality again.
@@ -48,25 +47,40 @@ class ContentManager : MonoBehaviour {
         //get all the files in the folder
         string[] penus = Directory.GetFiles(filePath);
 
+
         string dataAsJson = JsonUtility.ToJson(penus);
         File.WriteAllText(filePath + "/manifest.json", dataAsJson);
         Debug.Log("manifest.json has been refreshed.");
     }
 
+    //utility function: loads and returns all available content from manifest.
+    public string[] LoadManifest()
+    {
+        string filePath = Application.dataPath + "/content/cars/manifest.json";
+        string[] penus = JsonUtility.FromJson<string[]>(File.ReadAllText(filePath));
+
+        return penus;
+    }
+
 
     //first make a method that lists all the cars from content
     //compile to json to make a manifest.
+    
 
 
-    public GameObject GetCar(string carName)
+
+        //used in car behavior on instantiate
+        //used in 1000 other places
+        //used at the start of the game to get all assetbundles
+    public AssetBundle GetCar(string carName)
     {
+
         foreach(AssetBundle e in Cars)
         {
             if(e.name == carName)
             {
-                return e.LoadAsset(carName) as GameObject;
+                return e;
             }
-
         }
         //failsafe in case car is not found, find tempcar and send it back.
         //tbh maybe make tempcar first car on list? ill have to see about it.
@@ -75,9 +89,8 @@ class ContentManager : MonoBehaviour {
         {
             if (e.name == "tempcar")
             {
-                return e.LoadAsset("tempcar") as GameObject;
+                return e;
             }
-
         }
         //if you end up here, user deleted tempcar and deserves to have
         //their shit freeze, fuckin wanker

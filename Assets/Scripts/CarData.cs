@@ -18,6 +18,7 @@ public class CarData {
     //aero push down force
     public float dragCoef = 0.06f;
     //max rigidbody.drag value.-drag reaches this value at some 150mph or sth
+    //this also affects stability in high speeds. higher value = more stable
 
     //engine
     public float engineIdle = 800;
@@ -55,7 +56,6 @@ public class CarData {
     public CarData ImportData(string dataAsJson)
     {
         CarData dolor;
-        Debug.Log("AAAAAAAAAAAAAAAAAAAAASSSSSSSSSSSSSS" + dataAsJson);
         dolor = JsonUtility.FromJson<CarData>(dataAsJson);
         return dolor;
     }
