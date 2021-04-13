@@ -30,7 +30,7 @@ class ContentManager : MonoBehaviour {
         //im just doing some hardcoded thing to make basic functionality again.
         //this should be looped with the data from the manifest to get
         //all the cars into the list. essentially just replace "tempcar"
-        string filePath = Application.dataPath + "/Content/Cars/tempcar";
+        string filePath = Application.dataPath + "/Content/Cars/tempcar.sneed";
         Debug.Log(filePath);
         AssetBundle corr = AssetBundle.LoadFromFile(filePath);
         //not sure if i need to unload corr inbetween. leaving as cliffnote
@@ -41,37 +41,44 @@ class ContentManager : MonoBehaviour {
     //this writes the manifest
     public void GenerateManifest()
     {
-        string filePath = Application.dataPath + "/content/cars";
-        Debug.Log(filePath);
-
+        Manifest manifest = new Manifest();
+        string filePath = Application.dataPath + "/Content/Cars";
         //get all the files in the folder
         string[] penus = Directory.GetFiles(filePath);
-
-
-        string dataAsJson = JsonUtility.ToJson(penus);
+        //because we dont want to add other garbage into the manifest,
+        //make sure car files end in something. (.sneed)
+        foreach (string d in penus)
+        {
+            if (d.EndsWith(".sneed"))
+            {
+                manifest.data.Add(Path.GetFileNameWithoutExtension(d));
+            }
+        }
+        string dataAsJson = JsonUtility.ToJson(manifest);
         File.WriteAllText(filePath + "/manifest.json", dataAsJson);
         Debug.Log("manifest.json has been refreshed.");
     }
-
-    //utility function: loads and returns all available content from manifest.
+    
+    //this finds the manifest file, unpacks, and return as an array.
     public string[] LoadManifest()
     {
-        string filePath = Application.dataPath + "/content/cars/manifest.json";
-        string[] penus = JsonUtility.FromJson<string[]>(File.ReadAllText(filePath));
+        string filePath = Application.dataPath + "/Content/Cars/manifest.json";
+        Manifest penus = JsonUtility.FromJson<Manifest>(File.ReadAllText(filePath));
 
-        return penus;
+        //convert the list<string> to an array.
+        string[] manifestToArray = new string[penus.data.Count];
+        for (int i = 0; i < penus.data.Count; i++)
+        {
+            manifestToArray[i] = penus.data[i];
+        }
+
+        return manifestToArray;
     }
 
 
-    //first make a method that lists all the cars from content
-    //compile to json to make a manifest.
-    
-
-
-
-        //used in car behavior on instantiate
-        //used in 1000 other places
-        //used at the start of the game to get all assetbundles
+    //used in car behavior on instantiate
+    //used in 1000 other places
+    //used at the start of the game to get all assetbundles
     public AssetBundle GetCar(string carName)
     {
 
@@ -110,11 +117,16 @@ class ContentManager : MonoBehaviour {
         CarData penis = new CarData();
 
         string filePath = Application.dataPath + "/EXPORT/" + "penis.json";
-        string dataAsJson = JsonUtility.ToJson(penis);
+        string dataAsJson = JsonUtility.ToJson(penis, true);
         File.WriteAllText(filePath, dataAsJson);
         Debug.Log("PEN IS MUSIC" + filePath);
     }
 
 
 
+}
+
+public class Manifest
+{
+    public List<string> data = new List<string>();
 }

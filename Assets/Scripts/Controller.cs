@@ -118,7 +118,7 @@ public class Controller : MonoBehaviour {
 
             // Can't be bothered
             string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
-            for (int i=0; i < carsPrefabs.Count; i++) {
+            for (int i = 0; i < carsPrefabs.Count; i++) {
                 if (carsPrefabs[i].name == selectedCarName) {
                     CarIndex = i;
                     break;
@@ -127,26 +127,27 @@ public class Controller : MonoBehaviour {
             StartCoroutine(Move3DGarageModel(0));
         } else {
             // Classic GT2 garage
+            ContentManager cm = FindObjectOfType<ContentManager>();
+            string[] installedCars = cm.LoadManifest();
+
             GarageCanvas.gameObject.SetActive(true);
 
-            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
-
+            //string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
+            string selectedCarName = "tempcar";
             // Add the car buttons
             createdGarageButtons = new List<GameObject>();
             int offset = 0;
             GameObject selectedCar = null;
-            foreach (GameObject prefab in carsPrefabs) {
+            foreach (string prefab in installedCars) {
                 GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
-
                 // Set labels
-                button.name = prefab.name;
-                button.GetComponentInChildren<Text>().text = prefab.name;
+                button.name = prefab;
+                button.GetComponentInChildren<Text>().text = prefab;
 
                 // Set car model instantiation parameters
-                button.GetComponent<ButtonProperties>().carPrefab = prefab;
+                button.GetComponent<ButtonProperties>().carPrefab = cm.GetCar(prefab).LoadAsset(prefab + ".prefab") as GameObject;
                 button.GetComponent<ButtonProperties>().parent = GarageCanvas;
                 createdGarageButtons.Add(button);
-
                 // Add car select callback
                 button.GetComponent<Button>().onClick.AddListener(CarSelection);
 
@@ -155,7 +156,7 @@ public class Controller : MonoBehaviour {
                 offset -= 70;
 
                 // Detect default focused button
-                if (prefab.name == selectedCarName) selectedCar = button;
+                if (prefab == selectedCarName) selectedCar = button;
             }
 
             // Set focus to the button corresponding to the last selected car

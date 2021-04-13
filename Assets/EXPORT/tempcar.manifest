@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2351436218
+CRC: 1273298834
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 3fc450147d06b08ec858097c1cb5ab9c
+    Hash: fdcd022fa940fa32c6b2e657101b6b5c
   TypeTreeHash:
     serializedVersion: 2
     Hash: 6fc6a823ffbf64361b118e99197398a5
@@ -32,6 +32,9 @@ ClassTypes:
 - Class: 146
   Script: {instanceID: 0}
 Assets:
+- Assets/cars/tempcar/Materials/MAIN.mat
+- Assets/cars/tempcar/Materials/MAIN.png
 - Assets/cars/tempcar/tempcar.prefab
+- Assets/cars/tempcar/tempcar.fbx
 - Assets/cars/tempcar/specs.json
 Dependencies: []
