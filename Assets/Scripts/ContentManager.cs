@@ -30,9 +30,8 @@ class ContentManager : MonoBehaviour {
         //im just doing some hardcoded thing to make basic functionality again.
         //this should be looped with the data from the manifest to get
         //all the cars into the list. essentially just replace "tempcar"
-        string filePath = Application.dataPath + "/Content/Cars/tempcar.sneed";
-        Debug.Log(filePath);
-        AssetBundle corr = AssetBundle.LoadFromFile(filePath);
+
+        AssetBundle corr = GetCarFromFile("tempcar");
         //not sure if i need to unload corr inbetween. leaving as cliffnote
         Cars.Add(corr);
 
@@ -71,17 +70,26 @@ class ContentManager : MonoBehaviour {
         {
             manifestToArray[i] = penus.data[i];
         }
-
+        
         return manifestToArray;
     }
 
+    
+    
+    public AssetBundle GetCarFromFile(string carName)
+    {
+        string filePath = Application.dataPath + "/Content/Cars/" + carName + ".sneed";
+        Debug.Log(filePath);
+        AssetBundle corr = AssetBundle.LoadFromFile(filePath);
 
-    //used in car behavior on instantiate
-    //used in 1000 other places
-    //used at the start of the game to get all assetbundles
+        return corr;
+    }
+
+
+        //used in car behavior on instantiate
+        //used in 1000 other places
     public AssetBundle GetCar(string carName)
     {
-
         foreach(AssetBundle e in Cars)
         {
             if(e.name == carName)

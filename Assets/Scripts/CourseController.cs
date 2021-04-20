@@ -61,12 +61,10 @@ public class CourseController : MonoBehaviour {
 
         ContentManager cm = FindObjectOfType<ContentManager>();
         //replace tempcar with datacontroller car name
-        
-        GameObject corr = Instantiate(cm.Cars[0].LoadAsset("tempcar.prefab") as GameObject, pits[0].position, pits[0].rotation);
-        
+        GameObject corr = Instantiate(cm.Cars[0].LoadAsset(dataController.SelectedCar) as GameObject, pits[0].position, pits[0].rotation);
         Camera.GetComponent<CarCamera>().car = corr.transform;
         corr.AddComponent<CarBehaviour>();
-
+        corr.AddComponent<TGNetworkMan>();
 
     }
 
