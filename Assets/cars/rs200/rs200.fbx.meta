@@ -1,92 +1,120 @@
 fileFormatVersion: 2
-guid: 23fed76db56a2dd4abe52b6a4b8f87b0
-timeCreated: 1617652145
+guid: d4116097e75e3fa478c264fe3e6fdd4f
+timeCreated: 1621963494
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
-    100000: FLcalp
-    100002: FLcollider
+    100000: FL
+    100002: FLcalp
     100004: FLhub
     100006: FLsusp
     100008: FLwheel
-    100010: FRcalp
-    100012: FRcollider
+    100010: FR
+    100012: FRcalp
     100014: FRhub
     100016: FRsusp
     100018: FRwheel
-    100020: mainbody
-    100022: RLclap
-    100024: RLcollider
-    100026: RLhub
-    100028: RLsusp
-    100030: RLwheel
-    100032: RRcalp
-    100034: RRcollider
-    100036: RRhub
-    100038: RRsusp
-    100040: RRwheel
-    100042: //RootNode
-    100044: wheelcolldiers
-    100046: wheeltransforms
-    400000: FLcalp
-    400002: FLcollider
+    100020: INTERIOR
+    100022: mainbody
+    100024: rearwheel
+    100026: RL
+    100028: RLcalp
+    100030: RLhub
+    100032: RLsusp
+    100034: RLwheel
+    100036: RR
+    100038: RRcalp
+    100040: RRhub
+    100042: RRsusp
+    100044: RRwheel
+    100046: //RootNode
+    100048: wheelcolliders
+    100050: wheeltransforms
+    400000: FL
+    400002: FLcalp
     400004: FLhub
     400006: FLsusp
     400008: FLwheel
-    400010: FRcalp
-    400012: FRcollider
+    400010: FR
+    400012: FRcalp
     400014: FRhub
     400016: FRsusp
     400018: FRwheel
-    400020: mainbody
-    400022: RLclap
-    400024: RLcollider
-    400026: RLhub
-    400028: RLsusp
-    400030: RLwheel
-    400032: RRcalp
-    400034: RRcollider
-    400036: RRhub
-    400038: RRsusp
-    400040: RRwheel
-    400042: //RootNode
-    400044: wheelcolldiers
-    400046: wheeltransforms
-    2100000: MAIN
+    400020: INTERIOR
+    400022: mainbody
+    400024: rearwheel
+    400026: RL
+    400028: RLcalp
+    400030: RLhub
+    400032: RLsusp
+    400034: RLwheel
+    400036: RR
+    400038: RRcalp
+    400040: RRhub
+    400042: RRsusp
+    400044: RRwheel
+    400046: //RootNode
+    400048: wheelcolliders
+    400050: wheeltransforms
+    2100000: WHEELS
+    2100002: DISC
+    2100004: MAIN
+    2100006: WINDOWS
     2300000: FLcalp
     2300002: FLwheel
     2300004: FRcalp
     2300006: FRwheel
-    2300008: mainbody
-    2300010: RLclap
-    2300012: RLwheel
-    2300014: RRcalp
-    2300016: RRwheel
+    2300008: INTERIOR
+    2300010: mainbody
+    2300012: rearwheel
+    2300014: RLcalp
+    2300016: RLwheel
+    2300018: RRcalp
+    2300020: RRwheel
     3300000: FLcalp
     3300002: FLwheel
     3300004: FRcalp
     3300006: FRwheel
-    3300008: mainbody
-    3300010: RLclap
-    3300012: RLwheel
-    3300014: RRcalp
-    3300016: RRwheel
-    4300000: RRwheel
-    4300002: RRcalp
+    3300008: INTERIOR
+    3300010: mainbody
+    3300012: rearwheel
+    3300014: RLcalp
+    3300016: RLwheel
+    3300018: RRcalp
+    3300020: RRwheel
+    4300000: FLwheel
+    4300002: FLcalp
     4300004: FRwheel
-    4300006: FLcalp
-    4300008: FLwheel
-    4300010: FRcalp
-    4300012: RLwheel
-    4300014: RLclap
-    4300016: mainbody
+    4300006: FRcalp
+    4300008: RLwheel
+    4300010: RLcalp
+    4300012: RRwheel
+    4300014: RRcalp
+    4300016: INTERIOR
+    4300018: rearwheel
+    4300020: mainbody
   externalObjects:
   - first:
       type: UnityEngine:Material
       assembly: UnityEngine.CoreModule
+      name: DISC
+    second: {fileID: 2100000, guid: 168e47328e8010741bce768564376aa0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
       name: MAIN
-    second: {fileID: 2100000, guid: 1fe0ca6192d2d0a4081598b65e67ae7c, type: 2}
+    second: {fileID: 2100000, guid: 1660bcfa6bfeb8c49ab5a4aaf00d56e3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WHEELS
+    second: {fileID: 2100000, guid: 38afa28c456804842b3932a421f46c19, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: WINDOWS
+    second: {fileID: 2100000, guid: 5cea6e2e9ab761240be644d859d23631, type: 2}
   materials:
     importMaterials: 1
     materialName: 0

@@ -30,11 +30,7 @@ class ContentManager : MonoBehaviour {
         //im just doing some hardcoded thing to make basic functionality again.
         //this should be looped with the data from the manifest to get
         //all the cars into the list. essentially just replace "tempcar"
-
-        AssetBundle corr = GetCarFromFile("tempcar");
-        //not sure if i need to unload corr inbetween. leaving as cliffnote
-        Cars.Add(corr);
-
+        
     }
 
     //this writes the manifest
@@ -51,6 +47,7 @@ class ContentManager : MonoBehaviour {
             if (d.EndsWith(".sneed"))
             {
                 manifest.data.Add(Path.GetFileNameWithoutExtension(d));
+                Debug.Log(d.ToString());
             }
         }
         string dataAsJson = JsonUtility.ToJson(manifest);

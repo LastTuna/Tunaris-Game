@@ -79,7 +79,7 @@ public class CarBehaviour : MonoBehaviour {
 
 
     // CoG
-    public Vector3 CenterOfGravity = new Vector3(0, -0.4f, 0.5f);
+    public Vector3 CenterOfGravity = new Vector3(0, 0.2f, 0.1f);
 
     // busrider mode
     private bool isBusrider;
@@ -89,10 +89,10 @@ public class CarBehaviour : MonoBehaviour {
         {
             ContentManager cm = FindObjectOfType<ContentManager>();
             //initialize car data object.
-            specs = new CarData();
+            //specs = new CarData();
             //LOAD CAR SPECS
-            TextAsset ass = cm.Cars[0].LoadAsset("specs.json") as TextAsset;
-            specs =  specs.ImportData(ass.text);
+            //TextAsset ass = LoadAsset("specs.json") as TextAsset;
+            //specs =  specs.ImportData(ass.text);
             InitializeCar();
 
             // Set game camera target

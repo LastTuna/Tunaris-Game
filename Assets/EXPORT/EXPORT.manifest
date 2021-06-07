@@ -1,7 +1,10 @@
 ManifestFileVersion: 0
-CRC: 3538075027
+CRC: 2729532469
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
       Name: tempcar
+      Dependencies: {}
+    Info_1:
+      Name: rs200
       Dependencies: {}

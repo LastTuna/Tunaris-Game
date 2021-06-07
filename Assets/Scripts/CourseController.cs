@@ -61,7 +61,8 @@ public class CourseController : MonoBehaviour {
 
         ContentManager cm = FindObjectOfType<ContentManager>();
         //replace tempcar with datacontroller car name
-        GameObject corr = Instantiate(cm.Cars[0].LoadAsset(dataController.SelectedCar) as GameObject, pits[0].position, pits[0].rotation);
+        AssetBundle coooorr = cm.GetCarFromFile(dataController.SelectedCar);
+        GameObject corr = Instantiate(coooorr.LoadAsset(dataController.SelectedCar) as GameObject, pits[0].position, pits[0].rotation);
         Camera.GetComponent<CarCamera>().car = corr.transform;
         corr.AddComponent<CarBehaviour>();
         corr.AddComponent<TGNetworkMan>();
