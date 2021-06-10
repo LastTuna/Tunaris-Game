@@ -10,7 +10,9 @@ public class CourseController : MonoBehaviour {
 
     // Are we loading into multiplayer
     public bool IsMultiplayer = false;
-    
+
+    //debug UI
+    public GameObject DebugUI;
     // Default HUD
     public GameObject DefaultHUD;
     // Busrider mode HUD
@@ -66,6 +68,7 @@ public class CourseController : MonoBehaviour {
         Camera.GetComponent<CarCamera>().car = corr.transform;
         corr.AddComponent<CarBehaviour>();
         corr.AddComponent<TGNetworkMan>();
+        Instantiate(DebugUI);
 
     }
 

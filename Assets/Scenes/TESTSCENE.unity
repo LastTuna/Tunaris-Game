@@ -179,6 +179,48 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 3698b2b61aad1be438f32053b8d21db5, type: 3}
   m_IsPrefabParent: 0
+--- !u!1001 &180097359
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 372
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 313.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4363050272943928, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &321135900
 GameObject:
   m_ObjectHideFlags: 0
@@ -515,6 +557,7 @@ MonoBehaviour:
   debug: 1
   chosenCamera: 0
   supportedCameras: 3
+  isVR: 0
 --- !u!81 &934010318
 AudioListener:
   m_ObjectHideFlags: 0
@@ -756,6 +799,35 @@ Prefab:
     - target: {fileID: 224959235500303920, guid: b5c98f7b746451d4c8338c8bc5711a8c,
         type: 2}
       propertyPath: m_Pivot.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 224223315224275458, guid: b5c98f7b746451d4c8338c8bc5711a8c,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0.14893617
+      objectReference: {fileID: 0}
+    - target: {fileID: 224223315224275458, guid: b5c98f7b746451d4c8338c8bc5711a8c,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 224355685367637334, guid: b5c98f7b746451d4c8338c8bc5711a8c,
+        type: 2}
+      propertyPath: m_AnchorMin.x
+      value: 0.14893617
+      objectReference: {fileID: 0}
+    - target: {fileID: 224355685367637334, guid: b5c98f7b746451d4c8338c8bc5711a8c,
+        type: 2}
+      propertyPath: m_AnchorMax.x
+      value: 0.14893617
+      objectReference: {fileID: 0}
+    - target: {fileID: 224355685367637334, guid: b5c98f7b746451d4c8338c8bc5711a8c,
+        type: 2}
+      propertyPath: m_AnchorMax.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1581084383281940, guid: b5c98f7b746451d4c8338c8bc5711a8c, type: 2}
+      propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
@@ -1048,12 +1120,6 @@ MonoBehaviour:
     MenuAudio: 0
     CuntUI: 0
     IsBusrider: 0
-    TireBias: 0
-    FinalDrive: 0
-    Aero: 0
-    SpringStiffness: 0
-    BrakeStiffness: 0
-    Gearbox: 0
     Dirtiness:
       keys: []
       values: []
@@ -1062,17 +1128,14 @@ MonoBehaviour:
     IP: 
     PlayerName: 
   IsMultiplayer: 0
-  IP: 
-  MultiplayerPrefab: {fileID: 1401953083095588, guid: a930d34439da909449a3d9824ec2493f,
-    type: 2}
-  HostUI: {fileID: 1267096992082948, guid: 36ac95ee80f840d4d81bb8365829d596, type: 2}
-  HostUIInstance: {fileID: 0}
   DefaultHUD: {fileID: 0}
   BusriderHUD: {fileID: 0}
   HUDCanvas: {fileID: 0}
   AudioSource: {fileID: 934010316}
   Camera: {fileID: 934010315}
-  manager: {fileID: 0}
+  cars: []
+  pits: []
+  grid: []
   AIWaypoints: []
 --- !u!4 &1899796779
 Transform:

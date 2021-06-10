@@ -8,8 +8,7 @@ public class TireBehavior : MonoBehaviour
     public WheelCollider tyre;
     public GameObject visualWheel;
     public Transform wheelHub, suspension;
-
-
+    
     public float treadType = 1;
     public float TreadHealth = 100;
     public float brakeStrength = 300;
@@ -35,8 +34,8 @@ public class TireBehavior : MonoBehaviour
     public GameObject smokeEmitter;//debugging thing
     public float forwardSlipTreshold;
     public float sidewaysSlipThreshold;
-    public float forwardSlipDebug;
-    public float sidewaysSlipDebug;
+    public float forwardSlip;
+    public float sidewaysSlip;
 
     public TreadBehavior[] tyreTread;
     //multidim array
@@ -128,8 +127,8 @@ public class TireBehavior : MonoBehaviour
         WheelHit wheelhit;
         tyre.GetGroundHit(out wheelhit);
 
-        forwardSlipDebug = Mathf.Abs(wheelhit.forwardSlip);
-        sidewaysSlipDebug = Mathf.Abs(wheelhit.sidewaysSlip);
+        forwardSlip = Mathf.Abs(wheelhit.forwardSlip);
+        sidewaysSlip = Mathf.Abs(wheelhit.sidewaysSlip);
         fss = Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold;
         sss = Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold;
 
@@ -234,6 +233,12 @@ public class TireBehavior : MonoBehaviour
             brakeHeat = brakeHeat - brakeHeat / 500;
         if (brakeHeat > 400)
             brakeMat.SetColor("_EmissionColor", new Color(1 - brakeFadeCurve.Evaluate(brakeHeat), (1 - brakeFadeCurve.Evaluate(brakeHeat)) / 2, 0));
+    }
+
+    //referenced in the debug UI.
+    public float BrakeOutput()
+    {
+        return brakeStrength * brakeFadeCurve.Evaluate(brakeHeat);
     }
 
     WheelFrictionCurve SetStiffness(float[] wheel, float newStiffness)
