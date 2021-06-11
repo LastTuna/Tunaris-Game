@@ -104,7 +104,7 @@ public class DebugUIMan : MonoBehaviour {
             airSpeed = GameObject.Find("DEBUG_AIRSPEED").GetComponent<Text>();
         }
         engineRPM.text = Mathf.Round(car.engineRPM).ToString();
-        engineOutput.text = car.engineREDLINE.ToString();// THIS IS WROOOONG - MAKE A VARIABLE TO CAR WITH CALCULATED ENGINE OUTPUT SO IT CAN BE REFERENCED......will do lator
+        engineOutput.text = Mathf.Round(car.engineOUT).ToString();
         boost.text = (Mathf.Round(car.turboSpool * 10) / 10).ToString();
         airSpeed.text = (Mathf.Round(car.airSpeed * 10) / 10).ToString();
     }

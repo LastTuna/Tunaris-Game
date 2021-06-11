@@ -17,8 +17,6 @@ public class CarBehaviour : MonoBehaviour {
     public Transform differentialTrans;
     public float currentSpeed, wheelRPM;
     public Material dirt; //dirt MATERIAL.
-    public GameObject HUDPrefab;
-    private HUD HUD;
     public int manual = 1; //0auto - 1manual - 2manualwclutch
     public float shifterDelay = 0.3f;
     //tuneable stats
@@ -43,6 +41,7 @@ public class CarBehaviour : MonoBehaviour {
     public float lsd = 1f;
 
     //end tuneable stats
+    public float engineOUT;//engine output
     public float airSpeed;
     public float engineRPM;
     public float engineIdle = 800;
@@ -65,7 +64,6 @@ public class CarBehaviour : MonoBehaviour {
     public float debug1;
     public float debug2;
     public float debug3;
-    public float debug4;
     private float[] tirewearlist;
 
     // FFB shit
@@ -98,13 +96,7 @@ public class CarBehaviour : MonoBehaviour {
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
-
-            // load the default HUD if no car HUD
-            if (!HUDPrefab)
-            {
-                HUDPrefab = ctrl.DefaultHUD;
-            }
-            HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
+            
 
             //if no turbo then make sure boost is 1
             if (!aspirated) turboSpool = 1;
@@ -121,16 +113,12 @@ public class CarBehaviour : MonoBehaviour {
             DataController dataController = FindObjectOfType<DataController>();
             dirtiness = dataController.GetDirtiness();
             isBusrider = dataController.IsBusrider;
-
-            tirewearlist = new float[4];
             //call the FFB start routine
             FFBStart();
 
         }
         if (isBusrider) {
             CourseController ctrl = FindObjectOfType<CourseController>();
-            HUDPrefab = ctrl.BusriderHUD;
-            HUD = Instantiate(HUDPrefab, ctrl.HUDCanvas.transform).GetComponent<HUD>();
 
             ctrl.Camera.GetComponent<CarCameraBusrider>().car = this.gameObject.transform;
             ctrl.Camera.GetComponent<CarCamera>().enabled = false;
@@ -309,13 +297,7 @@ public class CarBehaviour : MonoBehaviour {
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
             float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
-
-            WheelHit wheelHitR2, wheelHitL2;
-            wheelFR.GetGroundHit(out wheelHitR2);
-            wheelFL.GetGroundHit(out wheelHitL2);
-
-            HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, new float[] { wheelHitL2.forwardSlip * 100, wheelHitR2.forwardSlip * 100, wheelHitL2.sidewaysSlip * 100, wheelHitR2.sidewaysSlip * 100 });
-
+        
             // FFB calculations
             if (ffbeffect != null) {
 
@@ -355,30 +337,18 @@ public class CarBehaviour : MonoBehaviour {
             wheelFR.steerAngle = targetSteering;
             wheelFL.steerAngle = targetSteering;
 
-            if(aspirated) Turbo();
-
-            //currentSpeed = 2 * 22/7 * wheelFL.radius * wheelFL.rpm * 60 / 1000; legacy
+            if(aspirated) Turbo();//turbo sim enable
+            
             currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
             currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
     }
 
-    public void TireWearMonitor()
-    {
-        //ghetto code here for now
-        tirewearlist[0] = wheelFL.GetComponent<TireBehavior>().TreadHealth;
-        tirewearlist[1] = wheelFR.GetComponent<TireBehavior>().TreadHealth;
-        tirewearlist[2] = wheelRL.GetComponent<TireBehavior>().TreadHealth;
-        tirewearlist[3] = wheelRR.GetComponent<TireBehavior>().TreadHealth;
-    }
-
-
-
     void Update() {
 
             float[] shariq = new float[] { wheelFL.rpm, wheelFR.rpm, wheelRL.rpm, wheelRR.rpm };
             //HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
-
+            //TODO!!!!!!!!! SOUND SYSTEM RE ENABLE
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
             LightsOn();
@@ -423,6 +393,8 @@ public class CarBehaviour : MonoBehaviour {
             //make motor torks calc shorter with temporary variable
             float precalc = Mathf.Clamp01(CustomInput.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
 
+            engineOUT = engineTorque.Evaluate(engineRPM) * precalc;
+
             wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
             wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
             wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * precalc;
@@ -457,12 +429,6 @@ public class CarBehaviour : MonoBehaviour {
             }
 
         }
-
-        debug1 = wheelFL.motorTorque;
-        debug2 = wheelFR.motorTorque;
-        debug3 = wheelRL.motorTorque;
-        debug4 = wheelRR.motorTorque;
-        
         wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
         
     }
@@ -634,6 +600,7 @@ public class CarBehaviour : MonoBehaviour {
     
     void LightsOn()
     {
+        //make this check if(input.getaxis) whatever. TODO.
         if (gear == 595)
         {
 

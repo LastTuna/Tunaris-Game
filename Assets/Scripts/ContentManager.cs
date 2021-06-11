@@ -12,8 +12,10 @@ using System.IO;
 
 class ContentManager : MonoBehaviour {
     
-    //this is where all assetbundles are stored.
+    //this is where all LOADED assetbundles are stored. once UNLOADED, remove from the list.
     public List<AssetBundle> Cars;
+    public const string fileExtension = ".sneed";
+    //figure out some file extension thats not .sneed in the secret shadow government meeting
 
     private void Start()
     {
@@ -44,10 +46,9 @@ class ContentManager : MonoBehaviour {
         //make sure car files end in something. (.sneed)
         foreach (string d in penus)
         {
-            if (d.EndsWith(".sneed"))
+            if (d.EndsWith(fileExtension))
             {
                 manifest.data.Add(Path.GetFileNameWithoutExtension(d));
-                Debug.Log(d.ToString());
             }
         }
         string dataAsJson = JsonUtility.ToJson(manifest);
@@ -67,24 +68,36 @@ class ContentManager : MonoBehaviour {
         {
             manifestToArray[i] = penus.data[i];
         }
-        
         return manifestToArray;
     }
 
-    
+    //helper function, for unloading content
+    public void UnloadCar(string carName)
+    {
+        foreach (AssetBundle e in Cars)
+        {
+            if (e.name == carName)
+            {
+                Cars.Remove(e);
+                e.Unload(true);
+                break;
+            }
+        }
+    }
     
     public AssetBundle GetCarFromFile(string carName)
     {
-        string filePath = Application.dataPath + "/Content/Cars/" + carName + ".sneed";
-        Debug.Log(filePath);
+        string filePath = Application.dataPath + "/Content/Cars/" + carName + fileExtension;
+        Debug.Log("LOADED: " + filePath);
         AssetBundle corr = AssetBundle.LoadFromFile(filePath);
-
+        Cars.Add(corr);
         return corr;
     }
 
-
-        //used in car behavior on instantiate
-        //used in 1000 other places
+    //used in car behavior on instantiate
+    //used in 1000 other places
+    //if you need to instantiate a car, use this. it will return the car
+    //and if it was not loaded yet, will load it.
     public AssetBundle GetCar(string carName)
     {
         foreach(AssetBundle e in Cars)
@@ -94,20 +107,7 @@ class ContentManager : MonoBehaviour {
                 return e;
             }
         }
-        //failsafe in case car is not found, find tempcar and send it back.
-        //tbh maybe make tempcar first car on list? ill have to see about it.
-        //hardcoding it in isnt the most retarded idea either.
-        foreach (AssetBundle e in Cars)
-        {
-            if (e.name == "tempcar")
-            {
-                return e;
-            }
-        }
-        //if you end up here, user deleted tempcar and deserves to have
-        //their shit freeze, fuckin wanker
-        return null;
-
+        return GetCarFromFile(carName);
     }
 
     
