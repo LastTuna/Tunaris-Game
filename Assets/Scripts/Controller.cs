@@ -16,6 +16,8 @@ public class Controller : MonoBehaviour {
 
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
+    public Canvas GarageTurntableCanvas;
+    public Canvas GarageContextCanvas;
     public GameObject Garage3DCanvas;
     public Canvas TuneScreenCanvas;
     public Canvas LoadTuneScreenCanvas;
@@ -27,12 +29,13 @@ public class Controller : MonoBehaviour {
     public Canvas CreditsCanvas;
     public Canvas RecordsCanvas;
     public Canvas LicensesCanvas;
+    public GameObject GarageScrollBoxContent;
     public GameObject setupExceptionText;
     public static bool washing;
     public Canvas LoadingScreenCanvas;
     public AudioSource menuMusic;//controlling menu music temporaily via controller. make music manager later on
     public AudioClip[] TGmusic;
-    public static List<GameObject> currentCars = new List<GameObject>();
+    public List<GameObject> currentCars = new List<GameObject>();//just a container for any instantiated cars so they can be cleaned up.
     public GameObject carro;
     public GameObject bestest;
     
@@ -52,15 +55,10 @@ public class Controller : MonoBehaviour {
         {
             if (Input.GetKeyDown("t") && !bestest.activeSelf)
             {
-                KeyValuePair<string, Laptime> fastestLap = new KeyValuePair<string, Laptime>("Star GT V8", TimeSpan.FromSeconds(1488));
-                foreach (var carpair in data.BestestLapTimes)
-                {
-                    fastestLap = carpair;
-                }
-                carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
-                CarScriptKill(carro);
+                GameObject pos = new GameObject();
+                pos.transform.SetPositionAndRotation(new Vector3(0, -1.4f, -2.4f), Quaternion.Euler(0, -90, 15));
+                carro = InstantiateCar("rs200", pos.transform);
                 bestest.SetActive(true);
-                bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
             }
             else if (Input.GetKeyDown("t") && bestest.activeSelf)
             {
@@ -131,36 +129,29 @@ public class Controller : MonoBehaviour {
             string[] installedCars = cm.LoadManifest();
 
             GarageCanvas.gameObject.SetActive(true);
-
-            //string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
-            string selectedCarName = "tempcar";
+            
             // Add the car buttons
             createdGarageButtons = new List<GameObject>();
             int offset = 0;
-            GameObject selectedCar = null;
+
+            //go through every car found in the manifest and create the buttons for them
             foreach (string prefab in installedCars) {
-                GameObject button = Instantiate(buttonPrefab, GarageCanvas.transform);
+                GameObject button = Instantiate(buttonPrefab, GarageScrollBoxContent.transform);
                 // Set labels
                 button.name = prefab;
                 button.GetComponentInChildren<Text>().text = prefab;
 
-                // Set car model instantiation parameters
-                button.GetComponent<ButtonProperties>().carPrefab = cm.GetCar(prefab).LoadAsset(prefab + ".prefab") as GameObject;
-                button.GetComponent<ButtonProperties>().parent = GarageCanvas;
+                //write a script on the button to duz its thing
+
                 createdGarageButtons.Add(button);
                 // Add car select callback
                 button.GetComponent<Button>().onClick.AddListener(CarSelection);
 
                 // Move the button to its correct position using a lot of unity code soup
                 (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
-                offset -= 70;
+                offset -= 50;
 
-                // Detect default focused button
-                if (prefab == selectedCarName) selectedCar = button;
             }
-
-            // Set focus to the button corresponding to the last selected car
-            StartCoroutine(SetSelectedGameObject(selectedCar));
         }
     }
 
@@ -224,7 +215,7 @@ public class Controller : MonoBehaviour {
         GameObject spinner = Instantiate(carsPrefabs[CarIndex], Garage3DCarRoot.transform);
 
         // Disable wheel colliders or unity spergs in the log
-        CarScriptKill(spinner);
+        //CarScriptKill(spinner);
 
         // Set transform
         StartCoroutine(SetPosition(spinner));
@@ -405,10 +396,11 @@ public class Controller : MonoBehaviour {
             break;
         }
         if (carro != null) Destroy(carro);
+        //CAR INSTANTIATE CALL HERE
         carro = Instantiate(carsPrefabs.Find(carpre => carpre.name == fastestLap.Key), Vector3.zero, Quaternion.Euler(0, -90, 15), RecordsCanvas.transform);
         carro.transform.localScale = new Vector3(3, 3, 3);
         carro.transform.localPosition = new Vector3(-0.76f, -0.6f, -922.1f);
-        CarScriptKill(carro);
+        
         bestest.GetComponent<TextMesh>().text = string.Format("{0:00}:{1:00}:{2:000}", fastestLap.Value.Minutes, fastestLap.Value.Seconds, fastestLap.Value.Milliseconds);
     }
 
@@ -438,9 +430,21 @@ public class Controller : MonoBehaviour {
     IEnumerator CarSelectionCoroutine() {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
-        Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-        FindObjectOfType<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
-        Cancel();
+
+        //add a boolean setting to savedata "QuickCarSelect" which lets you 1 click a car
+        //ill see if i even go with that 3d garage idea anymore tbh, maybe swap that with this...
+        if (false)
+        {
+            Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
+            FindObjectOfType<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+            Cancel();
+        }
+        else
+        {
+            GarageCanvas.gameObject.SetActive(false);
+            GarageTurntableCanvas.gameObject.SetActive(true);
+
+        }
     }
     
     public void OpenCredits()
@@ -459,23 +463,27 @@ public class Controller : MonoBehaviour {
         data.PlayerName = GameObject.Find("Username").GetComponent<Text>().text;
         data.SaveGameData();
     }
-    //car wash save
-    public IEnumerator OpenWash()
+
+    public void Bumsex()
+    {
+        StartCoroutine(OpenWash());
+    }
+
+    IEnumerator OpenWash()
     {
         GoWashCanvas.gameObject.SetActive(true);
         yield return new WaitForEndOfFrame();
         GoRaceCanvas.gameObject.SetActive(false);
         menuMusic.clip = TGmusic[2];
         menuMusic.Play();
+        
         DataController dataController = FindObjectOfType<DataController>();
-        GameObject selectedCar = Instantiate(carsPrefabs.Find(carpre => carpre.name == dataController.SelectedCar), GoWashCanvas.transform);
-        CarScriptKill(selectedCar);
-        selectedCar.transform.localScale = new Vector3(90, 90, 90);
-        selectedCar.transform.localPosition = new Vector3(0, -150, -326);
+        GameObject spinner = InstantiateCar(dataController.SelectedCar, GoWashCanvas.transform);
+        spinner.transform.localScale = new Vector3(90, 90, 90);
+        spinner.transform.localPosition = new Vector3(0, -150, -326);
         // Add rotation script
-        selectedCar.AddComponent<Spinner>();
-        selectedCar.AddComponent<CarWash>();
-        currentCars.Add(selectedCar);
+        spinner.AddComponent<Spinner>();
+        spinner.AddComponent<CarWash>();
     }
     public void WashMe()
     {
@@ -505,25 +513,21 @@ public class Controller : MonoBehaviour {
         washing = false;
     }
 
-    public void CarScriptKill (GameObject spinner)
+    //use this to instantiate cars to spinners/menus. feed it the car name, and a position.
+    public GameObject InstantiateCar (string carName, Transform position)
     {
+        ContentManager cm = FindObjectOfType<ContentManager>();
+        AssetBundle corr = cm.GetCar(carName);
+        GameObject nuCar = Instantiate(corr.LoadAsset(carName) as GameObject, position);
+        currentCars.Add(nuCar);
         // Disable wheel colliders or unity spergs in the log
-        foreach (WheelCollider wc in spinner.GetComponentsInChildren<WheelCollider>())
+        foreach (WheelCollider wc in nuCar.GetComponentsInChildren<WheelCollider>())
         {
             Destroy(wc);
         }
-        // Disable car driving scripts
-        foreach (Behaviour c in spinner.GetComponents<Behaviour>())
-        {
-            Destroy(c);
-        }
-        //disable tyre behavior
-        foreach (Behaviour c in spinner.GetComponentsInChildren<TireBehavior>())
-        {
-            Destroy(c);
-        }
         // Disable main rigidbody
-        Destroy(spinner.GetComponent<Rigidbody>());
+        Destroy(nuCar.GetComponent<Rigidbody>());
+        return nuCar;
     }    
 
     // Save options
@@ -677,6 +681,13 @@ public class Controller : MonoBehaviour {
         {
             SaveTuneScreenCanvas.gameObject.SetActive(false);
             OpenTuneScreen();
+        }
+
+        // GarageTurntable -> Garage
+        if (GarageTurntableCanvas.gameObject.activeSelf)
+        {
+            GarageTurntableCanvas.gameObject.SetActive(false);
+            GarageCanvas.gameObject.SetActive(true);
         }
 
 

@@ -15,12 +15,7 @@ public class ShowCarSpinner : StateMachineBehaviour {
         // Instantiate prefab
         ButtonProperties data = animator.gameObject.GetComponent<ButtonProperties>();
         GameObject spinner = Instantiate(data.carPrefab, data.parent.transform);
-
-        // Disable wheel colliders or unity spergs in the log
-
-        Controller controller = FindObjectOfType<Controller>();
-        controller.CarScriptKill(spinner);
-
+        
         // Set transform
         spinner.transform.localScale = new Vector3(120, 120, 120);
         spinner.transform.localPosition = new Vector3(220, -50, -200);

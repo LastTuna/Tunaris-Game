@@ -32,7 +32,7 @@ public class CarWash : MonoBehaviour {
         mainbody.SetFloat("_FortniteRange", dirtiness);
         foreach (Material e in wheelDirt)
         {
-            e.SetFloat("_FortniteRange", dirtiness);
+            //e.SetFloat("_FortniteRange", dirtiness);
         }
     }
 

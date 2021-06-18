@@ -14,7 +14,7 @@ class ContentManager : MonoBehaviour {
     
     //this is where all LOADED assetbundles are stored. once UNLOADED, remove from the list.
     public List<AssetBundle> Cars;
-    public const string fileExtension = ".sneed";
+    public const string fileExtension = ".tgm";
     //figure out some file extension thats not .sneed in the secret shadow government meeting
 
     private void Start()
@@ -85,7 +85,8 @@ class ContentManager : MonoBehaviour {
         }
     }
     
-    public AssetBundle GetCarFromFile(string carName)
+    //this only exists in this namespace. shouldnt ever be called outside.
+    AssetBundle GetCarFromFile(string carName)
     {
         string filePath = Application.dataPath + "/Content/Cars/" + carName + fileExtension;
         Debug.Log("LOADED: " + filePath);
