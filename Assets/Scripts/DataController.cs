@@ -83,12 +83,12 @@ public class DataController : MonoBehaviour {
             LoadedData.Cash = value;
         }
     }
-    public bool Garage3D {
+    public bool QuickCarSelect {
         get {
-            return LoadedData.Garage3D;
+            return LoadedData.QuickCarSelect;
         }
         set {
-            LoadedData.Garage3D = value;
+            LoadedData.QuickCarSelect = value;
         }
     }
     public float MenuAudio {
@@ -170,7 +170,7 @@ public class DataController : MonoBehaviour {
             PlayerName = "Player";
             Cash = 100;
             Dirtiness = new DirtinessDictionary();
-            Garage3D = false;
+            QuickCarSelect = false;
             MenuAudio = 0.4f;
             BestestLapTimes = new LapTimeDictionary() { { "Star GT V8", TimeSpan.FromSeconds(69) }, { "Nasan GRT", TimeSpan.FromSeconds(420) } };
             IsBusrider = true;
@@ -193,7 +193,7 @@ public class GameData {
     public string SelectedCourse;
     public LapTimeDictionary BestestLapTimes;
 
-    public bool Garage3D;
+    public bool QuickCarSelect;
     public float MenuAudio;
     public bool CuntUI;
     public bool IsBusrider;

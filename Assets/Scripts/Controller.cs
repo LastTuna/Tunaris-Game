@@ -16,9 +16,9 @@ public class Controller : MonoBehaviour {
 
     public Canvas CourseSelectCanvas;
     public Canvas GarageCanvas;
+    public GameObject GarageTurntableParent;
     public Canvas GarageTurntableCanvas;
     public Canvas GarageContextCanvas;
-    public GameObject Garage3DCanvas;
     public Canvas TuneScreenCanvas;
     public Canvas LoadTuneScreenCanvas;
     public Canvas SaveTuneScreenCanvas;
@@ -101,6 +101,7 @@ public class Controller : MonoBehaviour {
     public void OpenGarage() {
         StartCoroutine(OpenGarageImpl());
     }
+
     public IEnumerator OpenGarageImpl() {
         yield return new WaitForEndOfFrame();
         if (FindObjectOfType<DataController>().CuntUI) {
@@ -108,129 +109,32 @@ public class Controller : MonoBehaviour {
         } else {
             GoRaceCanvas.gameObject.SetActive(false);
         }
+        // Classic GT2 garage
+        ContentManager cm = FindObjectOfType<ContentManager>();
+        string[] installedCars = cm.LoadManifest();
 
-        // Show the proper garage
-        if (FindObjectOfType<DataController>().Garage3D) {
-            // 3D garage
-            Garage3DCanvas.gameObject.SetActive(true);
+        GarageCanvas.gameObject.SetActive(true);
+        // Add the car buttons
+        createdGarageButtons = new List<GameObject>();
+        int offset = 0;
 
-            // Can't be bothered
-            string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
-            for (int i = 0; i < carsPrefabs.Count; i++) {
-                if (carsPrefabs[i].name == selectedCarName) {
-                    CarIndex = i;
-                    break;
-                }
-            }
-            StartCoroutine(Move3DGarageModel(0));
-        } else {
-            // Classic GT2 garage
-            ContentManager cm = FindObjectOfType<ContentManager>();
-            string[] installedCars = cm.LoadManifest();
+        //go through every car found in the manifest and create the buttons for them
+        foreach (string prefab in installedCars) {
+            GameObject button = Instantiate(buttonPrefab, GarageScrollBoxContent.transform);
+            // Set labels
+            button.name = prefab;
+            button.GetComponentInChildren<Text>().text = prefab;
 
-            GarageCanvas.gameObject.SetActive(true);
-            
-            // Add the car buttons
-            createdGarageButtons = new List<GameObject>();
-            int offset = 0;
+            //write a script on the button to duz its thing
 
-            //go through every car found in the manifest and create the buttons for them
-            foreach (string prefab in installedCars) {
-                GameObject button = Instantiate(buttonPrefab, GarageScrollBoxContent.transform);
-                // Set labels
-                button.name = prefab;
-                button.GetComponentInChildren<Text>().text = prefab;
+            createdGarageButtons.Add(button);
+            // Add car select callback
+            button.GetComponent<Button>().onClick.AddListener(CarSelection);
 
-                //write a script on the button to duz its thing
-
-                createdGarageButtons.Add(button);
-                // Add car select callback
-                button.GetComponent<Button>().onClick.AddListener(CarSelection);
-
-                // Move the button to its correct position using a lot of unity code soup
-                (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
-                offset -= 50;
-
-            }
+            // Move the button to its correct position using a lot of unity code soup
+            (button.transform as RectTransform).anchoredPosition = new Vector2((button.transform as RectTransform).anchoredPosition.x, (button.transform as RectTransform).anchoredPosition.y + offset);
+            offset -= 50;
         }
-    }
-
-    public GameObject Garage3DModel;
-    public GameObject Garage3DCarRoot;
-    public GameObject Garage3DCarLogo;
-    public GameObject Garage3DCarName;
-    private int CarIndex = 0;
-    public void Garage3DLeft() {
-        CarIndex--;
-        if (CarIndex < 0) CarIndex = carsPrefabs.Count - 1;
-        StartCoroutine(Move3DGarageModel(2));
-    }
-
-    public void Garage3DRight() {
-        CarIndex++;
-        if (CarIndex > carsPrefabs.Count - 1) CarIndex = 0;
-        StartCoroutine(Move3DGarageModel(-2));
-    }
-
-    public void TestInit() {
-        // Can't be bothered
-        string selectedCarName = FindObjectOfType<DataController>().SelectedCar;
-        for (int i = 0; i < carsPrefabs.Count; i++) {
-            if (carsPrefabs[i].name == selectedCarName) {
-                CarIndex = i;
-                break;
-            }
-        }
-        StartCoroutine(Move3DGarageModel(0));
-    }
-
-    public IEnumerator Move3DGarageModel(float direction) {
-        // accumulator to restore translation
-        float acc = 0;
-        if (direction != 0) {
-            // Close door
-            Garage3DModel.gameObject.GetComponent<GarageDoorScript>().CloseDoor();
-
-            // Run "fake" translation
-            while (Math.Abs(acc) < 70) {
-                Garage3DModel.gameObject.transform.Translate(direction, 0, 0);
-                acc += direction;
-                yield return new WaitForEndOfFrame();
-            }
-        }
-
-        // Set logo material
-        Material logo = CarIndex > carLogos.Count - 2 ? carLogos[0] : carLogos[CarIndex+1];
-        Garage3DCarLogo.GetComponent<MeshRenderer>().material = logo;
-
-        // Set car name
-        Garage3DCarName.GetComponent<Text>().text = carsPrefabs[CarIndex].name;
-
-        // Delete old car model
-        foreach(Transform child in Garage3DCarRoot.transform) {
-            Destroy(child.gameObject);
-        }
-
-        // Instantiate new car model
-        GameObject spinner = Instantiate(carsPrefabs[CarIndex], Garage3DCarRoot.transform);
-
-        // Disable wheel colliders or unity spergs in the log
-        //CarScriptKill(spinner);
-
-        // Set transform
-        StartCoroutine(SetPosition(spinner));
-
-        // Return to initial position and open door
-        Garage3DModel.gameObject.transform.Translate(-acc, 0, 0);
-        Garage3DModel.gameObject.GetComponent<GarageDoorScript>().OpenDoor();
-    }
-
-    private IEnumerator SetPosition(GameObject spinner) {
-        // We do this thing because doing it all in Move3DGarageModel doesn't work
-        // My guess is, all the scripts to be disabled (esp rigidbody) 
-        // don't play nicely with setting the position
-        yield return new WaitForEndOfFrame();
-        spinner.transform.localPosition = new Vector3(0, 0, 0);
     }
 
     private IEnumerator SetSelectedGameObject(GameObject select) {
@@ -359,7 +263,7 @@ public class Controller : MonoBehaviour {
 
         //fetch values from save data
         DataController data = FindObjectOfType<DataController>();
-        GameObject.Find("3D Garage").GetComponent<Toggle>().isOn = data.Garage3D;
+        GameObject.Find("QuickCarSelect").GetComponent<Toggle>().isOn = data.QuickCarSelect;
         GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value = data.MenuAudio;
     }
 
@@ -433,20 +337,43 @@ public class Controller : MonoBehaviour {
 
         //add a boolean setting to savedata "QuickCarSelect" which lets you 1 click a car
         //ill see if i even go with that 3d garage idea anymore tbh, maybe swap that with this...
-        if (false)
+        DataController data = FindObjectOfType<DataController>();
+        if (data.QuickCarSelect)
         {
             Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-            FindObjectOfType<DataController>().SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+            data.SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
             Cancel();
         }
         else
         {
             GarageCanvas.gameObject.SetActive(false);
+            GarageTurntableParent.SetActive(true);
+            GarageContextCanvas.gameObject.SetActive(false);
             GarageTurntableCanvas.gameObject.SetActive(true);
+            FindObjectOfType<Camera>().fieldOfView = 30;
+            //get the car, and set some data.
+            ContentManager cm = FindObjectOfType<ContentManager>();
+            AssetBundle corr = cm.GetCar(gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name);
+            GameObject.Find("GARAGE_CarName").GetComponent<Text>().text = corr.name;
+            GameObject spawnpoint = new GameObject();
 
+            GameObject spinner = InstantiateCar(corr.name, spawnpoint.transform);
+            currentCars.Add(spinner);
+            currentCars.Add(spawnpoint);
+            spinner.transform.position = new Vector3(0, -29.3f, 177.4f);
+            spinner.transform.localScale = new Vector3(15, 15, 15);
+            // Add rotation script
+            spinner.AddComponent<Spinner>();
         }
     }
     
+    public void OpenCarContext()
+    {
+        GarageTurntableCanvas.gameObject.SetActive(false);
+        GarageContextCanvas.gameObject.SetActive(true);
+    }
+
+
     public void OpenCredits()
     {
         GoRaceCanvas.gameObject.SetActive(false);
@@ -533,7 +460,7 @@ public class Controller : MonoBehaviour {
     // Save options
     public void SaveOptions() {
         DataController data = FindObjectOfType<DataController>();
-        data.Garage3D = GameObject.Find("3D Garage").GetComponent<Toggle>().isOn;
+        data.QuickCarSelect = GameObject.Find("QuickCarSelect").GetComponent<Toggle>().isOn;
         data.MenuAudio = GameObject.Find("Menu Audio Volume").GetComponent<Slider>().value;
         data.CuntUI = GameObject.Find("ImAFuckingCunt").GetComponent<Toggle>().isOn;
 
@@ -593,12 +520,6 @@ public class Controller : MonoBehaviour {
                 Destroy(button);
             }
             createdGarageButtons.Clear();
-        }
-
-        // Garage 3D -> Go Race
-        if (Garage3DCanvas.gameObject.activeSelf) {
-            GoRaceCanvas.gameObject.SetActive(true);
-            Garage3DCanvas.gameObject.SetActive(false);
         }
 
         // Tuning -> Go Race
@@ -683,13 +604,28 @@ public class Controller : MonoBehaviour {
             OpenTuneScreen();
         }
 
-        // GarageTurntable -> Garage
+        // Garage Turntable -> Garage
         if (GarageTurntableCanvas.gameObject.activeSelf)
         {
+            foreach (GameObject carro in currentCars)
+            {
+                Destroy(carro);
+            }
+            GarageContextCanvas.gameObject.SetActive(false);
             GarageTurntableCanvas.gameObject.SetActive(false);
+            GarageTurntableParent.SetActive(false);
             GarageCanvas.gameObject.SetActive(true);
+            FindObjectOfType<Camera>().fieldOfView = 60;
         }
 
+
+        // Garage Info -> Garage Turntable
+        if (GarageContextCanvas.gameObject.activeSelf)
+        {
+            GarageContextCanvas.gameObject.SetActive(false);
+            GarageTurntableCanvas.gameObject.SetActive(true);
+        }
+        
 
         dataController.SaveGameData();
         yield return null;
