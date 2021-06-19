@@ -19,6 +19,7 @@ public class Controller : MonoBehaviour {
     public GameObject GarageTurntableParent;
     public Canvas GarageTurntableCanvas;
     public Canvas GarageContextCanvas;
+    public Canvas GarageOKCanvas;
     public Canvas TuneScreenCanvas;
     public Canvas LoadTuneScreenCanvas;
     public Canvas SaveTuneScreenCanvas;
@@ -367,10 +368,30 @@ public class Controller : MonoBehaviour {
         }
     }
     
+    //select car button
+    public void SelectCar()
+    {
+        GarageOKCanvas.gameObject.SetActive(true);
+        Text text = GameObject.Find("GARAGE_OKtext").GetComponent<Text>();
+        DataController data = FindObjectOfType<DataController>();
+        string currentCor = GameObject.Find("GARAGE_CarName").GetComponent<Text>().text;
+        GarageTurntableCanvas.gameObject.SetActive(false);
+        if (data.SelectedCar == currentCor)
+        {
+            text.text = "You are already driving this car.";
+        }
+        else
+        {
+            text.text = "You are now driving the " + currentCor + ".";
+        }
+        data.SelectedCar = currentCor;
+    }
+
     public void OpenCarContext()
     {
         GarageTurntableCanvas.gameObject.SetActive(false);
         GarageContextCanvas.gameObject.SetActive(true);
+        FindObjectOfType<Camera>().gameObject.transform.position = GameObject.Find("camPos1").transform.position;
     }
 
 
@@ -617,15 +638,22 @@ public class Controller : MonoBehaviour {
             GarageCanvas.gameObject.SetActive(true);
             FindObjectOfType<Camera>().fieldOfView = 60;
         }
-
-
+        
         // Garage Info -> Garage Turntable
         if (GarageContextCanvas.gameObject.activeSelf)
         {
+
+            FindObjectOfType<Camera>().gameObject.transform.position = GameObject.Find("camPos0").transform.position;
             GarageContextCanvas.gameObject.SetActive(false);
             GarageTurntableCanvas.gameObject.SetActive(true);
         }
-        
+
+        // Garage OK -> Garage Turntable
+        if (GarageOKCanvas.gameObject.activeSelf)
+        {
+            GarageOKCanvas.gameObject.SetActive(false);
+            GarageTurntableCanvas.gameObject.SetActive(true);
+        }
 
         dataController.SaveGameData();
         yield return null;
