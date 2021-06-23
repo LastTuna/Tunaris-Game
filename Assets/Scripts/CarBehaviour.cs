@@ -21,7 +21,7 @@ public class CarBehaviour : MonoBehaviour {
     public float shifterDelay = 0.3f;
     //tuneable stats
     public CarData specs;
-
+    public HUD Hud;//HUD container
 
     public float aero = 5f;
     public float dragCoef = 0.06f;//max rigidbody.drag value.
@@ -85,19 +85,35 @@ public class CarBehaviour : MonoBehaviour {
     void Start() {
         if (!isBusrider)
         {
+            DataController dataController = FindObjectOfType<DataController>();
             ContentManager cm = FindObjectOfType<ContentManager>();
-            //initialize car data object.
-            //specs = new CarData();
-            //LOAD CAR SPECS
-            //TextAsset ass = LoadAsset("specs.json") as TextAsset;
-            //specs =  specs.ImportData(ass.text);
-            InitializeCar();
 
+            AssetBundle cor = cm.GetCar(dataController.SelectedCar);
+            //initialize car data object.
+            specs = new CarData();
+            //LOAD CAR SPECS
+            TextAsset SpecData = cor.LoadAsset("specs.json") as TextAsset;
+            specs = specs.ImportData(SpecData.text);
+
+            //instantiate HUD. Then get the specific HUD data.
+            GameObject hudprefab = Instantiate(cor.LoadAsset("HUD") as GameObject);
+            if(hudprefab == null)
+            {
+                //DEFAULT HUD
+            }
+            else
+            {
+                TextAsset hudData = cor.LoadAsset("HUD.json") as TextAsset;
+                Hud = Instantiate(new HUD(), hudprefab.transform);
+                Hud.GetUIinfo(hudData.text);
+            }
+
+            InitializeCar();
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
-            
 
+            
             //if no turbo then make sure boost is 1
             if (!aspirated) turboSpool = 1;
 
@@ -110,7 +126,6 @@ public class CarBehaviour : MonoBehaviour {
             wheelRL.ConfigureVehicleSubsteps(5, 12, 15);
             wheelRR.ConfigureVehicleSubsteps(5, 12, 15);
 
-            DataController dataController = FindObjectOfType<DataController>();
             dirtiness = dataController.GetDirtiness();
             isBusrider = dataController.IsBusrider;
             //call the FFB start routine
@@ -156,8 +171,6 @@ public class CarBehaviour : MonoBehaviour {
         wheelFR.gameObject.AddComponent<TireBehavior>();
         wheelRL.gameObject.AddComponent<TireBehavior>();
         wheelRR.gameObject.AddComponent<TireBehavior>();
-
-
     }
 
     //move all the FFB gibberish into a method so i can actually see whats going on in Start()
@@ -345,9 +358,7 @@ public class CarBehaviour : MonoBehaviour {
     }
 
     void Update() {
-
-            float[] shariq = new float[] { wheelFL.rpm, wheelFR.rpm, wheelRL.rpm, wheelRR.rpm };
-            //HUD.UpdateHUD(engineRPM, engineREDLINE, currentSpeed, shifting, gear, tirewearlist, shariq);
+            Hud.UpdateHUD(engineRPM, engineREDLINE, turboSpool, currentSpeed, shifting, gear, tirewearlist);
             //TODO!!!!!!!!! SOUND SYSTEM RE ENABLE
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
