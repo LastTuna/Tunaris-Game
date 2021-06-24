@@ -11,11 +11,14 @@ using System.IO;
 //other custom content.
 
 class ContentManager : MonoBehaviour {
-    
+
     //this is where all LOADED assetbundles are stored. once UNLOADED, remove from the list.
     public List<AssetBundle> Cars;
     public const string fileExtension = ".tgm";
+
     //figure out some file extension thats not .sneed in the secret shadow government meeting
+
+    public GameObject DefaultHUD;//this is where i slap default HUD. TROLLFACE
 
     private void Start()
     {

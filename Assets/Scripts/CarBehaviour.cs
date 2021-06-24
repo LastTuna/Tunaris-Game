@@ -90,21 +90,26 @@ public class CarBehaviour : MonoBehaviour {
 
             AssetBundle cor = cm.GetCar(dataController.SelectedCar);
             //initialize car data object.
-            specs = new CarData();
+            //specs = new CarData();
             //LOAD CAR SPECS
-            TextAsset SpecData = cor.LoadAsset("specs.json") as TextAsset;
-            specs = specs.ImportData(SpecData.text);
+            //TextAsset SpecData = cor.LoadAsset("specs.json") as TextAsset;
+            //specs = specs.ImportData(SpecData.text);
 
             //instantiate HUD. Then get the specific HUD data.
-            GameObject hudprefab = Instantiate(cor.LoadAsset("HUD") as GameObject);
-            if(hudprefab == null)
+            TextAsset hudData = cor.LoadAsset("HUD.json") as TextAsset;
+
+            if(hudData == null)
             {
-                //DEFAULT HUD
+                //default HUD
+                GameObject hudprefab = Instantiate(cm.DefaultHUD);
+                Hud = hudprefab.AddComponent<HUD>();
+                Hud.GetUIinfo("default");
             }
             else
             {
-                TextAsset hudData = cor.LoadAsset("HUD.json") as TextAsset;
-                Hud = Instantiate(new HUD(), hudprefab.transform);
+                //CUSTOM HUD
+                GameObject hudprefab = Instantiate(cor.LoadAsset("HUD") as GameObject);
+                Hud = hudprefab.AddComponent<HUD>();
                 Hud.GetUIinfo(hudData.text);
             }
 
@@ -113,7 +118,8 @@ public class CarBehaviour : MonoBehaviour {
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
-            
+            tirewearlist = new float[] {0,0,0,0 };
+
             //if no turbo then make sure boost is 1
             if (!aspirated) turboSpool = 1;
 

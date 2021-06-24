@@ -16249,6 +16249,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Cars: []
+  DefaultHUD: {fileID: 1636430603528072, guid: 5b2038f527ef5114d9e0b45b93d8a0b4, type: 2}
 --- !u!4 &1578424631
 Transform:
   m_ObjectHideFlags: 0

@@ -34,9 +34,9 @@ public class HUD : MonoBehaviour {
         digitalSpeedDummies = new List<GameObject>();
         digitalTurboDummies = new List<GameObject>();
 
-        RPMpointer = GameObject.Find("HUD_RPM_POINTER").GetComponent<RectTransform>();
-        speedPointer = GameObject.Find("HUD_SPEED_POINTER").GetComponent<RectTransform>();
-        turboPointer = GameObject.Find("HUD_TURBO_POINTER").GetComponent<RectTransform>();
+        RPMpointer = GetPointerRect("HUD_RPM_POINTER");
+        speedPointer = GetPointerRect("HUD_SPEED_POINTER");
+        turboPointer = GetPointerRect("HUD_TURBO_POINTER");
 
         DigitalDummies("HUD_DIGITAL_RPM_", digitalRPMdummies);
         DigitalDummies("HUD_DIGITAL_SPEED_", digitalSpeedDummies);
@@ -46,8 +46,14 @@ public class HUD : MonoBehaviour {
         speedDisplay = GameObject.Find("HUD_SPEED").GetComponent<Text>();
 
         digitalSpeedPrecalc = CustomHudData.SpeedoMaxValue / digitalSpeedDummies.Count;
-        
+
         //instantiate mat - TREAD WEAR READOUT
+        treadDisplay = new Image[4];
+        treadDisplay[0] = GameObject.Find("HUD_TREAD_FL").GetComponent<Image>();
+        treadDisplay[1] = GameObject.Find("HUD_TREAD_FR").GetComponent<Image>();
+        treadDisplay[2] = GameObject.Find("HUD_TREAD_RL").GetComponent<Image>();
+        treadDisplay[3] = GameObject.Find("HUD_TREAD_RR").GetComponent<Image>();
+
         treadColors = new Material[4];
         int i = 0;
         foreach(Image m in treadDisplay)
@@ -58,10 +64,21 @@ public class HUD : MonoBehaviour {
         }
     }
 
+    //need 2 check da dummies or it will refuse to execute any code underneath
+    //because we are using GetComponent();
+    public RectTransform GetPointerRect(string name)
+    {
+        if(GameObject.Find(name) != null)
+        {
+            return GameObject.Find(name).GetComponent<RectTransform>();
+        }
+        return null;
+    }
+
     //HUD_DIGITAL_RPM_, HUD_DIGITAL_SPEED_, HUD_DIGITAL_TURBO_
     public void DigitalDummies(string type, List<GameObject> dummylist)
     {
-        if (GameObject.Find(type + "0") == null)
+        if (GameObject.Find(type + "0") != null)
         {
             GameObject dolor;
             for (int t = 0; true; t++)
@@ -71,12 +88,29 @@ public class HUD : MonoBehaviour {
                 dummylist.Add(GameObject.Find(type + t));
             }
         }
+        else
+        {
+            //if nothings found add a null to first index so it can be null checked
+            dummylist.Add(null);
+        }
     }
     //called from CarBehavior. give the UI data json file. if not available then initiate default HUD.
 
+        //CALL "default" TO INITIATE DEFAULT UI.
     public void GetUIinfo(string dataAsJson)
     {
-        CustomHudData = JsonUtility.FromJson<CustomHud>(dataAsJson);
+        CustomHudData = new CustomHud();
+        if (dataAsJson == "default")
+        {
+            //if u make the default UI more complex then u gotta expand on the defaults.
+            CustomHudData.RPM.dialStartRot = 90;
+            CustomHudData.RPM.dialEndRot = -180;
+        }
+        else
+        {
+            CustomHudData = JsonUtility.FromJson<CustomHud>(dataAsJson);
+        }
+
     }
 
     public void UpdateHUD(float engineRPM, float engineREDLINE, float turboPressure, float currentSpeed, bool shifting, int gear, float[] treadWear) {
@@ -193,7 +227,6 @@ public class HUD : MonoBehaviour {
                 }
             }
         }
-
         //TIRE READOUT
         if(treadColors[0] != null)
         {
