@@ -1,0 +1,39 @@
+ManifestFileVersion: 0
+CRC: 2735506456
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4398eeeee49c3bbb2a891fa74b239bb7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: f9667c9bc053f7d713eb09d38446d8d1
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 49
+  Script: {instanceID: 0}
+- Class: 54
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 146
+  Script: {instanceID: 0}
+Assets:
+- Assets/cars/rs200/rs200.prefab
+- Assets/cars/rs200/specs.json
+Dependencies: []

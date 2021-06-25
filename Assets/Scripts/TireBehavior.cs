@@ -83,6 +83,7 @@ public class TireBehavior : MonoBehaviour
         //get the current wheel identity (FR,FL,RR,RL you get it)
         string wheelIdentity = gameObject.name.Substring(0, 2);
         wheelHub = basecar.transform.Find(wheelIdentity + "hub");
+        visualWheel = wheelHub.Find(wheelIdentity + "wheel").gameObject;
         suspension = basecar.transform.Find(wheelIdentity + "susp");
 
     }

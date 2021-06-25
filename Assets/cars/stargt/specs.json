@@ -1,0 +1,97 @@
+{
+    "carName": "Star GT V8",
+    "carClass": "R",
+    "description": "Naturally aspirated V8 and all wheel drive, what more do you need?",
+    "version": "0.0.6",
+    "weight": 100.0,
+    "centerOfGravy": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.2
+    },
+    "aero": 2.0,
+    "dragCoef": 0.06,
+    "engineIdle": 800.0,
+    "engineREDLINE": 6000.0,
+    "engineTorque": {
+        "serializedVersion": "2",
+        "m_Curve": [
+            {
+                "serializedVersion": "2",
+                "time": 0.0,
+                "value": 50.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 5000.0,
+                "value": 100.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 9000.0,
+                "value": 160.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2,
+        "m_RotationOrder": 4
+    },
+    "frontWheelDriveBias": 0.5,
+    "ratio": 4.0,
+    "gears": [
+        -5.0,
+        0.0,
+        5.4,
+        3.4,
+        2.7,
+        2.0,
+        1.8,
+        1.6
+    ],
+    "shifterDelay": 0.3,
+    "maxSteerAngle": 15.0,
+    "lsd": 1.0,
+    "aspirated": false,
+    "turboWaste": {
+        "serializedVersion": "2",
+        "m_Curve": [
+            {
+                "serializedVersion": "2",
+                "time": 0.0,
+                "value": 0.4,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 5000.0,
+                "value": 1.2,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 9000.0,
+                "value": 1.8,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2,
+        "m_RotationOrder": 4
+    },
+    "turboSize": 10.0
+}
