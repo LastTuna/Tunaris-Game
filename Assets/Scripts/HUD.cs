@@ -103,6 +103,7 @@ public class HUD : MonoBehaviour {
         if (dataAsJson == "default")
         {
             //if u make the default UI more complex then u gotta expand on the defaults.
+            //technically this is not necessary anymore but keeping it here just in case...
             CustomHudData.RPM.dialStartRot = 90;
             CustomHudData.RPM.dialEndRot = -180;
         }
@@ -110,7 +111,6 @@ public class HUD : MonoBehaviour {
         {
             CustomHudData = JsonUtility.FromJson<CustomHud>(dataAsJson);
         }
-
     }
 
     public void UpdateHUD(float engineRPM, float engineREDLINE, float turboPressure, float currentSpeed, bool shifting, int gear, float[] treadWear) {
@@ -200,7 +200,7 @@ public class HUD : MonoBehaviour {
         //RPM DISPLAY
         if (RPMdisplay != null)
         {
-            RPMdisplay.text = Mathf.Abs(engineRPM).ToString();
+            RPMdisplay.text = Mathf.Round(Mathf.Abs(engineRPM * CustomHudData.ReadoutRPMscale)).ToString();
         }
 
         //GEAR DISPLAY
@@ -239,17 +239,20 @@ public class HUD : MonoBehaviour {
     }
 }
 
+[System.Serializable]
 public class CustomHud
 {
-    public struct Dial
+    //cant use a struct, must be class to serialize to unitys AAASSSSSSSSS JSON export...
+    [System.Serializable]
+    public class Dial
     {
-        public float dialStartRot;//start position of the dial
-        public float dialEndRot;//end position of the dial
+        public float dialStartRot = 90;//start position of the dial
+        public float dialEndRot = -180;//end position of the dial
     }
-    public Dial RPM;
-    public Dial Speedo;
-    public Dial Turbo;
-    public float SpeedoMaxValue;//reference value to the cars "top speed" on the speedo.
-    public float PeakBoostValue;//reference value to turbo peak boost
-    public float ReadoutRPMscale;//RPM multiplier if you want rpm readout in digits
+    public Dial RPM = new Dial();
+    public Dial Speedo = new Dial();
+    public Dial Turbo = new Dial();
+    public float SpeedoMaxValue = 200;//reference value to the cars "top speed" on the speedo.
+    public float PeakBoostValue = 1.8f;//reference value to turbo peak boost
+    public float ReadoutRPMscale = 1;//RPM multiplier if you want rpm readout in digits
 }

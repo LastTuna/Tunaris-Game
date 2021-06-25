@@ -18,46 +18,32 @@ public class CarBehaviour : MonoBehaviour {
     public float currentSpeed, wheelRPM;
     public Material dirt; //dirt MATERIAL.
     public int manual = 1; //0auto - 1manual - 2manualwclutch
-    public float shifterDelay = 0.3f;
     //tuneable stats
     public CarData specs;
     public HUD Hud;//HUD container
-
-    public float aero = 5f;
-    public float dragCoef = 0.06f;//max rigidbody.drag value.
-    public float ratio = 1; //final drive
-    public float maxSteerAngle = 20;
+    
     /// <summary>
     /// How much power is being sent to the front wheels, as a ratio, can be used to change drivetrain
     /// 0: no power to front, 100% power to rear
     /// 0.5: half front, half rear
     /// 1: 100% front,  no rear
     /// </summary>
-    public float FrontWheelDriveBias = 0.5f;
     // Having it as a ratio opens a whole lot of tricks, but mainly an easy way to allocate power for ALL drivetrains
     // FrontPower = engineOutput * FrontWheelDriveBias
     // RearPower = engineOutput * (1-FrontWheelDriveBias)
     // Chaning this while the car is driving is an effective way of having a center diff
-    public float lsd = 1f;
 
     //end tuneable stats
     public float engineOUT;//engine output
     public float airSpeed;
     public float engineRPM;
-    public float engineIdle = 800;
-    public float engineREDLINE = 9000;//engine redline - REDLINE AT 6000 IF TRUCK
-    public AnimationCurve engineTorque = new AnimationCurve(new Keyframe(0, 130), new Keyframe(5000, 250), new Keyframe(9000, 200));//engine power - CHANGE TO 200 IF TRUCK
-    public bool aspirated = false;
-    public AnimationCurve turboWaste = new AnimationCurve(new Keyframe(0, 0), new Keyframe(5000, 1), new Keyframe(9000, 0)); //adjust turbo engagement curve, turbo pressure
-    public float turboSpool = 0.1f;//current turbo pressure
-    public float turboSize = 10;//mm - adjusts turbo lag
+    public float turboSpool = 1;
     public bool spooled = false;//determine whether to play wastegate sound or not
     public float unitOutput;//current power output to wheels
     //clutch
     public float clutchPressure = 1; //0-1 clamp
     public float clutchRPM;
     //gears
-    public float[] gears = new float[8] { -5.0f, 0.0f, 5.4f, 3.4f, 2.7f, 2.0f, 1.8f, 1.6f };
     public int gear;//current gear
     public bool shifting = false;//shifter delay
 
@@ -75,10 +61,7 @@ public class CarBehaviour : MonoBehaviour {
     private int[] axes, dirs;
     public float FFBMultiplier = 1.0f;
 
-
-    // CoG
-    public Vector3 CenterOfGravity = new Vector3(0, 0.2f, 0.1f);
-
+    
     // busrider mode
     private bool isBusrider;
 
@@ -90,10 +73,13 @@ public class CarBehaviour : MonoBehaviour {
 
             AssetBundle cor = cm.GetCar(dataController.SelectedCar);
             //initialize car data object.
-            //specs = new CarData();
-            //LOAD CAR SPECS
-            //TextAsset SpecData = cor.LoadAsset("specs.json") as TextAsset;
-            //specs = specs.ImportData(SpecData.text);
+            specs = new CarData();
+            //LOAD CAR SPECS. if no car specs are found, run defaults.
+            TextAsset SpecData = cor.LoadAsset("specs.json") as TextAsset;
+            if(SpecData != null)
+            {
+                specs = specs.ImportData(SpecData.text);
+            }
 
             //instantiate HUD. Then get the specific HUD data.
             TextAsset hudData = cor.LoadAsset("HUD.json") as TextAsset;
@@ -118,13 +104,11 @@ public class CarBehaviour : MonoBehaviour {
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
 
-            tirewearlist = new float[] {0,0,0,0 };
-
-            //if no turbo then make sure boost is 1
-            if (!aspirated) turboSpool = 1;
-
+            tirewearlist = new float[] {100,100,100,100};
+            
             engineRPM = 800;
-            GetComponent<Rigidbody>().centerOfMass = CenterOfGravity;
+            GetComponent<Rigidbody>().centerOfMass = specs.centerOfGravy;
+            GetComponent<Rigidbody>().mass = specs.weight;
             gear = 1;
 
             wheelFR.ConfigureVehicleSubsteps(5, 12, 15);
@@ -312,10 +296,10 @@ public class CarBehaviour : MonoBehaviour {
     void FixedUpdate() {
             AeroDrag();
 
-            //TireWearMonitor();//remove this sometime just reminder
+            TireWearMonitor();
             if (manual == 2) clutchPressure = 1 - CustomInput.GetAxis("Clutch");
             Engine();
-            float targetSteering = maxSteerAngle * CustomInput.GetAxis("Steering");
+            float targetSteering = specs.maxSteerAngle * CustomInput.GetAxis("Steering");
         
             // FFB calculations
             if (ffbeffect != null) {
@@ -336,7 +320,7 @@ public class CarBehaviour : MonoBehaviour {
                     float centering = Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up);
                     float baseForce = (wheelHitR.force + wheelHitL.force) * 5;
                     ffbForce.Magnitude = (int) (baseForce * wheelWeight * centering * -0.5);*/
-                    int centering = Mathf.RoundToInt((Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up) / maxSteerAngle) * -10000); ;
+                    int centering = Mathf.RoundToInt((Vector3.SignedAngle(wheelHitR.forwardDir.normalized, GetComponent<Rigidbody>().transform.forward, Vector3.up) / specs.maxSteerAngle) * -10000); ;
                     centeringDebug = centering;
 
                     float computedFFBFront = FFBApproximation(wheelFL, wheelHitL, wheelFR, wheelHitR) / FFBMultiplier;
@@ -356,15 +340,15 @@ public class CarBehaviour : MonoBehaviour {
             wheelFR.steerAngle = targetSteering;
             wheelFL.steerAngle = targetSteering;
 
-            if(aspirated) Turbo();//turbo sim enable
+            if(specs.aspirated) Turbo();//turbo sim enable
             
-            currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * 60 / 1000;
-            currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * 60 / 1000;
+            currentSpeed = 2 * 22 / 7 * wheelFL.radius * ((wheelFL.rpm + wheelFR.rpm) / 2 * specs.frontWheelDriveBias) * 60 / 1000;
+            currentSpeed += 2 * 22 / 7 * wheelRL.radius * ((wheelRL.rpm + wheelRR.rpm) / 2 * (1 - specs.frontWheelDriveBias)) * 60 / 1000;
             currentSpeed = Mathf.Round(currentSpeed);
     }
 
     void Update() {
-            Hud.UpdateHUD(engineRPM, engineREDLINE, turboSpool, currentSpeed, shifting, gear, tirewearlist);
+            Hud.UpdateHUD(engineRPM, specs.engineREDLINE, turboSpool, currentSpeed, shifting, gear, tirewearlist);
             //TODO!!!!!!!!! SOUND SYSTEM RE ENABLE
             Gearbox();//gearbox update
             //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
@@ -387,15 +371,15 @@ public class CarBehaviour : MonoBehaviour {
     {//engine
         if(gear == 1 || clutchPressure < 0.5f)
         {//NEUTRAL
-            if (engineRPM >= engineREDLINE)
+            if (engineRPM >= specs.engineREDLINE)
             {
                 engineRPM -= 300;
             }
             else
             {
-                engineRPM += engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(CustomInput.GetAxis("Throttle"));
-                if (engineRPM > engineIdle && Mathf.Clamp01(CustomInput.GetAxis("Throttle")) == 0) engineRPM -= engineTorque.Evaluate(engineRPM) / 3;
-                if (engineRPM < engineIdle) engineRPM += 20;
+                engineRPM += specs.engineTorque.Evaluate(engineRPM) * turboSpool * Mathf.Clamp01(CustomInput.GetAxis("Throttle"));
+                if (engineRPM > specs.engineIdle && Mathf.Clamp01(CustomInput.GetAxis("Throttle")) == 0) engineRPM -= specs.engineTorque.Evaluate(engineRPM) / 3;
+                if (engineRPM < specs.engineIdle) engineRPM += 20;
             }
             clutchRPM = engineRPM;
             wheelFL.motorTorque = 0;
@@ -405,40 +389,40 @@ public class CarBehaviour : MonoBehaviour {
         }
         else
         {//DRIVE
-            engineRPM = (Mathf.Abs(wheelFL.rpm + wheelFR.rpm) / 2 * FrontWheelDriveBias) * ratio * Mathf.Abs(gears[gear]);
-            engineRPM += (Mathf.Abs(wheelRL.rpm + wheelRR.rpm) / 2 * (1 - FrontWheelDriveBias)) * ratio * Mathf.Abs(gears[gear]);
+            engineRPM = (Mathf.Abs(wheelFL.rpm + wheelFR.rpm) / 2 * specs.frontWheelDriveBias) * specs.ratio * Mathf.Abs(specs.gears[gear]);
+            engineRPM += (Mathf.Abs(wheelRL.rpm + wheelRR.rpm) / 2 * (1 - specs.frontWheelDriveBias)) * specs.ratio * Mathf.Abs(specs.gears[gear]);
             //make motor torks calc shorter with temporary variable
-            float precalc = Mathf.Clamp01(CustomInput.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure * turboSpool;
+            float precalc = Mathf.Clamp01(CustomInput.GetAxis("Throttle")) * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure * turboSpool;
 
-            engineOUT = engineTorque.Evaluate(engineRPM) * precalc;
+            engineOUT = specs.engineTorque.Evaluate(engineRPM) * precalc;
 
-            wheelFL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
-            wheelFR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * FrontWheelDriveBias * precalc;
-            wheelRL.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * precalc;
-            wheelRR.motorTorque = (engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - FrontWheelDriveBias) * precalc;
+            wheelFL.motorTorque = (specs.engineTorque.Evaluate(engineRPM) - Differential(wheelFR, wheelFL)) * CenterDifferential(1) * specs.frontWheelDriveBias * precalc;
+            wheelFR.motorTorque = (specs.engineTorque.Evaluate(engineRPM) - Differential(wheelFL, wheelFR)) * CenterDifferential(1) * specs.frontWheelDriveBias * precalc;
+            wheelRL.motorTorque = (specs.engineTorque.Evaluate(engineRPM) - Differential(wheelRR, wheelRL)) * CenterDifferential(-1) * (1 - specs.frontWheelDriveBias) * precalc;
+            wheelRR.motorTorque = (specs.engineTorque.Evaluate(engineRPM) - Differential(wheelRL, wheelRR)) * CenterDifferential(-1) * (1 - specs.frontWheelDriveBias) * precalc;
 
-            if (engineRPM >= engineREDLINE)
+            if (engineRPM >= specs.engineREDLINE)
             {//rev limiter
                 wheelFL.motorTorque = 0;
                 wheelFR.motorTorque = 0;
                 wheelRL.motorTorque = 0;
                 wheelRR.motorTorque = 0;
             }
-            if (engineRPM < engineIdle)
+            if (engineRPM < specs.engineIdle)
             {//idling
-                wheelFL.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelFR.motorTorque = 100 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelRL.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelRR.motorTorque = 100 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelFL.motorTorque = 100 * specs.frontWheelDriveBias * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelFR.motorTorque = 100 * specs.frontWheelDriveBias * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelRL.motorTorque = 100 * (1 - specs.frontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelRR.motorTorque = 100 * (1 - specs.frontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
             }
             if (clutchRPM > engineRPM)
             {//clutch kick
-                clutchRPM -= engineTorque.Evaluate(engineRPM);
+                clutchRPM -= specs.engineTorque.Evaluate(engineRPM);
                 engineRPM = clutchRPM;
-                wheelFL.motorTorque = 300 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelFR.motorTorque = 300 * FrontWheelDriveBias * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelRL.motorTorque = 300 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
-                wheelRR.motorTorque = 300 * (1 - FrontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(gears[gear])) * 2) * clutchPressure;
+                wheelFL.motorTorque = 300 * specs.frontWheelDriveBias * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelFR.motorTorque = 300 * specs.frontWheelDriveBias * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelRL.motorTorque = 300 * (1 - specs.frontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
+                wheelRR.motorTorque = 300 * (1 - specs.frontWheelDriveBias) * ((-0.5f + Mathf.Clamp01(specs.gears[gear])) * 2) * clutchPressure;
             }
             else if (clutchRPM + 300 < engineRPM)
             {
@@ -446,18 +430,26 @@ public class CarBehaviour : MonoBehaviour {
             }
 
         }
-        wheelRPM = (wheelFL.rpm * 3.3f) * ratio; //speed counter
-        
+        wheelRPM = (wheelFL.rpm * 3.3f) * specs.ratio; //speed counter
     }
     
+    //i know its a bit janky but eh whatever
+    void TireWearMonitor()
+    {
+        tirewearlist[0] = wheelFL.gameObject.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[1] = wheelFR.gameObject.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[2] = wheelRL.gameObject.GetComponent<TireBehavior>().TreadHealth;
+        tirewearlist[3] = wheelRR.gameObject.GetComponent<TireBehavior>().TreadHealth;
+    }
+
     void Turbo()
     {
-        if (CustomInput.GetAxis("Throttle") > 0 && engineRPM > engineIdle + 50)
+        if (CustomInput.GetAxis("Throttle") > 0 && engineRPM > specs.engineIdle + 50)
         {
-            turboSpool += turboWaste.Evaluate(engineRPM) / (turboSize * 3);
-            if (turboSpool > turboWaste.Evaluate(engineRPM))
+            turboSpool += specs.turboWaste.Evaluate(engineRPM) / (specs.turboSize * 3);
+            if (turboSpool > specs.turboWaste.Evaluate(engineRPM))
             {
-                turboSpool = turboWaste.Evaluate(engineRPM);
+                turboSpool = specs.turboWaste.Evaluate(engineRPM);
                 spooled = true;
             }
         }
@@ -466,7 +458,7 @@ public class CarBehaviour : MonoBehaviour {
             if (turboSpool > 0.2f)
             {
                 spooled = false;
-                turboSpool -= turboSpool / (turboSize * 4);
+                turboSpool -= turboSpool / (specs.turboSize * 4);
             }
         }
     }
@@ -474,14 +466,14 @@ public class CarBehaviour : MonoBehaviour {
     public float CenterDifferential (float front)
     {
         //if car is not awd, dont calculate center diff (DUH!)
-        if (FrontWheelDriveBias == 0 || FrontWheelDriveBias == 1)
+        if (specs.frontWheelDriveBias == 0 || specs.frontWheelDriveBias == 1)
         {
             return 1;
         }
         else
         {
             //deduct 50% of power if wheels are faster than fronts
-            if (front * ((wheelFL.rpm + wheelFR.rpm) / 2) - ((wheelRL.rpm + wheelRR.rpm) / 2) > lsd)
+            if (front * ((wheelFL.rpm + wheelFR.rpm) / 2) - ((wheelRL.rpm + wheelRR.rpm) / 2) > specs.lsd)
             {
                 return 0.5f;
             }
@@ -517,22 +509,22 @@ public class CarBehaviour : MonoBehaviour {
                 if(gear == 1)
                 {
                     //neutral
-                    if(engineRPM > engineIdle + 900) gear++;
+                    if(engineRPM > specs.engineIdle + 900) gear++;
                     break;
                 }
-                if(engineRPM > engineREDLINE - 500 && gear != gears.Length - 1)
+                if(engineRPM > specs.engineREDLINE - 500 && gear != specs.gears.Length - 1)
                 {
                     //upshift
                     gear++;
                     break;
                 }
-                if (engineRPM < engineREDLINE - engineREDLINE / 2 && gear != 2 && gear != 1)
+                if (engineRPM < specs.engineREDLINE - specs.engineREDLINE / 2 && gear != 2 && gear != 1)
                 {
                     //downshift
                     gear--;
                     break;
                 }
-                if (engineRPM < engineIdle + 200 && gear == 2)
+                if (engineRPM < specs.engineIdle + 200 && gear == 2)
                 {
                     //downshift to neutral
                     gear--;
@@ -540,19 +532,19 @@ public class CarBehaviour : MonoBehaviour {
                 }
                 break;
             case 1: //MANUAL
-                if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && shifting == false)
+                if (Input.GetButtonDown("ShiftUp") == true && gear < specs.gears.Length - 1 && shifting == false)
                 {
                     gear = gear + 1;
-                    StartCoroutine(ClutchDelay(shifterDelay));
+                    StartCoroutine(ClutchDelay(specs.shifterDelay));
                 }
                 if (Input.GetButtonDown("ShiftDown") == true && gear > 0 && shifting == false)
                 {
                     gear = gear - 1;
-                    StartCoroutine(ClutchDelay(shifterDelay / 3));
+                    StartCoroutine(ClutchDelay(specs.shifterDelay / 3));
                 }
                 break;
             case 2: //MANUAL CLUTCH
-                if (Input.GetButtonDown("ShiftUp") == true && gear < gears.Length - 1 && clutchPressure < 0.5f)
+                if (Input.GetButtonDown("ShiftUp") == true && gear < specs.gears.Length - 1 && clutchPressure < 0.5f)
                 {
                     shifting = true;
                     gear = gear + 1;
@@ -581,12 +573,12 @@ public class CarBehaviour : MonoBehaviour {
             Mathf.Abs(gameObject.GetComponent<Rigidbody>().velocity.z);
 
         Vector3 drag = gameObject.transform.forward.normalized * -1;
-        drag.y = -aero * airSpeed;//downforce
+        drag.y = -specs.aero * airSpeed;//downforce
         
         
         //Debug.Log(drag);
         gameObject.GetComponent<Rigidbody>().angularDrag = Mathf.Lerp(0, 0.8f, airSpeed / 100);
-        gameObject.GetComponent<Rigidbody>().drag = Mathf.Lerp(0, dragCoef + aero / 200, airSpeed / 100);
+        gameObject.GetComponent<Rigidbody>().drag = Mathf.Lerp(0, specs.dragCoef + specs.aero / 200, airSpeed / 100);
         //Debug.Log(transform.forward.y);
         gameObject.GetComponent<Rigidbody>().AddRelativeForce(drag, ForceMode.Force);
 

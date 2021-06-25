@@ -28,9 +28,8 @@ class ContentManager : MonoBehaviour {
         //be a second instance.
         //sort something out here becasuse i fuckin cant BRUUUUUH
 
-
         GenerateManifest();
-
+        //ExportData();
 
         //im just doing some hardcoded thing to make basic functionality again.
         //this should be looped with the data from the manifest to get
@@ -75,14 +74,20 @@ class ContentManager : MonoBehaviour {
     }
 
     //helper function, for unloading content
-    public void UnloadCar(string carName)
+    //unsafeUnload = true will unload everything from the bundle, regardless.
+    //false will keep whatever current active elements in memory (active gameobjects etc).
+    public void UnloadCar(string carName, bool unsafeUnload)
     {
         foreach (AssetBundle e in Cars)
         {
             if (e.name == carName)
             {
-                Cars.Remove(e);
-                e.Unload(true);
+                //we are completely unloading the asset, so remove from the loaded objects list.
+                if (unsafeUnload)
+                {
+                    Cars.Remove(e);
+                }
+                e.Unload(unsafeUnload);
                 break;
             }
         }
@@ -114,9 +119,26 @@ class ContentManager : MonoBehaviour {
         return GetCarFromFile(carName);
     }
 
-    
+    //use this to get a car's real name. real name is contained inside specs.json.
+    //not really much i can do about this... fucking asset bundles dont support caps
+    //why did i not test that beforehand, im going 9nsain
+    //bool is for SAFE/UNSAFE UNLOAD.
+    //"false" if you are using other parts of the car asset somewhere.
+    //"true" if you want to clear it completely from memory.
 
+    public string GetCarName(string carAlias, bool unsafeUnload)
+    {
+        CarData carData = new CarData();
+        AssetBundle car = GetCar(carAlias);
+        TextAsset carJson = car.LoadAsset("specs.json") as TextAsset;
+        carData = carData.ImportData(carJson.text);
 
+        string carname = carData.carName;
+        //ok we got the car name, now just unload all the garbage i dont need
+        carJson = null;
+        UnloadCar(carAlias, unsafeUnload);
+        return carData.carName;
+    }
 
     //just a debug func
     public void ExportData()
@@ -131,6 +153,14 @@ class ContentManager : MonoBehaviour {
         Debug.Log("PEN IS MUSIC" + filePath);
     }
 
+    public void ExportHUD()
+    {
+        CustomHud culos = new CustomHud();
+        string filePath = Application.dataPath + "/EXPORT/" + "HUD.json";
+        string dataAsJson = JsonUtility.ToJson(culos, true);
+        File.WriteAllText(filePath, dataAsJson);
+        Debug.Log("AAAAASSSSSSSSSSSSSSSS" + filePath);
+    }
 
 
 }

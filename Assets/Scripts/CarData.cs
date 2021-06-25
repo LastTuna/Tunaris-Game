@@ -1,9 +1,13 @@
 ﻿using System.IO;
 using UnityEngine;
 
+[System.Serializable]
 public class CarData {
-    
+
     //general
+    public string carName = "tempcar";
+    public string carClass = "R";
+    //car name
     public string description = "this is temp car";
     //car description
     public string version = "0.0.6";

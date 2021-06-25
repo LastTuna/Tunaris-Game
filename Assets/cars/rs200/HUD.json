@@ -1,0 +1,17 @@
+{
+    "RPM": {
+        "dialStartRot": 90.0,
+        "dialEndRot": -180.0
+    },
+    "Speedo": {
+        "dialStartRot": 90.0,
+        "dialEndRot": -180.0
+    },
+    "Turbo": {
+        "dialStartRot": 90.0,
+        "dialEndRot": -180.0
+    },
+    "SpeedoMaxValue": 200.0,
+    "PeakBoostValue": 1.7999999523162842,
+    "ReadoutRPMscale": 1.0
+}

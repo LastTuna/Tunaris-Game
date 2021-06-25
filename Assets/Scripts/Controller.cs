@@ -39,7 +39,8 @@ public class Controller : MonoBehaviour {
     public List<GameObject> currentCars = new List<GameObject>();//just a container for any instantiated cars so they can be cleaned up.
     public GameObject carro;
     public GameObject bestest;
-    
+    public CarData GarageCarInfo;
+    string garageCarPrefabName;//container for the prefab name of the car u just picked
     
     public void DefaultCallback() {
         Debug.Log("you forgot to set a click callback you retard");
@@ -124,7 +125,7 @@ public class Controller : MonoBehaviour {
             GameObject button = Instantiate(buttonPrefab, GarageScrollBoxContent.transform);
             // Set labels
             button.name = prefab;
-            button.GetComponentInChildren<Text>().text = prefab;
+            button.GetComponentInChildren<Text>().text = cm.GetCarName(prefab, true);
 
             //write a script on the button to duz its thing
 
@@ -336,13 +337,12 @@ public class Controller : MonoBehaviour {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
 
-        //add a boolean setting to savedata "QuickCarSelect" which lets you 1 click a car
-        //ill see if i even go with that 3d garage idea anymore tbh, maybe swap that with this...
+        garageCarPrefabName = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         DataController data = FindObjectOfType<DataController>();
         if (data.QuickCarSelect)
         {
             Debug.Log(gameObject.GetComponent<EventSystem>().currentSelectedGameObject);
-            data.SelectedCar = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
+            data.SelectedCar = garageCarPrefabName;
             Cancel();
         }
         else
@@ -354,8 +354,10 @@ public class Controller : MonoBehaviour {
             FindObjectOfType<Camera>().fieldOfView = 30;
             //get the car, and set some data.
             ContentManager cm = FindObjectOfType<ContentManager>();
-            AssetBundle corr = cm.GetCar(gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name);
-            GameObject.Find("GARAGE_CarName").GetComponent<Text>().text = corr.name;
+            AssetBundle corr = cm.GetCar(garageCarPrefabName);
+            TextAsset specs = corr.LoadAsset("specs.json") as TextAsset;
+            GarageCarInfo = GarageCarInfo.ImportData(specs.text);//get the car data and cache to a object.
+            GameObject.Find("GARAGE_CarName").GetComponent<Text>().text = GarageCarInfo.carName;
             GameObject spawnpoint = new GameObject();
 
             GameObject spinner = InstantiateCar(corr.name, spawnpoint.transform);
@@ -374,26 +376,28 @@ public class Controller : MonoBehaviour {
         GarageOKCanvas.gameObject.SetActive(true);
         Text text = GameObject.Find("GARAGE_OKtext").GetComponent<Text>();
         DataController data = FindObjectOfType<DataController>();
-        string currentCor = GameObject.Find("GARAGE_CarName").GetComponent<Text>().text;
+        
         GarageTurntableCanvas.gameObject.SetActive(false);
-        if (data.SelectedCar == currentCor)
+        if (data.SelectedCar == garageCarPrefabName)
         {
             text.text = "You are already driving this car.";
         }
         else
         {
-            text.text = "You are now driving the " + currentCor + ".";
+            text.text = "You are now driving the " + GarageCarInfo.carName + ".";
         }
-        data.SelectedCar = currentCor;
+        data.SelectedCar = garageCarPrefabName;
     }
 
     public void OpenCarContext()
     {
+        string currentCor = GameObject.Find("GARAGE_CarName").GetComponent<Text>().text;
         GarageTurntableCanvas.gameObject.SetActive(false);
         GarageContextCanvas.gameObject.SetActive(true);
+        ContentManager cm = FindObjectOfType<ContentManager>();
+        GameObject.Find("GARAGE_INFO_TEXT").GetComponent<Text>().text = GarageCarInfo.description;
         FindObjectOfType<Camera>().gameObject.transform.position = GameObject.Find("camPos1").transform.position;
     }
-
 
     public void OpenCredits()
     {

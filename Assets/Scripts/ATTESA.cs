@@ -41,9 +41,9 @@ public class ATTESA : MonoBehaviour {
 
     void ActiveDifferential(WheelHit wheelL, WheelHit wheelR) {
         if (wheelL.forwardSlip + wheelR.forwardSlip > 0.5f) {
-            carBehaviour.FrontWheelDriveBias = 0.5f;
+            carBehaviour.specs.frontWheelDriveBias = 0.5f;
         } else {
-            carBehaviour.FrontWheelDriveBias = Mathf.Abs(wheelL.forwardSlip + wheelR.forwardSlip);
+            carBehaviour.specs.frontWheelDriveBias = Mathf.Abs(wheelL.forwardSlip + wheelR.forwardSlip);
         }
     }
 
