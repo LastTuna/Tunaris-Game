@@ -29,14 +29,15 @@ public class TireBehavior : MonoBehaviour
         new Keyframe(600, 1f),
         new Keyframe(800, 0.3f)
         );
-    public string lastSurface;
-
+    string lastSurface;
+    int surface = 0;
     public GameObject smokeEmitter;//debugging thing
     public float forwardSlipTreshold;
     public float sidewaysSlipThreshold;
     public float forwardSlip;
     public float sidewaysSlip;
     public CompoundData tireCompound;
+    private TireData tireDataContainer;
     private float tireTicker = 0;//call wheel tread update every x ticks
     public float wheelrpm;
     // Use this for initialization
@@ -80,19 +81,28 @@ public class TireBehavior : MonoBehaviour
         visualWheel = wheelHub.Find(wheelIdentity + "wheel").gameObject;
         suspension = basecar.transform.Find(wheelIdentity + "susp");
 
-        //write here code to get the tire compound json
-        //meanwhile just initiate tires with defaults.
-        TireData tires = new TireData();
+        //load default wheel if no tire data
+        if (tireDataContainer == null) tireDataContainer = new TireData();
+
         if (wheelIdentity == "FR" || wheelIdentity == "FL")
         {
-            Debug.Log(tires.tireCompounds[0].FrontTires.handbrake);
-            tireCompound = tires.tireCompounds[TireIndex].FrontTires;
-            Debug.Log(tireCompound.handbrake);
+            tireCompound = tireDataContainer.tireCompounds[TireIndex].FrontTires;
         }
         else
         {
-            tireCompound = tires.tireCompounds[TireIndex].RearTires;
+            tireCompound = tireDataContainer.tireCompounds[TireIndex].RearTires;
         }
+    }
+
+    public void ExportCurrentData()
+    {
+        //make a func here so you can export wheels during runtime to make life easier
+    }
+
+    public void SetTireData(string tireData)
+    {
+        tireDataContainer = tireDataContainer.ImportData(tireData);
+        //call this from car behavior. get the tire data.
     }
 
     // Update is called once per frame
@@ -116,7 +126,8 @@ public class TireBehavior : MonoBehaviour
     public void TyreWear()
     {
         WheelHit GroundHit;
-        if (!burst && TreadHealth > 0 && tyre.GetGroundHit(out GroundHit))
+        tyre.GetGroundHit(out GroundHit);
+        if (!burst && TreadHealth > 0)
         {
             TreadHealth = TreadHealth - (Mathf.Abs(GroundHit.sidewaysSlip) + Mathf.Abs(GroundHit.forwardSlip)) / tireCompound.wearFactor;
             tyre.radius = diameter;
@@ -149,8 +160,9 @@ public class TireBehavior : MonoBehaviour
 
     public void GripManager()
     {
-        int surface = 0;//0road,1gravel,2grass,3snow
-        float stiffness = 0.1f;
+        float FwdStiffness = 0;
+        float SwdStiffness = 0;
+
         switch (lastSurface)
         {
             case "tarmac":
@@ -168,15 +180,11 @@ public class TireBehavior : MonoBehaviour
 
             case "grass":
                 //grass
-                surface = 2;
+                surface = 0;
                 break;
 
             case "snow":
-                surface = 3;
-                break;
-
-            case "puddle":
-                stiffness = 0.1f;
+                surface = 1;
                 break;
         }
 
@@ -185,11 +193,13 @@ public class TireBehavior : MonoBehaviour
         WheelHit wheelhit;
         if (tyre.GetGroundHit(out wheelhit) && tireTicker >= 4)
         {
-            stiffness = tireCompound.ForwardFric[surface].stiffness - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
+            FwdStiffness = tireCompound.ForwardFric[surface].stiffness - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
+            SwdStiffness = tireCompound.SidewaysFric[surface].stiffness - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
             lastSurface = wheelhit.collider.gameObject.tag;
             if (burst)
             {
-                stiffness = 0.1f;
+                FwdStiffness = 0.1f;
+                SwdStiffness = 0.1f;
             }
             tyre.forwardFriction = SetStiffness(tireCompound.ForwardFric[surface]);
             tyre.sidewaysFriction = SetStiffness(tireCompound.SidewaysFric[surface]);

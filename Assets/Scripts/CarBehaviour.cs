@@ -72,6 +72,7 @@ public class CarBehaviour : MonoBehaviour {
             ContentManager cm = FindObjectOfType<ContentManager>();
 
             AssetBundle cor = cm.GetCar(dataController.SelectedCar);
+            
             //initialize car data object.
             specs = new CarData();
             //LOAD CAR SPECS. if no car specs are found, run defaults.
@@ -100,6 +101,17 @@ public class CarBehaviour : MonoBehaviour {
             }
 
             InitializeCar();
+
+            TextAsset tireData = cor.LoadAsset("tires.json") as TextAsset;
+            if(tireData != null)
+            {
+                wheelFL.gameObject.GetComponent<TireBehavior>().SetTireData(tireData.text);
+                wheelFR.gameObject.GetComponent<TireBehavior>().SetTireData(tireData.text);
+                wheelRL.gameObject.GetComponent<TireBehavior>().SetTireData(tireData.text);
+                wheelRR.gameObject.GetComponent<TireBehavior>().SetTireData(tireData.text);
+            }
+
+
             // Set game camera target
             CourseController ctrl = FindObjectOfType<CourseController>();
             ctrl.Camera.GetComponent<CarCamera>().car = this.gameObject.transform;
@@ -120,7 +132,6 @@ public class CarBehaviour : MonoBehaviour {
             isBusrider = dataController.IsBusrider;
             //call the FFB start routine
             FFBStart();
-
         }
         if (isBusrider) {
             CourseController ctrl = FindObjectOfType<CourseController>();

@@ -38,7 +38,7 @@ class ContentManager : MonoBehaviour {
 
         //this is just make a new tire data object n export a sample json.
         TireData asdadsasd = new TireData();
-        asdadsasd.ExportData();
+        asdadsasd.ExportData(asdadsasd);
     }
 
     //this writes the manifest

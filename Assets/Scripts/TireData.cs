@@ -8,21 +8,31 @@ using UnityEngine;
 [System.Serializable]
 public class TireData
 {
-    public TireSet[] tireCompounds = new TireSet[1];
-    
+    public TireSet[] tireCompounds;
+    public TireData()
+    {
+        tireCompounds = new TireSet[] { new TireSet() };
+    }
+
     //debug func. used to export tires that you made during runtime.
-    public void ExportData()
+    public void ExportData(TireData AAASSSSS)
     {
         //export a json to EXPORT folder. has default values.
         //trigger this by whatever you want really. not used ingame.
-        TireData AAASSSSS = new TireData();
-        Debug.Log(AAASSSSS.tireCompounds[0].FrontTires.handbrake);
-
         string filePath = Application.dataPath + "/EXPORT/" + "tires.json";
         string dataAsJson = JsonUtility.ToJson(AAASSSSS, true);
         File.WriteAllText(filePath, dataAsJson);
         Debug.Log("TIRE SET EXPORTED TO " + filePath);
     }
+
+    public TireData ImportData(string dataAsJson)
+    {
+        TireData dolor;
+        dolor = JsonUtility.FromJson<TireData>(dataAsJson);
+        return dolor;
+    }
+
+
 }
 
 [System.Serializable]
@@ -38,8 +48,8 @@ public class CompoundData
     public string treadName = "Grueso Semislick";
     //first index: tarmac
     //second index: gravel
-    public WheelFricCurve[] ForwardFric = new WheelFricCurve[2];
-    public WheelFricCurve[] SidewaysFric = new WheelFricCurve[2];
+    public WheelFricCurve[] ForwardFric = new WheelFricCurve[] { new WheelFricCurve(), new WheelFricCurve() };
+    public WheelFricCurve[] SidewaysFric = new WheelFricCurve[] { new WheelFricCurve(), new WheelFricCurve() };
     public float wearFactor = 200;//bigger number = harder compound
     public bool handbrake = false;//is handbrake enabled on this axle
                                   //brake fade curve
@@ -60,4 +70,5 @@ public class WheelFricCurve
     public float asymptoteSlip = 0.8f;
     public float asymptoteValue = 0.5f;
     public float stiffness = 1;
+
 }
