@@ -34,7 +34,11 @@ class ContentManager : MonoBehaviour {
         //im just doing some hardcoded thing to make basic functionality again.
         //this should be looped with the data from the manifest to get
         //all the cars into the list. essentially just replace "tempcar"
-        
+
+
+        //this is just make a new tire data object n export a sample json.
+        TireData asdadsasd = new TireData();
+        asdadsasd.ExportData();
     }
 
     //this writes the manifest

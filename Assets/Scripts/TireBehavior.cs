@@ -9,9 +9,9 @@ public class TireBehavior : MonoBehaviour
     public GameObject visualWheel;
     public Transform wheelHub, suspension;
     
-    public float treadType = 1;
+    public int TireIndex = 0;//the number of the compound in TireData
     public float TreadHealth = 100;
-    public float brakeStrength = 300;
+    public float brakeStrength = 100;
     public bool handbrake = false;
     public bool raceStartHandbrake = false;
     public float brakeHeat = 26;//celsius
@@ -36,15 +36,8 @@ public class TireBehavior : MonoBehaviour
     public float sidewaysSlipThreshold;
     public float forwardSlip;
     public float sidewaysSlip;
-
-    public TreadBehavior[] tyreTread;
-    //multidim array
-    //first index: tarmac
-    //second index: gravel
-    //third index: grass
-    //fourth: snow (future support)
+    public CompoundData tireCompound;
     private float tireTicker = 0;//call wheel tread update every x ticks
-
     public float wheelrpm;
     // Use this for initialization
     void Start()
@@ -55,23 +48,24 @@ public class TireBehavior : MonoBehaviour
         //also add here the part where you fetch the tire data from
         //the tire json in the assetbundle. use content manager.
 
+        handbrake = tireCompound.handbrake;
+        //initiate some reference values.
+        diameter = tyre.radius;
+        defaultSusp = tyre.suspensionDistance;
+        tyre.suspensionSpring = springs;
+
         if (!visualWheel) {
             Debug.LogError("TireBehavior::Start no visualWheel");
         } else {
             dirt = visualWheel.GetComponent<Renderer>().materials[0];
             brakeMat = visualWheel.GetComponent<Renderer>().materials[1];
         }
-        diameter = tyre.radius;
-        defaultSusp = tyre.suspensionDistance;
         if (!smokeEmitter) {
             Debug.LogError("TireBehavior::Start no smokeEmitter");
         } else {
             smokeEmitter = Instantiate(smokeEmitter, gameObject.transform);//debug for now...
             smokeEmitter.GetComponent<ParticleSystem>().Play();
         }
-        
-
-        tyre.suspensionSpring = springs;
     }
 
     //here basically Find() all the relevant items. like wheel, wheel colldier
@@ -86,20 +80,34 @@ public class TireBehavior : MonoBehaviour
         visualWheel = wheelHub.Find(wheelIdentity + "wheel").gameObject;
         suspension = basecar.transform.Find(wheelIdentity + "susp");
 
+        //write here code to get the tire compound json
+        //meanwhile just initiate tires with defaults.
+        TireData tires = new TireData();
+        if (wheelIdentity == "FR" || wheelIdentity == "FL")
+        {
+            Debug.Log(tires.tireCompounds[0].FrontTires.handbrake);
+            tireCompound = tires.tireCompounds[TireIndex].FrontTires;
+            Debug.Log(tireCompound.handbrake);
+        }
+        else
+        {
+            tireCompound = tires.tireCompounds[TireIndex].RearTires;
+        }
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
         TyreWear();
-        //temporary failsafe it will just use defaults.
-        if(tyreTread != null) GripManager();
+        GripManager();
         Brakes();
         wheelrpm = tyre.rpm;
         if (smokeEmitter) {
             SmonkEmitter();
         }
+
     }
+
     void Update()
     {
         WheelPosition();
@@ -108,10 +116,9 @@ public class TireBehavior : MonoBehaviour
     public void TyreWear()
     {
         WheelHit GroundHit;
-        tyre.GetGroundHit(out GroundHit);
-        if (!burst && TreadHealth > 0)
+        if (!burst && TreadHealth > 0 && tyre.GetGroundHit(out GroundHit))
         {
-            TreadHealth = TreadHealth - (Mathf.Abs(GroundHit.sidewaysSlip) + Mathf.Abs(GroundHit.forwardSlip)) / 200;
+            TreadHealth = TreadHealth - (Mathf.Abs(GroundHit.sidewaysSlip) + Mathf.Abs(GroundHit.forwardSlip)) / tireCompound.wearFactor;
             tyre.radius = diameter;
         }
         else
@@ -120,9 +127,7 @@ public class TireBehavior : MonoBehaviour
             burst = true;
         }
     }
-
-    public bool fss = false;
-    public bool sss = false;
+    
     public bool smokeState = false;
     public void SmonkEmitter() {
         WheelHit wheelhit;
@@ -130,10 +135,8 @@ public class TireBehavior : MonoBehaviour
 
         forwardSlip = Mathf.Abs(wheelhit.forwardSlip);
         sidewaysSlip = Mathf.Abs(wheelhit.sidewaysSlip);
-        fss = Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold;
-        sss = Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold;
 
-        if (Mathf.Abs(wheelhit.forwardSlip) > forwardSlipTreshold || Mathf.Abs(wheelhit.sidewaysSlip) > sidewaysSlipThreshold) {
+        if (forwardSlip + sidewaysSlip > forwardSlipTreshold + sidewaysSlipThreshold) {
             ParticleSystem.EmissionModule em = smokeEmitter.GetComponent<ParticleSystem>().emission;
             em.enabled = true;
             smokeState = true;
@@ -146,7 +149,6 @@ public class TireBehavior : MonoBehaviour
 
     public void GripManager()
     {
-
         int surface = 0;//0road,1gravel,2grass,3snow
         float stiffness = 0.1f;
         switch (lastSurface)
@@ -183,14 +185,14 @@ public class TireBehavior : MonoBehaviour
         WheelHit wheelhit;
         if (tyre.GetGroundHit(out wheelhit) && tireTicker >= 4)
         {
-            stiffness = 1 - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
+            stiffness = tireCompound.ForwardFric[surface].stiffness - Dampness(wheelhit) - ((100 - TreadHealth) / 1000);
             lastSurface = wheelhit.collider.gameObject.tag;
             if (burst)
             {
                 stiffness = 0.1f;
             }
-            tyre.forwardFriction = SetStiffness(tyreTread[surface].forwardCurve, stiffness);
-            tyre.sidewaysFriction = SetStiffness(tyreTread[surface].sidewaysCurve, stiffness);
+            tyre.forwardFriction = SetStiffness(tireCompound.ForwardFric[surface]);
+            tyre.sidewaysFriction = SetStiffness(tireCompound.SidewaysFric[surface]);
             tireTicker = 0;
 
             // update smoke emitter thresholds based on new tire parameters
@@ -242,16 +244,16 @@ public class TireBehavior : MonoBehaviour
         return brakeStrength * brakeFadeCurve.Evaluate(brakeHeat);
     }
 
-    WheelFrictionCurve SetStiffness(float[] wheel, float newStiffness)
+    WheelFrictionCurve SetStiffness(WheelFricCurve fric)
     {
         //sets tire grip
         return new WheelFrictionCurve()
         {
-            extremumSlip = wheel[0],
-            extremumValue = wheel[1],
-            asymptoteSlip = wheel[2],
-            asymptoteValue = wheel[3],
-            stiffness = newStiffness
+            extremumSlip = fric.extremumSlip,
+            extremumValue = fric.extremumValue,
+            asymptoteSlip = fric.asymptoteSlip,
+            asymptoteValue = fric.asymptoteValue,
+            stiffness = fric.stiffness
         };
     }
 
@@ -296,14 +298,5 @@ public class TireBehavior : MonoBehaviour
         if (suspension) {
             suspension.localEulerAngles = new Vector3(suspension.localEulerAngles.x, tyre.steerAngle - suspension.localEulerAngles.z, suspension.localEulerAngles.z);
         }
-
     }
-
-}
-
-[System.Serializable]
-public class TreadBehavior
-{
-    public float[] forwardCurve;
-    public float[] sidewaysCurve;
 }

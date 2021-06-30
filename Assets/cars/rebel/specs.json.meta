@@ -1,10 +1,9 @@
 fileFormatVersion: 2
-guid: 65a984b67f0191a49ae4c017e254e428
-timeCreated: 1624648017
+guid: c4338ba3630141d4db4d9975b0582d3a
+timeCreated: 1624648061
 licenseType: Free
-NativeFormatImporter:
+TextScriptImporter:
   externalObjects: {}
-  mainObjectFileID: 100100000
   userData: 
   assetBundleName: rebel
   assetBundleVariant: 

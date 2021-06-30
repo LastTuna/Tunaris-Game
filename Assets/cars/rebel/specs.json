@@ -1,0 +1,97 @@
+{
+    "carName": "Rebel",
+    "carClass": "R",
+    "description": "You wake up. realize youre old, alone, miserable. The back pain is not going away. Thats why you got an expensive race car, so you can ruin everyone elses day with your loud engine.",
+    "version": "0.0.6",
+    "weight": 100.0,
+    "centerOfGravy": {
+        "x": 0.0,
+        "y": 0.2,
+        "z": 0.2
+    },
+    "aero": 4.0,
+    "dragCoef": 0.06,
+    "engineIdle": 800.0,
+    "engineREDLINE": 6000.0,
+    "engineTorque": {
+        "serializedVersion": "2",
+        "m_Curve": [
+            {
+                "serializedVersion": "2",
+                "time": 0.0,
+                "value": 100.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 5000.0,
+                "value": 240.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 7000.0,
+                "value": 200.0,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2,
+        "m_RotationOrder": 4
+    },
+    "frontWheelDriveBias": 0.0,
+    "ratio": 3.0,
+    "gears": [
+        -5.0,
+        0.0,
+        4.7,
+        2.8,
+        2.2,
+        1.8,
+        1.4,
+        1.1
+    ],
+    "shifterDelay": 0.3,
+    "maxSteerAngle": 15.0,
+    "lsd": 1.0,
+    "aspirated": false,
+    "turboWaste": {
+        "serializedVersion": "2",
+        "m_Curve": [
+            {
+                "serializedVersion": "2",
+                "time": 0.0,
+                "value": 0.4,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 5000.0,
+                "value": 1.2,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            },
+            {
+                "serializedVersion": "2",
+                "time": 9000.0,
+                "value": 1.8,
+                "inSlope": 0.0,
+                "outSlope": 0.0,
+                "tangentMode": 0
+            }
+        ],
+        "m_PreInfinity": 2,
+        "m_PostInfinity": 2,
+        "m_RotationOrder": 4
+    },
+    "turboSize": 10.0
+}

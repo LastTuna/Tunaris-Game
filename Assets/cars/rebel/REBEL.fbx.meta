@@ -1,82 +1,94 @@
 fileFormatVersion: 2
-guid: a560c039c297a6c4ba6a0d0f6564378c
-timeCreated: 1589050881
+guid: d62a0d899ffa1824c92e9800d3b56ad3
+timeCreated: 1624647715
 licenseType: Free
 ModelImporter:
   serializedVersion: 22
   fileIDToRecycleName:
     100000: Armature
     100002: FLcalp
-    100004: FLshaft
-    100006: FLshaft_end
-    100008: FLsusp
-    100010: FLw
-    100012: FLwheel
-    100014: FRcalp
-    100016: FRshaft
-    100018: FRshaft_end
-    100020: FRsusp
-    100022: FRw
-    100024: FRwheel
-    100026: HARDTOP
-    100028: Interior
-    100030: mainbody
-    100032: Rdiff
-    100034: Rdiff_end
-    100036: //RootNode
-    100038: RLclap
-    100040: RLshaft
-    100042: RLshaft_end
-    100044: RLsusp
-    100046: RLw
-    100048: RLwheel
-    100050: RRcalp
-    100052: RRshaft
-    100054: RRshaft_end
-    100056: RRsusp
-    100058: RRw
-    100060: RRwheel
-    100062: STATIC
-    100064: STATIC_end
-    100066: SUSPENSION
-    100068: Wheel
-    100070: Wipers
+    100004: FLcollider
+    100006: FLhub
+    100008: FLshaft
+    100010: FLshaft_end
+    100012: FLsusp
+    100014: FLwheel
+    100016: FRcalp
+    100018: FRcollider
+    100020: FRhub
+    100022: FRshaft
+    100024: FRshaft_end
+    100026: FRsusp
+    100028: FRwheel
+    100030: HARDTOP
+    100032: Interior
+    100034: mainbody
+    100036: Rdiff
+    100038: Rdiff_end
+    100040: //RootNode
+    100042: RLclap
+    100044: RLcollider
+    100046: RLhub
+    100048: RLshaft
+    100050: RLshaft_end
+    100052: RLsusp
+    100054: RLwheel
+    100056: RRcalp
+    100058: RRcollider
+    100060: RRhub
+    100062: RRshaft
+    100064: RRshaft_end
+    100066: RRsusp
+    100068: RRwheel
+    100070: STATIC
+    100072: STATIC_end
+    100074: SUSPENSION
+    100076: Wheel
+    100078: wheelcolliders
+    100080: wheeltransforms
+    100082: Wipers
     400000: Armature
     400002: FLcalp
-    400004: FLshaft
-    400006: FLshaft_end
-    400008: FLsusp
-    400010: FLw
-    400012: FLwheel
-    400014: FRcalp
-    400016: FRshaft
-    400018: FRshaft_end
-    400020: FRsusp
-    400022: FRw
-    400024: FRwheel
-    400026: HARDTOP
-    400028: Interior
-    400030: mainbody
-    400032: Rdiff
-    400034: Rdiff_end
-    400036: //RootNode
-    400038: RLclap
-    400040: RLshaft
-    400042: RLshaft_end
-    400044: RLsusp
-    400046: RLw
-    400048: RLwheel
-    400050: RRcalp
-    400052: RRshaft
-    400054: RRshaft_end
-    400056: RRsusp
-    400058: RRw
-    400060: RRwheel
-    400062: STATIC
-    400064: STATIC_end
-    400066: SUSPENSION
-    400068: Wheel
-    400070: Wipers
+    400004: FLcollider
+    400006: FLhub
+    400008: FLshaft
+    400010: FLshaft_end
+    400012: FLsusp
+    400014: FLwheel
+    400016: FRcalp
+    400018: FRcollider
+    400020: FRhub
+    400022: FRshaft
+    400024: FRshaft_end
+    400026: FRsusp
+    400028: FRwheel
+    400030: HARDTOP
+    400032: Interior
+    400034: mainbody
+    400036: Rdiff
+    400038: Rdiff_end
+    400040: //RootNode
+    400042: RLclap
+    400044: RLcollider
+    400046: RLhub
+    400048: RLshaft
+    400050: RLshaft_end
+    400052: RLsusp
+    400054: RLwheel
+    400056: RRcalp
+    400058: RRcollider
+    400060: RRhub
+    400062: RRshaft
+    400064: RRshaft_end
+    400066: RRsusp
+    400068: RRwheel
+    400070: STATIC
+    400072: STATIC_end
+    400074: SUSPENSION
+    400076: Wheel
+    400078: wheelcolliders
+    400080: wheeltransforms
+    400082: Wipers
     2100000: WHEELS
     2100002: DISC
     2100004: INTERIOR
@@ -84,39 +96,39 @@ ModelImporter:
     2100008: WINDOWS
     2100010: INTERIOR_WINDOWS
     2300000: FLcalp
-    2300002: FLw
+    2300002: FLwheel
     2300004: FRcalp
-    2300006: FRw
+    2300006: FRwheel
     2300008: HARDTOP
     2300010: Interior
     2300012: mainbody
     2300014: RLclap
-    2300016: RLw
+    2300016: RLwheel
     2300018: RRcalp
-    2300020: RRw
+    2300020: RRwheel
     2300022: Wheel
     2300024: Wipers
     3300000: FLcalp
-    3300002: FLw
+    3300002: FLwheel
     3300004: FRcalp
-    3300006: FRw
+    3300006: FRwheel
     3300008: HARDTOP
     3300010: Interior
     3300012: mainbody
     3300014: RLclap
-    3300016: RLw
+    3300016: RLwheel
     3300018: RRcalp
-    3300020: RRw
+    3300020: RRwheel
     3300022: Wheel
     3300024: Wipers
-    4300000: FRw
-    4300002: FRcalp
-    4300004: RRw
-    4300006: RRcalp
-    4300008: RLclap
-    4300010: RLw
-    4300012: FLcalp
-    4300014: FLw
+    4300000: RRwheel
+    4300002: RRcalp
+    4300004: RLwheel
+    4300006: RLclap
+    4300008: FRwheel
+    4300010: FLcalp
+    4300012: FLwheel
+    4300014: FRcalp
     4300016: Wipers
     4300018: HARDTOP
     4300020: mainbody

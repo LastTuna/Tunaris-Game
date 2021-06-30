@@ -363,7 +363,7 @@ public class Controller : MonoBehaviour {
             GameObject spinner = InstantiateCar(corr.name, spawnpoint.transform);
             currentCars.Add(spinner);
             currentCars.Add(spawnpoint);
-            spinner.transform.position = new Vector3(0, -29.3f, 177.4f);
+            spinner.transform.position = GameObject.Find("GARAGE_FLOOR").transform.position;
             spinner.transform.localScale = new Vector3(15, 15, 15);
             // Add rotation script
             spinner.AddComponent<Spinner>();
