@@ -111,8 +111,12 @@ public class Controller : MonoBehaviour {
         } else {
             GoRaceCanvas.gameObject.SetActive(false);
         }
+        menuMusic.clip = TGmusic[3];
+        menuMusic.Play();
+
         // Classic GT2 garage
         ContentManager cm = FindObjectOfType<ContentManager>();
+        cm.UnloadAllContent();
         string[] installedCars = cm.LoadManifest();
 
         GarageCanvas.gameObject.SetActive(true);
@@ -336,7 +340,7 @@ public class Controller : MonoBehaviour {
     IEnumerator CarSelectionCoroutine() {
         // Waiting for the end of the frame ensures the Pressed state of the FSM is entered, and the select sound being played
         yield return new WaitForEndOfFrame();
-
+        
         garageCarPrefabName = gameObject.GetComponent<EventSystem>().currentSelectedGameObject.name;
         DataController data = FindObjectOfType<DataController>();
         if (data.QuickCarSelect)
@@ -541,7 +545,10 @@ public class Controller : MonoBehaviour {
             GoRaceCanvas.gameObject.SetActive(true);
             GarageCanvas.gameObject.SetActive(false);
 
-            foreach(GameObject button in createdGarageButtons) {
+            menuMusic.clip = TGmusic[0];
+            menuMusic.Play();
+
+            foreach (GameObject button in createdGarageButtons) {
                 Destroy(button);
             }
             createdGarageButtons.Clear();

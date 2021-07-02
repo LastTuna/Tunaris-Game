@@ -82,21 +82,37 @@ class ContentManager : MonoBehaviour {
     //false will keep whatever current active elements in memory (active gameobjects etc).
     public void UnloadCar(string carName, bool unsafeUnload)
     {
-        foreach (AssetBundle e in Cars)
+        int i = 0;
+        while (true)
         {
-            if (e.name == carName)
+            if (Cars[i].name == carName)
             {
+                Cars[i].Unload(unsafeUnload);
                 //we are completely unloading the asset, so remove from the loaded objects list.
                 if (unsafeUnload)
                 {
-                    Cars.Remove(e);
+                    Cars.Remove(Cars[i]);
                 }
-                e.Unload(unsafeUnload);
                 break;
             }
+            i++;
         }
     }
     
+    //unloads ALL CONTENT. UNSAFE UNLOAD.
+    public void UnloadAllContent()
+    {
+        while(true)
+        {
+            if(Cars.Count == 0)
+            {
+                break;
+            }
+            Cars[0].Unload(true);
+            Cars.Remove(Cars[0]);
+        }
+    }
+
     //this only exists in this namespace. shouldnt ever be called outside.
     AssetBundle GetCarFromFile(string carName)
     {
