@@ -464,7 +464,7 @@ GameObject:
   - component: {fileID: 95980744841801120}
   - component: {fileID: 54248641440947584}
   m_Layer: 0
-  m_Name: rebel
+  m_Name: Rebel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

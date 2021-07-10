@@ -7,12 +7,13 @@ public class EngineAudioBehaviour : MonoBehaviour
 {
     // Car attached source
     public AudioSource[] CarEngine;
-    public AudioSource horn;
+    public AudioSource boostSource;
+    public AudioSource hornSource;
     //can essentially have as many sound layers as you want
-
-
+    
     // Engine sounds
-    public EngineSampleArray[] sounds;
+    public EngineSoundData AccelSounds;
+    public EngineSoundData DecelSounds;
     //MULTIDIMENSIONAL ARRAY
     //FIRST COMES INDEX
     //SECOND COMES LAYER
@@ -21,30 +22,51 @@ public class EngineAudioBehaviour : MonoBehaviour
 
     // Turbo related stuff
     public bool hasTurbo;
-    public AudioSource boostSource;
-    public AudioClip woosh;
-    public AudioClip pssh;
     public bool isSpooled;
 
     // Some attempt at blindly speeding up processing
     private int lastIndex = 0;
-
-    // Initialize audio
-    void Start()
+    
+    //called from carbehavior. gets a shitload of required resources etc..
+    public void InitiateSounds(AssetBundle car)
     {
-        if(sounds.Length == 0 || sounds[0].index.Length == 0) {
-            Debug.LogError("EngineAudioBehaviour::Start no sound samples. Suiciding.");
-            Destroy(this);
-            return;
+        AccelSounds = new EngineSoundData();
+        AccelSounds = AccelSounds.ImportData(null);
+        LoadSamples(AccelSounds,car);
+
+        AccelSounds.boost = car.LoadAsset<AudioClip>(AccelSounds.boostName);
+        AccelSounds.horn = car.LoadAsset<AudioClip>(AccelSounds.hornName);
+        //load psshh sounds
+        AudioClip[] tempPshh = new AudioClip[AccelSounds.pshhNames.Length];//jut make a temp array for them
+        for(int i = 0; i < AccelSounds.pshhNames.Length; i++)
+        {
+            tempPshh[i] = car.LoadAsset<AudioClip>(AccelSounds.pshhNames[i]);
         }
-        CarEngine[0].clip = sounds[lastIndex].index[0].clip;
-        CarEngine[0].Play();
+        //initiate rpm ref index
+        rpmIndex = new int[AccelSounds.SampleIndex.Length];
+        for (int i = 0; i < AccelSounds.SampleIndex.Length; i++)
+        {
+            rpmIndex[i] = AccelSounds.SampleIndex[i].indexThreshold;
+        }
     }
 
-    // Called from CarBehaviour, processes sounds
-    public void ProcessSounds(float revs, bool spooled, float boostPressure)
+    //htis iterates through every sample on every layer/index n gets the resources n applies to its place.
+    public void LoadSamples(EngineSoundData soundbank, AssetBundle car)
     {
-        if (sounds.Length == 0) return;//null check
+        foreach(EngineSampleIndex penoz in soundbank.SampleIndex)
+        {
+            foreach(EngineSample layer in penoz.SampleLayer)
+            {
+                if (layer.clipname == "") break;
+                layer.clip = car.LoadAsset<AudioClip>(layer.clipname);
+            }
+        }
+    }
+    
+    // Called from CarBehaviour, processes sounds
+    public void ProcessSounds(float revs, bool spooled, float boostPressure, float throttlePressure)
+    {
+        if (AccelSounds.SampleIndex.Length == 0) return;//null check
 
         //find index
         int currentIndex = SoundIndex(revs);
@@ -55,43 +77,43 @@ public class EngineAudioBehaviour : MonoBehaviour
         {
             //go through all layers in current index and apply samples. mute unused layers
             int i = 0;
-            for (i = 0; i < sounds[currentIndex].index.Length; i++)
+            for (i = 0; i < AccelSounds.SampleIndex[currentIndex].SampleLayer.Length; i++)
             {
-                CarEngine[i].clip = sounds[currentIndex].index[i].clip;
-                CarEngine[i].pitch = 1f;
                 CarEngine[i].Play();
             }
             while (i < CarEngine.Length)
             {
-                CarEngine[i].clip = null;
+                CarEngine[i].clip = null;//mute unused
                 i++;
             }
             lastIndex = currentIndex;
         }
         // Apply the modifiers
-        for (int i = 0; i < sounds[currentIndex].index.Length; i++)
+        for (int i = 0; i < AccelSounds.SampleIndex[currentIndex].SampleLayer.Length; i++)
         {
-            float factor = Mathf.InverseLerp(sounds[currentIndex].index[i].lowRev, sounds[currentIndex].index[i].highRev, revs);
-            CarEngine[i].pitch = sounds[currentIndex].index[i].audioPitch.Evaluate(factor);
-            CarEngine[i].volume = sounds[currentIndex].index[i].audioVolume.Evaluate(factor);
+            float lerpFactor = Mathf.Lerp(AccelSounds.SampleIndex[currentIndex].SampleLayer[i].lowRPM, AccelSounds.SampleIndex[currentIndex].SampleLayer[i].hiRPM, revs);
+            //lerp factor,used in pitching and volume adjustment
+            CarEngine[i].pitch = AccelSounds.SampleIndex[currentIndex].SampleLayer[i].audioPitch.Evaluate(lerpFactor);
+            CarEngine[i].volume = AccelSounds.SampleIndex[currentIndex].SampleLayer[i].audioVolume.Evaluate(lerpFactor);
         }
         // Process turbo sound
         if (hasTurbo)
         {
-            // turbo started spooling
+            // turbo whine (your mom)
             if (!isSpooled && spooled)
             {
-                boostSource.clip = woosh;
+                boostSource.clip = AccelSounds.boost;
+                boostSource.pitch = boostPressure;
                 boostSource.loop = true;
                 boostSource.Play();
                 isSpooled = spooled;
             }
 
-            // turbo stopped spooling
+            // turbo wastegate PSSSHHHHHHH once lift gas AND boost threshold has been crossed
             if (isSpooled && !spooled)
             {
                 boostSource.pitch = 1;
-                boostSource.clip = pssh;
+                boostSource.clip = AccelSounds.pshh[UnityEngine.Random.Range(0, AccelSounds.pshh.Length)];
                 boostSource.loop = false;
                 boostSource.Play();
                 isSpooled = spooled;
@@ -111,24 +133,4 @@ public class EngineAudioBehaviour : MonoBehaviour
         }
         return 0;
     }
-
-    [System.Serializable]
-    public struct EngineSample
-    {
-        public int lowRev;
-        public int highRev;
-        public AudioClip clip;
-        public AnimationCurve audioVolume;
-        public AnimationCurve audioPitch;
-        // Maybe find a way to replace that with a way to parametrize the formula
-    }
-    //because cant view a struct in a multidim. array on the editor you gotta make it into a class first
-    [System.Serializable]
-    public class EngineSampleArray
-    {
-        public EngineSample[] index;
-    }
-
 }
-
-

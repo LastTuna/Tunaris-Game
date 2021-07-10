@@ -1,0 +1,115 @@
+{
+    "SampleIndex": [
+        {
+            "SampleLayer": [
+                {
+                    "lowRPM": 0,
+                    "hiRPM": 830,
+                    "clip": {
+                        "instanceID": 0
+                    },
+                    "clipname": "idle.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    }
+                },
+                {
+                    "lowRPM": 0,
+                    "hiRPM": 830,
+                    "clip": {
+                        "instanceID": 0
+                    },
+                    "clipname": "idle.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    }
+                }
+            ],
+            "indexThreshold": 830
+        },
+        {
+            "SampleLayer": [
+                {
+                    "lowRPM": 0,
+                    "hiRPM": 830,
+                    "clip": {
+                        "instanceID": 0
+                    },
+                    "clipname": "idle.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    }
+                },
+                {
+                    "lowRPM": 0,
+                    "hiRPM": 830,
+                    "clip": {
+                        "instanceID": 0
+                    },
+                    "clipname": "idle.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    }
+                }
+            ],
+            "indexThreshold": 830
+        }
+    ],
+    "pshhNames": [
+        "wastegate1.wav"
+    ],
+    "boostName": "whee.wav",
+    "hornName": "doot.wav",
+    "horn": {
+        "instanceID": 0
+    },
+    "pshh": [],
+    "boost": {
+        "instanceID": 0
+    },
+    "SoundbankInfo": "sample engine sound bank"
+}
