@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 2966981053
+CRC: 1609733192
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: d3096335ef8518eb8778f1ef4afa7200
+    Hash: eb704edc9cedd94c4add829fdd02f3e7
   TypeTreeHash:
     serializedVersion: 2
     Hash: 5b8e59ce960e0bc2bc81197cadfcd4cc
@@ -41,5 +41,5 @@ ClassTypes:
   Script: {instanceID: 0}
 Assets:
 - Assets/cars/rebel/specs.json
-- Assets/cars/rebel/rebel.prefab
+- Assets/cars/rebel/Rebel.prefab
 Dependencies: []

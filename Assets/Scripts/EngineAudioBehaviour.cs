@@ -13,7 +13,7 @@ public class EngineAudioBehaviour : MonoBehaviour
     
     // Engine sounds
     public EngineSoundData AccelSounds;
-    public EngineSoundData DecelSounds;
+    //public EngineSoundData DecelSounds;
     //MULTIDIMENSIONAL ARRAY
     //FIRST COMES INDEX
     //SECOND COMES LAYER
@@ -25,15 +25,16 @@ public class EngineAudioBehaviour : MonoBehaviour
     public bool isSpooled;
 
     // Some attempt at blindly speeding up processing
-    private int lastIndex = 0;
+    int lastIndex = 0;
     
     //called from carbehavior. gets a shitload of required resources etc..
     public void InitiateSounds(AssetBundle car)
     {
         AccelSounds = new EngineSoundData();
-        AccelSounds = AccelSounds.ImportData(null);
-        LoadSamples(AccelSounds,car);
+        TextAsset soundbankJson = car.LoadAsset<TextAsset>("soundbank.json");
+        AccelSounds = AccelSounds.ImportData(soundbankJson.text);
 
+        LoadSamples(AccelSounds,car);
         AccelSounds.boost = car.LoadAsset<AudioClip>(AccelSounds.boostName);
         AccelSounds.horn = car.LoadAsset<AudioClip>(AccelSounds.hornName);
         //load psshh sounds
@@ -43,10 +44,28 @@ public class EngineAudioBehaviour : MonoBehaviour
             tempPshh[i] = car.LoadAsset<AudioClip>(AccelSounds.pshhNames[i]);
         }
         //initiate rpm ref index
-        rpmIndex = new int[AccelSounds.SampleIndex.Length];
-        for (int i = 0; i < AccelSounds.SampleIndex.Length; i++)
+        //skip first index in loop, because i want to start array with 0 in the first index.
+        rpmIndex = new int[AccelSounds.SampleIndex.Length + 1];
+        rpmIndex[0] = 0;
+        for (int i = 1; i < rpmIndex.Length; i++)
         {
-            rpmIndex[i] = AccelSounds.SampleIndex[i].indexThreshold;
+            rpmIndex[i] = AccelSounds.SampleIndex[i - 1].indexThreshold;
+        }
+
+        //ok now that we have gathered all these resources make the audio sources
+        if(AccelSounds.boost != null)
+        {
+            boostSource = gameObject.AddComponent<AudioSource>();
+        }
+        if (AccelSounds.horn != null)
+        {
+            hornSource = gameObject.AddComponent<AudioSource>();
+        }
+        CarEngine = new AudioSource[4];
+        for(int i = 0; i < CarEngine.Length; i++)
+        {
+            CarEngine[i] = gameObject.AddComponent<AudioSource>();
+            CarEngine[i].loop = true;
         }
     }
 
@@ -67,7 +86,7 @@ public class EngineAudioBehaviour : MonoBehaviour
     public void ProcessSounds(float revs, bool spooled, float boostPressure, float throttlePressure)
     {
         if (AccelSounds.SampleIndex.Length == 0) return;//null check
-
+        
         //find index
         int currentIndex = SoundIndex(revs);
         // At this point currentIndex points to the correct rev range
@@ -79,6 +98,7 @@ public class EngineAudioBehaviour : MonoBehaviour
             int i = 0;
             for (i = 0; i < AccelSounds.SampleIndex[currentIndex].SampleLayer.Length; i++)
             {
+                CarEngine[i].clip = AccelSounds.SampleIndex[currentIndex].SampleLayer[i].clip;
                 CarEngine[i].Play();
             }
             while (i < CarEngine.Length)
@@ -91,7 +111,7 @@ public class EngineAudioBehaviour : MonoBehaviour
         // Apply the modifiers
         for (int i = 0; i < AccelSounds.SampleIndex[currentIndex].SampleLayer.Length; i++)
         {
-            float lerpFactor = Mathf.Lerp(AccelSounds.SampleIndex[currentIndex].SampleLayer[i].lowRPM, AccelSounds.SampleIndex[currentIndex].SampleLayer[i].hiRPM, revs);
+            float lerpFactor = (revs - AccelSounds.SampleIndex[currentIndex].SampleLayer[i].lowRPM) / (AccelSounds.SampleIndex[currentIndex].SampleLayer[i].hiRPM - AccelSounds.SampleIndex[currentIndex].SampleLayer[i].lowRPM);
             //lerp factor,used in pitching and volume adjustment
             CarEngine[i].pitch = AccelSounds.SampleIndex[currentIndex].SampleLayer[i].audioPitch.Evaluate(lerpFactor);
             CarEngine[i].volume = AccelSounds.SampleIndex[currentIndex].SampleLayer[i].audioVolume.Evaluate(lerpFactor);

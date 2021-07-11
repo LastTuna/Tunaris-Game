@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1563644509
+CRC: 3808210266
 AssetBundleManifest:
   AssetBundleInfos:
     Info_0:
@@ -9,8 +9,8 @@ AssetBundleManifest:
       Name: rs200
       Dependencies: {}
     Info_2:
-      Name: stargtv8
+      Name: rebel
       Dependencies: {}
     Info_3:
-      Name: rebel
+      Name: stargtv8
       Dependencies: {}

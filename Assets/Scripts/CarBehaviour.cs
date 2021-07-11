@@ -101,6 +101,9 @@ public class CarBehaviour : MonoBehaviour {
             }
 
             InitializeCar();
+            EngineAudio = gameObject.AddComponent<EngineAudioBehaviour>();
+            EngineAudio.InitiateSounds(cor);
+
 
             TextAsset tireData = cor.LoadAsset("tires.json") as TextAsset;
             if(tireData != null)
@@ -360,9 +363,8 @@ public class CarBehaviour : MonoBehaviour {
 
     void Update() {
             Hud.UpdateHUD(engineRPM, specs.engineREDLINE, turboSpool, currentSpeed, shifting, gear, tirewearlist);
-            //TODO!!!!!!!!! SOUND SYSTEM RE ENABLE
             Gearbox();//gearbox update
-            //EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool);
+            EngineAudio.ProcessSounds(engineRPM, spooled, turboSpool, Input.GetAxis("Throttle"));
             LightsOn();
             if (differentialTrans != null) DiffPosition(wheelRRTrans, wheelRLTrans);
             if(drivingWheel != null) drivingWheel.transform.localEulerAngles = new Vector3(drivingWheel.transform.rotation.x, drivingWheel.transform.rotation.y, -90 * CustomInput.GetAxis("Steering"));

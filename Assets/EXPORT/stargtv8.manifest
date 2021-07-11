@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2781688903
+CRC: 4204757800
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: fb29350b3c1236b120c3ff302dabc29e
+    Hash: 6981622ef902b16f78065a95df31eb6c
   TypeTreeHash:
     serializedVersion: 2
-    Hash: 5b8e59ce960e0bc2bc81197cadfcd4cc
+    Hash: c5236dbb2d9b702c0bb9a46df2029aa7
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,6 +31,8 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
 - Class: 90
   Script: {instanceID: 0}
 - Class: 95
@@ -40,6 +42,9 @@ ClassTypes:
 - Class: 146
   Script: {instanceID: 0}
 Assets:
+- Assets/cars/stargt/idle.wav
+- Assets/cars/stargt/3000.wav
 - Assets/cars/stargt/specs.json
 - Assets/cars/stargt/stargtv8.prefab
+- Assets/cars/stargt/soundbank.json
 Dependencies: []
