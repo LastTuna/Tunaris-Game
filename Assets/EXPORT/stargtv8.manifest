@@ -1,9 +1,9 @@
 ManifestFileVersion: 0
-CRC: 4204757800
+CRC: 3229785054
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 6981622ef902b16f78065a95df31eb6c
+    Hash: 561014fb6b9b9a9d3df42ea011a51a26
   TypeTreeHash:
     serializedVersion: 2
     Hash: c5236dbb2d9b702c0bb9a46df2029aa7
@@ -45,6 +45,6 @@ Assets:
 - Assets/cars/stargt/idle.wav
 - Assets/cars/stargt/3000.wav
 - Assets/cars/stargt/specs.json
-- Assets/cars/stargt/stargtv8.prefab
 - Assets/cars/stargt/soundbank.json
+- Assets/cars/stargt/stargtv8.prefab
 Dependencies: []

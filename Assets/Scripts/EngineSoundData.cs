@@ -19,8 +19,8 @@ public class EngineSample
 [System.Serializable]
 public class EngineSampleIndex
 {
-    public EngineSample[] SampleLayer = new EngineSample[2];//samples' layers for this index
     public int indexThreshold = 830;//the end of this sample range. after this, samples move on to the next index.
+    public EngineSample[] SampleLayer = new EngineSample[2];//samples' layers for this index
 }
 [System.Serializable]
 public class EngineSoundData
@@ -39,6 +39,28 @@ public class EngineSoundData
     //debug func. used to export tires that you made during runtime.
     public void ExportData(EngineSoundData AAASSSSS)
     {
+        //convert clips into filenames
+        foreach (EngineSampleIndex penoz in AAASSSSS.SampleIndex)
+        {
+            foreach (EngineSample layer in penoz.SampleLayer)
+            {
+                if (layer.clip == null) break;
+                layer.clipname = layer.clip.name + ".wav";
+            }
+        }
+        if(AAASSSSS.pshh.Length != 0)
+        {
+            for (int i = 0; i < AAASSSSS.pshh.Length; i++)
+            {
+                AAASSSSS.pshhNames[i] = pshh[i].name + ".wav";
+            }
+            AAASSSSS.boostName = AAASSSSS.boost.name + ".wav";
+        }
+        if(AAASSSSS.horn != null)
+        {
+            AAASSSSS.hornName = horn.name + ".wav";
+        }
+
         //export a json to EXPORT folder. has default values.
         //trigger this by whatever you want really. not used ingame.
         string filePath = Application.dataPath + "/EXPORT/" + "soundbank.json";

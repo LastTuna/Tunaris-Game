@@ -1,12 +1,13 @@
 {
     "SampleIndex": [
         {
+            "indexThreshold": 830,
             "SampleLayer": [
                 {
                     "lowRPM": 0,
                     "hiRPM": 830,
                     "clip": {
-                        "instanceID": 0
+                        "instanceID": 57386
                     },
                     "clipname": "idle.wav",
                     "audioVolume": {
@@ -58,16 +59,16 @@
                         "m_RotationOrder": 4
                     }
                 }
-            ],
-            "indexThreshold": 830
+            ]
         },
         {
+            "indexThreshold": 7000,
             "SampleLayer": [
                 {
                     "lowRPM": 831,
                     "hiRPM": 7000,
                     "clip": {
-                        "instanceID": 0
+                        "instanceID": 57388
                     },
                     "clipname": "3000.wav",
                     "audioVolume": {
@@ -76,7 +77,7 @@
                             {
                                 "serializedVersion": "2",
                                 "time": 0.0,
-                                "value": 1.0,
+                                "value": 0.402740478515625,
                                 "inSlope": 0.0,
                                 "outSlope": 0.0,
                                 "tangentMode": 0
@@ -92,7 +93,7 @@
                         ],
                         "m_PreInfinity": 2,
                         "m_PostInfinity": 2,
-                        "m_RotationOrder": 4
+                        "m_RotationOrder": 0
                     },
                     "audioPitch": {
                         "serializedVersion": "2",
@@ -100,7 +101,7 @@
                             {
                                 "serializedVersion": "2",
                                 "time": 0.0,
-                                "value": 1.0,
+                                "value": 0.35772705078125,
                                 "inSlope": 0.0,
                                 "outSlope": 0.0,
                                 "tangentMode": 0
@@ -108,7 +109,7 @@
                             {
                                 "serializedVersion": "2",
                                 "time": 1.0,
-                                "value": 1.0,
+                                "value": 1.332489013671875,
                                 "inSlope": 0.0,
                                 "outSlope": 0.0,
                                 "tangentMode": 0
@@ -116,11 +117,10 @@
                         ],
                         "m_PreInfinity": 2,
                         "m_PostInfinity": 2,
-                        "m_RotationOrder": 4
+                        "m_RotationOrder": 0
                     }
                 }
-            ],
-            "indexThreshold": 7000
+            ]
         }
     ],
     "pshhNames": [

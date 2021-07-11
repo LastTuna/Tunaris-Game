@@ -17,22 +17,21 @@ public class CarWash : MonoBehaviour {
         mainbody = GameObject.Find("mainbody").GetComponent<Renderer>().material;
         mainbody.DisableKeyword("_GLOSSYREFLECTIONS_OFF");
         mainbody.SetInt("_GlossyReflections", 1);
-        wheelDirt[0] = GameObject.Find("FLw").GetComponent<Renderer>().material;
-        wheelDirt[1] = GameObject.Find("FRw").GetComponent<Renderer>().material;
-        wheelDirt[2] = GameObject.Find("RLw").GetComponent<Renderer>().material;
-        wheelDirt[3] = GameObject.Find("RRw").GetComponent<Renderer>().material;
+        wheelDirt[0] = GameObject.Find("FLwheel").GetComponent<Renderer>().material;
+        wheelDirt[1] = GameObject.Find("FRwheel").GetComponent<Renderer>().material;
+        wheelDirt[2] = GameObject.Find("RLwheel").GetComponent<Renderer>().material;
+        wheelDirt[3] = GameObject.Find("RRwheel").GetComponent<Renderer>().material;
     }
 	
 	// Update is called once per frame
 	void Update ()
     {
-
         dirtiness = dataController.GetDirtiness();
-        mainbody.SetFloat("_Glossiness", Mathf.Clamp01(1 - (dirtiness * 2)));//placeholder
+        mainbody.SetFloat("_Glossiness", Mathf.Clamp01(1 - (dirtiness * 2)));
         mainbody.SetFloat("_FortniteRange", dirtiness);
         foreach (Material e in wheelDirt)
         {
-            //e.SetFloat("_FortniteRange", dirtiness);
+            e.SetFloat("_FortniteRange", dirtiness);
         }
     }
 

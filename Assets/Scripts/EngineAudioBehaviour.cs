@@ -24,6 +24,8 @@ public class EngineAudioBehaviour : MonoBehaviour
     public bool hasTurbo;
     public bool isSpooled;
 
+    public bool exportJson;
+
     // Some attempt at blindly speeding up processing
     int lastIndex = 0;
     
@@ -139,6 +141,7 @@ public class EngineAudioBehaviour : MonoBehaviour
                 isSpooled = spooled;
             }
         }
+        ExportSoundbankJson();
     }
 
     public int SoundIndex(float revs)
@@ -153,4 +156,14 @@ public class EngineAudioBehaviour : MonoBehaviour
         }
         return 0;
     }
+
+    public void ExportSoundbankJson()
+    {
+        if (exportJson)
+        {
+            exportJson = false;
+            AccelSounds.ExportData(AccelSounds);
+        }
+    }
+
 }
