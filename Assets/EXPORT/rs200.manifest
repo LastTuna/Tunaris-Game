@@ -1,12 +1,12 @@
 ManifestFileVersion: 0
-CRC: 2117161079
+CRC: 3600215990
 Hashes:
   AssetFileHash:
     serializedVersion: 2
-    Hash: 7075cb0dc7ac11d8f819b546357909d4
+    Hash: f088375f8330a0c99f6add60c4791ad0
   TypeTreeHash:
     serializedVersion: 2
-    Hash: f9667c9bc053f7d713eb09d38446d8d1
+    Hash: c41177fce1c25fd3a30b86f98f4daf34
 HashAppended: 0
 ClassTypes:
 - Class: 1
@@ -31,9 +31,16 @@ ClassTypes:
   Script: {instanceID: 0}
 - Class: 65
   Script: {instanceID: 0}
+- Class: 83
+  Script: {instanceID: 0}
 - Class: 146
   Script: {instanceID: 0}
 Assets:
+- Assets/cars/rs200/ClioV6drive.wav
+- Assets/cars/rs200/soundbank.json
 - Assets/cars/rs200/rs200.prefab
+- Assets/cars/rs200/ClioV6idle.wav
 - Assets/cars/rs200/specs.json
+- Assets/cars/rs200/wastegate.wav
+- Assets/cars/rs200/turbo.wav
 Dependencies: []

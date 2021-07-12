@@ -57,13 +57,14 @@ public class EngineAudioBehaviour : MonoBehaviour
         //ok now that we have gathered all these resources make the audio sources
         if(AccelSounds.boost != null)
         {
+            hasTurbo = true;
             boostSource = gameObject.AddComponent<AudioSource>();
         }
         if (AccelSounds.horn != null)
         {
             hornSource = gameObject.AddComponent<AudioSource>();
         }
-        CarEngine = new AudioSource[4];
+        CarEngine = new AudioSource[4];///////TODO!!!!!!!!!!!! FIX THIS!!!!!!! ALLOCATE DYNAMICALLY ENOUGH AUDIO SOURCES!
         for(int i = 0; i < CarEngine.Length; i++)
         {
             CarEngine[i] = gameObject.AddComponent<AudioSource>();
@@ -121,25 +122,36 @@ public class EngineAudioBehaviour : MonoBehaviour
         // Process turbo sound
         if (hasTurbo)
         {
-            // turbo whine (your mom)
-            if (!isSpooled && spooled)
+            if(throttlePressure > 0 || isSpooled)
             {
-                boostSource.clip = AccelSounds.boost;
+                // turbo whine (your mom)
+                if (!isSpooled && spooled)
+                {
+                    boostSource.clip = AccelSounds.boost;
+                    boostSource.loop = true;
+                    boostSource.Play();
+                    isSpooled = spooled;
+                }
                 boostSource.pitch = boostPressure;
-                boostSource.loop = true;
-                boostSource.Play();
+                // turbo wastegate PSSSHHHHHHH once lift gas AND boost threshold has been crossed
+                if (isSpooled && !spooled)
+                {
+                    boostSource.pitch = 1;
+                    boostSource.clip = AccelSounds.pshh[UnityEngine.Random.Range(0, AccelSounds.pshh.Length)];
+                    boostSource.loop = false;
+                    boostSource.Play();
+                    isSpooled = spooled;
+                }
+            }
+            else
+            {
+                if(boostSource.clip == AccelSounds.boost)
+                {
+                    boostSource.clip = null;
+                }
                 isSpooled = spooled;
             }
 
-            // turbo wastegate PSSSHHHHHHH once lift gas AND boost threshold has been crossed
-            if (isSpooled && !spooled)
-            {
-                boostSource.pitch = 1;
-                boostSource.clip = AccelSounds.pshh[UnityEngine.Random.Range(0, AccelSounds.pshh.Length)];
-                boostSource.loop = false;
-                boostSource.Play();
-                isSpooled = spooled;
-            }
         }
         ExportSoundbankJson();
     }

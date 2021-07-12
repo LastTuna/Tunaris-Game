@@ -1,0 +1,143 @@
+{
+    "SampleIndex": [
+        {
+            "indexThreshold": 830,
+            "SampleLayer": [
+                {
+                    "lowRPM": 0,
+                    "hiRPM": 830,
+                    "clip": {
+                        "instanceID": 11412
+                    },
+                    "clipname": "ClioV6idle.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "2",
+                                "time": 0.0,
+                                "value": 1.0212208032608033,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            },
+                            {
+                                "serializedVersion": "2",
+                                "time": 1.0,
+                                "value": 1.0216994285583497,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 0
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "2",
+                                "time": 0.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            },
+                            {
+                                "serializedVersion": "2",
+                                "time": 1.0,
+                                "value": 1.0,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 4
+                    }
+                }
+            ]
+        },
+        {
+            "indexThreshold": 7000,
+            "SampleLayer": [
+                {
+                    "lowRPM": 831,
+                    "hiRPM": 10000,
+                    "clip": {
+                        "instanceID": 10590
+                    },
+                    "clipname": "ClioV6drive.wav",
+                    "audioVolume": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "2",
+                                "time": 0.0,
+                                "value": 0.898895263671875,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            },
+                            {
+                                "serializedVersion": "2",
+                                "time": 1.0,
+                                "value": 1.2850341796875,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 0
+                    },
+                    "audioPitch": {
+                        "serializedVersion": "2",
+                        "m_Curve": [
+                            {
+                                "serializedVersion": "2",
+                                "time": 0.0,
+                                "value": 0.85107421875,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            },
+                            {
+                                "serializedVersion": "2",
+                                "time": 1.0,
+                                "value": 2.466156005859375,
+                                "inSlope": 0.0,
+                                "outSlope": 0.0,
+                                "tangentMode": 0
+                            }
+                        ],
+                        "m_PreInfinity": 2,
+                        "m_PostInfinity": 2,
+                        "m_RotationOrder": 0
+                    }
+                }
+            ]
+        }
+    ],
+    "pshhNames": [
+        "wastegate.wav"
+    ],
+    "boostName": "turbo.wav",
+    "hornName": "doot.wav",
+    "horn": {
+        "instanceID": 0
+    },
+    "pshh": [
+        {
+            "instanceID": 11578
+        }
+    ],
+    "boost": {
+        "instanceID": 12066
+    },
+    "SoundbankInfo": "STAR GT test bank"
+}

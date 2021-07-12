@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 7bc7cfdd52437134380bb8511872cee7
+guid: 03835c3bc44cb6545808a3d741dffd8e
 timeCreated: 1522939217
 licenseType: Free
 AudioImporter:
@@ -20,5 +20,5 @@ AudioImporter:
   ambisonic: 0
   3D: 1
   userData: 
-  assetBundleName: 
+  assetBundleName: rs200
   assetBundleVariant: 
