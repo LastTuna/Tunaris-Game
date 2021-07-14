@@ -18,6 +18,9 @@ public class CarCamera : MonoBehaviour {
     // Variable to store the selected camera
     public int chosenCamera = 0;
 
+    public GameObject[] tvCams;//tv cam transform array
+    public bool CheckingCamDistance = true;
+    public int currentTVCam = 0;
     // cameras supported
     // basically this should be the max chosenCamera so 1 for chase + interior cam
     public int supportedCameras = 3;
@@ -40,6 +43,16 @@ public class CarCamera : MonoBehaviour {
         } else {
             actualCamera = transform;
         }
+        tvCams = new GameObject[10];
+        int i = 0;
+        while (true)
+        {
+            GameObject dolor = GameObject.Find("TVcam_" + i);
+            if (dolor == null) break;
+            tvCams[i] = dolor;
+            i++;
+        }
+
     }
 
     void LateUpdate() {
@@ -83,10 +96,10 @@ public class CarCamera : MonoBehaviour {
 
                     //car.Find("Cockpit").gameObject.SetActive(true);
                     break;
-                // 2: wheel debug camera right side
+                    //tv cam
                 case 2:
-                    actualCamera.position = car.position;
-                    actualCamera.position += car.right * 5;
+                    if (CheckingCamDistance) StartCoroutine(RefreshCamDistance());
+
                     actualCamera.LookAt(car);
                     break;
                 // 3: wheel debug camera left side
@@ -98,6 +111,50 @@ public class CarCamera : MonoBehaviour {
                 default: break;
             }
         }
+    }
+
+    //originally i made this as a ienumerator to run it as coroutine because
+    //the og one was really inefficient, iterating through all of them to find the nearest cam
+    //i think this can be changed into a int function and return the index, and throw the pos value
+    //in the main case statement
+    IEnumerator RefreshCamDistance()
+    {
+        CheckingCamDistance = false;
+        float bomboloni = Vector3.Distance(tvCams[currentTVCam].transform.position, car.position);
+        yield return new WaitForSeconds(0.2f);
+        //check distance to next camera
+        if (currentTVCam + 1 != tvCams.Length)
+        {
+            if (bomboloni > Vector3.Distance(tvCams[currentTVCam + 1].transform.position, car.position))
+            {
+                currentTVCam++;
+            }
+        }
+        //check distance to previous camera
+        if(currentTVCam != 0)
+        {
+            if (bomboloni > Vector3.Distance(tvCams[currentTVCam - 1].transform.position, car.position))
+            {
+                currentTVCam--;
+            }
+        }
+        //loopback to the first camera in the index
+        if(currentTVCam + 1 == tvCams.Length)
+        {
+            if (bomboloni > Vector3.Distance(tvCams[0].transform.position, car.position))
+            {
+                currentTVCam = 0;
+            }
+        }
+        if (currentTVCam == 0)
+        {
+            if (bomboloni > Vector3.Distance(tvCams[tvCams.Length - 1].transform.position, car.position))
+            {
+                currentTVCam = 0;
+            }
+        }
+        actualCamera.position = tvCams[currentTVCam].transform.position;
+        CheckingCamDistance = true;
     }
 
     void Update() {
