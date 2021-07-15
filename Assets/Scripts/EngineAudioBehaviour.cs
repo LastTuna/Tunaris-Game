@@ -24,6 +24,8 @@ public class EngineAudioBehaviour : MonoBehaviour
     public bool hasTurbo;
     public bool isSpooled;
 
+    public float dopplerfactor = 1;
+
     public bool exportJson;
 
     // Some attempt at blindly speeding up processing
@@ -69,6 +71,12 @@ public class EngineAudioBehaviour : MonoBehaviour
         {
             CarEngine[i] = gameObject.AddComponent<AudioSource>();
             CarEngine[i].loop = true;
+            CarEngine[i].dopplerLevel = 1;
+            CarEngine[i].maxDistance = 100;
+            CarEngine[i].reverbZoneMix = 1;
+            CarEngine[i].rolloffMode = AudioRolloffMode.Linear;
+            CarEngine[i].spatialBlend = 1;
+            CarEngine[i].spread = 1;
         }
     }
 

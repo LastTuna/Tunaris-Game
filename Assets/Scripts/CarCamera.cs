@@ -150,7 +150,7 @@ public class CarCamera : MonoBehaviour {
         {
             if (bomboloni > Vector3.Distance(tvCams[tvCams.Length - 1].transform.position, car.position))
             {
-                currentTVCam = 0;
+                currentTVCam = tvCams.Length - 1;
             }
         }
         actualCamera.position = tvCams[currentTVCam].transform.position;
