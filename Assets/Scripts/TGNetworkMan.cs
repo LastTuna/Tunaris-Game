@@ -6,157 +6,119 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Collections.Generic;
 
 public class TGNetworkMan : MonoBehaviour
 {
-
-    // use this thread for whatever.
-    //server/client uses this same object just to make sure u cant fat finger both server and client on at the same time
-    Thread Thread;
-
-    // "connection" things
-    IPEndPoint remoteEndPoint;
-    UdpClient client;
+    
+    public List<NetPlayer> playerInfo = new List<NetPlayer>();
+    
+    Socket TCPSocket;
+    public List<Socket> TCPConnections = new List<Socket>();
 
     public string IP = "127.0.0.1";
-    public int port = 11111;//port that server and cleint uses
-    // infos
-    public string lastReceivedUDPPacket = "";
-    public string allReceivedUDPPackets = ""; // clean up this from time to time!
-
+    public int UDPport = 11111;
+    public int TCPport = 11112;
     public string clientMsg = "";//write a message here and press enter while client is running to send a messag to server
-
-    public bool isServer = false;//click on this to run a server.
-    public bool isClient = false;//click on this to run a client.
+    
     public bool isRunning = false;//indicator light
-    public bool startRunning = false;//starts server/client depending on which one is marked true.
-    public bool kill = false;//kill thread.
-
-
-    public void FixedUpdate()
-    {
-        if (startRunning && !isRunning)
-        {
-            startRunning = false;
-            if (isServer)
-            {
-                StartServer();
-            }
-            if (isClient)
-            {
-                StartClient();
-            }
-        }
-
-        if (kill && Thread.IsAlive)
-        {
-            kill = false;
-            isRunning = false;
-            Debug.Log("thread killed" + Thread.ThreadState);
-            
-        }
-    }
+    public List<string> textMessages = new List<string>();
+    
 
     //the comments are in german because i stole half of this shit from a stackoverflow.
     //i have no idea what half of the shit means and im too lazy to delete it all.
-
-
-    public void StartClient()
+    private void Start()
     {
-        // Endpunkt definieren, von dem die Nachrichten gesendet werden.
-        print("starting UDP client");
-        
+        DataController data = FindObjectOfType<DataController>();
+        IP = data.IP;
 
-        // ----------------------------
-        // Senden
-        // ----------------------------
-        remoteEndPoint = new IPEndPoint(IPAddress.Parse(IP), port);
-        client = new UdpClient();
-        client.Client.ReceiveTimeout = 5000;
-        // status
-        print("Sending to " + IP + " : " + port);
-        print("Testing: nc -lu " + IP + " : " + port);
-
-        //make threaad here n start it.
-        Thread = new Thread(new ThreadStart(SendString));
-        Thread.IsBackground = true;
-        Thread.Start();
-        isRunning = true;
-        Debug.Log("client started");
+        //you are the host
+        if(IP == "")
+        {
+            isRunning = true;
+            Debug.Log("starting server");
+            InitListenerSocket();
+        }
+        else
+        {
+            isRunning = true;
+            TCPSocket = ConnectSocket(IP, TCPport);
+            TCPSocket.Disconnect(false);
+            TCPSocket.Close();
+            //start client
+        }
     }
     
-    // sendData
-    private void SendString()
+    private void InitListenerSocket()
+    {
+        //create socket
+        TCPSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        //bind the listening socket to the port
+        IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, TCPport);
+        TCPSocket.Bind(endpoint);
+
+        //start listening
+        TCPSocket.Listen(4);
+
+        Thread cbt = new Thread(new ThreadStart(Insain));
+        cbt.Start();
+    }
+
+    //this is the listener thread where you llisten n tally up incoming TCP connections.
+    private void Insain()
     {
         do
         {
-            try
-            {
-                if (clientMsg != "")
-                {
-                    byte[] data = Encoding.UTF8.GetBytes(clientMsg);
-
-                    client.Send(data, data.Length, remoteEndPoint);
-                    clientMsg = "";
-                }
-            }
-            catch (Exception err)
-            {
-                print(err.ToString());
-            }
+            Socket perro = TCPSocket.Accept();
+            TCPConnections.Add(perro);
+            IPEndPoint perroEP = perro.RemoteEndPoint as IPEndPoint;//get da IP address for da prompt
+            Debug.Log("el nuevo connecion: " + perroEP.Address.ToString());
         } while (isRunning);
     }
 
-    // this initiates a server.
-    private void StartServer()
+
+    //stole this from microsofts doc so it should work no problem.
+    private static Socket ConnectSocket(string serverIP, int port)
     {
-        // Endpunkt definieren, von dem die Nachrichten gesendet werden.
-        print("starting server");
-        
-        client = new UdpClient(port);
-        client.Client.ReceiveTimeout = 5000;
+        Socket s = null;
+        IPHostEntry hostEntry = null;
 
-        // status
-        print("Sending to 127.0.0.1 : " + port);
-        print("Test-Sending to this Port: nc -u 127.0.0.1  " + port + "");
+        //Get host related information.
+        hostEntry = Dns.GetHostEntry(serverIP);
 
-
-        //make threaad here n start it.
-        Thread = new Thread(new ThreadStart(ReceiveData));
-        Thread.IsBackground = true;
-        Thread.Start();
-        isRunning = true;
-        Debug.Log("server started");
-    }
-
-    // receive thread
-    private void ReceiveData()
-    {
-        do
+        //Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
+        //an exception that occurs when the host IP Address is not compatible with the address family
+        // (typical in the IPv6 case).
+        Debug.Log("attempting connectiong to : " + serverIP);
+        foreach (IPAddress address in hostEntry.AddressList)
         {
-            try
+            IPEndPoint ipe = new IPEndPoint(address, port);
+            Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+            
+            tempSocket.Connect(ipe);
+
+            if (tempSocket.Connected)
             {
-                // Bytes empfangen.
-                IPEndPoint anyIP = new IPEndPoint(IPAddress.Any, 0);
-                byte[] data = client.Receive(ref anyIP);
-
-                // Bytes mit der UTF8-Kodierung in das Textformat kodieren.
-                string text = Encoding.UTF8.GetString(data);
-
-                // Den abgerufenen Text anzeigen.
-                print(">> " + text);
-
-                // latest UDPpacket
-                lastReceivedUDPPacket = text;
-
-                // ....
-                allReceivedUDPPackets = allReceivedUDPPackets + text;
-
+                s = tempSocket;
+                break;
             }
-            catch (Exception err)
+            else
             {
-                print(err.ToString());
+                continue;
             }
-        } while (isRunning);
+        }
+        Debug.Log("TCP socket connected to: " + serverIP);
+        return s;
     }
+
+
+}
+
+
+public class NetPlayer
+{
+
+
+
+
 }
