@@ -24,9 +24,7 @@ public class TGNetworkMan : MonoBehaviour
     public bool isRunning = false;//indicator light
     public List<string> textMessages = new List<string>();
     
-
-    //the comments are in german because i stole half of this shit from a stackoverflow.
-    //i have no idea what half of the shit means and im too lazy to delete it all.
+    
     private void Start()
     {
         DataController data = FindObjectOfType<DataController>();
@@ -41,58 +39,87 @@ public class TGNetworkMan : MonoBehaviour
         }
         else
         {
-            isRunning = true;
-            TCPSocket = ConnectSocket(IP, TCPport);
-            TCPSocket.Disconnect(false);
-            TCPSocket.Close();
             //start client
+            isRunning = true;
+            Thread tt = new Thread(new ThreadStart(ConnectSocket));
+            tt.Start();
         }
     }
     
     private void InitListenerSocket()
     {
         //create socket
-        TCPSocket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        TCPSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
         //bind the listening socket to the port
-        IPEndPoint endpoint = new IPEndPoint(IPAddress.Any, TCPport);
+        IPEndPoint endpoint = new IPEndPoint(IPAddress.IPv6Any, TCPport);
         TCPSocket.Bind(endpoint);
-
+        Debug.Log("tcp listener bound.");
         //start listening
         TCPSocket.Listen(4);
 
-        Thread cbt = new Thread(new ThreadStart(Insain));
+        Thread cbt = new Thread(new ThreadStart(TCPlistenerThread));
         cbt.Start();
     }
 
     //this is the listener thread where you llisten n tally up incoming TCP connections.
-    private void Insain()
+    private void TCPlistenerThread()
     {
+
+        Debug.Log("initiating listener thread");
         do
         {
             Socket perro = TCPSocket.Accept();
             TCPConnections.Add(perro);
             IPEndPoint perroEP = perro.RemoteEndPoint as IPEndPoint;//get da IP address for da prompt
             Debug.Log("el nuevo connecion: " + perroEP.Address.ToString());
+            StartCoroutine(JoinGameHandler(perro));// WIP WIP WIP WIP
+
         } while (isRunning);
     }
-
+    
+    IEnumerator JoinGameHandler(Socket tcpsock)//WIP WIP WIP WIP WIP WIP
+    {
+        NetPlayer samir = new NetPlayer();
+        samir.TCPsock = tcpsock;
+        samir.username = ReceiveTCPasString(tcpsock);
+        samir.carname = ReceiveTCPasString(tcpsock);
+        samir.token = ReceiveTCPasString(tcpsock);
+        playerInfo.Add(samir);
+        yield return new WaitForSeconds(0.3f);
+    }
+    //UNTESTED
+    string ReceiveTCPasString(Socket TCPsock)
+    {
+        byte[] data = new byte[128];
+        TCPsock.Receive(data);
+        string content = Encoding.UTF8.GetString(data);
+        return content;
+    }
+    //UNTESTED
+    void SendStringTCP(string content, Socket TCPsock)
+    {
+        byte[] data = new byte[128];
+        data = Encoding.UTF8.GetBytes(content);
+        TCPsock.Send(data);
+    }
 
     //stole this from microsofts doc so it should work no problem.
-    private static Socket ConnectSocket(string serverIP, int port)
+    private void ConnectSocket()
     {
         Socket s = null;
         IPHostEntry hostEntry = null;
 
         //Get host related information.
-        hostEntry = Dns.GetHostEntry(serverIP);
+        //GETTING LOCALHOST VIA THIS METHOD RETURNS IPV6!!!!!!!!!!!!
+        hostEntry = Dns.GetHostEntry(IP);
 
         //Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
         //an exception that occurs when the host IP Address is not compatible with the address family
         // (typical in the IPv6 case).
-        Debug.Log("attempting connectiong to : " + serverIP);
+        Debug.Log("attempting connectiong to : " + IP);
         foreach (IPAddress address in hostEntry.AddressList)
         {
-            IPEndPoint ipe = new IPEndPoint(address, port);
+            IPEndPoint ipe = new IPEndPoint(address, TCPport);
             Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
             
             tempSocket.Connect(ipe);
@@ -107,8 +134,8 @@ public class TGNetworkMan : MonoBehaviour
                 continue;
             }
         }
-        Debug.Log("TCP socket connected to: " + serverIP);
-        return s;
+
+        Debug.Log("TCP socket connected to: " + IP);
     }
 
 
@@ -117,6 +144,11 @@ public class TGNetworkMan : MonoBehaviour
 
 public class NetPlayer
 {
+    public GameObject vehicle;//the instantiated physical car
+    public string username;//screem name
+    public string carname;//car CONTENT MANAGER NAME
+    public string token;//token used in UDP transmission regarding this instance
+    public Socket TCPsock;//used by server-pointer to this instances socket
 
 
 
