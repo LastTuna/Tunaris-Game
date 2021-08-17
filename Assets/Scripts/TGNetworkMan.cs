@@ -12,9 +12,10 @@ public class TGNetworkMan : MonoBehaviour
 {
     
     public List<NetPlayer> playerInfo = new List<NetPlayer>();
-    
-    Socket TCPSocket;
-    public List<Socket> TCPConnections = new List<Socket>();
+
+    List<Socket> TCPConnections = new List<Socket>();//used by server to keep tally of all connections
+    Socket TCPListenerSocket;//listener sock used by server
+    Socket TCPSocket;//used by client
 
     public string IP = "127.0.0.1";
     public int UDPport = 11111;
@@ -49,13 +50,13 @@ public class TGNetworkMan : MonoBehaviour
     private void InitListenerSocket()
     {
         //create socket
-        TCPSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+        TCPListenerSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
         //bind the listening socket to the port
         IPEndPoint endpoint = new IPEndPoint(IPAddress.IPv6Any, TCPport);
-        TCPSocket.Bind(endpoint);
+        TCPListenerSocket.Bind(endpoint);
         Debug.Log("tcp listener bound.");
         //start listening
-        TCPSocket.Listen(4);
+        TCPListenerSocket.Listen(4);
 
         Thread cbt = new Thread(new ThreadStart(TCPlistenerThread));
         cbt.Start();
@@ -68,16 +69,16 @@ public class TGNetworkMan : MonoBehaviour
         Debug.Log("initiating listener thread");
         do
         {
-            Socket perro = TCPSocket.Accept();
+            Socket perro = TCPListenerSocket.Accept();
             TCPConnections.Add(perro);
             IPEndPoint perroEP = perro.RemoteEndPoint as IPEndPoint;//get da IP address for da prompt
             Debug.Log("el nuevo connecion: " + perroEP.Address.ToString());
-            StartCoroutine(JoinGameHandler(perro));// WIP WIP WIP WIP
+            JoinGameHandler(perro);// WIP WIP WIP WIP
 
         } while (isRunning);
     }
     
-    IEnumerator JoinGameHandler(Socket tcpsock)//WIP WIP WIP WIP WIP WIP
+    void JoinGameHandler(Socket tcpsock)//WIP WIP WIP WIP WIP WIP
     {
         NetPlayer samir = new NetPlayer();
         samir.TCPsock = tcpsock;
@@ -85,7 +86,6 @@ public class TGNetworkMan : MonoBehaviour
         samir.carname = ReceiveTCPasString(tcpsock);
         samir.token = ReceiveTCPasString(tcpsock);
         playerInfo.Add(samir);
-        yield return new WaitForSeconds(0.3f);
     }
     //UNTESTED
     string ReceiveTCPasString(Socket TCPsock)
@@ -134,7 +134,7 @@ public class TGNetworkMan : MonoBehaviour
                 continue;
             }
         }
-
+        TCPSocket = s;
         Debug.Log("TCP socket connected to: " + IP);
     }
 
