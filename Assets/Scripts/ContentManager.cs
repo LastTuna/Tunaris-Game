@@ -37,12 +37,12 @@ class ContentManager : MonoBehaviour {
 
 
         //this is just make a new tire data object n export a sample json.
-        TireData asdadsasd = new TireData();
-        asdadsasd.ExportData(asdadsasd);
+        //TireData asdadsasd = new TireData();
+        //asdadsasd.ExportData(asdadsasd);
 
 
 
-        EngineSoundData culoo = new EngineSoundData();
+        //EngineSoundData culoo = new EngineSoundData();
         //culoo.ExportData(culoo);
     }
 

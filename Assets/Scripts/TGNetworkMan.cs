@@ -11,7 +11,7 @@ using System.Collections.Generic;
 public class TGNetworkMan : MonoBehaviour
 {
     public SessionInfo session;
-
+    public DataController data;
     Socket TCPListenerSocket;//listener sock used by server
     Socket TCPSocket;//used by client
 
@@ -27,7 +27,7 @@ public class TGNetworkMan : MonoBehaviour
     private void Start()
     {
         session = new SessionInfo();
-        DataController data = FindObjectOfType<DataController>();
+        data = FindObjectOfType<DataController>();
         IP = data.IP;
 
         //you are the host
@@ -41,8 +41,7 @@ public class TGNetworkMan : MonoBehaviour
         {
             //start client
             isRunning = true;
-            Thread tt = new Thread(new ThreadStart(ConnectSocket));
-            tt.Start();
+            ConnectSocket();
         }
     }
 
@@ -91,6 +90,7 @@ public class TGNetworkMan : MonoBehaviour
                 Debug.Log("password was correct");
             }
         }
+
         //if password is blank, execute this. if password is correct, execute
         if (session.sessionPass == "" || greenflag)
         {
@@ -102,11 +102,23 @@ public class TGNetworkMan : MonoBehaviour
             //make the client vet the name so theres enough bytes for the rest of the data.
 
             samir.ImportPlayerData(handshakeInfo);//load the data into the new player object
-            session.playerInfo.Add(samir);//everything went well, add player to player list
             textMessages.Add(handshakeInfo);//DEBUG
-            Debug.Log("received");
+            Debug.Log("received user " + samir.username + " info. sending token...");
 
-            //WRITE CODE TO SEND SERVER INFO TO CLIENT.
+            while (true)
+            {
+                //generate tokens until you get a unique token
+                samir.token = samir.GenerateUDPToken();
+                if (CheckDuplicateToken(samir.token)) break;
+            }
+            Debug.Log("token generated.sending...");
+            //send token to joining client
+            SendStringTCP(samir.token, samir.TCPsock);
+
+            //after this, send rest of the session info. like connected players, time of day etc
+            //then write something to do UDP back n forth...
+            session.playerInfo.Add(samir);//everything went well, add player to player list
+            Debug.Log("everything worked.very nice");
 
         }
         else
@@ -118,16 +130,54 @@ public class TGNetworkMan : MonoBehaviour
         }
     }
 
+    //use this to make sure there arent 2 players with the same token..just for the off chance
+    //with my luck, this will totally happen so i made this
+    bool CheckDuplicateToken(string token)
+    {
+        foreach(NetPlayer culo in session.playerInfo)
+        {
+            if(culo.token == token)
+            {
+                //duplicate, do not break loop.
+                return false;
+            }
+        }
+        //no duplicates found, carry on
+        return true;
+    }
+
     //WIP WIP WIP WIP WIP WIP WIP
     //send this users info to server. then receive the session info from server.
     void JoinGameClientHandshake(Socket tcpsock)
     {
-        //test shit for now
-        NetPlayer test = new NetPlayer();
-        test.username = "What the fuck did you just fucking say about me, you little bitch? I'll have you know I graduated top of my class in the Navy Seals, and I've been involved in numerous secret raids on Al-Quaeda, and I have over 300 confirmed kills. I am trained in gorilla warfare and I'm the top sniper in the entire US armed forces. You are nothing to me but just another target. I will wipe you the fuck out with precision the likes of which has never been seen before on this Earth, mark my fucking words. You think you can get away with saying that shit to me over the Internet? Think again, fucker. As we speak I am contacting my secret network of spies across the USA and your IP is being traced right now so you better prepare for the storm, maggot. The storm that wipes out the pathetic little thing you call your life. You're fucking dead, kid. I can be anywhere, anytime, and I can kill you in over seven hundred ways, and that's just with my bare hands. Not only am I extensively trained in unarmed combat, but I have access to the entire arsenal of the United States Marine Corps and I will use it to its full extent to wipe your miserable ass off the face of the continent, you little shit. If only you could have known what unholy retribution your little \"clever\" comment was about to bring down upon you, maybe you would have held your fucking tongue. But you couldn't, you didn't, and now you're paying the price, you goddamn idiot. I will shit fury all over you and you will drown in it. You're fucking dead, kiddo.";
-        test.carname = "stargt";
-        test.token = "microwave";
-        SendStringTCP(test.DataAsString(), tcpsock);
+        //get relevant data from datacontroller
+        NetPlayer myself = new NetPlayer();
+        myself.username = myself.TooLongUsernameReplacer();//using this temporaily because
+        //i think its cool
+
+
+        //just make sure its not too long
+        //TODO: vet other data too, maybe make a separate bool/void for it i guess..
+        if(myself.username.Length > 2000)
+        {
+            myself.username = myself.TooLongUsernameReplacer();
+        }
+        
+        myself.carname = data.SelectedCar;
+        myself.token = "null";
+        session.sessionPass = "";
+        
+        //TODO ADD SERVER PASSWORD FIELD TO SAVEDATA or add it as join param somewhere? i dunno yet...
+
+        if (session.sessionPass != "") SendStringTCP(session.sessionPass, tcpsock);
+        //send password if there is one
+
+        //carry on, send things about myself
+        SendStringTCP(myself.DataAsString(), tcpsock);
+
+        myself.token = ReceiveTCPasString(tcpsock, 3);
+        Debug.Log(myself.DataAsString());
+        //very cool if it works this far.
     }
 
     //receive TCP data and convert to string.
@@ -183,6 +233,7 @@ public class TGNetworkMan : MonoBehaviour
         TCPSocket = s;
         Debug.Log("TCP socket connected to: " + IP);
         JoinGameClientHandshake(s);
+        //proceed to handshake
     }
 
 
@@ -224,6 +275,36 @@ public class NetPlayer
         username = splicedData[0];
         carname = splicedData[1];
         token = splicedData[2];
-
     }
+
+    //used to generate UDP token. UDP token is 3 letters long.
+    public string GenerateUDPToken()
+    {
+        string validKeys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        string genToken = "";
+
+        System.Random dolor = new System.Random();
+
+        while (genToken.Length < 4)
+        {
+            genToken += validKeys.Substring(dolor.Next(0, validKeys.Length - 1), 1);
+        }
+        return genToken;
+    }
+
+    //username so long it breaks the arbitary character limit that i will mindlessly adjust
+    public string TooLongUsernameReplacer()
+    {
+        string[] happyFriendsWords = new string[] { "3am", "1nsain", "Samir", "CIA", "Happy", "Friend", "Burger", "Enjoyer", "Glowie", "Afongus", "Frenchman", "Top", "Earth", "Shift", "Brazilian"};
+        System.Random dolor = new System.Random();
+        int length = dolor.Next(1, 4);
+        string cooltext = "";
+        for(int i = 0; i < length; i++)
+        {
+            cooltext += happyFriendsWords[dolor.Next(0, happyFriendsWords.Length - 1)];
+        }
+        return cooltext;
+    }
+
+
 }
