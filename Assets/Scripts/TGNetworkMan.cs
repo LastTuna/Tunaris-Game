@@ -7,127 +7,104 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Collections.Generic;
+using UnityEngine.UI;
 
 public class TGNetworkMan : MonoBehaviour
 {
+    public bool debugMode = false;//enable this for possible debug stuff
+    //public DebugUIMan debugUI;
+    
     public SessionInfo session;
     public DataController data;
-    Socket TCPListenerSocket;//listener sock used by server
-    Socket TCPSocket;//used by client
+    public TGnetworkUDP network;
 
     public string IP = "127.0.0.1";
     public int UDPport = 11111;
     public int TCPport = 11112;
-    public string clientMsg = "";//write a message here and press enter while client is running to send a messag to server
+
+    public bool isServer = false;
+
 
     public bool isRunning = false;//indicator light
     public List<string> textMessages = new List<string>();
 
+    int UDPtrafficTimer = 0;//container
+    
 
     private void Start()
     {
         session = new SessionInfo();
+        network = new TGnetworkUDP();
         data = FindObjectOfType<DataController>();
+        
         IP = data.IP;
 
         //you are the host
         if (IP == "")
         {
+            isServer = true;
             isRunning = true;
+
             Debug.Log("starting server");
-            InitListenerSocket();
+            network.InitiateUDPReader(UDPport);
+            NetPlayer dolor = new NetPlayer();
+            dolor.username = dolor.TooLongUsernameReplacer();
+            dolor.carname = data.SelectedCar;
+            dolor.token = "ttt";
+            dolor.vehicle = gameObject;
+            session.playerInfo.Add(dolor);
+            Debug.Log("reached end of start() " + dolor.DataAsString());
         }
         else
         {
+            network.serverAddress = new IPEndPoint(IPAddress.Parse(IP), UDPport);
             //start client
             isRunning = true;
-            ConnectSocket();
-        }
-    }
-
-    //called from Start() - SERVER: starts listener socket.
-    private void InitListenerSocket()
-    {
-        //create socket
-        TCPListenerSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
-        //bind the listening socket to the port
-        IPEndPoint endpoint = new IPEndPoint(IPAddress.IPv6Any, TCPport);
-        TCPListenerSocket.Bind(endpoint);
-        Debug.Log("tcp listener bound.");
-        //start listening
-        TCPListenerSocket.Listen(4);
-        //delegate listening to a thread
-        Thread cbt = new Thread(new ThreadStart(TCPlistenerThread));
-        cbt.Start();
-    }
-
-    //this is the listener thread where you llisten n tally up incoming TCP connections.
-    private void TCPlistenerThread()
-    {
-
-        Debug.Log("initiating listener thread");
-        do
-        {
-            Socket perro = TCPListenerSocket.Accept();
-            IPEndPoint perroEP = perro.RemoteEndPoint as IPEndPoint;//get da IP address for da prompt
-            Debug.Log("el nuevo connecion: " + perroEP.Address.ToString());
-            JoinGameServerHandshake(perro);//handshake handler for joining user
-
-        } while (isRunning);
-    }
-
-    //SERVER: TCP HANDSHAKE / TRADE SESSION INFO
-    void JoinGameServerHandshake(Socket tcpsock)//WIP WIP WIP WIP WIP WIP
-    {
-        bool greenflag = false;//true = password is correct
-
-        //check if the joining client gives correct password. if password is empty, skip check.
-        if (session.sessionPass != "")
-        {
-            if (ReceiveTCPasString(tcpsock, session.sessionPass.Length) == session.sessionPass)
-            {
-                greenflag = true;//password is correct
-                Debug.Log("password was correct");
-            }
-        }
-
-        //if password is blank, execute this. if password is correct, execute
-        if (session.sessionPass == "" || greenflag)
-        {
-            NetPlayer samir = new NetPlayer();//create new netplayer
-            samir.TCPsock = tcpsock;//bundle the relevant sock with this player
+            network.InitiateUDPReader(UDPport);
             
-            string handshakeInfo = ReceiveTCPasString(tcpsock, 4096);
-            //just get 4k bytes i think thats plenty of characters for a funny username + game data.
-            //make the client vet the name so theres enough bytes for the rest of the data.
+            NetPlayer dolor = new NetPlayer();
+            //make local player
+            dolor.username = dolor.TooLongUsernameReplacer();
+            dolor.carname = data.SelectedCar;
+            dolor.token = "null";
+            session.playerInfo.Add(dolor);
 
-            samir.ImportPlayerData(handshakeInfo);//load the data into the new player object
-            textMessages.Add(handshakeInfo);//DEBUG
-            Debug.Log("received user " + samir.username + " info. sending token...");
-
-            while (true)
-            {
-                //generate tokens until you get a unique token
-                samir.token = samir.GenerateUDPToken();
-                if (CheckDuplicateToken(samir.token)) break;
-            }
-            Debug.Log("token generated.sending...");
-            //send token to joining client
-            SendStringTCP(samir.token, samir.TCPsock);
-
-            //after this, send rest of the session info. like connected players, time of day etc
-            //then write something to do UDP back n forth...
-            session.playerInfo.Add(samir);//everything went well, add player to player list
-            Debug.Log("everything worked.very nice");
-
+            Debug.Log("AMOGUSAMOGUSAMOGUSAMOGUSAMOGUSAMOGUSAMOGUS");
+            //send info to server
+            network.SendStringUDP("0|" + dolor.DataAsString(), dolor.address);
+            //receive token from server
+            CommandReader(network.ReceiveUDPasString());
+            Debug.Log("reached end of start() " + dolor.DataAsString());
         }
-        else
+    }
+
+    private void FixedUpdate()
+    {
+        UDPtrafficTimer++;
+        if(UDPtrafficTimer > network.UDPpacketSendRate)
         {
-            //kill connection if wrong pass
-            Debug.Log("wrong password, timing out...");
-            tcpsock.Disconnect(false);
-            tcpsock.Close();
+            UDPtrafficTimer = 0;
+            if (isServer)
+            {
+                Debug.Log("scanning for packets");
+                CommandReader(network.ReceiveUDPasString());
+
+            }
+            
+            
+            //RefreshPos();
+            
+
         }
+
+
+    }
+
+    void RefreshPos()
+    {
+        network.SendStringUDP("3" + session.playerInfo[0].token + "COCK AND BALLL TORTURE", network.serverAddress);
+
+
     }
 
     //use this to make sure there arent 2 players with the same token..just for the off chance
@@ -146,42 +123,140 @@ public class TGNetworkMan : MonoBehaviour
         return true;
     }
 
-    //WIP WIP WIP WIP WIP WIP WIP
-    //send this users info to server. then receive the session info from server.
-    void JoinGameClientHandshake(Socket tcpsock)
+    //to make network traffic quick n easy
+    //give different actions a code
+    //and handle them
+    void CommandReader(TGnetworkUDP.Packet packet)
     {
-        //get relevant data from datacontroller
-        NetPlayer myself = new NetPlayer();
-        myself.username = myself.TooLongUsernameReplacer();//using this temporaily because
-        //i think its cool
+        //0 - handshake
+        //1 - add player
+        //2 - text message
+        //3 - updatePosition
 
-
-        //just make sure its not too long
-        //TODO: vet other data too, maybe make a separate bool/void for it i guess..
-        if(myself.username.Length > 2000)
+        string commandType = packet.command.Substring(0, 1);
+        switch (commandType)
         {
-            myself.username = myself.TooLongUsernameReplacer();
+            case "0":
+                UDPhandshake(packet);
+                break;
+            case "1":
+                AddPlayer(packet.command);
+                break;
+            case "2":
+                TextChatRefreshMessages(packet.command);
+                //parse pos and apply
+
+
+                break;
         }
-        
-        myself.carname = data.SelectedCar;
-        myself.token = "null";
-        session.sessionPass = "";
-        
-        //TODO ADD SERVER PASSWORD FIELD TO SAVEDATA or add it as join param somewhere? i dunno yet...
-
-        if (session.sessionPass != "") SendStringTCP(session.sessionPass, tcpsock);
-        //send password if there is one
-
-        //carry on, send things about myself
-        SendStringTCP(myself.DataAsString(), tcpsock);
-
-        myself.token = ReceiveTCPasString(tcpsock, 3);
-        Debug.Log(myself.DataAsString());
-        //very cool if it works this far.
     }
 
-    //receive TCP data and convert to string.
-    //in some cases, we dont want to read any other random shit off the buffer.. so add byte length there
+    public void UDPhandshake(TGnetworkUDP.Packet packet)
+    {
+        //if server, send client their token
+        //then send every other session users info.
+        if (isServer)
+        {
+            NetPlayer samir = new NetPlayer();
+            //data = "0|" + username + "|" + carname + "|" + token + "|" + ip address;
+            samir.ImportPlayerData(packet.command);
+            samir.address = packet.origin;
+            while (true)
+            {
+                //generate tokens until you get a unique token
+                samir.token = samir.GenerateUDPToken();
+                if (CheckDuplicateToken(samir.token)) break;
+            }
+            Debug.Log("token generated.sending...");
+            network.SendStringUDP("0|" + samir.token, samir.address);
+            //after sending token to joining player, add joining player via joinplayer
+            //that broadscasts the join event.
+            string addPlayerCommand = "1|" + samir.DataAsString();
+
+            //broadcast it to everybody connected.
+
+            for(int i = 1; i < session.playerInfo.Count; i++)
+            {
+                network.SendStringUDP(addPlayerCommand, session.playerInfo[i].address);
+                //iterate through everyone n send new players info.
+                //dont tell myself that a player joined i already know you fuckin buffoon
+            }
+            session.playerInfo.Add(samir);
+            //then instantiate samir to server
+            Debug.Log("instantiate samir please sir; " + addPlayerCommand);
+        }
+        else
+        {
+            string[] command = packet.command.Split();
+            session.playerInfo[0].token = command[1];
+        }
+
+    }
+    void AddPlayer(string data)
+    {
+        //host announces a new user. tally em up.
+        NetPlayer venkatesh = new NetPlayer();
+        venkatesh.ImportPlayerData(data);
+        //instantiate venkatesh's game object
+        Debug.Log("good sir please... instantiate venkatesh i begging u; " + data);
+    }
+
+    
+    void TextChatRefreshMessages(string incomingMessage)
+    {
+        
+
+
+
+
+    }
+}
+
+public class TGnetworkUDP
+{
+    UdpClient UDPclient;
+    public IPEndPoint serverAddress;
+    int port = 11111;
+    public List<IPEndPoint> connectedClients = new List<IPEndPoint>();
+    public int UDPpacketSendRate = 10;//send packet every x ticks
+
+    public struct Packet
+    {
+       public string command;
+       public IPEndPoint origin;
+    }
+
+    public Packet ReceiveUDPasString()
+    {
+        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
+        byte[] data = UDPclient.Receive(ref RemoteIpEndPoint);
+        Packet content = new Packet();
+        content.command = Encoding.UTF8.GetString(data);
+        content.origin = new IPEndPoint(RemoteIpEndPoint.Address, port);
+        return content;
+    }
+
+    public void SendStringUDP(string content, IPEndPoint destination)
+    {
+        byte[] data = new byte[content.Length];
+        data = Encoding.UTF8.GetBytes(content);
+        UDPclient.Send(data, data.Length, destination);
+    }
+    public void InitiateUDPReader(int port)
+    {
+        this.port = port;
+        this.UDPclient = new UdpClient(port, AddressFamily.InterNetworkV6);
+        Debug.Log("UDP server open");
+    }
+}
+
+
+public class TGnetworkTCP
+{
+    public TGserverTCP TCPserver;
+    public TGclientTCP TCPclient;
+    
+    
     string ReceiveTCPasString(Socket TCPsock, int expectedDataLength)
     {
         byte[] data = new byte[expectedDataLength];
@@ -191,6 +266,7 @@ public class TGNetworkMan : MonoBehaviour
         //or funny things will happen.
         return content;
     }
+
     //give a tcp socket and a string and it will send the string as bytes
     void SendStringTCP(string content, Socket TCPsock)
     {
@@ -199,55 +275,171 @@ public class TGNetworkMan : MonoBehaviour
         TCPsock.Send(data);
     }
 
-    //stole this from microsofts doc so it should work no problem.
-    private void ConnectSocket()
+    //server specific TCP things
+    public class TGserverTCP
     {
-        Socket s = null;
-        IPHostEntry hostEntry = null;
+        Socket TCPListenerSocket;
+        int port = 11112;
+        bool isListenerOn;
 
-        //Get host related information.
-        //GETTING LOCALHOST VIA THIS METHOD RETURNS IPV6!!!!!!!!!!!!
-        hostEntry = Dns.GetHostEntry(IP);
-
-        //Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
-        //an exception that occurs when the host IP Address is not compatible with the address family
-        // (typical in the IPv6 case).
-        Debug.Log("attempting connectiong to : " + IP);
-        foreach (IPAddress address in hostEntry.AddressList)
+        //called from Start() - SERVER: starts listener socket.
+        private void InitListenerSocket(int port)
         {
-            IPEndPoint ipe = new IPEndPoint(address, TCPport);
-            Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
-            
-            tempSocket.Connect(ipe);
-
-            if (tempSocket.Connected)
-            {
-                s = tempSocket;
-                break;
-            }
-            else
-            {
-                continue;
-            }
+            this.port = port;
+            //create socket
+            TCPListenerSocket = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+            //bind the listening socket to the port
+            IPEndPoint endpoint = new IPEndPoint(IPAddress.IPv6Any, port);
+            TCPListenerSocket.Bind(endpoint);
+            Debug.Log("tcp listener bound.");
+            //start listening
+            TCPListenerSocket.Listen(4);
+            //delegate listening to a thread
+            Thread cbt = new Thread(new ThreadStart(TCPlistenerThread));
+            cbt.Start();
+            isListenerOn = true;
         }
-        TCPSocket = s;
-        Debug.Log("TCP socket connected to: " + IP);
-        JoinGameClientHandshake(s);
-        //proceed to handshake
+
+        //this is the listener thread where you llisten n tally up incoming TCP connections.
+        private void TCPlistenerThread()
+        {
+            Debug.Log("initiating listener thread");
+            do
+            {
+                Socket perro = TCPListenerSocket.Accept();//accept incoming client to a new socket object
+                IPEndPoint perroEP = perro.RemoteEndPoint as IPEndPoint;//get da IP address for da prompt
+                Debug.Log("el nuevo connecion: " + perroEP.Address.ToString());
+                JoinHandshake(perro);//handshake handler for joining user
+
+            } while (true);
+            isListenerOn = false;
+        }
+
+        //SERVER: TCP HANDSHAKE / TRADE SESSION INFO
+        void JoinHandshake(Socket tcpsock)//WIP WIP WIP WIP WIP WIP
+        {
+            NetPlayer samir = new NetPlayer();//create new netplayer
+            samir.TCPsock = tcpsock;//bundle the relevant sock with this player
+
+            //string handshakeInfo = ReceiveTCPasString(tcpsock, 4096);
+            //just get 4k bytes i think thats plenty of characters for a funny username + game data.
+            //make the client vet the name so theres enough bytes for the rest of the data.
+
+            //samir.ImportPlayerData(handshakeInfo);//load the data into the new player object
+            //textMessages.Add(handshakeInfo);//DEBUG
+            Debug.Log("received user " + samir.username + " info. sending token...");
+
+            //send token to joining client
+            //SendStringTCP(samir.token, samir.TCPsock);
+
+            //after this, send rest of the session info. like connected players, time of day etc
+            //then write something to do UDP back n forth...
+            //session.playerInfo.Add(samir);//everything went well, add player to player list
+            Debug.Log("everything worked.very nice");
+            
+        }
+
     }
 
+    //client
+    public class TGclientTCP
+    {
+        //stole this from microsofts doc so it should work no problem.
+        //connect to a remote host
+        Socket ConnectSocket(string IP, int TCPport)
+        {
+            Socket s = null;
+            IPHostEntry hostEntry = null;
 
+            //Get host related information.
+            //GETTING LOCALHOST VIA THIS METHOD RETURNS IPV6!!!!!!!!!!!!
+            hostEntry = Dns.GetHostEntry(IP);
+
+            //Loop through the AddressList to obtain the supported AddressFamily. This is to avoid
+            //an exception that occurs when the host IP Address is not compatible with the address family
+            // (typical in the IPv6 case).
+            Debug.Log("attempting connectiong to : " + IP);
+            foreach (IPAddress address in hostEntry.AddressList)
+            {
+                IPEndPoint ipe = new IPEndPoint(address, TCPport);
+                Socket tempSocket = new Socket(ipe.AddressFamily, SocketType.Stream, ProtocolType.Tcp);
+
+                tempSocket.Connect(ipe);
+
+                if (tempSocket.Connected)
+                {
+                    s = tempSocket;
+                    break;
+                }
+                else
+                {
+                    continue;
+                }
+            }
+            Debug.Log("TCP socket connected to: " + IP);
+            return s;
+            //proceed to handshake
+        }
+        
+        //send this users info to server. then receive the session info from server.
+        void JoinHandshake(Socket tcpsock)
+        {
+            //get relevant data from datacontroller
+            NetPlayer myself = new NetPlayer();
+            myself.username = myself.TooLongUsernameReplacer();//using this temporaily because
+                                                               //i think its cool
+            //just make sure its not too long
+            //TODO: vet other data too, maybe make a separate bool/void for it i guess..
+            if (myself.username.Length > 2000)
+            {
+                myself.username = myself.TooLongUsernameReplacer();
+            }
+
+            myself.carname = "stargt";
+            myself.token = "null";
+            
+            //send server your info, and server replies with your token.
+
+            Debug.Log(myself.DataAsString());
+            //very cool if it works this far.
+        }
+    }
 }
+
+
 
 public class SessionInfo
 {
     public string sessionPass = "";
     public List<NetPlayer> playerInfo = new List<NetPlayer>();
-
+    public NetUI networkUI;
     
 
 
+    public string PlayerNameFromToken(string token)
+    {
+        foreach(NetPlayer gamer in playerInfo)
+        {
+            if(gamer.token == token)
+            {
+                return gamer.username;
+            }
+        }
+        //no user found with that token
+        return "BAD NEWS BROWN";
+    }
 
+
+
+    public class NetUI
+    {
+        public Canvas TextChatUI;
+        public List<Text> TextMessages;
+
+        public Canvas PlayerListUI;
+        public List<Text> Playernames;
+
+    }
 }
 
 public class NetPlayer
@@ -256,7 +448,8 @@ public class NetPlayer
     public string username;//screem name
     public string carname;//car CONTENT MANAGER NAME
     public string token;//token used in UDP transmission regarding this instance
-    public Socket TCPsock;//used by server-pointer to this instances socket
+    public Socket TCPsock;//used by TCP. pointer to this instances TCPsocket (if TCP is used)
+    public IPEndPoint address;//used by UDP to send packets to correct destinations.
 
 
     //spit out user data as delimited string.
@@ -272,9 +465,9 @@ public class NetPlayer
     public void ImportPlayerData(string data)
     {
         string[] splicedData = data.Split('|');
-        username = splicedData[0];
-        carname = splicedData[1];
-        token = splicedData[2];
+        username = splicedData[1];
+        carname = splicedData[2];
+        token = splicedData[3];
     }
 
     //used to generate UDP token. UDP token is 3 letters long.
