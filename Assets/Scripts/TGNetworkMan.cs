@@ -46,7 +46,7 @@ public class TGNetworkMan : MonoBehaviour
             isRunning = true;
 
             Debug.Log("starting server");
-            network.InitiateUDPReader(UDPport);
+            network.InitiateUDPReader();
             NetPlayer dolor = new NetPlayer();
             dolor.username = dolor.TooLongUsernameReplacer();
             dolor.carname = data.SelectedCar;
@@ -59,8 +59,10 @@ public class TGNetworkMan : MonoBehaviour
         {
             network.serverAddress = new IPEndPoint(IPAddress.Parse(IP), UDPport);
             //start client
+            Debug.Log(IPAddress.Parse(IP).ToString() + network.serverAddress.Address.ToString());
+
             isRunning = true;
-            network.InitiateUDPReader(UDPport);
+            network.InitiateUDPReader();
             
             NetPlayer dolor = new NetPlayer();
             //make local player
@@ -68,12 +70,14 @@ public class TGNetworkMan : MonoBehaviour
             dolor.carname = data.SelectedCar;
             dolor.token = "null";
             session.playerInfo.Add(dolor);
-
-            Debug.Log("AMOGUSAMOGUSAMOGUSAMOGUSAMOGUSAMOGUSAMOGUS");
+            
             //send info to server
-            network.SendStringUDP("0|" + dolor.DataAsString(), dolor.address);
+            network.SendStringUDP("0|" + dolor.DataAsString(), network.serverAddress);
+            
+            
             //receive token from server
-            CommandReader(network.ReceiveUDPasString());
+            Debug.Log("packet sent AMOGUS");
+            CommandReader(network.ReceiveUDPasString());//SocketException: An existing connection was forcibly closed by the remote host.
             Debug.Log("reached end of start() " + dolor.DataAsString());
         }
     }
@@ -214,7 +218,7 @@ public class TGNetworkMan : MonoBehaviour
 
 public class TGnetworkUDP
 {
-    UdpClient UDPclient;
+    public Socket client;
     public IPEndPoint serverAddress;
     int port = 11111;
     public List<IPEndPoint> connectedClients = new List<IPEndPoint>();
@@ -228,11 +232,12 @@ public class TGnetworkUDP
 
     public Packet ReceiveUDPasString()
     {
-        IPEndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
-        byte[] data = UDPclient.Receive(ref RemoteIpEndPoint);
+        EndPoint RemoteIpEndPoint = new IPEndPoint(IPAddress.Any, port);
+        byte[] data = new byte[256];
+        client.ReceiveFrom(data, ref RemoteIpEndPoint);
         Packet content = new Packet();
         content.command = Encoding.UTF8.GetString(data);
-        content.origin = new IPEndPoint(RemoteIpEndPoint.Address, port);
+        content.origin = (IPEndPoint)RemoteIpEndPoint;
         return content;
     }
 
@@ -240,12 +245,15 @@ public class TGnetworkUDP
     {
         byte[] data = new byte[content.Length];
         data = Encoding.UTF8.GetBytes(content);
-        UDPclient.Send(data, data.Length, destination);
+        Debug.Log(destination.Address.ToString());
+        client.SendTo(data, destination);
     }
-    public void InitiateUDPReader(int port)
+    public void InitiateUDPReader()
     {
-        this.port = port;
-        this.UDPclient = new UdpClient(port, AddressFamily.InterNetworkV6);
+        this.client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
+        this.client.ReceiveTimeout = 100;
+        this.client.SendTimeout = 100;
+
         Debug.Log("UDP server open");
     }
 }
