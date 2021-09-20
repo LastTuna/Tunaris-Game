@@ -38,6 +38,7 @@ public class TGNetworkMan : MonoBehaviour
         data = FindObjectOfType<DataController>();
         
         IP = data.IP;
+        
 
         //you are the host
         if (IP == "")
@@ -46,23 +47,24 @@ public class TGNetworkMan : MonoBehaviour
             isRunning = true;
 
             Debug.Log("starting server");
-            network.InitiateUDPReader();
+            network.InitiateUDPReader(isServer);
             NetPlayer dolor = new NetPlayer();
             dolor.username = dolor.TooLongUsernameReplacer();
             dolor.carname = data.SelectedCar;
             dolor.token = "ttt";
             dolor.vehicle = gameObject;
             session.playerInfo.Add(dolor);
-            Debug.Log("reached end of start() " + dolor.DataAsString());
+            StartCoroutine(MessageReceiverAsync());
         }
         else
         {
+            Debug.Log("starting client...");
             network.serverAddress = new IPEndPoint(IPAddress.Parse(IP), UDPport);
             //start client
             Debug.Log(IPAddress.Parse(IP).ToString() + network.serverAddress.Address.ToString());
 
             isRunning = true;
-            network.InitiateUDPReader();
+            network.InitiateUDPReader(isServer);
             
             NetPlayer dolor = new NetPlayer();
             //make local player
@@ -73,44 +75,35 @@ public class TGNetworkMan : MonoBehaviour
             
             //send info to server
             network.SendStringUDP("0|" + dolor.DataAsString(), network.serverAddress);
-            
-            
             //receive token from server
-            Debug.Log("packet sent AMOGUS");
-            CommandReader(network.ReceiveUDPasString());//SocketException: An existing connection was forcibly closed by the remote host.
-            Debug.Log("reached end of start() " + dolor.DataAsString());
+            Debug.Log("info sent to host.");
+            TGnetworkUDP.Packet receivedToken = network.ReceiveUDPasString();
+            
+            string[] command = receivedToken.command.Split('|');
+            session.playerInfo[0].token = command[1];
+            Debug.Log("token received. very cool." + command[1]);
+
+            StartCoroutine(MessageReceiverAsync());
         }
     }
 
-    private void FixedUpdate()
+    IEnumerator SendMessage(string message, IPEndPoint address)
     {
-        UDPtrafficTimer++;
-        if(UDPtrafficTimer > network.UDPpacketSendRate)
-        {
-            UDPtrafficTimer = 0;
-            if (isServer)
-            {
-                Debug.Log("scanning for packets");
-                CommandReader(network.ReceiveUDPasString());
-
-            }
-            
-            
-            //RefreshPos();
-            
-
-        }
-
-
+        network.SendStringUDP(message, address);
+        yield return null;
     }
 
-    void RefreshPos()
+    IEnumerator MessageReceiverAsync()
     {
-        network.SendStringUDP("3" + session.playerInfo[0].token + "COCK AND BALLL TORTURE", network.serverAddress);
-
+        
+        TGnetworkUDP.Packet message = network.ReceiveUDPasString();
+        Debug.Log("receiving package....");
+        CommandReader(message);
+        StartCoroutine(MessageReceiverAsync());
+        yield return null;
 
     }
-
+    
     //use this to make sure there arent 2 players with the same token..just for the off chance
     //with my luck, this will totally happen so i made this
     bool CheckDuplicateToken(string token)
@@ -148,54 +141,54 @@ public class TGNetworkMan : MonoBehaviour
                 break;
             case "2":
                 TextChatRefreshMessages(packet.command);
-                //parse pos and apply
-
-
+                
                 break;
         }
     }
 
-    public void UDPhandshake(TGnetworkUDP.Packet packet)
+    IEnumerator BroadcastCommand(string command)
     {
-        //if server, send client their token
-        //then send every other session users info.
         if (isServer)
         {
-            NetPlayer samir = new NetPlayer();
-            //data = "0|" + username + "|" + carname + "|" + token + "|" + ip address;
-            samir.ImportPlayerData(packet.command);
-            samir.address = packet.origin;
-            while (true)
-            {
-                //generate tokens until you get a unique token
-                samir.token = samir.GenerateUDPToken();
-                if (CheckDuplicateToken(samir.token)) break;
-            }
-            Debug.Log("token generated.sending...");
-            network.SendStringUDP("0|" + samir.token, samir.address);
-            //after sending token to joining player, add joining player via joinplayer
-            //that broadscasts the join event.
-            string addPlayerCommand = "1|" + samir.DataAsString();
-
             //broadcast it to everybody connected.
-
-            for(int i = 1; i < session.playerInfo.Count; i++)
+            for (int i = 1; i < session.playerInfo.Count; i++)
             {
-                network.SendStringUDP(addPlayerCommand, session.playerInfo[i].address);
+                network.SendStringUDP(command, session.playerInfo[i].address);
                 //iterate through everyone n send new players info.
                 //dont tell myself that a player joined i already know you fuckin buffoon
             }
-            session.playerInfo.Add(samir);
-            //then instantiate samir to server
-            Debug.Log("instantiate samir please sir; " + addPlayerCommand);
-        }
-        else
-        {
-            string[] command = packet.command.Split();
-            session.playerInfo[0].token = command[1];
-        }
 
+        }
+        yield return null;
     }
+
+    public void UDPhandshake(TGnetworkUDP.Packet packet)
+    {
+        //send user their token
+        //then send every other session users info.
+
+        NetPlayer samir = new NetPlayer();
+        //data = "0|" + username + "|" + carname + "|" + token;
+        samir.ImportPlayerData(packet.command);
+        samir.address = packet.origin;
+        while (true)
+        {
+            //generate tokens until you get a unique token
+            samir.token = samir.GenerateUDPToken();
+            if (CheckDuplicateToken(samir.token)) break;
+        }
+        Debug.Log("token generated.sending...");
+        network.SendStringUDP("0|" + samir.token, samir.address);
+        //after sending token to joining player, add joining player
+        //then broadscasts the join event.
+        string addPlayerCommand = "1|" + samir.DataAsString();
+        StartCoroutine(BroadcastCommand(addPlayerCommand));
+
+        session.playerInfo.Add(samir);//////TODO WIP EDIT THIS SO YOU DONT BROADCAST TO THE NEW USER
+        //then instantiate samir to server
+        Debug.Log("instantiate samir please sir; " + addPlayerCommand);
+    }
+
     void AddPlayer(string data)
     {
         //host announces a new user. tally em up.
@@ -208,7 +201,7 @@ public class TGNetworkMan : MonoBehaviour
     
     void TextChatRefreshMessages(string incomingMessage)
     {
-        
+        Debug.Log("INCOMING MESSAG:" + incomingMessage);
 
 
 
@@ -248,11 +241,19 @@ public class TGnetworkUDP
         Debug.Log(destination.Address.ToString());
         client.SendTo(data, destination);
     }
-    public void InitiateUDPReader()
+    public void InitiateUDPReader(bool server)
     {
         this.client = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-        this.client.ReceiveTimeout = 100;
-        this.client.SendTimeout = 100;
+        this.client.ReceiveTimeout = 10000;
+        this.client.SendTimeout = 10000;
+
+        //if server then bind
+        if (server)
+        {
+            IPEndPoint balls = new IPEndPoint(IPAddress.Any, port);
+            this.client.Bind(balls);
+        }
+
 
         Debug.Log("UDP server open");
     }
