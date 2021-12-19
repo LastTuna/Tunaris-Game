@@ -67,7 +67,7 @@ public class CourseController : MonoBehaviour {
         GameObject corr = Instantiate(coooorr.LoadAsset(dataController.SelectedCar) as GameObject, pits[0].position, pits[0].rotation);
         Camera.GetComponent<CarCamera>().car = corr.transform;
         corr.AddComponent<CarBehaviour>();
-        corr.AddComponent<TGNetworkMan>();
+        //corr.AddComponent<TGNetworkMan>();
         Instantiate(DebugUI);
 
     }
