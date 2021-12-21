@@ -10,9 +10,6 @@ public class MobileButtonHandler : MonoBehaviour {
 	void Start () {
         foreach(TouchScreenButton dolor in ScreenButtons)
         {
-            dolor.buttonPxSize = dolor.button.GetComponent<Image>().sprite.rect.size;
-
-
             //get user button scaling and pos from user settings (datacontroller?)
 
         }
@@ -49,6 +46,7 @@ public class MobileButtonHandler : MonoBehaviour {
             Debug.Log(dolor.button.GetComponent<Image>().sprite.bounds.ToString());
             if(dolor.button.GetComponent<Image>().sprite.bounds.Contains(new Vector3(fingerPos.x, fingerPos.y, 0))){
                 //write here button payload
+                CustomInput.SetAxis(dolor.axis , 1);
             }
 
 
@@ -58,12 +56,14 @@ public class MobileButtonHandler : MonoBehaviour {
 
 }
 
+[System.Serializable]
 public class TouchScreenButton
 {
     public GameObject button;
-    public Vector2 buttonPxSize;//size of the image that represents the button on screen.
+    public string axis;//the name of the input axis we is overriding (ex. "Throttle", "Brake", "Clutch")
     //fetched with GetComponent<image>().size during runtime or whatever
-    public Vector2 ButtonPos;//(user) position on screen.
-    public Vector2 buttonScale;//user scale
+    public float buttonValue = 1;
+    public Vector2 userButtonPos;//(user) position on screen.
+    public Vector2 userButtonScale;//user scale
 
 }

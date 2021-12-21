@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.6595605, g: 0.78910524, b: 0.7121809, a: 1}
+  m_IndirectSpecularColor: {r: 0.6592061, g: 0.78901833, b: 0.7121776, a: 1}
 --- !u!157 &3
 LightmapSettings:
   m_ObjectHideFlags: 0
@@ -708,6 +708,7 @@ MonoBehaviour:
     IP: 
     PlayerName: 
   IsMultiplayer: 0
+  MobileUI: {fileID: 1398770650915280, guid: 47d58461f2f3b754c8f0a6900876e3fc, type: 2}
   DebugUI: {fileID: 1338871946658340, guid: 031a42cb70fd9e145a90be75174f9532, type: 2}
   DefaultHUD: {fileID: 1386815377202846, guid: 63084902d49bc9245af5248ddbbb8174, type: 2}
   BusriderHUD: {fileID: 1077224830904214, guid: 89750fb40f6fe1247b92db76ee0ddacb,
@@ -1699,7 +1700,7 @@ MonoBehaviour:
   debug: 1
   chosenCamera: 0
   tvCams: []
-  CheckingCamDistance: 0
+  CheckingCamDistance: 1
   currentTVCam: 0
   supportedCameras: 3
   isVR: 0
