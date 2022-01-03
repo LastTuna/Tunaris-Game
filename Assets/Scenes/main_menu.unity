@@ -10833,6 +10833,7 @@ MonoBehaviour:
   - {fileID: 8300000, guid: 549fac79e67773c43ad11d4a5a4778b4, type: 3}
   - {fileID: 8300000, guid: 7d2ab5e735305144797ab76b0017869e, type: 3}
   - {fileID: 8300000, guid: 1e2d0d9015765e9418bfa404a356493c, type: 3}
+  - {fileID: 8300000, guid: bbbd200b6c9ed6f4aba6958eb7de06c7, type: 3}
   currentCars: []
   carro: {fileID: 0}
   bestest: {fileID: 1352033581}

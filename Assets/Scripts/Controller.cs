@@ -545,8 +545,7 @@ public class Controller : MonoBehaviour {
             GoRaceCanvas.gameObject.SetActive(true);
             GarageCanvas.gameObject.SetActive(false);
 
-            menuMusic.clip = TGmusic[0];
-            menuMusic.Play();
+            MainMenuMusicCancel();
 
             foreach (GameObject button in createdGarageButtons) {
                 Destroy(button);
@@ -578,16 +577,14 @@ public class Controller : MonoBehaviour {
             }
             GoWashCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
-            menuMusic.clip = TGmusic[0];
-            menuMusic.Play();
+            MainMenuMusicCancel();
         }
         //Credits -> Go Race
         if(CreditsCanvas.gameObject.activeSelf)
         {
             CreditsCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
-            menuMusic.clip = TGmusic[0];
-            menuMusic.Play();
+            MainMenuMusicCancel();
         }
 
         // Licenses -> Go Race
@@ -597,8 +594,7 @@ public class Controller : MonoBehaviour {
             LicensesCanvas.gameObject.SetActive(false);
             GoRaceCanvas.gameObject.SetActive(true);
 
-            menuMusic.clip = TGmusic[0];
-            menuMusic.Play();
+            MainMenuMusicCancel();
         }
 
         // Records -> Main
@@ -669,4 +665,18 @@ public class Controller : MonoBehaviour {
         dataController.SaveGameData();
         yield return null;
     }
+
+    void MainMenuMusicCancel()
+    {
+        if (System.DateTime.Today.Month == 12)
+        {
+            menuMusic.clip = TGmusic[4];
+        }
+        else
+        {
+            menuMusic.clip = TGmusic[0];
+        }
+        menuMusic.Play();
+    }
+
 }
